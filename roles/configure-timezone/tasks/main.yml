@@ -1,0 +1,30 @@
+---
+# Configure Timezone and NTP
+
+- name: Setting your timezone to UTC
+  community.general.timezone:
+    name: UTC
+  become: true
+
+
+- name: Enable NTP synchronization using timedatectl
+  ansible.builtin.command: /usr/bin/timedatectl set-ntp true
+  changed_when: false
+  tags: ntp
+
+- name: Create a file /etc/systemd/timesyncd.conf with ntp.shoa.cl
+  ansible.builtin.copy:
+    content: |
+      [Time]
+      NTP=ntp.shoa.cl
+      #FallbackNTP=0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org 3.debian.pool.ntp.org
+      #RootDistanceMaxSec=5
+      #PollIntervalMinSec=32
+      #PollIntervalMaxSec=2048
+      #ConnectionRetrySec=30
+      #SaveIntervalSec=60
+
+    dest: /etc/systemd/timesyncd.conf
+    owner: root
+    group: root
+    mode: '0644'

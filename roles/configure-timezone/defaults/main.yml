@@ -1,0 +1,4 @@
+---
+# Defaults values
+timezone: UTC
+enable_ntp: true

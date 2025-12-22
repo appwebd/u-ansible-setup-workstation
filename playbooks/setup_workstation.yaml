@@ -1,0 +1,13 @@
+---
+- name: Apply updates && install packages
+  hosts: dev.local
+  become: true
+  roles:
+    - update_upgrade
+    - configure-timezone
+    - suggested_software_packages
+    - setup_rkhunter
+    - hardening_debian
+    - file_permission
+    - configure_login_def
+    - configure_auditd

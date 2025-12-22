@@ -1,0 +1,62 @@
+---
+suggested_software_packages_:
+   - acpi-call-dkms
+   - ansible
+   - ansible-lint
+   - apg
+   - apparmor
+   - apparmor-utils
+   - apt-config-auto-update
+   - apt-listbugs
+   - apt-listchanges
+   - apt-show-versions
+   - apt-transport-https
+   - audispd-plugins
+   - auditd
+   - bsd-mailx
+   - clamav, clamav-daemon
+   - ca-certificates
+   - curl
+   - debsums
+   - fail2ban
+   - ffmpeg
+   - git
+   - gnupg2
+   - htop
+   - iptables
+   - iptables-persistent
+   - jq
+   - libcrack2
+   - libpam-passwdqc
+   - libpam-pwquality
+   - libpam-tmpdir
+   - needrestart
+   - netfilter-persistent
+   - nftables
+   - rsyslog
+   - sysstat
+   - systemd-timesyncd
+   - tp-smapi-dkms
+   - tripwire
+   - unattended-upgrades
+   - ufw
+
+suggested_software_packages_gui_:
+   - chromium
+   - feh
+   - gedit
+   - gnome-shell-extension-appindicator
+   - gnome-shell-extension-dashtodock
+   - gnome-shell-extension-desktop-icons-ng
+   - gnome-shell-extension-manager
+   - gnome-shell-extension-prefs
+   - gnome-shell-extensions
+   - gparted
+   - keepassxc
+   - mc
+   - otpclient
+   - remmina
+   - terminator
+   - thunderbird
+   - bogofilter
+   - tweak

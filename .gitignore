@@ -1,0 +1,9 @@
+/.idea/
+/tmp/
+*.retry
+*/.idea/*
+*/.vscode/*
+/inventory/inventory.ini
+/.ansible/
+/.scannerwork/
+/.ansible/

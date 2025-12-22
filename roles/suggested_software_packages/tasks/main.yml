@@ -1,0 +1,31 @@
+---
+- name: Install group of suggested software packages
+  ansible.builtin.apt:
+    name: "{{ suggested_software_packages }}"
+    state: present
+    update_cache: true
+
+- name: Install group of suggested software packages
+  ansible.builtin.apt:
+    name: "{{ suggested_software_packages_gui }}"
+    state: present
+    update_cache: true
+
+
+- name: Enable Universe repository
+  ansible.builtin.apt_repository:
+    repo: deb http://deb.debian.org/debian {{ ansible_distribution_release }} universe
+    state: present
+    update_cache: true
+
+- name: Install package libfuse2t64
+  ansible.builtin.apt:
+    name: libfuse2t64
+    state: present
+
+- name: Configure unattended-upgrades (reconfigure)
+  debconf:
+    name: unattended-upgrades
+    question: unattended-upgrades/enable_auto_updates
+    value: 'true'
+    vtype: boolean
