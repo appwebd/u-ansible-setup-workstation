@@ -6,6 +6,7 @@
     - update_upgrade
     - configure-timezone
     - suggested_software_packages
+    - suggested_software_packages_desktop
     - setup_rkhunter
     - hardening_debian
     - file_permission
