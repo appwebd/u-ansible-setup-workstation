@@ -1,8 +1,116 @@
-- name: Configure auditd.conf
+---
+- name: Ensure auditd is installed
+  ansible.builtin.package:
+    name: auditd
+    state: present
+
+- name: Create a file /etc/audit/auditd.conf
   ansible.builtin.template:
     src: auditd.conf.j2
     dest: /etc/audit/auditd.conf
     owner: root
     group: root
     mode: '0640'
-  notify: Restart auditd
+
+- name: Create a file /etc/audit/audit.rules
+  ansible.builtin.template:
+    src: audit.rules.j2
+    dest: /etc/audit/audit.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create a file /etc/audit/rules.d/20-sudo-sudoers.rules
+  ansible.builtin.template:
+    src: rules.d/20-sudo-sudoers.rules.j2
+    dest: /etc/audit/rules.d/20-sudo-sudoers.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+- name: Create a file /etc/audit/rules.d/30-time-locale.rules
+  ansible.builtin.template:
+    src: rules.d/30-time-locale.rules.j2
+    dest: /etc/audit/rules.d/30-time-locale.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create a file /etc/audit/rules.d/40-access-identity.rules
+  ansible.builtin.template:
+    src: rules.d/40-access-identity.rules.j2
+    dest: /etc/audit/rules.d/40-access-identity.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+- name: Create a file /etc/audit/rules.d/50-perm-mounts.rules
+  ansible.builtin.template:
+    src: rules.d/50-perm-mounts.rules.j2
+    dest: /etc/audit/rules.d/50-perm-mounts.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+- name: Create a file /etc/audit/rules.d/60-session-login.rules
+  ansible.builtin.template:
+    src: rules.d/60-session-login.rules.j2
+    dest: /etc/audit/rules.d/60-session-login.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+- name: Create a file /etc/audit/rules.d/70-mac-commands.rules
+  ansible.builtin.template:
+    src: rules.d/70-mac-commands.rules.j2
+    dest: /etc/audit/rules.d/70-mac-commands.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+- name: Create a file /etc/audit/rules.d/80-modules.rules
+  ansible.builtin.template:
+    src: rules.d/80-modules.rules.j2
+    dest: /etc/audit/rules.d/80-modules.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+- name: Create a file /etc/audit/rules.d/99-finalize.rules
+  ansible.builtin.template:
+    src: rules.d/99-finalize.rules.j2
+    dest: /etc/audit/rules.d/99-finalize.rules.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create a file /etc/audit/rules.d/audit.rules
+  ansible.builtin.template:
+    src: rules.d/audit.rules.j2
+    dest: /etc/audit/rules.d/audit.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+# ---
+- name: Ensure auditd service is running
+  ansible.builtin.service:
+    name: auditd
+    state: started
+    enabled: true
+  notify: restart auditd
+
+- name: Reload auditd configuration to apply changes
+  ansible.builtin.systemd:
+    name: auditd
+    state: restarted
+  when: ansible_facts['os_family'] == "Debian"
+  notify:
+    - restart auditd
