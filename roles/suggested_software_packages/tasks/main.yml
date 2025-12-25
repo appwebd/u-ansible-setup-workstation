@@ -1,7 +1,7 @@
 ---
 - name: Install group of suggested software packages
   ansible.builtin.apt:
-    name: "{{ suggested_software_packages }}"
+    name: "{{ suggested_software_packages_ }}"
     state: present
     update_cache: true
 

@@ -14,7 +14,8 @@ suggested_software_packages_:
    - audispd-plugins
    - auditd
    - bsd-mailx
-   - clamav, clamav-daemon
+   - clamav
+   - clamav-daemon
    - ca-certificates
    - curl
    - debsums
