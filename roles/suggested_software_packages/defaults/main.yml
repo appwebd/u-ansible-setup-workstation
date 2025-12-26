@@ -21,6 +21,7 @@ suggested_software_packages_:
    - debsums
    - fail2ban
    - ffmpeg
+   - ffmpeg
    - git
    - gnupg2
    - htop

@@ -3,19 +3,19 @@
 - name: Configure login.def PASS_MAX_DAYS
   ansible.builtin.replace:
     path: /etc/login.defs
-    regexp: '^PASS_MAX_DAYS.*99999/'
+    regexp: '^PASS_MAX_DAYS.*99999'
     replace: 'PASS_MAX_DAYS 90'
 
 - name: Configure login.def PASS_MIN_DAYS.*0
   ansible.builtin.replace:
     path: /etc/login.defs
-    regexp: '^PASS_MIN_DAYS.*0/'
+    regexp: '^PASS_MIN_DAYS.*0'
     replace: 'PASS_MIN_DAYS 1'
 
 - name: Configure login.def PASS_WARN_AGE.*7
   ansible.builtin.replace:
     path: /etc/login.defs
-    regexp: '^PASS_WARN_AGE.*7/'
+    regexp: '^PASS_WARN_AGE.*7'
     replace: 'PASS_WARN_AGE 7'
 
 - name: Setting UMASK 027 in /etc/login.defs

@@ -3,12 +3,13 @@
   hosts: dev.local
   become: true
   roles:
-    - update_upgrade
+    - configure_local_login_banner
     - configure-timezone
+    - update_upgrade
+    - file_permission
+    - configure_login_def
+    - configure_auditd
     - suggested_software_packages
     - suggested_software_packages_desktop
     - setup_rkhunter
     - hardening_debian
-    - file_permission
-    - configure_login_def
-    - configure_auditd
