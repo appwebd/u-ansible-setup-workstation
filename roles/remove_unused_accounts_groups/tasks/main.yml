@@ -1,0 +1,25 @@
+---
+- name: Remove specifics accounts with homes folder
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: absent
+    remove: "{{ remove_unused_accounts_groups_user_remove_options.remove_home | default(true) }}"
+    force: "{{ remove_unused_accounts_groups_user_remove_options.force | default(true) }}"
+  loop: "{{ remove_unused_accounts_groups_users_to_remove }}"
+  become: true
+
+- name: Remove accounts optionals additional
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: absent
+    remove: true
+    force: true
+  loop: "{{ remove_unused_accounts_groups_additional_users }}"
+  become: true
+
+- name: Remove groups (if this exists)
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ remove_unused_accounts_groups_users_to_remove }}"
+  become: true

@@ -1,0 +1,20 @@
+---
+# User account list to remove in debian 13
+remove_unused_accounts_groups_users_to_remove:
+  - games
+  - irc
+  - geoclue
+  - gnome-remote-desktop
+  - nobody
+  - www-data
+
+# Opcional: additional users
+remove_unused_accounts_groups_additional_users:
+  - avahi    # we are not using avahi-daemon
+#  - gdm     # we are not using gdm or gdm3
+#  - colord  # we are not using colord colour management daemon
+
+# Remove configuration options
+remove_unused_accounts_groups_user_remove_options:
+  remove_home: true
+  force: true           # force remove including tasks
