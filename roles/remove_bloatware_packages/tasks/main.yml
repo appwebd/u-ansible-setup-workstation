@@ -1,0 +1,12 @@
+---
+
+- name: Remove useless packages from the cache /var/cache/apt/archives
+  ansible.builtin.apt:
+    autoclean: true
+    autoremove: true
+
+- name: Remove packages
+  ansible.builtin.apt:
+    name: "{{ remove_bloatware_packages_ }}"
+    state: absent
+    update_cache: true

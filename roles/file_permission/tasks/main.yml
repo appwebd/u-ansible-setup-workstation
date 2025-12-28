@@ -105,3 +105,31 @@
   ansible.builtin.file:
     path: /etc/cron.d
     mode: '0700'
+
+- name: Check if /etc/security/opasswd exists
+  ansible.builtin.stat:
+    path: /etc/security/opasswd
+  register: opasswd_stat
+
+- name: Set secure permissions for /etc/security/opasswd if it exists
+  ansible.builtin.file:
+    path: /etc/security/opasswd
+    mode: '0600'
+    owner: root
+    group: root
+    state: file
+  when: opasswd_stat.stat.exists is true
+
+- name: Check if /etc/security/opasswd.old exists
+  ansible.builtin.stat:
+    path: /etc/security/opasswd.old
+  register: opasswd_old_stat
+
+- name: Set secure permissions for /etc/security/opasswd.old if it exists
+  ansible.builtin.file:
+    path: /etc/security/opasswd.old
+    mode: '0600'
+    owner: root
+    group: root
+    state: file
+  when: opasswd_old_stat.stat.exists is true

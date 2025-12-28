@@ -1,0 +1,37 @@
+---
+remove_bloatware_packages_:
+  - apache2-bin
+  - avahi-daemon
+  - avahi-utils
+  - bind9
+  - dovecot-imapd
+  - dovecot-pop3d
+  - evolution
+  - geoclue-2.0
+  - gnome-characters
+  - gnome-maps
+  - gnome-remote-desktop
+  - gnome-tour
+  - gnome-weather
+  - inetutils-telnet
+  - inetutils-telnetd
+  - iptables-persistent
+  - isc-dhcp-server
+  - ldap-utils
+  - libvirt-daemon*
+  - nfs-kernel-server
+  - nftables
+  - nis
+  - open-iscsi
+  - rsh-client
+  - rsh-server
+  - samba
+  - slapd
+  - snmpd
+  - talk
+  - telnet*
+  - tftpd-hpa tftp-hpa
+  - tnftp
+  - vsftpd
+  - xinetd
+  - yelp

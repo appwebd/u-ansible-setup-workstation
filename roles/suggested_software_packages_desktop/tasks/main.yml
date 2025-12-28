@@ -1,7 +1,7 @@
 ---
 - name: Install group of suggested software packages
   ansible.builtin.apt:
-    name: "{{ suggested_software_packages_desktop }}"
+    name: "{{ suggested_software_packages_desktop_ }}"
     state: present
     update_cache: true
 
@@ -16,3 +16,5 @@
   ansible.builtin.apt:
     name: libfuse2t64
     state: present
+
+# TODO automatizar instalación y configuración de otpclient

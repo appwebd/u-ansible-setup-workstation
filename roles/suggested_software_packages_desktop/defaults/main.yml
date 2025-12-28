@@ -1,7 +1,6 @@
 ---
 
 suggested_software_packages_desktop_:
-   - chromium
    - feh
    - gedit
    - gnome-shell-extension-appindicator
@@ -14,7 +13,6 @@ suggested_software_packages_desktop_:
    - keepassxc
    - mc
    - otpclient
-   - remmina
    - terminator
    - thunderbird
    - bogofilter
