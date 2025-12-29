@@ -9,7 +9,7 @@
     - configure-timezone
     - update_upgrade
     - file_permission
-    - configure_login_def
+    - configure_login_defs
     - configure_auditd
     - suggested_software_packages
     - suggested_software_packages_desktop
