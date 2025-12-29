@@ -2,14 +2,18 @@
 - name: Apply updates && install packages
   hosts: dev.local
   become: true
+  vars_files:
+    - vault.yml
   roles:
     - configure_local_login_banner
     - configure-timezone
     - update_upgrade
     - file_permission
-    - configure_login_def
+    - configure_login_defs
     - configure_auditd
     - suggested_software_packages
     - suggested_software_packages_desktop
     - setup_rkhunter
+    - setup_tripwire
+    - setup_aide
     - hardening_debian

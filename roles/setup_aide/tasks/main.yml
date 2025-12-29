@@ -1,0 +1,11 @@
+---
+- name: Installing package aide
+  ansible.builtin.apt:
+    name: aide
+    state: present
+    update_cache: yes
+
+- name: Initialize aide database
+  ansible.builtin.command: aide --init --config /etc/aide/aide.conf
+  args:
+    creates: /var/lib/aide/aide.db.gz

@@ -1,0 +1,23 @@
+- name: Update upgrade packages (Debian/Ubuntu)
+  ansible.builtin.apt:
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Tripwire package (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: tripwire
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Generate keys if this does not exists
+  ansible.builtin.command: twadmin --generate-keys --site-keyfile /etc/tripwire/site.key --local-keyfile /etc/tripwire/localhost.localdomain-local.key
+  args:
+    creates: /etc/tripwire/site.key
+  ignore_errors: true
+
+- name: Initialize data base of Tripwire
+  ansible.builtin.command: tripwire --init
+  args:
+    creates: /var/lib/tripwire/`hostname`.twd
+  environment:
+    PASSPHRASE: "{{ tripwire_password  }}"
