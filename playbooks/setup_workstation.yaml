@@ -7,6 +7,7 @@
   roles:
     - configure_local_login_banner
     - configure-timezone
+    - grub_audit_backlog
     - update_upgrade
     - file_permission
     - configure_login_defs
@@ -16,4 +17,5 @@
     - setup_rkhunter
     - setup_tripwire
     - setup_aide
+    - setup_sysstat
     - hardening_debian
