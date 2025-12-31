@@ -1,0 +1,19 @@
+---
+- name: Install sysstat package
+  ansible.builtin.apt:
+    name: sysstat
+    state: present
+    update_cache: true
+
+- name: Enable recollect info of sysstat /etc/default/sysstat
+  ansible.builtin.lineinfile:
+    path: /etc/default/sysstat
+    regexp: '^ENABLED='
+    line: 'ENABLED="true"'
+    state: present
+
+- name: Enable and activate service sysstat
+  ansible.builtin.systemd:
+    name: sysstat
+    enabled: true
+    state: started
