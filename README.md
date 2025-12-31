@@ -8,3 +8,6 @@ Prepare the workstation with defined properties:
 * Configuration of some auditd options
 * General permissions configuration
 * Installation of rkhunter
+* Installation of Tripwire
+* Installation of Aida
+ 
