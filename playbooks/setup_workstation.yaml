@@ -7,15 +7,16 @@
   roles:
     - configure_local_login_banner
     - configure-timezone
-    - grub_audit_backlog
+    - grub_audit_backlog            # Caution: Review the result file /etc/default/grub
     - update_upgrade
     - file_permission
     - configure_login_defs
     - configure_auditd
     - suggested_software_packages
     - suggested_software_packages_desktop
-    - setup_rkhunter
-    - setup_tripwire
     - setup_aide
+    - setup_otpclient
+    - setup_rkhunter
     - setup_sysstat
+    - setup_tripwire
     - hardening_debian
