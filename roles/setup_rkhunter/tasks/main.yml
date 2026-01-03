@@ -4,19 +4,19 @@
     name: rkhunter
     state: present
 
-- name: Setting UPDATE_MIRRORS a 1
+- name: Setting UPDATE_MIRRORS to 1
   ansible.builtin.replace:
     path: /etc/rkhunter.conf
     regexp: '^UPDATE_MIRRORS=0'
     replace: 'UPDATE_MIRRORS=1'
 
-- name: Setting MIRRORS_MODE a 0
+- name: Setting MIRRORS_MODE to 0
   ansible.builtin.replace:
     path: /etc/rkhunter.conf
     regexp: '^MIRRORS_MODE=1'
     replace: 'MIRRORS_MODE=0'
 
-- name: Disabled var WEB_CMD
+- name: Disabled variable WEB_CMD
   ansible.builtin.replace:
     path: /etc/rkhunter.conf
     regexp: '^WEB_CMD=/bin/false'
@@ -26,7 +26,7 @@
   ansible.builtin.get_url:
     url: https://rkhunter.sourceforge.net/1.4/mirrors.dat
     dest: /var/lib/rkhunter/db/mirrors.dat
-    mode: '0644'
+#    mode: '0644'
 
 - name: Update data base of rkhunter
   ansible.builtin.command: rkhunter --update
