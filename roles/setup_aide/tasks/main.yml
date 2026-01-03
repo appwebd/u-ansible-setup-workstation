@@ -5,6 +5,14 @@
     state: present
     update_cache: yes
 
+- name: Create a exclude some files
+  ansible.builtin.template:
+    src: 00_local_excludes.j2
+    dest: /etc/aide/aide.conf.d/00_local_excludes
+    owner: root
+    group: root
+    mode: '0640'
+
 - name: Initialize aide database
   ansible.builtin.command: aide --init --config /etc/aide/aide.conf
   args:
