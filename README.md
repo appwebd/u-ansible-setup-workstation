@@ -7,7 +7,9 @@ Prepare the workstation with defined properties:
 * Hardening of Debian 13 (Kernel hardening, driver blacklisting) 
 * Configuration of some auditd options
 * General permissions configuration
-* Installation of rkhunter
-* Installation of Tripwire
 * Installation of Aida
+* Installation of Rkhunter
+* Installation of Sysstat
+* Installation of Tripwire
+
  
