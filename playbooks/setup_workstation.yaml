@@ -15,6 +15,7 @@
     - suggested_software_packages
     - suggested_software_packages_desktop
     - setup_aide
+    - setup_gnome
     - setup_otpclient
     - setup_rkhunter
     - setup_sysstat
