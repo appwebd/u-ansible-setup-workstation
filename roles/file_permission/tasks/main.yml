@@ -39,69 +39,69 @@
     group: root
   when: file_stat.stat.exists
 
-- name: Eliminar permisos a grupo y otros en /etc/crontab
+- name: Remove group and other permissions in /etc/crontabb
   ansible.builtin.file:
     path: /etc/crontab
-    mode: '0600'  # Equivalente a chmod og-rwx
+    mode: '0600'  # Equivalent:  chmod og-rwx
     owner: root
     group: root
 
-- name: Asegurar propietario root:root en /etc/cron.hourly
+- name: Ensure owner root:root in /etc/cron.hourly
   ansible.builtin.file:
     path: /etc/cron.hourly
     owner: root
     group: root
     mode: '0700'
 
-- name: Asegurar permisos og-rwx en /etc/cron.hourly
+- name: Ensure og-rwx permissions in /etc/cron.hourly
   ansible.builtin.file:
     path: /etc/cron.hourly
     mode: '0700'
 
-- name: Asegurar propietario root:root en /etc/cron.daily
+- name: Ensure root:root ownership in /etc/cron.daily
   ansible.builtin.file:
     path: /etc/cron.daily
     owner: root
     group: root
     mode: '0700'
 
-- name: Asegurar permisos og-rwx en /etc/cron.daily
+- name: Ensure og-rwx permissions in /etc/cron.daily
   ansible.builtin.file:
     path: /etc/cron.daily
     mode: '0700'
 
-- name: Asegurar propietario root:root en /etc/cron.weekly
+- name: Ensure root:root ownership in /etc/cron.weekly
   ansible.builtin.file:
     path: /etc/cron.weekly
     owner: root
     group: root
     mode: '0700'
 
-- name: Asegurar permisos og-rwx en /etc/cron.weekly
+- name: Ensure og-rwx permissions in /etc/cron.weekly
   ansible.builtin.file:
     path: /etc/cron.weekly
     mode: '0700'
 
-- name: Asegurar propietario root:root en /etc/cron.monthly
+- name: Ensure root:root ownership in /etc/cron.monthly
   ansible.builtin.file:
     path: /etc/cron.monthly
     owner: root
     group: root
     mode: '0700'
 
-- name: Asegurar permisos og-rwx en /etc/cron.monthly
+- name: Ensure og-rwx permissions in /etc/cron.monthly
   ansible.builtin.file:
     path: /etc/cron.monthly
     mode: '0700'
 
-- name: Asegurar propietario root:root en /etc/cron.d
+- name: Ensure root:root ownership in /etc/cron.d
   ansible.builtin.file:
     path: /etc/cron.d
     owner: root
     group: root
     mode: '0700'
 
-- name: Asegurar permisos og-rwx en /etc/cron.d
+- name: Ensure og-rwx permissions in /etc/cron.d
   ansible.builtin.file:
     path: /etc/cron.d
     mode: '0700'
@@ -118,7 +118,7 @@
     owner: root
     group: root
     state: file
-  when: opasswd_stat.stat.exists is true
+  when: opasswd_stat.stat.exists
 
 - name: Check if /etc/security/opasswd.old exists
   ansible.builtin.stat:
@@ -132,4 +132,4 @@
     owner: root
     group: root
     state: file
-  when: opasswd_old_stat.stat.exists is true
+  when: opasswd_old_stat.stat.exists

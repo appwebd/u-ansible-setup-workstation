@@ -10,8 +10,8 @@ ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default('') }}
 [sshd]
 enabled = true
 port = {{ ssh_port | default('ssh') }}
-logpath = %(syslog_authlog)s
-backend = %(syslog_backend)s
+logpath = %(sshd_log)s
+backend = %(sshd_backend)s
 
 {% if nginx_installed | default(false) %}
 [nginx-http-auth]
