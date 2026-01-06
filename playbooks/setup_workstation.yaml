@@ -1,22 +1,23 @@
 ---
 - name: Apply updates && install packages
-  hosts: dev.local
+  hosts: localhost
   become: true
   vars_files:
     - vault.yml
   roles:
-    - configure_local_login_banner
-    - configure-timezone
-    - grub_audit_backlog
-    - update_upgrade
-    - file_permission
-    - configure_login_defs
-    - configure_auditd
-    - suggested_software_packages
-    - suggested_software_packages_desktop
-    - setup_aide
-    - setup_otpclient
-    - setup_rkhunter
-    - setup_sysstat
-    - setup_tripwire
-    - hardening_debian
+#    - configure_local_login_banner
+#    - configure-timezone
+#    - grub_audit_backlog
+#    - update_upgrade
+#    - file_permission
+#    - configure_login_defs
+#    - configure_auditd
+#    - suggested_software_packages
+#    - suggested_software_packages_desktop
+#    - setup_aide
+    - setup_gnome
+#    - setup_otpclient
+#    - setup_rkhunter
+#    - setup_sysstat
+#    - setup_tripwire
+#    - hardening_debian

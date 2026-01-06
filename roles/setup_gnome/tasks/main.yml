@@ -1,0 +1,99 @@
+# gsettings list-schemas
+# gsettings list-recursively | grep privacy
+#
+#  org.gnome.desktop.privacy disable-camera false
+#  org.gnome.desktop.privacy disable-microphone false
+#  org.gnome.desktop.privacy disable-sound-output false
+#  org.gnome.desktop.privacy hide-identity true
+#  org.gnome.desktop.privacy old-files-age uint32 30
+#  org.gnome.desktop.privacy privacy-screen false
+#  org.gnome.desktop.privacy recent-files-max-age -1
+#  org.gnome.desktop.privacy remember-app-usage false
+#  org.gnome.desktop.privacy remember-recent-files false
+#  org.gnome.desktop.privacy remove-old-temp-files false
+#  org.gnome.desktop.privacy remove-old-trash-files false
+#  org.gnome.desktop.privacy report-technical-problems false
+#  org.gnome.desktop.privacy send-software-usage-stats false
+#  org.gnome.desktop.privacy show-full-name-in-top-bar true
+#  org.gnome.desktop.privacy usb-protection true
+#  org.gnome.desktop.privacy usb-protection-level 'lockscreen'
+
+- name: Disable camera access
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/disable-camera
+    value: 'true'
+
+- name: Disable microphone access
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/disable-microphone
+    value: 'true'
+
+- name: Disable sound output access
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/disable-sound-output
+    value: 'false'
+
+- name: Hide user identity
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/hide-identity
+    value: 'true'
+
+- name: Set old files age to 30 days
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/old-files-age
+    value: '3'
+
+- name: Setting privacy screen
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/privacy-screen
+    value: 'false'
+
+- name: Do not limit recent files age
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/recent-files-max-age
+    value: '1'
+
+- name: Remember application usage
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/remember-app-usage
+    value: 'false'
+
+- name: Remember recent files
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/remember-recent-files
+    value: 'true'
+
+- name: Remove old temporary files
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/remove-old-temp-files
+    value: 'true'
+
+- name: Remove old trash files
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/remove-old-trash-files
+    value: 'true'
+
+- name: Report technical problems
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/report-technical-problems
+    value: 'false'
+
+- name: Send software usage statistics
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/send-software-usage-stats
+    value: 'false'
+
+- name: Show full name in top bar
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/show-full-name-in-top-bar
+    value: 'true'
+
+- name: Enable USB protection
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/usb-protection
+    value: 'false'
+
+- name: Set USB protection level to lockscreen
+  community.general.dconf:
+    key: /org/gnome/desktop/privacy/usb-protection-level
+    value: "'lockscreen'"

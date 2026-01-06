@@ -26,7 +26,9 @@
   ansible.builtin.get_url:
     url: https://rkhunter.sourceforge.net/1.4/mirrors.dat
     dest: /var/lib/rkhunter/db/mirrors.dat
-#    mode: '0644'
+    owner: root
+    group: root
+    mode: '0640'
 
 - name: Update data base of rkhunter
   ansible.builtin.command: rkhunter --update
