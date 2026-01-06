@@ -3,7 +3,7 @@
   ansible.builtin.apt:
     name: aide
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Create a exclude some files
   ansible.builtin.template:

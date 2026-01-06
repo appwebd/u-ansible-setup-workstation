@@ -13,11 +13,10 @@
   ansible.builtin.command: twadmin --generate-keys --site-keyfile /etc/tripwire/site.key --local-keyfile /etc/tripwire/localhost.localdomain-local.key
   args:
     creates: /etc/tripwire/site.key
-  ignore_errors: true
 
 - name: Initialize data base of Tripwire
   ansible.builtin.command: tripwire --init
   args:
     creates: /var/lib/tripwire/`hostname`.twd
   environment:
-    PASSPHRASE: "{{ tripwire_password  }}"
+    PASSPHRASE: "{{ tripwire_password }}"
