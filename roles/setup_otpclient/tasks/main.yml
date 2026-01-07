@@ -4,9 +4,9 @@
     path: /etc/pam.d/common-session
   register: common_session_file
 
-- name:  Verify current file contents
+- name: Verify current file contents
   ansible.builtin.command: grep -E '^session\s+required\s+pam_limits\. so' /etc/pam. d/common-session
-  register:  pam_limits_check
+  register: pam_limits_check
   changed_when: false
   failed_when: false
   when: common_session_file.stat.exists
@@ -23,11 +23,11 @@
 
 - name: Ensure that pam_limits.so is configured
   ansible.builtin.lineinfile:
-    path:  /etc/pam.d/common-session
+    path: /etc/pam.d/common-session
     regexp: '^session\s+required\s+pam_limits\. so'
     line: 'session required pam_limits.so'
     state: present
-    backup: yes
+    backup: true
   when: common_session_file.stat.exists
 
 - name: Verify final configuration

@@ -3,6 +3,7 @@
   ansible.builtin.package:
     name: auditd
     state: present
+    update_cache: true
 
 - name: Create a file /etc/audit/auditd.conf
   ansible.builtin.template:
@@ -90,6 +91,108 @@
     group: root
     mode: '0640'
 
+
+- name: Create rules file for network environment modification events
+  ansible.builtin.copy:
+    content: |
+      # Rule 33257: Ensure events that modify the network environment are collected
+      -a always,exit -F arch=b64 -S sethostname -S setdomainname -S sethostname
+      -a always,exit -F arch=b32 -S sethostname -S setdomainname -S sethostname
+    dest: /etc/audit/rules.d/99-network.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create rules file for user/group modification events
+  ansible.builtin.copy:
+    content: |
+      # Rule 33260: Ensure events that modify user/group information are collected
+      -w /etc/passwd -p wa
+      -w /etc/shadow -p wa
+      -w /etc/group -p wa
+    dest: /etc/audit/rules.d/99-user-modification.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create rules file for login/logout events
+  ansible.builtin.copy:
+    content: |
+      # Rule 33264: Ensure login and logout events are collected
+      -w /var/log/faillog -p wa
+      -w /var/log/lastlog -p wa
+      -w /var/log/tallylog -p wa
+    dest: /etc/audit/rules.d/99-login-logout.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create rules file for SELinux-related events
+  ansible.builtin.copy:
+    content: |
+      # Rule 33266: Ensure events that modify Mandatory Access Controls are collected
+      -a always,exit -F arch=b64 -S setxattr -F key=security
+      -a always,exit -F arch=b32 -S setxattr -F key=security
+    dest: /etc/audit/rules.d/99-selinux.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create rules file for chcon command
+  ansible.builtin.copy:
+    content: |
+      # Rule 33267: Ensure successful and unsuccessful attempts to use the chcon command are collected
+      -a always,exit -F arch=b64 -S chcon
+      -a always,exit -F arch=b32 -S chcon
+    dest: /etc/audit/rules.d/99-chcon.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create rules file for setfacl command
+  ansible.builtin.copy:
+    content: |
+      # Rule 33268: Ensure successful and unsuccessful attempts to use the setfacl command are collected
+      -a always,exit -F arch=b64 -S setfacl
+      -a always,exit -F arch=b32 -S setfacl
+    dest: /etc/audit/rules.d/99-setfacl.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create rules file for chacl command
+  ansible.builtin.copy:
+    content: |
+      # Rule 33269: Ensure successful and unsuccessful attempts to use the chacl command are collected
+      -a always,exit -F arch=b64 -S chacl
+      -a always,exit -F arch=b32 -S chacl
+    dest: /etc/audit/rules.d/99-chacl.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create rules file for usermod command
+  ansible.builtin.copy:
+    content: |
+      # Rule 33270: Ensure successful and unsuccessful attempts to use the usermod command are collected
+      -a always,exit -F arch=b64 -S usermod
+      -a always,exit -F arch=b32 -S usermod
+    dest: /etc/audit/rules.d/99-usermod.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create rules file for kernel module loading/unloading/modification events
+  ansible.builtin.copy:
+    content: |
+      # Rule 33271: Ensure kernel module loading, unloading, and modification events are collected
+      -a always,exit -F arch=b64 -S init_module -S delete_module
+      -a always,exit -F arch=b32 -S init_module -S delete_module
+    dest: /etc/audit/rules.d/99-kernel-modules.rules
+    owner: root
+    group: root
+    mode: '0640'
+
 - name: Create a file /etc/audit/rules.d/audit.rules
   ansible.builtin.template:
     src: rules.d/audit.rules.j2
@@ -97,7 +200,6 @@
     owner: root
     group: root
     mode: '0640'
-
 
 # ---
 - name: Ensure auditd service is running
