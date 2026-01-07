@@ -5,6 +5,14 @@
     state: present
     update_cache: true
 
+- name: Ensure audit log directory exists
+  file:
+    path: /var/log/audit
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+
 - name: Create a file /etc/audit/auditd.conf
   ansible.builtin.template:
     src: auditd.conf.j2
@@ -13,160 +21,106 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/audit.rules
-  ansible.builtin.template:
-    src: audit.rules.j2
-    dest: /etc/audit/audit.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-- name: Create a file /etc/audit/rules.d/20-sudo-sudoers.rules
-  ansible.builtin.template:
-    src: rules.d/20-sudo-sudoers.rules.j2
-    dest: /etc/audit/rules.d/20-sudo-sudoers.rules
-    owner: root
-    group: root
-    mode: '0640'
 
 
-- name: Create a file /etc/audit/rules.d/30-time-locale.rules
-  ansible.builtin.template:
-    src: rules.d/30-time-locale.rules.j2
-    dest: /etc/audit/rules.d/30-time-locale.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-- name: Create a file /etc/audit/rules.d/40-access-identity.rules
-  ansible.builtin.template:
-    src: rules.d/40-access-identity.rules.j2
-    dest: /etc/audit/rules.d/40-access-identity.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-
-- name: Create a file /etc/audit/rules.d/50-perm-mounts.rules
-  ansible.builtin.template:
-    src: rules.d/50-perm-mounts.rules.j2
-    dest: /etc/audit/rules.d/50-perm-mounts.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-
-- name: Create a file /etc/audit/rules.d/60-session-login.rules
-  ansible.builtin.template:
-    src: rules.d/60-session-login.rules.j2
-    dest: /etc/audit/rules.d/60-session-login.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-
-- name: Create a file /etc/audit/rules.d/70-mac-commands.rules
-  ansible.builtin.template:
-    src: rules.d/70-mac-commands.rules.j2
-    dest: /etc/audit/rules.d/70-mac-commands.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-
-- name: Create a file /etc/audit/rules.d/80-modules.rules
-  ansible.builtin.template:
-    src: rules.d/80-modules.rules.j2
-    dest: /etc/audit/rules.d/80-modules.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-
-- name: Create a file /etc/audit/rules.d/99-finalize.rules
-  ansible.builtin.template:
-    src: rules.d/99-finalize.rules.j2
-    dest: /etc/audit/rules.d/99-finalize.rules.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-
-- name: Create rules file for network environment modification events
+- name: Create a file /etc/audit/rules.d/10-sudo-sudoers.rules
   ansible.builtin.copy:
     content: |
-      # Rule 33257: Ensure events that modify the network environment are collected
-      -a always,exit -F arch=b64 -S sethostname -S setdomainname -S sethostname
-      -a always,exit -F arch=b32 -S sethostname -S setdomainname -S sethostname
-    dest: /etc/audit/rules.d/99-network.rules
+      ## 33253 - changes to the sudoers file
+      -w /etc/sudoers -p wa -k scope
+      -w /etc/sudoers.d -p wa -k scope
+
+      ## 33254 - Actions as another user
+      -a always,exit -F arch=b64 -C euid!=uid -F auid!=unset -S execve -k user_emulation
+      -a always,exit -F arch=b32 -C euid!=uid -F auid!=unset -S execve -k user_emulation
+
+      ## 33255 - Changes to the sudo log
+      -w /var/log/sudo.log -p wa -k sudo_log_file
+    dest: /etc/audit/rules.d/10-sudo-sudoers.rules
     owner: root
     group: root
     mode: '0640'
 
-- name: Create rules file for user/group modification events
+- name: Create a file /etc/audit/rules.d/15-time-locale.rules
   ansible.builtin.copy:
-    content: |
-      # Rule 33260: Ensure events that modify user/group information are collected
-      -w /etc/passwd -p wa
-      -w /etc/shadow -p wa
-      -w /etc/group -p wa
-    dest: /etc/audit/rules.d/99-user-modification.rules
+    content: | 
+      ## 33256 - Date and time changes
+      -a always,exit -F arch=b64 -S adjtimex,settimeofday,clock_settime -k time-change
+      -a always,exit -F arch=b32 -S adjtimex,settimeofday,clock_settime -k time-change
+      -w /etc/localtime -p wa -k time-change
+  
+      ## 33257 - Changes to the network environment
+      -a always,exit -F arch=b64 -S sethostname,setdomainname -k system-locale
+      -a always,exit -F arch=b32 -S sethostname,setdomainname -k system-locale
+      -w /etc/issue -p wa -k system-locale
+      -w /etc/issue.net -p wa -k system-locale
+      -w /etc/hosts -p wa -k system-locale
+      -w /etc/network -p wa -k system-locale
+      -w /etc/networks -p wa -k system-locale
+    dest: /etc/audit/rules.d/15-time-locale.rules
     owner: root
     group: root
     mode: '0640'
 
-- name: Create rules file for login/logout events
+- name: Create a file /etc/audit/rules.d/20-access-identity.rules<
   ansible.builtin.copy:
     content: |
-      # Rule 33264: Ensure login and logout events are collected
+      ## 33259 - Failed login attempts
+      -a always,exit -F arch=b64 -S open,openat,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access
+      -a always,exit -F arch=b64 -S open,openat,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access
+      -a always,exit -F arch=b32 -S open,openat,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access
+      -a always,exit -F arch=b32 -S open,openat,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access
+
+      ## 33260 - Create rules file for user/group modification events
+      -w /etc/group -p wa -k identity
+      -w /etc/passwd -p wa -k identity
+      -w /etc/gshadow -p wa -k identity
+      -w /etc/shadow -p wa -k identity
+      -w /etc/security/opasswd -p wa -k identity
+    dest: /etc/audit/rules.d/20-access-identity.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+- name: Create a file /etc/audit/rules.d/25-perm-mounts.rules
+  ansible.builtin.copy:
+    content: |
+      ## 33261 - Permission attribute modifications
+      -a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -k perm_mod
+      -a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -k perm_mod
+      -a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -k perm_mod
+      -a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -k perm_mod
+      -a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -k perm_mod
+      -a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -k perm_mod
+
+      ## 33262 - successful mount instructions
+      -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -k mounts
+      -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -k mounts
+    dest: /etc/audit/rules.d/25-perm-mounts.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+
+- name: Create a file /etc/audit/rules.d/30-session-login.rules
+  ansible.builtin.copy:
+    content: |
+      ## 33263 - Login information
+      -w /var/run/utmp -p wa -k session
+      -w /var/log/wtmp -p wa -k session
+      -w /var/log/btmp -p wa -k session
+
+      ## 33264 - Login/logout events
       -w /var/log/faillog -p wa
-      -w /var/log/lastlog -p wa
       -w /var/log/tallylog -p wa
-    dest: /etc/audit/rules.d/99-login-logout.rules
-    owner: root
-    group: root
-    mode: '0640'
+      -w /var/log/lastlog -p wa -k logins
+      -w /var/run/faillock -p wa -k logins
 
-- name: Create rules file for SELinux-related events
-  ansible.builtin.copy:
-    content: |
-      # Rule 33266: Ensure events that modify Mandatory Access Controls are collected
-      -a always,exit -F arch=b64 -S setxattr -F key=security
-      -a always,exit -F arch=b32 -S setxattr -F key=security
-    dest: /etc/audit/rules.d/99-selinux.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-- name: Create rules file for chcon command
-  ansible.builtin.copy:
-    content: |
-      # Rule 33267: Ensure successful and unsuccessful attempts to use the chcon command are collected
-      -a always,exit -F arch=b64 -S chcon
-      -a always,exit -F arch=b32 -S chcon
-    dest: /etc/audit/rules.d/99-chcon.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-- name: Create rules file for setfacl command
-  ansible.builtin.copy:
-    content: |
-      # Rule 33268: Ensure successful and unsuccessful attempts to use the setfacl command are collected
-      -a always,exit -F arch=b64 -S setfacl
-      -a always,exit -F arch=b32 -S setfacl
-    dest: /etc/audit/rules.d/99-setfacl.rules
-    owner: root
-    group: root
-    mode: '0640'
-
-- name: Create rules file for chacl command
-  ansible.builtin.copy:
-    content: |
-      # Rule 33269: Ensure successful and unsuccessful attempts to use the chacl command are collected
-      -a always,exit -F arch=b64 -S chacl
-      -a always,exit -F arch=b32 -S chacl
-    dest: /etc/audit/rules.d/99-chacl.rules
+      ## 33265 - File deletion
+      -a always,exit -F arch=b64 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=unset -k delete
+      -a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=unset -k delete
+    dest: /etc/audit/rules.d/30-session-login.rules
     owner: root
     group: root
     mode: '0640'
@@ -177,37 +131,49 @@
       # Rule 33270: Ensure successful and unsuccessful attempts to use the usermod command are collected
       -a always,exit -F arch=b64 -S usermod
       -a always,exit -F arch=b32 -S usermod
-    dest: /etc/audit/rules.d/99-usermod.rules
+    dest: /etc/audit/rules.d/35-usermod.rules
     owner: root
     group: root
     mode: '0640'
 
-- name: Create rules file for kernel module loading/unloading/modification events
+- name: Create a file /etc/audit/rules.d/40-modules.rules
   ansible.builtin.copy:
     content: |
-      # Rule 33271: Ensure kernel module loading, unloading, and modification events are collected
-      -a always,exit -F arch=b64 -S init_module -S delete_module
-      -a always,exit -F arch=b32 -S init_module -S delete_module
-    dest: /etc/audit/rules.d/99-kernel-modules.rules
+      ## 33271 -  Kernel modules
+      -a always,exit -F arch=b64 -S init_module,finit_module,delete_module -F auid!=unset -k modules
+      -a always,exit -F arch=b32 -S init_module,finit_module,delete_module -F auid!=unset -k modules
+      -w /usr/sbin/insmod -p x -k modules
+      -w /usr/sbin/rmmod -p x -k modules
+      -w /usr/sbin/modprobe -p x -k modules
+    dest: /etc/audit/rules.d/40-modules.rules
     owner: root
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/audit.rules
-  ansible.builtin.template:
-    src: rules.d/audit.rules.j2
-    dest: /etc/audit/rules.d/audit.rules
+
+- name: Create a file /etc/audit/rules.d/99-finalize.rules
+  ansible.builtin.copy:
+    content: |
+      ## 33272 - inmutable Contiguration (Always at the end)
+      -e 2
+    dest: /etc/audit/rules.d/99-finalize.rules.rules
     owner: root
     group: root
     mode: '0640'
 
 # ---
+
+- name: Load audit rules
+  ansible.builtin.command: augenrules --load
+  changed_when: false
+  # This ensures rules are valid before starting service
+
 - name: Ensure auditd service is running
   ansible.builtin.service:
     name: auditd
     state: started
     enabled: true
-  notify: Restart auditd
+    use: service  # Use init script wrapper for reliability
 
 - name: Reload auditd configuration to apply changes
   ansible.builtin.systemd:
