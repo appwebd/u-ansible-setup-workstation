@@ -1,5 +1,29 @@
-minlen = 12
-minclass = 4
+# /etc/security/pwquality.conf
+# Password quality configuration
+
+# 33194 - Ensure minimum password length is configured
+minlen = 14
+
+# 33195 - Ensure password complexity is configured
+dcredit = -1     # at least 1 digit
+ucredit = -1     # at least 1 uppercase letter
+lcredit = -1     # at least 1 lowercase letter
+ocredit = -1     # at least 1 special character
+
+# 33193 - Ensure password number of changed characters is configured
+difok = 4
+
+# 33196 - Ensure password same consecutive characters is configured
 maxrepeat = 3
-reject_username = 1
-difok = 8
+
+# 33197 - Ensure password maximum sequential characters is configured
+maxsequence = 3
+
+# 33198 - Ensure password dictionary check is enabled
+dictcheck = 1
+
+# 33199 - Ensure password quality checking is enforced
+enforcing = 1
+
+# 33200 - Ensure password quality is enforced for the root user
+enforce_for_root
