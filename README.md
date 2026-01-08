@@ -8,6 +8,7 @@ Prepare the workstation with defined properties:
 * Configuration of some auditd options
 * General permissions configuration
 * Installation of Aida
+* Installation of Otpclient
 * Installation of Rkhunter
 * Installation of Sysstat
 * Installation of Tripwire

@@ -6,7 +6,7 @@
     update_cache: true
 
 - name: Ensure audit log directory exists
-  file:
+  ansible.builtin.file:
     path: /var/log/audit
     state: directory
     owner: root
@@ -21,131 +21,310 @@
     group: root
     mode: '0640'
 
-
-
-- name: Create a file /etc/audit/rules.d/10-sudo-sudoers.rules
+- name: Create a file /etc/audit/rules.d/50-scope.rules
   ansible.builtin.copy:
     content: |
-      ## 33253 - changes to the sudoers file
-      -w /etc/sudoers -p wa -k scope
+      ## Audit rule for sudoers modifications (CIS 6.2.3.1)
+      ## Rule ID: 33253 OK
+      ## Purpose:  Ensure changes to system administration scope (sudoers) is collected
+      ## Status: Passed
+      ## Monitor /etc/sudoers file for write and attribute changes
+      -w /etc/sudoers -p wa -k scope    
+      ## Monitor /etc/sudoers.d directory for write and attribute changes
       -w /etc/sudoers.d -p wa -k scope
+    dest: /etc/audit/rules.d/50-scope.rules
+    owner: root
+    group: root
+    mode: '0640'
 
-      ## 33254 - Actions as another user
+- name: Create a file /etc/audit/rules.d/50-user_emulation.rules
+  ansible.builtin.copy:
+    content: |
+      ## Audit rule for user emulation/privilege escalation (CIS 6.2.3.2)
+      ## Rule ID: 33254
+      ## Purpose: Ensure actions as another user are always logged
+      ## Status: Failed
+      ## Monitor execve when effective UID differs from real UID (64-bit)
+      ## This captures sudo, su, and other privilege escalation commands
       -a always,exit -F arch=b64 -C euid!=uid -F auid!=unset -S execve -k user_emulation
       -a always,exit -F arch=b32 -C euid!=uid -F auid!=unset -S execve -k user_emulation
-
-      ## 33255 - Changes to the sudo log
-      -w /var/log/sudo.log -p wa -k sudo_log_file
-    dest: /etc/audit/rules.d/10-sudo-sudoers.rules
+    dest: /etc/audit/rules.d/50-user_emulation.rules
     owner: root
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/15-time-locale.rules
+- name: Create a file /etc/audit/rules.d/50-time-change.rules
   ansible.builtin.copy:
-    content: | 
-      ## 33256 - Date and time changes
-      -a always,exit -F arch=b64 -S adjtimex,settimeofday,clock_settime -k time-change
-      -a always,exit -F arch=b32 -S adjtimex,settimeofday,clock_settime -k time-change
+    content: |
+      ## Audit rule for date and time modifications (CIS 6.2.3.4)
+      ## Rule ID: 33256 OK
+      ## Purpose: Ensure events that modify date and time information are collected
+      ## Status: Passed
+      
+      ## ============================================================================
+      ## Monitor time adjustment system calls (64-bit)
+      ## ============================================================================
+      ## adjtimex - tune kernel clock
+      ## settimeofday - set time using timeval and timezone structures
+      -a always,exit -F arch=b64 -S adjtimex,settimeofday -k time-change
+      
+      ## Monitor time adjustment system calls (32-bit)
+      -a always,exit -F arch=b32 -S adjtimex,settimeofday -k time-change
+      
+      ## ============================================================================
+      ## Monitor clock_settime system call (64-bit)
+      ## ============================================================================
+      ## clock_settime - set clock time
+      ## a0=0x0 refers to CLOCK_REALTIME (the system-wide real-time clock)
+      -a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -k time-change
+      
+      ## Monitor clock_settime system call (32-bit)
+      -a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -k time-change
+      
+      ## ============================================================================
+      ## Monitor timezone configuration file
+      ## ============================================================================
+      ## /etc/localtime - system timezone configuration
       -w /etc/localtime -p wa -k time-change
-  
-      ## 33257 - Changes to the network environment
+    dest: /etc/audit/rules.d/50-time-change.rules
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create a file /etc/audit/rules.d/50-system_locale.rules
+  ansible.builtin.copy:
+    content: |
+      ## Audit rule for network environment changes (CIS 6.2.3.5)
+      ## Rule ID: 33257
+      ## Purpose:  Ensure events that modify the system's network environment are collected
+      
+      ## Monitor sethostname and setdomainname system calls (64-bit)
       -a always,exit -F arch=b64 -S sethostname,setdomainname -k system-locale
+      
+      ## Monitor sethostname and setdomainname system calls (32-bit)
       -a always,exit -F arch=b32 -S sethostname,setdomainname -k system-locale
+      
+      ## Monitor /etc/issue - pre-login message file
       -w /etc/issue -p wa -k system-locale
+      
+      ## Monitor /etc/issue. net - pre-login network message file
       -w /etc/issue.net -p wa -k system-locale
+      
+      ## Monitor /etc/hosts - host names and IP addresses
       -w /etc/hosts -p wa -k system-locale
-      -w /etc/network -p wa -k system-locale
+      
+      ## Monitor /etc/networks - symbolic names for networks
       -w /etc/networks -p wa -k system-locale
-    dest: /etc/audit/rules.d/15-time-locale.rules
+      
+      ## Monitor /etc/network/ - network interface scripts and configurations
+      -w /etc/network/ -p wa -k system-locale
+      
+      ## Monitor /etc/netplan/ - YAML networking configuration files (Ubuntu/Debian)
+      -w /etc/netplan/ -p wa -k system-locale
+    dest: /etc/audit/rules.d/50-system_locale.rules
     owner: root
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/20-access-identity.rules<
+- name: Create a file /etc/audit/rules.d/50-access.rules
   ansible.builtin.copy:
     content: |
-      ## 33259 - Failed login attempts
-      -a always,exit -F arch=b64 -S open,openat,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access
-      -a always,exit -F arch=b64 -S open,openat,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access
-      -a always,exit -F arch=b32 -S open,openat,open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access
-      -a always,exit -F arch=b32 -S open,openat,open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access
+      ## Audit rule for unsuccessful file access attempts (CIS 6.2.3.7)
+      ## Rule ID: 33259
+      ## Purpose:  Ensure unsuccessful file access attempts are collected
+      ## Status: Failed - NEEDS IMPLEMENTATION
+      
+      ## NOTE: UID_MIN is typically 1000 on Debian/Ubuntu systems
+      ## Verify with: awk '/^\s*UID_MIN/{print $2}' /etc/login.defs
+      
+      ## ============================================================================
+      ## Monitor EACCES (Permission Denied) errors (64-bit)
+      ## ============================================================================
+      ## Captures:  creat, open, openat, truncate, ftruncate that fail with EACCES
+      -a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access
+      
+      ## Monitor EACCES (Permission Denied) errors (32-bit)
+      -a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access
+      
+      ## ============================================================================
+      ## Monitor EPERM (Operation Not Permitted) errors (64-bit)
+      ## ============================================================================
+      ## Captures: creat, open, openat, truncate, ftruncate that fail with EPERM
+      -a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access
+      
+      ## Monitor EPERM (Operation Not Permitted) errors (32-bit)
+      -a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access
+    dest: /etc/audit/rules.d/50-access.rules
+    owner: root
+    group: root
+    mode: '0640'
 
-      ## 33260 - Create rules file for user/group modification events
+- name: Create a file /etc/audit/rules.d/50-identity.rules
+  ansible.builtin.copy:
+    content: |
+      ## Audit rule for user/group information modifications (CIS 6.2.3.8)
+      ## Rule ID: 33260
+      ## Purpose:  Ensure events that modify user/group information are collected
+      ## Status: Failed - NEEDS IMPLEMENTATION
+      
+      ## ============================================================================
+      ## Monitor User and Group Database Files
+      ## ============================================================================
+      
+      ## /etc/group - System groups database
       -w /etc/group -p wa -k identity
+      
+      ## /etc/passwd - System users database
       -w /etc/passwd -p wa -k identity
+      
+      ## /etc/gshadow - Encrypted passwords for groups
       -w /etc/gshadow -p wa -k identity
+      
+      ## /etc/shadow - System user encrypted passwords
       -w /etc/shadow -p wa -k identity
+      
+      ## /etc/security/opasswd - Old passwords storage (PAM remember module)
       -w /etc/security/opasswd -p wa -k identity
-    dest: /etc/audit/rules.d/20-access-identity.rules
+      
+      ## ============================================================================
+      ## Monitor Name Service Switch and Authentication Configuration
+      ## ============================================================================
+      
+      ## /etc/nsswitch.conf - Name service switch configuration
+      ## Controls how system resolves hostnames, users, groups, etc.
+      -w /etc/nsswitch.conf -p wa -k identity
+      
+      ## /etc/pam.conf - PAM master configuration file (legacy, rarely used)
+      -w /etc/pam.conf -p wa -k identity
+      
+      ## /etc/pam.d/ - PAM configuration directory (modern PAM configs)
+      ## Contains per-service PAM configuration files
+      -w /etc/pam.d -p wa -k identity
+    dest: /etc/audit/rules.d/50-identity.rules
     owner: root
     group: root
     mode: '0640'
 
 
-- name: Create a file /etc/audit/rules.d/25-perm-mounts.rules
+- name: Create a file /etc/audit/rules.d/50-perm_mod.rules
   ansible.builtin.copy:
     content: |
-      ## 33261 - Permission attribute modifications
+      ## Audit rule for discretionary access control permission modifications (CIS 6.2.3.9)
+      ## Rule ID: 33261 OK
+      ## Purpose:  Ensure discretionary access control permission modification events are collected
+      ## Status: Passed
+      
+      ## NOTE: UID_MIN is typically 1000 on Debian/Ubuntu systems
+      ## Verify with: awk '/^\s*UID_MIN/{print $2}' /etc/login.defs
+      
+      ## ============================================================================
+      ## CHMOD - Monitor file permission changes (64-bit)
+      ## ============================================================================
       -a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -k perm_mod
+      
+      ## CHMOD - Monitor file permission changes (32-bit)
       -a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -k perm_mod
-      -a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -k perm_mod
-      -a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>=1000 -F auid!=unset -k perm_mod
+      
+      ## ============================================================================
+      ## CHOWN - Monitor file ownership changes (64-bit)
+      ## ============================================================================
+      -a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F auid>=1000 -F auid!=unset -k perm_mod
+      
+      ## CHOWN - Monitor file ownership changes (32-bit)
+      -a always,exit -F arch=b32 -S chown,fchown,lchown,fchownat -F auid>=1000 -F auid!=unset -k perm_mod
+      
+      ## ============================================================================
+      ## XATTR - Monitor extended attribute changes (64-bit)
+      ## ============================================================================
       -a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -k perm_mod
+      
+      ## XATTR - Monitor extended attribute changes (32-bit)
       -a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -k perm_mod
+    dest: /etc/audit/rules.d/50-perm_mod.rules
+    owner: root
+    group: root
+    mode: '0640'
 
-      ## 33262 - successful mount instructions
-      -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -k mounts
+- name: Create a file /etc/audit/rules.d/50-mounts.rules
+  ansible.builtin.copy:
+    content: |
+      ## Audit rule for file system mounts (CIS 6.2.3.10)
+      ## Rule ID: 33262 OK
+      ## Purpose:  Ensure successful file system mounts are collected
+      ## Status: Passed
+      
+      ## NOTE: UID_MIN is typically 1000 on Debian/Ubuntu systems
+      ## Verify with: awk '/^\s*UID_MIN/{print $2}' /etc/login.defs
+      
+      ## Monitor mount system call by non-privileged users (32-bit)
       -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -k mounts
-    dest: /etc/audit/rules.d/25-perm-mounts.rules
+      
+      ## Monitor mount system call by non-privileged users (64-bit)
+      -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -k mounts
+    dest: /etc/audit/rules.d/50-mounts.rules
     owner: root
     group: root
     mode: '0640'
 
 
-- name: Create a file /etc/audit/rules.d/30-session-login.rules
+- name: Create a file /etc/audit/rules.d/50-session.rules
   ansible.builtin.copy:
     content: |
-      ## 33263 - Login information
+      ## Audit rule for session initiation information (CIS 6.2.3.11)
+      ## Rule ID: 33263 OK
+      ## Purpose:   Ensure session initiation information is collected
+      ## Status:  Passed
+      
+      ## ============================================================================
+      ## Monitor Session Tracking Files
+      ## ============================================================================
+      
+      ## /var/run/utmp - Currently logged in users
+      ## This file tracks all users currently logged into the system
+      ## Updated in real-time as users login/logout
       -w /var/run/utmp -p wa -k session
+      
+      ## /var/log/wtmp - Login/logout history
+      ## Tracks all logins, logouts, system shutdowns, and reboots
+      ## Permanent record of all session events
       -w /var/log/wtmp -p wa -k session
+      
+      ## /var/log/btmp - Failed login attempts
+      ## Records all failed authentication attempts
+      ## Critical for detecting brute-force attacks
       -w /var/log/btmp -p wa -k session
-
-      ## 33264 - Login/logout events
-      -w /var/log/faillog -p wa
-      -w /var/log/tallylog -p wa
-      -w /var/log/lastlog -p wa -k logins
-      -w /var/run/faillock -p wa -k logins
-
-      ## 33265 - File deletion
-      -a always,exit -F arch=b64 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=unset -k delete
-      -a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat,rmdir -F auid>=1000 -F auid!=unset -k delete
-    dest: /etc/audit/rules.d/30-session-login.rules
+    dest: /etc/audit/rules.d/50-session.rules
     owner: root
     group: root
     mode: '0640'
 
-- name: Create rules file for usermod command
+- name: Create rules file /etc/audit/rules.d/50-usermod.rules for usermod command
   ansible.builtin.copy:
-    content: |
-      # Rule 33270: Ensure successful and unsuccessful attempts to use the usermod command are collected
-      -a always,exit -F arch=b64 -S usermod
-      -a always,exit -F arch=b32 -S usermod
-    dest: /etc/audit/rules.d/35-usermod.rules
+    content: |      
+      ## Audit rule for usermod command (CIS 6.2.3.18)
+      ## Rule ID: 33270
+      ## Purpose: Ensure successful and unsuccessful attempts to use the usermod command are collected
+
+      # Get UID_MIN from login.defs (typically 1000 for most systems)
+      -a always,exit -F path=/usr/sbin/usermod -F perm=x -F auid>=1000 -F auid!=unset -k usermod
+    dest: /etc/audit/rules.d/50-usermod.rules
     owner: root
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/40-modules.rules
+- name: Create a file /etc/audit/rules.d/50-kernel_modules.rules
   ansible.builtin.copy:
     content: |
-      ## 33271 -  Kernel modules
-      -a always,exit -F arch=b64 -S init_module,finit_module,delete_module -F auid!=unset -k modules
-      -a always,exit -F arch=b32 -S init_module,finit_module,delete_module -F auid!=unset -k modules
-      -w /usr/sbin/insmod -p x -k modules
-      -w /usr/sbin/rmmod -p x -k modules
-      -w /usr/sbin/modprobe -p x -k modules
-    dest: /etc/audit/rules.d/40-modules.rules
+      ## Rule ID: 33271 OK -  Rule for auditing kernel module loading, unloading, and modifications
+      # Syscalls of kernel módules (64 bits)
+      -a always,exit -F arch=b64 -S init_module -S finit_module -S delete_module -S create_module -S query_module -F auid>=1000 -F auid!=unset -k kernel_modules
+      
+      # Syscalls of kernel modules (32 bits)
+      -a always,exit -F arch=b32 -S init_module -S finit_module -S delete_module -S create_module -S query_module -F auid>=1000 -F auid!=unset -k kernel_modules
+      
+      # kmod Execution
+      -a always,exit -F path=/usr/bin/kmod -F perm=x -F auid>=1000 -F auid!=unset -k kernel_modules
+    dest: /etc/audit/rules.d/50-kernel_modules.rules
     owner: root
     group: root
     mode: '0640'
@@ -154,7 +333,7 @@
 - name: Create a file /etc/audit/rules.d/99-finalize.rules
   ansible.builtin.copy:
     content: |
-      ## 33272 - inmutable Contiguration (Always at the end)
+      ## Rule ID: 33272 OK - inmutable Contiguration (Always at the end)
       -e 2
     dest: /etc/audit/rules.d/99-finalize.rules.rules
     owner: root
