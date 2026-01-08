@@ -29,7 +29,7 @@
       ## Purpose:  Ensure changes to system administration scope (sudoers) is collected
       ## Status: Passed
       ## Monitor /etc/sudoers file for write and attribute changes
-      -w /etc/sudoers -p wa -k scope    
+      -w /etc/sudoers -p wa -k scope
       ## Monitor /etc/sudoers.d directory for write and attribute changes
       -w /etc/sudoers.d -p wa -k scope
     dest: /etc/audit/rules.d/50-scope.rules
@@ -60,27 +60,27 @@
       ## Rule ID: 33256 OK
       ## Purpose: Ensure events that modify date and time information are collected
       ## Status: Passed
-      
+
       ## ============================================================================
       ## Monitor time adjustment system calls (64-bit)
       ## ============================================================================
       ## adjtimex - tune kernel clock
       ## settimeofday - set time using timeval and timezone structures
       -a always,exit -F arch=b64 -S adjtimex,settimeofday -k time-change
-      
+
       ## Monitor time adjustment system calls (32-bit)
       -a always,exit -F arch=b32 -S adjtimex,settimeofday -k time-change
-      
+
       ## ============================================================================
       ## Monitor clock_settime system call (64-bit)
       ## ============================================================================
       ## clock_settime - set clock time
       ## a0=0x0 refers to CLOCK_REALTIME (the system-wide real-time clock)
       -a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -k time-change
-      
+
       ## Monitor clock_settime system call (32-bit)
       -a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -k time-change
-      
+
       ## ============================================================================
       ## Monitor timezone configuration file
       ## ============================================================================
@@ -97,28 +97,28 @@
       ## Audit rule for network environment changes (CIS 6.2.3.5)
       ## Rule ID: 33257
       ## Purpose:  Ensure events that modify the system's network environment are collected
-      
+
       ## Monitor sethostname and setdomainname system calls (64-bit)
       -a always,exit -F arch=b64 -S sethostname,setdomainname -k system-locale
-      
+
       ## Monitor sethostname and setdomainname system calls (32-bit)
       -a always,exit -F arch=b32 -S sethostname,setdomainname -k system-locale
-      
+
       ## Monitor /etc/issue - pre-login message file
       -w /etc/issue -p wa -k system-locale
-      
+
       ## Monitor /etc/issue. net - pre-login network message file
       -w /etc/issue.net -p wa -k system-locale
-      
+
       ## Monitor /etc/hosts - host names and IP addresses
       -w /etc/hosts -p wa -k system-locale
-      
+
       ## Monitor /etc/networks - symbolic names for networks
       -w /etc/networks -p wa -k system-locale
-      
+
       ## Monitor /etc/network/ - network interface scripts and configurations
       -w /etc/network/ -p wa -k system-locale
-      
+
       ## Monitor /etc/netplan/ - YAML networking configuration files (Ubuntu/Debian)
       -w /etc/netplan/ -p wa -k system-locale
     dest: /etc/audit/rules.d/50-system_locale.rules
@@ -133,25 +133,25 @@
       ## Rule ID: 33259
       ## Purpose:  Ensure unsuccessful file access attempts are collected
       ## Status: Failed - NEEDS IMPLEMENTATION
-      
+
       ## NOTE: UID_MIN is typically 1000 on Debian/Ubuntu systems
       ## Verify with: awk '/^\s*UID_MIN/{print $2}' /etc/login.defs
-      
+
       ## ============================================================================
       ## Monitor EACCES (Permission Denied) errors (64-bit)
       ## ============================================================================
       ## Captures:  creat, open, openat, truncate, ftruncate that fail with EACCES
       -a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access
-      
+
       ## Monitor EACCES (Permission Denied) errors (32-bit)
       -a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=unset -k access
-      
+
       ## ============================================================================
       ## Monitor EPERM (Operation Not Permitted) errors (64-bit)
       ## ============================================================================
       ## Captures: creat, open, openat, truncate, ftruncate that fail with EPERM
       -a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access
-      
+
       ## Monitor EPERM (Operation Not Permitted) errors (32-bit)
       -a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=unset -k access
     dest: /etc/audit/rules.d/50-access.rules
@@ -166,37 +166,37 @@
       ## Rule ID: 33260
       ## Purpose:  Ensure events that modify user/group information are collected
       ## Status: Failed - NEEDS IMPLEMENTATION
-      
+
       ## ============================================================================
       ## Monitor User and Group Database Files
       ## ============================================================================
-      
+
       ## /etc/group - System groups database
       -w /etc/group -p wa -k identity
-      
+
       ## /etc/passwd - System users database
       -w /etc/passwd -p wa -k identity
-      
+
       ## /etc/gshadow - Encrypted passwords for groups
       -w /etc/gshadow -p wa -k identity
-      
+
       ## /etc/shadow - System user encrypted passwords
       -w /etc/shadow -p wa -k identity
-      
+
       ## /etc/security/opasswd - Old passwords storage (PAM remember module)
       -w /etc/security/opasswd -p wa -k identity
-      
+
       ## ============================================================================
       ## Monitor Name Service Switch and Authentication Configuration
       ## ============================================================================
-      
+
       ## /etc/nsswitch.conf - Name service switch configuration
       ## Controls how system resolves hostnames, users, groups, etc.
       -w /etc/nsswitch.conf -p wa -k identity
-      
+
       ## /etc/pam.conf - PAM master configuration file (legacy, rarely used)
       -w /etc/pam.conf -p wa -k identity
-      
+
       ## /etc/pam.d/ - PAM configuration directory (modern PAM configs)
       ## Contains per-service PAM configuration files
       -w /etc/pam.d -p wa -k identity
@@ -213,31 +213,31 @@
       ## Rule ID: 33261 OK
       ## Purpose:  Ensure discretionary access control permission modification events are collected
       ## Status: Passed
-      
+
       ## NOTE: UID_MIN is typically 1000 on Debian/Ubuntu systems
       ## Verify with: awk '/^\s*UID_MIN/{print $2}' /etc/login.defs
-      
+
       ## ============================================================================
       ## CHMOD - Monitor file permission changes (64-bit)
       ## ============================================================================
       -a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -k perm_mod
-      
+
       ## CHMOD - Monitor file permission changes (32-bit)
       -a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=1000 -F auid!=unset -k perm_mod
-      
+
       ## ============================================================================
       ## CHOWN - Monitor file ownership changes (64-bit)
       ## ============================================================================
       -a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F auid>=1000 -F auid!=unset -k perm_mod
-      
+
       ## CHOWN - Monitor file ownership changes (32-bit)
       -a always,exit -F arch=b32 -S chown,fchown,lchown,fchownat -F auid>=1000 -F auid!=unset -k perm_mod
-      
+
       ## ============================================================================
       ## XATTR - Monitor extended attribute changes (64-bit)
       ## ============================================================================
       -a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -k perm_mod
-      
+
       ## XATTR - Monitor extended attribute changes (32-bit)
       -a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -k perm_mod
     dest: /etc/audit/rules.d/50-perm_mod.rules
@@ -252,13 +252,13 @@
       ## Rule ID: 33262 OK
       ## Purpose:  Ensure successful file system mounts are collected
       ## Status: Passed
-      
+
       ## NOTE: UID_MIN is typically 1000 on Debian/Ubuntu systems
       ## Verify with: awk '/^\s*UID_MIN/{print $2}' /etc/login.defs
-      
+
       ## Monitor mount system call by non-privileged users (32-bit)
       -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -k mounts
-      
+
       ## Monitor mount system call by non-privileged users (64-bit)
       -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -k mounts
     dest: /etc/audit/rules.d/50-mounts.rules
@@ -274,21 +274,21 @@
       ## Rule ID: 33263 OK
       ## Purpose:   Ensure session initiation information is collected
       ## Status:  Passed
-      
+
       ## ============================================================================
       ## Monitor Session Tracking Files
       ## ============================================================================
-      
+
       ## /var/run/utmp - Currently logged in users
       ## This file tracks all users currently logged into the system
       ## Updated in real-time as users login/logout
       -w /var/run/utmp -p wa -k session
-      
+
       ## /var/log/wtmp - Login/logout history
       ## Tracks all logins, logouts, system shutdowns, and reboots
       ## Permanent record of all session events
       -w /var/log/wtmp -p wa -k session
-      
+
       ## /var/log/btmp - Failed login attempts
       ## Records all failed authentication attempts
       ## Critical for detecting brute-force attacks
@@ -300,7 +300,7 @@
 
 - name: Create rules file /etc/audit/rules.d/50-usermod.rules for usermod command
   ansible.builtin.copy:
-    content: |      
+    content: |
       ## Audit rule for usermod command (CIS 6.2.3.18)
       ## Rule ID: 33270
       ## Purpose: Ensure successful and unsuccessful attempts to use the usermod command are collected
@@ -318,10 +318,10 @@
       ## Rule ID: 33271 OK -  Rule for auditing kernel module loading, unloading, and modifications
       # Syscalls of kernel módules (64 bits)
       -a always,exit -F arch=b64 -S init_module -S finit_module -S delete_module -S create_module -S query_module -F auid>=1000 -F auid!=unset -k kernel_modules
-      
+
       # Syscalls of kernel modules (32 bits)
       -a always,exit -F arch=b32 -S init_module -S finit_module -S delete_module -S create_module -S query_module -F auid>=1000 -F auid!=unset -k kernel_modules
-      
+
       # kmod Execution
       -a always,exit -F path=/usr/bin/kmod -F perm=x -F auid>=1000 -F auid!=unset -k kernel_modules
     dest: /etc/audit/rules.d/50-kernel_modules.rules
