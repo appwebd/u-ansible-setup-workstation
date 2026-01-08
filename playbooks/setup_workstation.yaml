@@ -19,6 +19,7 @@
     - setup_gnome
     - setup_otpclient
     - setup_rkhunter
+    - setup_sshd
     - setup_sysstat
     - setup_tripwire
     - hardening_debian
