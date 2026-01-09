@@ -1,9 +1,12 @@
 ---
 - name: Apply updates && install packages
   hosts: dev.local
+  connection: local
   become: true
+  gather_facts: true
   vars_files:
-    - vault.yml
+    - roles/setup_tripwire/vars/main.yml
+
   roles:
     - configure_local_login_banner
     - configure-timezone

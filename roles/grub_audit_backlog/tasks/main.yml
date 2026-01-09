@@ -8,15 +8,7 @@
 - name: Add or update audit_backlog_limit in GRUB_CMDLINE_LINUX
   ansible.builtin.lineinfile:
     path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX="((?!.*audit_backlog_limit=8192).*)"$'
-    line: 'GRUB_CMDLINE_LINUX="\\1 audit_backlog_limit=8192 "'
-    backrefs: true
-  notify: Update grub
-
-- name: Add or update audit=1 in GRUB_CMDLINE_LINUX
-  ansible.builtin.lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX="((?!.*audit=1).*)"$'
-    line: 'GRUB_CMDLINE_LINUX="\\1 audit=1 "'
+    regexp: '^GRUB_CMDLINE_LINUX="((?!.*audit=1 audit_backlog_limit=8192).*)"$'
+    line: 'GRUB_CMDLINE_LINUX="\1 audit=1 audit_backlog_limit=8192"'
     backrefs: true
   notify: Update grub
