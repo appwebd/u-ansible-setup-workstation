@@ -1,0 +1,2 @@
+---
+tripwire_password: "{{ vault_tripwire_password }}"

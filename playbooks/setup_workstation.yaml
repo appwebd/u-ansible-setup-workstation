@@ -3,7 +3,7 @@
   hosts: dev.local
   become: true
   vars_files:
-    - vault.yml
+    - ../group_vars/all/vault.yml
   roles:
     - configure_local_login_banner
     - configure-timezone

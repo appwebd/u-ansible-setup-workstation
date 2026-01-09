@@ -6,4 +6,4 @@
 /inventory/inventory.ini
 /.ansible/
 /.scannerwork/
-/vault.yml
+/group_vars/all/vault.yml

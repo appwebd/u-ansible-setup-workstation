@@ -13,4 +13,12 @@ Prepare the workstation with defined properties:
 * Installation of Sysstat
 * Installation of Tripwire
 
+## Configuration
+Create your password variable in vault_tripwire_password in the folder group_vars/all/vault.yml
+
+```
+cd group_vars/all/
+ansible-vault create vault.yml
+```
+
  

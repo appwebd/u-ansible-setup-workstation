@@ -10,9 +10,11 @@
   when: ansible_os_family == "Debian"
 
 - name: Generate keys if this does not exists
-  ansible.builtin.command: twadmin --generate-keys --site-keyfile /etc/tripwire/site.key --local-keyfile /etc/tripwire/localhost.localdomain-local.key
+  ansible.builtin.command: twadmin --generate-keys --site-keyfile /etc/tripwire/`hostname`-local.key --local-keyfile /etc/tripwire/localhost.localdomain-local.key
   args:
-    creates: /etc/tripwire/site.key
+    creates: /etc/tripwire/`hostname`-local.key
+  environment:
+    PASSPHRASE: "{{ tripwire_password }}"
 
 - name: Initialize data base of Tripwire
   ansible.builtin.command: tripwire --init

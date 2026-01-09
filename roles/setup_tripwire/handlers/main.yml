@@ -1,0 +1,22 @@
+---
+# Handlers for setup_tripwire role. Only run when notified by a task
+
+- name: Verify Tripwire integrity
+  command: tripwire --check
+  become: true
+  register: tripwire_check
+  changed_when: false
+  # This task doesn’t mark "changed", only verifies integrity
+
+- name: Reload Tripwire configuration
+  command: tripwire --update-policy
+  become: true
+  when: tripwire_check is succeeded
+  # Runs only if the verification succeeded
+
+- name: Restart Tripwire service
+  service:
+    name: tripwire
+    state: restarted
+  become: true
+  # Only runs if a task notified it due to a critical change
