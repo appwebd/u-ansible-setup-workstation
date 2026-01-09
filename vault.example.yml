@@ -1,7 +1,0 @@
- # Save Secrets / Passwords using ansible-vault create vault.yml
- #
- # Password created:
- #
- # | key               | where is used       |
- # |-------------------|---------------------|
- # | tripwire_password | role/setup_tripwire |

@@ -1,2 +1,3 @@
 ---
-tripwire_password: "{{ vault_tripwire_password }}"
+setup_tripwire_site_passphrase: "{{ vault_tripwire_site_passphrase }}"
+setup_tripwire_local_passphrase: "{{ vault_tripwire_local_passphrase }}"

@@ -6,4 +6,5 @@
 /inventory/inventory.ini
 /.ansible/
 /.scannerwork/
-/group_vars/all/vault.yml
+/roles/setup_tripwire/vars/main.yml
+.vault_password
