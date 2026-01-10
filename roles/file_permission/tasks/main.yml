@@ -39,7 +39,7 @@
     group: root
   when: file_stat.stat.exists
 
-- name: Remove group and other permissions in /etc/crontabb
+- name: Remove group and other permissions in /etc/crontab
   ansible.builtin.file:
     path: /etc/crontab
     mode: '0600'  # Equivalent:  chmod og-rwx
