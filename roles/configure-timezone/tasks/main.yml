@@ -1,30 +1,33 @@
 ---
-# Configure Timezone and NTP
+- name: Ensure tzdata is installed
+  ansible.builtin.package:
+    name: tzdata
+    state: present
 
-- name: Setting your timezone to UTC
+- name: Setting your timezone
   community.general.timezone:
-    name: UTC
+    name: "{{ timezone }}"
   become: true
 
+- name: Install chrony
+  ansible.builtin.package:
+    name: chrony
+    state: present
 
-- name: Enable NTP synchronization using timedatectl
-  ansible.builtin.command: /usr/bin/timedatectl set-ntp true
-  changed_when: false
-  tags: ntp
-
-- name: Create a file /etc/systemd/timesyncd.conf with ntp.shoa.cl
-  ansible.builtin.copy:
-    content: |
-      [Time]
-      NTP=ntp.shoa.cl
-      #FallbackNTP=0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org 3.debian.pool.ntp.org
-      #RootDistanceMaxSec=5
-      #PollIntervalMinSec=32
-      #PollIntervalMaxSec=2048
-      #ConnectionRetrySec=30
-      #SaveIntervalSec=60
-
-    dest: /etc/systemd/timesyncd.conf
+- name: Configure chrony NTP servers
+  ansible.builtin.lineinfile:
+    path: /etc/chrony.conf
+    regexp: '^server '
+    line: "server {{ item }} iburst"
+    create: true
     owner: root
     group: root
-    mode: '0644'
+    mode: '0640'
+  loop: "{{ chrony_ntp_servers }}"
+  notify: Restart chrony
+
+- name: Enable and start chrony
+  ansible.builtin.service:
+    name: chronyd
+    state: started
+    enabled: true
