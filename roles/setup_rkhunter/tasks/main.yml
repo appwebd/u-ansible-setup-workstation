@@ -31,9 +31,13 @@
     mode: '0640'
 
 - name: Update data base of rkhunter
-  ansible.builtin.command: rkhunter --update
+  ansible.builtin.command: rkhunter --update --nocolors
+  register: rkhunter_update
   changed_when: false
+  failed_when: rkhunter_update.rc not in [0, 2]
 
 - name: Update properties of base of files
   ansible.builtin.command: rkhunter --propupd
+  register: rkhunter_propupd
   changed_when: false
+  failed_when: rkhunter_propupd.rc not in [0, 2]
