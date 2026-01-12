@@ -14,9 +14,10 @@ suggested_software_packages_:
    - audispd-plugins
    - auditd
    - bsd-mailx
+   - ca-certificates
+   - chkrootkit
    - clamav
    - clamav-daemon
-   - ca-certificates
    - curl
    - debsums
    - fail2ban
@@ -33,10 +34,11 @@ suggested_software_packages_:
    - libpam-tmpdir
    - needrestart
    - nftables
+   - rkhunter
    - rsyslog
    - sysstat
    - systemd-timesyncd
    - tp-smapi-dkms
    - tripwire
-   - unattended-upgrades
    - ufw
+   - unattended-upgrades

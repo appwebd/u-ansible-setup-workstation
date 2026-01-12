@@ -16,7 +16,9 @@
   # Only runs if a task notified it due to a critical change
 
 - name: Compile Tripwire policy
-  ansible.builtin.command: tripwire --update-policy /etc/tripwire/twpol.txt
-  become: true
-  args:
-    creates: /etc/tripwire/twpol.txt
+  ansible.builtin.expect:
+    command: twadmin --create-polfile /etc/tripwire/twpol.txt
+    responses:
+      '(?i)passphrase': "{{ setup_tripwire_site_passphrase }}"
+    timeout: 120
+  no_log: false
