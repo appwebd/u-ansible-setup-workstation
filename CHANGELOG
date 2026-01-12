@@ -1,0 +1,74 @@
+f125025 Mon Jan 12 16:54:41 2026 +0000 Merge pull request 'review-correct-bugs-in-tasks-#29' (#30) from review-correct-bugs-in-tasks-#29 into main
+10390d1 Mon Jan 12 16:54:06 2026 +0000 fea: Updated suggested software packages
+87ceb7a Mon Jan 12 16:53:28 2026 +0000 fea: Updated run_remove_bloatware_packages.sh
+b4c2d2e Mon Jan 12 16:53:03 2026 +0000 fea: Added shutdown and update_upgrade
+130e0d3 Mon Jan 12 16:51:58 2026 +0000 fix: Fixed setup_tripwire
+65979d6 Sun Jan 11 00:26:48 2026 +0000 fix: Fixed setup_rkhunter
+52d947a Sun Jan 11 00:23:58 2026 +0000 Merge pull request 'configure-timezone-is-not-working-#27' (#28) from configure-timezone-is-not-working-#27 into main
+97e0c6c Sun Jan 11 00:21:47 2026 +0000 fix: Fixed configure timezone
+d21259e Sat Jan 10 23:49:41 2026 +0000 fix: Typo corrected
+3542b4b Fri Jan 9 22:18:51 2026 +0000 Merge pull request 'setup-tripwire-is-not-working-#25' (#26) from setup-tripwire-is-not-working-#25 into main
+8f788bc Fri Jan 9 22:18:04 2026 +0000 fix: grub audit has been added in grub GRUB_CMDLINE_LINUX
+610a3fb Fri Jan 9 22:17:19 2026 +0000 fix: Missing file 00_local_excludes.j2
+4a49171 Fri Jan 9 22:16:54 2026 +0000 fix: Setup Tripwire is not working #25
+0bfe47f Fri Jan 9 16:03:19 2026 +0000 fix: Setup Tripwire is not working #25
+e9f6702 Thu Jan 8 21:49:41 2026 +0000 Merge pull request 'Update-documentation-#22' (#24) from Update-documentation-#22 into main
+3dbbf57 Thu Jan 8 21:49:10 2026 +0000 fix: removing trailing spaces
+e85e883 Thu Jan 8 21:48:11 2026 +0000 docs: documentation pwquality.conf.j2
+a2abb14 Thu Jan 8 21:47:31 2026 +0000 docs: documentation setup_sshd
+cb72f99 Thu Jan 8 21:47:16 2026 +0000 docs: documentation setup_sshd
+d2705b8 Thu Jan 8 18:48:37 2026 +0000 Merge pull request 'Update-documentation-#22' (#23) from Update-documentation-#22 into main
+6e96630 Thu Jan 8 18:47:47 2026 +0000 docs: documentation is improved
+8f92786 Thu Jan 8 18:08:53 2026 +0000 fea: Added audit=1 in grub file
+3651dcf Wed Jan 7 19:13:22 2026 +0000 Merge pull request 'fix: auditd is not working' (#21) from auditd-is-not-working-#20 into main
+8c1103f Wed Jan 7 19:12:54 2026 +0000 fix: auditd is not working
+3a71128 Wed Jan 7 14:02:02 2026 +0000 Merge pull request 'Improve-general-privacy-#9' (#19) from Improve-general-privacy-#9 into main
+e6e7c2f Wed Jan 7 14:01:22 2026 +0000 fea: Added more rule events auditd
+03f168d Wed Jan 7 13:59:27 2026 +0000 fix: fixing some formatting errors
+b4c5117 Tue Jan 6 19:30:19 2026 +0000 Merge pull request 'Improve-general-privacy-#9' (#18) from Improve-general-privacy-#9 into main
+9c42ae0 Tue Jan 6 19:28:55 2026 +0000 fea: Update template jail.local.j2
+f449d6b Tue Jan 6 19:28:34 2026 +0000 doc: Translated to english
+0c5d2da Tue Jan 6 18:46:59 2026 +0000 Merge pull request 'fea: setup fail2ban' (#17) from Improve-general-privacy-#9 into main
+8125724 Tue Jan 6 18:46:05 2026 +0000 fea: setup fail2ban
+cb7ba9b Tue Jan 6 17:20:01 2026 +0000 Merge pull request 'Improve-general-privacy-#9' (#16) from Improve-general-privacy-#9 into main
+457e948 Tue Jan 6 17:19:46 2026 +0000 fea: Original file
+b5f053e Tue Jan 6 17:18:12 2026 +0000 fea: Setting secure memory limitations
+8840fb8 Tue Jan 6 15:01:48 2026 +0000 Merge pull request 'Improve-general-privacy-#9' (#15) from Improve-general-privacy-#9 into main
+43a7c40 Tue Jan 6 15:01:03 2026 +0000 fix: For better understanding, establish the positive form.
+23b28a1 Tue Jan 6 14:07:39 2026 +0000 fea: Setting Gnome Privacy
+8df8240 Tue Jan 6 14:06:52 2026 +0000 fix: Fixing some errors
+deb56d5 Mon Jan 5 13:09:55 2026 +0000 Merge pull request 'fix: Update grub audit backlog' (#14) from Improve-general-privacy-#9 into main
+2ba158a Mon Jan 5 13:09:25 2026 +0000 fix: Update grub audit backlog
+1eae1f8 Sat Jan 3 19:49:49 2026 +0000 Merge pull request 'Improve-general-privacy-#9' (#13) from Improve-general-privacy-#9 into main
+35bb197 Sat Jan 3 19:49:13 2026 +0000 fea: Excluding some files
+2696177 Sat Jan 3 19:48:51 2026 +0000 fix: Correcting some spelling mistakes
+741c6d2 Sat Jan 3 19:47:54 2026 +0000 fea: Added setup otpclient
+f5a5c16 Sat Jan 3 19:47:42 2026 +0000 fea: Added setup otpclient
+8900759 Sat Jan 3 19:47:20 2026 +0000 fea: Update setup_workstation.yaml
+955e6c8 Sat Jan 3 14:07:32 2026 +0000 docs: Update README.md
+d07668a Wed Dec 31 22:46:17 2025 +0000 Merge pull request 'Improve-general-privacy-#9' (#12) from Improve-general-privacy-#9 into main
+90ef56f Wed Dec 31 22:45:38 2025 +0000 fea: Added setup sysstat
+d68d4a8 Wed Dec 31 22:45:27 2025 +0000 fea: Added grub audit blacklog
+230379d Wed Dec 31 22:44:58 2025 +0000 doc: updated documentation
+36bec13 Wed Dec 31 22:44:31 2025 +0000 fea: Added: firewire ohci drivers
+995cb2b Mon Dec 29 22:12:51 2025 +0000 Merge pull request 'Improve-general-privacy-#9' (#11) from Improve-general-privacy-#9 into main
+bd0fd7a Mon Dec 29 21:36:03 2025 +0000 fea: setup aide
+ae2e6ba Mon Dec 29 21:07:35 2025 +0000 fea: setup tripwire
+627d412 Sun Dec 28 18:53:15 2025 +0000 Merge pull request 'docs: improvements to README.md' (#10) from Improve-general-privacy-#9 into main
+87fb4b7 Sun Dec 28 18:44:59 2025 +0000 docs: improvements to README.md
+9f7bf9c Sun Dec 28 17:51:36 2025 +0000 Merge pull request 'New-playbooks-#7' (#8) from New-playbooks-#7 into main
+0aba94c Sun Dec 28 17:50:02 2025 +0000 fea: created remove unused accounts groups
+8f0f31d Sat Dec 27 22:28:44 2025 +0000 fix: Error installing suggested software packages
+9cc8e70 Sat Dec 27 22:27:00 2025 +0000 fea: Added remove bloatware packages debian
+2f98a7b Sat Dec 27 22:25:06 2025 +0000 fea: changed local login banner
+c16904a Sat Dec 27 22:24:32 2025 +0000 fea: Set secure permissions /etc/security/opasswd
+93ba2ee Fri Dec 26 13:29:09 2025 +0000 Merge pull request 'Ensure-local-login-warning-banner-is-configured-properly-#5' (#6) from Ensure-local-login-warning-banner-is-configured-properly-#5 into main
+5b8c87c Fri Dec 26 13:26:40 2025 +0000 fix: Fixed some errors
+067878c Fri Dec 26 13:20:35 2025 +0000 fea: Added local login banner
+a6ae255 Thu Dec 25 23:30:59 2025 +0000 Merge pull request '02-Set-auditd-configuration' (#4) from 02-Set-auditd-configuration into main
+2c47664 Thu Dec 25 23:29:48 2025 +0000 fixx: fixed some errors
+28fbc76 Thu Dec 25 23:28:46 2025 +0000 fea: Added some files of auditd configuration
+9bcee4c Tue Dec 23 18:39:06 2025 +0000 Merge pull request 'fea: Separate console and desktop packages' (#2) from 01-Separate-console-and-desktop-packages-01 into main
+cef4643 Tue Dec 23 18:38:26 2025 +0000 fea: Separate console and desktop packages
+4deead7 Mon Dec 22 23:03:01 2025 +0000 Initial commit
+e9c3c89 Sun Dec 21 19:47:01 2025 -0300 Initial commit
