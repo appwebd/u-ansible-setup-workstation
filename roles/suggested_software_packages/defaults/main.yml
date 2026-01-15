@@ -39,4 +39,3 @@ suggested_software_packages_:
    - systemd-timesyncd
    - tp-smapi-dkms
    - ufw
-
