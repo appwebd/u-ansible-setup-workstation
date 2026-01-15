@@ -1,3 +1,11 @@
+67a6487 Thu Jan 15 23:08:40 2026 +0000 Merge pull request 'resolving-Wazuh-suggestions-#31' (#32) from resolving-Wazuh-suggestions-#31 into main
+6ccd986 Thu Jan 15 23:07:34 2026 +0000 fea: Added run_shutdown.sh
+764ca75 Thu Jan 15 23:07:14 2026 +0000 fix: ansible lint
+860b8e6 Thu Jan 15 23:04:07 2026 +0000 fea: rename roles
+5bda8b8 Thu Jan 15 23:03:01 2026 +0000 fea: Setting up and configuring unattended upgrades
+7c5e62b Thu Jan 15 23:02:04 2026 +0000 fea: Setting up and configuring sudo logging and authentication timeout
+9f78b40 Thu Jan 15 23:01:44 2026 +0000 fea: Setting up and configuring sudo logging and authentication timeout
+cd360f7 Mon Jan 12 17:19:34 2026 +0000 fea: Added CHANGELOG
 f125025 Mon Jan 12 16:54:41 2026 +0000 Merge pull request 'review-correct-bugs-in-tasks-#29' (#30) from review-correct-bugs-in-tasks-#29 into main
 10390d1 Mon Jan 12 16:54:06 2026 +0000 fea: Updated suggested software packages
 87ceb7a Mon Jan 12 16:53:28 2026 +0000 fea: Updated run_remove_bloatware_packages.sh
