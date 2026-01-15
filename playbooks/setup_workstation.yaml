@@ -14,15 +14,17 @@
     - update_upgrade
     - file_permission
     - configure_login_defs
-    - configure_auditd
+    - auditd
     - suggested_software_packages
     - suggested_software_packages_desktop
-    - setup_aide
-    - setup_fail2ban
-    - setup_gnome
-    - setup_otpclient
-    - setup_rkhunter
-    - setup_sshd
-    - setup_sysstat
-    - setup_tripwire
+    - sudo
+    - aide
+    - fail2ban
+    - gnome                 # Configure gsettings list-recursively | grep privacy
+    - otpclient
+    - rkhunter
+    - sshd
+    - sysstat
+    - tripwire
+    - unattended_upgrades
     - hardening_debian
