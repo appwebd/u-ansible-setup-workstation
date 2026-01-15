@@ -1,0 +1,3 @@
+---
+tripwire_site_passphrase: "{{ vault_tripwire_site_passphrase }}"
+tripwire_local_passphrase: "{{ vault_tripwire_local_passphrase }}"

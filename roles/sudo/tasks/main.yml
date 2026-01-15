@@ -1,0 +1,25 @@
+---
+- name: Install sudo
+  ansible.builtin.apt:
+    name:
+      - sudo
+    state: present
+    cache_valid_time: 3600
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+
+- name: Configure log of sudo
+  ansible.builtin.template:
+    src: 10-sudo-logging.j2
+    dest: /etc/sudoers.d/10-sudo-logging
+    owner: root
+    group: root
+    mode: '0440'
+
+- name: Configure sudo authentication timeout
+  ansible.builtin.template:
+    src: 20-sudo-authentication-timeout.j2
+    dest: /etc/sudoers.d/20-sudo-authentication-timeout
+    owner: root
+    group: root
+    mode: '0440'

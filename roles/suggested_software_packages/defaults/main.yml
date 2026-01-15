@@ -12,7 +12,6 @@ suggested_software_packages_:
    - apt-show-versions
    - apt-transport-https
    - audispd-plugins
-   - auditd
    - bsd-mailx
    - ca-certificates
    - chkrootkit
@@ -39,6 +38,4 @@ suggested_software_packages_:
    - sysstat
    - systemd-timesyncd
    - tp-smapi-dkms
-   - tripwire
    - ufw
-   - unattended-upgrades
