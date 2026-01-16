@@ -35,6 +35,7 @@ suggested_software_packages_:
    - nftables
    - rkhunter
    - rsyslog
+   - sudo
    - sysstat
    - systemd-timesyncd
    - tp-smapi-dkms

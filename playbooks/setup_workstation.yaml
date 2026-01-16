@@ -8,23 +8,23 @@
     - roles/setup_tripwire/vars/main.yml
 
   roles:
-    - configure_local_login_banner
-    - configure-timezone
-    - grub_audit_backlog
-    - update_upgrade
-    - file_permission
-    - configure_login_defs
-    - auditd
-    - suggested_software_packages
-    - suggested_software_packages_desktop
+#    - configure_local_login_banner
+#    - configure-timezone
+#    - grub_audit_backlog
+#    - update_upgrade
+#    - file_permission
+#    - configure_login_defs
+#    - auditd
+#    - suggested_software_packages
+#    - suggested_software_packages_desktop
     - sudo
-    - aide
-    - fail2ban
-    - gnome                 # Configure gsettings list-recursively | grep privacy
-    - otpclient
-    - rkhunter
-    - sshd
-    - sysstat
-    - tripwire
-    - unattended_upgrades
-    - hardening_debian
+#    - aide
+#    - fail2ban
+#    - gnome                 # Configure gsettings list-recursively | grep privacy
+#    - otpclient
+#    - rkhunter
+#    - sshd
+#    - sysstat
+#    - tripwire
+#    - unattended_upgrades
+#    - hardening_debian
