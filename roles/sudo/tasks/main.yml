@@ -1,12 +1,22 @@
 ---
-- name: Install sudo
+- name: Asegurar caché de apt actualizada
+  become: true
   ansible.builtin.apt:
-    name:
-      - sudo
+    update_cache: yes
+    cache_valid_time: 3600
+  register: result
+  until: result is success
+
+- name: Ensure sudo is installed
+  become: true
+  ansible.builtin.apt:
+    name: sudo
     state: present
     cache_valid_time: 3600
     update_cache: true
-  when: ansible_os_family == 'Debian'
+  retries: 10
+  delay: 5
+
 
 - name: Configure log of sudo
   ansible.builtin.template:
