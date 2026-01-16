@@ -1,5 +1,5 @@
 ---
-- name: Asegurar caché de apt actualizada
+- name: Ensure cache of apt updated
   become: true
   ansible.builtin.apt:
     update_cache: true
