@@ -133,3 +133,45 @@
     group: root
     state: file
   when: opasswd_old_stat.stat.exists
+
+- name: Wazuh id 33044 Check if /boot/grub/grub.cfg exists
+  ansible.builtin.stat:
+    path: /boot/grub/grub.cfg
+  register: grub_stat
+
+- name: Set secure permissions for /boot/grub/grub.cfg if it exists
+  ansible.builtin.file:
+    path: /boot/grub/grub.cfg
+    mode: '0600'
+    owner: root
+    group: root
+    state: file
+  when: grub_stat.stat.exists
+
+- name: Check if /etc/issue exists  # Wazuh id 33052
+  ansible.builtin.stat:
+    path: /etc/issue
+  register: etc_issue_stat
+
+- name: Set secure permissions for /etc/issue if it exists
+  ansible.builtin.file:
+    path: /etc/issue
+    mode: '0644'              # chmod u-x,go-wx $(readlink -e /etc/issue)
+    owner: root
+    group: root
+    state: file
+  when: etc_issue_stat.stat.exists
+
+- name: Check if /etc/issue.net exists # wazuh id 33053
+  ansible.builtin.stat:
+    path: /etc/issue.net
+  register: etc_issue_net_stat
+
+- name: Set secure permissions for /etc/issue.net if it exists
+  ansible.builtin.file:
+    path: /etc/issue.net
+    mode: '0644'              # chmod u-x,go-wx $(readlink -e /etc/issue.net)
+    owner: root
+    group: root
+    state: file
+  when: etc_issue_net_stat.stat.exists
