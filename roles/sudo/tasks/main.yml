@@ -1,8 +1,8 @@
 ---
-- name: Asegurar caché de apt actualizada
+- name: Ensure apt cache is up to date
   become: true
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
   register: result
   until: result is success

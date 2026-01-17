@@ -1,0 +1,10 @@
+/.idea/
+/tmp/
+*.retry
+*/.idea/*
+*/.vscode/*
+/inventory/inventory.ini
+/.ansible/
+/.scannerwork/
+/roles/tripwire/vars/main.yml
+.vault_password
