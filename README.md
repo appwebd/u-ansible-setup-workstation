@@ -130,6 +130,8 @@ bash bin/run_ansible_lint.sh
 - [Lynis Hardening Guide](https://cisofy.com/lynis/)
 - [Wazuh Documentation](https://documentation.wazuh.com/)
 - [Debian Hardening](https://wiki.debian.org/SecureDebootstrap)
+- [Ubuntu Security Standard](https://ubuntu.com/security/security-standards)
+- [Ubuntu hardening](https://ubuntu.com/engage/a-guide-to-infrastructure-hardening)
 
 ## 📜 Licencia
 Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
