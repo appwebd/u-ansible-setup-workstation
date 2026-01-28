@@ -7,7 +7,7 @@ remove_bloatware_packages_:
   - dovecot-imapd
   - dovecot-pop3d
   - evolution
-  - geoclue-2.0
+#  - geoclue-2.0                # paquete con una alta dependencia con escritorio gnome-shell
   - gnome-characters
   - gnome-maps
   - gnome-remote-desktop
@@ -20,7 +20,7 @@ remove_bloatware_packages_:
   - ldap-utils
   - libvirt-daemon*
   - nfs-kernel-server
-  - nftables
+#  - nftables                    #docker.io : Dependencia con : containerd (>= 1.2.6-0ubuntu1~)
   - nis
   - open-iscsi
   - rsh-client
@@ -31,7 +31,8 @@ remove_bloatware_packages_:
   - talk
   - telnet*
   - tftpd-hpa tftp-hpa
-  - tnftp
+#  - tnftp                     # Remuebe también ubuntu-standard TODO: Revisar que implicaciones tiene
   - vsftpd
   - xinetd
-  - yelp
+#  - yelp                      # Dependencias con gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp
+
