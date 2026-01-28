@@ -11,10 +11,9 @@
     repo: deb http://deb.debian.org/debian {{ ansible_distribution_release }} universe
     state: present
     update_cache: true
+  when: ansible_facts['distribution'] == 'Debian'
 
 - name: Install package libfuse2t64
   ansible.builtin.apt:
     name: libfuse2t64
     state: present
-
-# TODO automatizar instalación y configuración de otpclient

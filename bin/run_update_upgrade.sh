@@ -9,5 +9,4 @@ set +o history
 # | --diff  | Muestra diferencias antes de aplicar.                  |
 
 export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
-ansible-playbook -i inventory/inventory.ini  playbooks/shutdown.yaml -b -K -v
-
+ansible-playbook -i "inventory/inventory.ini" -v "playbooks/update_upgrade.yaml" -b -K -v

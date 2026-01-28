@@ -1,13 +1,13 @@
 ---
 suggested_software_packages_:
-   - acpi-call-dkms
+#   - acpi-call-dkms         # error de caso en ubuntu 24.04
    - ansible
    - ansible-lint
    - apg
    - apparmor
    - apparmor-utils
-   - apt-config-auto-update
-   - apt-listbugs
+#   - apt-config-auto-update # Disponible solo en Debian
+#   - apt-listbugs           # Disponible solo en Debian
    - apt-listchanges
    - apt-show-versions
    - apt-transport-https
@@ -21,7 +21,6 @@ suggested_software_packages_:
    - debsums
    - fail2ban
    - ffmpeg
-   - ffmpeg
    - git
    - gnupg2
    - htop
@@ -31,7 +30,7 @@ suggested_software_packages_:
    - libpam-passwdqc
    - libpam-pwquality
    - libpam-tmpdir
-   - needrestart
+#   - needrestart          # Disponible solo en Debian
    - nftables
    - rkhunter
    - rsyslog
