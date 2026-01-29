@@ -1,0 +1,25 @@
+---
+
+- name: Create a file /etc/security/pwquality.conf
+  ansible.builtin.template:
+    src: pwquality.conf.j2
+    dest: /etc/security/pwquality.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create a file /etc/modprobe.d/blacklist.conf don't load this modules
+  ansible.builtin.template:
+    src: blacklist.conf.j2
+    dest: /etc/modprobe.d/blacklist.conf
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Create file /etc/sysctl.conf
+  ansible.builtin.template:
+    src: sysctl.conf.j2
+    dest: /etc/sysctl.conf
+    owner: root
+    group: root
+    mode: '0640'

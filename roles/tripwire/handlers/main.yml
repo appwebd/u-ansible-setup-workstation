@@ -1,0 +1,24 @@
+---
+# Handlers for setup_tripwire role. Only run when notified by a task
+
+- name: Verify Tripwire integrity
+  ansible.builtin.command: tripwire --check
+  become: true
+  register: tripwire_check
+  changed_when: false
+  # This task doesn’t mark "changed", only verifies integrity
+
+- name: Restart Tripwire service
+  ansible.builtin.service:
+    name: tripwire
+    state: restarted
+  become: true
+  # Only runs if a task notified it due to a critical change
+
+- name: Compile Tripwire policy
+  ansible.builtin.expect:
+    command: twadmin --create-polfile /etc/tripwire/twpol.txt
+    responses:
+      '(?i)passphrase': "{{ setup_tripwire_site_passphrase }}"
+    timeout: 120
+  no_log: false

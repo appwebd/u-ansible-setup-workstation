@@ -1,0 +1,19 @@
+---
+
+suggested_software_packages_desktop_:
+   - feh
+   - gedit
+   - gnome-shell-extension-appindicator
+#   - gnome-shell-extension-dashtodock  # Not found in Ubuntu
+   - gnome-shell-extension-desktop-icons-ng
+   - gnome-shell-extension-manager
+   - gnome-shell-extension-prefs
+   - gnome-shell-extensions
+   - gparted
+   - keepassxc
+   - mc
+   - otpclient
+   - terminator
+   - thunderbird
+   - bogofilter
+   - tweak

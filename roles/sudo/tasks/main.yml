@@ -1,0 +1,35 @@
+---
+- name: Ensure apt cache is up to date
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  register: result
+  until: result is success
+
+- name: Ensure sudo is installed
+  become: true
+  ansible.builtin.apt:
+    name: sudo
+    state: present
+    cache_valid_time: 3600
+    update_cache: true
+  retries: 10
+  delay: 5
+
+
+- name: Configure log of sudo
+  ansible.builtin.template:
+    src: 10-sudo-logging.j2
+    dest: /etc/sudoers.d/10-sudo-logging
+    owner: root
+    group: root
+    mode: '0440'
+
+- name: Configure sudo authentication timeout
+  ansible.builtin.template:
+    src: 20-sudo-authentication-timeout.j2
+    dest: /etc/sudoers.d/20-sudo-authentication-timeout
+    owner: root
+    group: root
+    mode: '0440'

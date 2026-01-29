@@ -1,0 +1,6 @@
+---
+- name: Remove bloatware and no recommended packages
+  hosts: dev.local
+  become: true
+  roles:
+    - remove_bloatware_packages

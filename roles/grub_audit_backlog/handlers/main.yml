@@ -1,0 +1,6 @@
+---
+- name: Update grub
+  ansible.builtin.command: update-grub
+  become: true
+  register: result
+  changed_when: false

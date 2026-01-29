@@ -1,0 +1,43 @@
+---
+- name: Install package rkhunter
+  ansible.builtin.apt:
+    name: rkhunter
+    state: present
+
+- name: Setting UPDATE_MIRRORS to 1
+  ansible.builtin.replace:
+    path: /etc/rkhunter.conf
+    regexp: '^UPDATE_MIRRORS=0'
+    replace: 'UPDATE_MIRRORS=1'
+
+- name: Setting MIRRORS_MODE to 0
+  ansible.builtin.replace:
+    path: /etc/rkhunter.conf
+    regexp: '^MIRRORS_MODE=1'
+    replace: 'MIRRORS_MODE=0'
+
+- name: Disabled variable WEB_CMD
+  ansible.builtin.replace:
+    path: /etc/rkhunter.conf
+    regexp: '^WEB_CMD=/bin/false'
+    replace: 'WEB_CMD=""'
+
+- name: Download mirrors.dat
+  ansible.builtin.get_url:
+    url: https://rkhunter.sourceforge.net/1.4/mirrors.dat
+    dest: /var/lib/rkhunter/db/mirrors.dat
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Update data base of rkhunter
+  ansible.builtin.command: rkhunter --update --nocolors
+  register: rkhunter_update
+  changed_when: false
+  failed_when: rkhunter_update.rc not in [0, 2]
+
+- name: Update properties of base of files
+  ansible.builtin.command: rkhunter --propupd
+  register: rkhunter_propupd
+  changed_when: false
+  failed_when: rkhunter_propupd.rc not in [0, 2]

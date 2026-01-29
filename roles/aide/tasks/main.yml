@@ -1,0 +1,30 @@
+---
+- name: Ensure aide package is installed (Debian family)
+  ansible.builtin.package:
+    name: aide
+    state: present
+    update_cache: true
+    cache_valid_time: 86400 # 24h
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Create /etc/aide/aide.conf.d directory if missing
+  ansible.builtin.file:
+    path: /etc/aide/aide.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Template local excludes file
+  ansible.builtin.template:
+    src: 00_local_excludes.j2
+    dest: "/etc/aide/aide.conf.d/{{ aide_exclude_file | default('00_local_excludes') }}"
+    owner: root
+    group: root
+    mode: "0640"
+
+- name: Initialize or update aide database when needed
+  ansible.builtin.command:
+    cmd: "aide --init --config /etc/aide/aide.conf"
+    creates: /var/lib/aide/aide.db.gz
+  notify: Restart aide

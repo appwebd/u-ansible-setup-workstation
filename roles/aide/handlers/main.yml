@@ -1,0 +1,4 @@
+- name: Restart aide
+  ansible.builtin.service:
+    name: aide
+    state: restarted

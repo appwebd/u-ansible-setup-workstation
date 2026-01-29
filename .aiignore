@@ -1,0 +1,23 @@
+# An .aiignore file follows the same syntax as a .gitignore file.
+# .gitignore documentation: https://git-scm.com/docs/gitignore
+
+# you can ignore files
+.DS_Store
+*.log
+*.tmp
+
+# or folders
+dist/
+build/
+out/
+
+/.idea/
+/tmp/
+*.retry
+*/.idea/*
+*/.vscode/*
+/inventory/inventory.ini
+/.ansible/
+/.scannerwork/
+/roles/tripwire/vars/main.yml
+.vault_password

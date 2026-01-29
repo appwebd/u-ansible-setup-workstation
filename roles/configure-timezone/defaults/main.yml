@@ -1,0 +1,6 @@
+---
+timezone: 'UTC'
+
+chrony_ntp_servers:
+  - '0.pool.nro.org'
+  - '1.pool.nro.org'

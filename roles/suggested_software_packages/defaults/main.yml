@@ -1,0 +1,41 @@
+---
+suggested_software_packages_:
+#   - acpi-call-dkms         # error de caso en ubuntu 24.04
+   - ansible
+   - ansible-lint
+   - apg
+   - apparmor
+   - apparmor-utils
+#   - apt-config-auto-update # Disponible solo en Debian
+#   - apt-listbugs           # Disponible solo en Debian
+   - apt-listchanges
+   - apt-show-versions
+   - apt-transport-https
+   - audispd-plugins
+   - bsd-mailx
+   - ca-certificates
+   - chkrootkit
+   - clamav
+   - clamav-daemon
+   - curl
+   - debsums
+   - fail2ban
+   - ffmpeg
+   - git
+   - gnupg2
+   - htop
+   - iptables
+   - jq
+   - libcrack2
+   - libpam-passwdqc
+   - libpam-pwquality
+   - libpam-tmpdir
+#   - needrestart          # Disponible solo en Debian
+   - nftables
+   - rkhunter
+   - rsyslog
+   - sudo
+   - sysstat
+   - systemd-timesyncd
+   - tp-smapi-dkms
+   - ufw

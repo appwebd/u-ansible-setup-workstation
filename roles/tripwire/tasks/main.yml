@@ -1,0 +1,280 @@
+- name: Install Tripwire, dependencies and entropy generators (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name:
+      - tripwire
+      - expect
+      - python3-pexpect
+      - haveged
+      - rng-tools
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+  tags:
+    - tripwire
+    - install
+
+- name: Ensure haveged service is running
+  ansible.builtin.service:
+    name: haveged
+    state: started
+    enabled: true
+  tags:
+    - tripwire
+    - install
+
+- name: Deploy Tripwire policy template
+  ansible.builtin.template:
+    src: templates/twpol.txt.j2
+    dest: /etc/tripwire/twpol.txt
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Compile Tripwire policy
+
+- name: Load encrypted vault variables
+  ansible.builtin.include_vars:
+    file: main.yml
+    name: vault_vars
+  tags:
+    - always
+
+- name: Set Tripwire passwords from vault
+  ansible.builtin.set_fact:
+    tripwire_site_passphrase: "{{ vault_vars.vault_tripwire_site_passphrase }}"
+    tripwire_local_passphrase: "{{ vault_vars.vault_tripwire_local_passphrase }}"
+  no_log: true
+  tags:
+    - always
+
+- name: Verify Tripwire passwords are defined
+  ansible.builtin.assert:
+    that:
+      - tripwire_site_passphrase is defined
+      - tripwire_local_passphrase is defined
+      - tripwire_site_passphrase | length > 0
+      - tripwire_local_passphrase | length > 0
+    fail_msg: "Tripwire passwords must be defined in vars/vault.yml"
+    success_msg: "Tripwire passwords are properly configured"
+  tags:
+    - tripwire
+    - validation
+
+- name: Update cache and install Tripwire package (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: tripwire
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+  tags:
+    - tripwire
+    - install
+
+- name: Ensure Tripwire directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0700'
+    owner: root
+    group: root
+  loop:
+    - /etc/tripwire
+    - /var/lib/tripwire
+    - /var/lib/tripwire/report
+  tags:
+    - tripwire
+    - config
+
+# Site key
+- name: Check if site key exists
+  ansible.builtin.stat:
+    path: /etc/tripwire/site.key
+  register: site_key_stat
+  tags:
+    - tripwire
+    - keys
+
+- name: Create temporary file for site passphrase
+  ansible.builtin.tempfile:
+    state: file
+    suffix: .site_pass
+  register: temp_site_pass
+  when: not site_key_stat.stat.exists
+  no_log: true
+  changed_when: false
+  tags:
+    - tripwire
+    - keys
+
+- name: Write site passphrase to temp file
+  ansible.builtin.copy:
+    content: "{{ tripwire_site_passphrase }}\n"
+    dest: "{{ temp_site_pass.path }}"
+    mode: '0600'
+  when: not site_key_stat.stat.exists
+  no_log: true
+  tags:
+    - tripwire
+    - keys
+
+- name: Generate Tripwire site key
+  ansible.builtin.shell: |
+    set -o pipefail
+    cat {{ temp_site_pass.path }} | twadmin --generate-keys \
+      --site-keyfile /etc/tripwire/site.key
+  args:
+    executable: /bin/bash
+  when: not site_key_stat.stat.exists
+  register: site_key_gen
+  changed_when: site_key_gen.rc == 0
+  failed_when: site_key_gen.rc != 0
+  no_log: true
+  tags:
+    - tripwire
+    - keys
+
+- name: Remove site passphrase temp file
+  ansible.builtin.file:
+    path: "{{ temp_site_pass.path }}"
+    state: absent
+  when: temp_site_pass.path is defined
+  no_log: true
+  changed_when: false
+  tags:
+    - tripwire
+    - keys
+
+
+# Local key
+
+- name: Check if local key exists
+  ansible.builtin.stat:
+    path: "/etc/tripwire/{{ ansible_fqdn }}-local.key"
+  register: local_key_stat
+  tags:
+    - tripwire
+    - keys
+
+- name: Create temporary file for local passphrase
+  ansible.builtin.tempfile:
+    state: file
+    suffix: .local_pass
+  register: temp_local_pass
+  when: not local_key_stat.stat.exists
+  no_log: true
+  changed_when: false
+  tags:
+    - tripwire
+    - keys
+
+- name: Write local passphrase to temp file
+  ansible.builtin.copy:
+    content: "{{ tripwire_local_passphrase }}\n"
+    dest: "{{ temp_local_pass.path }}"
+    mode: '0600'
+  when: not local_key_stat.stat.exists
+  no_log: true
+  tags:
+    - tripwire
+    - keys
+
+- name: Generate Tripwire local key
+  ansible.builtin.shell: |
+    set -o pipefail
+    cat {{ temp_local_pass.path }} | twadmin --generate-keys \
+      --local-keyfile /etc/tripwire/{{ ansible_fqdn }}-local.key
+  args:
+    executable: /bin/bash
+  when: not local_key_stat.stat.exists
+  register: local_key_gen
+  changed_when: local_key_gen.rc == 0
+  failed_when: local_key_gen.rc != 0
+  no_log: true
+  tags:
+    - tripwire
+    - keys
+
+- name: Remove local passphrase temp file
+  ansible.builtin.file:
+    path: "{{ temp_local_pass.path }}"
+    state: absent
+  when: temp_local_pass.path is defined
+  no_log: true
+  changed_when: false
+  tags:
+    - tripwire
+    - keys
+
+# Database initialization
+
+- name: Check if Tripwire database exists
+  ansible.builtin.stat:
+    path: "/var/lib/tripwire/{{ ansible_hostname }}.twd"
+  register: tripwire_db_stat
+  tags:
+    - tripwire
+    - database
+
+- name: Create temporary file for database init passphrase
+  ansible.builtin.tempfile:
+    state: file
+    suffix: .db_pass
+  register: temp_db_pass
+  when: not tripwire_db_stat.stat.exists
+  no_log: true
+  changed_when: false
+  tags:
+    - tripwire
+    - database
+
+- name: Write database init passphrase to temp file
+  ansible.builtin.copy:
+    content: "{{ tripwire_local_passphrase }}\n"
+    dest: "{{ temp_db_pass.path }}"
+    mode: '0600'
+  when: not tripwire_db_stat.stat.exists
+  no_log: true
+  tags:
+    - tripwire
+    - database
+
+- name: Initialize Tripwire database
+  ansible.builtin.shell: |
+    set -o pipefail
+    cat {{ temp_db_pass.path }} | tripwire --init
+  args:
+    executable: /bin/bash
+  when: not tripwire_db_stat.stat.exists
+  register: tripwire_init
+  changed_when: tripwire_init.rc == 0
+  failed_when: tripwire_init.rc != 0
+  no_log: true
+  tags:
+    - tripwire
+    - database
+
+- name: Remove database init passphrase temp file
+  ansible.builtin.file:
+    path: "{{ temp_db_pass.path }}"
+    state: absent
+  when: temp_db_pass.path is defined
+  no_log: true
+  changed_when: false
+  tags:
+    - tripwire
+    - database
+
+# Cron job
+- name: Setup Tripwire cron job for daily checks
+  ansible.builtin.cron:
+    name: "Tripwire daily integrity check"
+    minute: "0"
+    hour: "2"
+    job: "/usr/sbin/tripwire --check > /dev/null 2>&1"
+    user: root
+    state: present
+  when: tripwire_enable_cron | default(true) | bool
+  tags:
+    - tripwire
+    - cron

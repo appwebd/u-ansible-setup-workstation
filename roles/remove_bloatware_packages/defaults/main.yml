@@ -1,0 +1,37 @@
+---
+remove_bloatware_packages_:
+  - apache2-bin
+  - avahi-daemon
+  - avahi-utils
+  - bind9
+  - dovecot-imapd
+  - dovecot-pop3d
+  - evolution
+  #  - geoclue-2.0                # paquete con una alta dependencia con escritorio gnome-shell
+  - gnome-characters
+  - gnome-maps
+  - gnome-remote-desktop
+  - gnome-tour
+  - gnome-weather
+  - inetutils-telnet
+  - inetutils-telnetd
+  - iptables-persistent
+  - isc-dhcp-server
+  - ldap-utils
+  - libvirt-daemon*
+  - nfs-kernel-server
+  #  - nftables                    #docker.io : Dependencia con : containerd (>= 1.2.6-0ubuntu1~)
+  - nis
+  - open-iscsi
+  - rsh-client
+  - rsh-server
+  - samba
+  - slapd
+  - snmpd
+  - talk
+  - telnet*
+  - tftpd-hpa tftp-hpa
+  #  - tnftp                     # Remuebe también ubuntu-standard TODO: Revisar que implicaciones tiene
+  - vsftpd
+  - xinetd
+#  - yelp                      # Dependencias con gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp

@@ -1,0 +1,19 @@
+---
+- name: Update package index
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Update packages (safe mode)
+  ansible.builtin.apt:
+    upgrade: safe
+  notify: Reboot if necessary
+
+- name: Verify reset file
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: reboot_required
+
+- name: Save reset file
+  ansible.builtin.set_fact:
+    reboot_needed: "{{ reboot_required.stat.exists }}"
+  changed_when: false

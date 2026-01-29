@@ -1,0 +1,21 @@
+(
+  rulename = "Invariant Directories",
+  severity = $(SIG_MED)
+)
+{
+	/		-> $(SEC_INVARIANT) (recurse = 0) ;
+	/home		-> $(SEC_INVARIANT) (recurse = 0) ;
+	/tmp		-> $(SEC_INVARIANT) (recurse = 0) ;
+	/usr		-> $(SEC_INVARIANT) (recurse = 0) ;
+	/var		-> $(SEC_INVARIANT) (recurse = 0) ;
+	/var/tmp	-> $(SEC_INVARIANT) (recurse = 0) ;
+}
+
+(
+  rulename = "Ignore Virtual Filesystems",
+  severity = $(SIG_LOW)
+)
+{
+  /proc   -> $(Ignore) ;
+  /sys    -> $(Ignore) ;
+}

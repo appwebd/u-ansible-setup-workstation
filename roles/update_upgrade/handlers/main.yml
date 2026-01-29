@@ -1,0 +1,6 @@
+---
+- name: Reboot if necessary
+  ansible.builtin.reboot:
+    timeout: 300
+    connect_timeout: 60
+  when: reboot_needed is defined and reboot_needed
