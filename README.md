@@ -3,64 +3,62 @@
 ![Ansible](https://img.shields.io/badge/Ansible-2.x-black?logo=ansible)
 ![Hardening](https://img.shields.io/badge/Security-Hardening-green)
 ![Static Badge](https://img.shields.io/badge/OS-Ubuntu%2024-red%3Flogo%3Dubuntu)
-[![Issues Resolving](https://img.shields.io/badge/Issues-Fixed-success)](https://github.com/gensecaihq/Ubuntu-Security-Hardening-Script/issues)
+[![Development Status](https://img.shields.io/badge/Status-Development-yellow?style=for-the-badge&logo=github)](https://img.shields.io/badge/Status-Development-yellow?style=for-the-badge&logo=github)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Este proyecto automatiza la preparación, hardening y personalización de una
-estación de trabajo basada en **Ubuntu 24.04**.  
+This project automates the preparation, hardening, and customization of a workstation based on **Ubuntu 24.04**.
 
-Se sigue la guía de hardening de *Lynis* y *Wazuh*, y se instala un conjunto
-de herramientas críticas de auditoría, detección de intrusos y control de
-acceso.
+It follows the hardening guides of *Lynis* and *Wazuh*, and installs a set of critical tools for auditing, intrusion detection, and access control.
 
----
 
-## 🚀 Instalación y uso
+## 🚀 Installation and Usage
 
-1. **Instalar Ansible**  
-   Si no lo tienes ya instalado, ejecuta el script incluido:
+1. **Install Ansible**  
+   If you don't already have it installed, run the included script:
 
 ```bash
-    bash bin/install-ansible.sh
+bash bin/install-ansible.sh
 ```
 
-## Clonar el repositorio
-```bash
-   git clone https://github.com/appwebd/u-ansible-setup-workstation.git
-   cd u-ansible-setup-workstation
-```
-
-## Configurar vault
-Ansible utiliza ansible-vault para manejar las variables sensibles. En este caso se empleará para generar una contraseña para tripwire
+## Clone the Repository
 
 ```bash
-   # Crear el vault y los archivos de variables
-   cd roles/setup_tripwire/vars/
-   ansible-vault create main.yml
+git clone https://github.com/appwebd/u-ansible-setup-workstation.git
+cd u-ansible-setup-workstation
 ```
 
-Guarda la contraseña maestra que has empleado en ansible-vault en el archivo '.vault_password':
+## Configure Vault
+Ansible uses `ansible-vault` to handle sensitive variables. Here it is used to generate a password for Tripwire.
 
 ```bash
-    echo "tu_contraseña_maestra" > .vault_password
-    chmod 600 .vault_password
-    export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password    
+# Create the vault and variable files
+cd roles/setup_tripwire/vars/
+ansible-vault create main.yml
 ```
-esto se hace mas que nada para automatizar la revisión de ansible-lint para que no consulte la contraseña del rol que la está empleando.
 
-## Estructura del proyecto
+Store the master password you used for `ansible-vault` in the `.vault_password` file:
+
+```bash
+echo "your_master_password" > .vault_password
+chmod 600 .vault_password
+export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
+```
+
+This is primarily to automate the `ansible-lint` review so it doesn't prompt for the role's password.
+
+## Project Structure
 
 ```text
 .
-├── bin/                     # Scripts auxiliares (install-ansible, wrappers, lint, etc.)
-├── inventory/               # Archivos de inventario de Ansible
-├── playbooks/               # Playbooks de alto nivel
+├── bin/                     # Helper scripts (install-ansible, wrappers, lint, etc.)
+├── inventory/               # Ansible inventory files
+├── playbooks/               # High‑level playbooks
 │   ├── setup_workstation.yaml
 │   ├── update_upgrade.yaml
 │   ├── remove_bloatware_packages.yaml
 │   ├── remove_unused_accounts_groups.yaml
 │   ├── shutdown.yaml
-├── roles/                   # Roles de Ansible
+├── roles/                   # Ansible roles
 │   ├── aide/
 │   ├── auditd/
 │   ├── configure-timezone/
@@ -83,58 +81,57 @@ esto se hace mas que nada para automatizar la revisión de ansible-lint para que
 │   ├── tripwire/
 │   ├── unattended_upgrades/
 │   └── update_upgrade/
-├── .ansible/                # Caché de Ansible
-├── .vault_password          # Contraseña maestra para Ansible Vault
+├── .ansible/                # Ansible cache
+├── .vault_password          # Master password for Ansible Vault
 └── README.md
 ```
 
-## Principales tareas en playbooks
+## Main Playbook Tasks
 
-| Tarea                                           | Script                                                   |
-|-------------------------------------------------|----------------------------------------------------------|
-| Actualizar paquetes en varios servidores        | `bash bin/run_update_upgrade.sh                          |
-| Apagar varios servidores                        | `bash bin/run_shutdown.sh`                               |
-| Asegurar que los playbooks siguen los estándares| `bash bin/run_ansible_lint.sh`                           |
-| Configurar SSH                                  | `bash bin/setup_ssh_key_authentication.sh`               |
-| Limpieza de software bloatware en ubuntu        | `bash bin/run_remove_bloatware_packages.sh`              |
-
-
-## Principales roles
-
-|  rol   | Propósito | Archivo clave |
-|--------|-----------|---------------|
-| `aide` | Instalación y configuración de AIDE | `tasks/main.yml` |
-| `auditd` | Configuración de auditd y reglas de auditoría | `tasks/main.yml` |
-| `fail2ban` | Protección contra intentos de login fallidos | `tasks/main.yml` |
-| `gnome` | Configuración de escritorio (banners, wallpaper, etc.) | `tasks/main.yml` |
-| `hardening_debian`  | Aplicar configuraciones de hardening de kernel, sysctl y appArmor | `tasks/main.yml` |
-| `remove_bloatware_packages` | Eliminar paquetes innecesarios | `tasks/main.yml` |
-| `remove_unused_accounts_groups` | Limpiar cuentas y grupos no usados | `tasks/main.yml` |
-| `rkhunter` | Instalación y ejecución de Rootkit Hunter | `tasks/main.yml` |
-| `sshd` | Hardening de SSH (permitidos solo key‑based, port, banner, etc.) | `tasks/main.yml` |
-| `sudo` | Configurar permisos de sudo y política de expiración | `tasks/main.yml` |
-| `tripwire` | Instalación y configuración de Tripwire para detección de cambios | `tasks/main.yml` |
-| `unattended_upgrades` | Automatizar parches de seguridad | `tasks/main.yml` |
-| `update_upgrade` | Ejecutar `apt update` y `apt upgrade | `tasks/main.yml` |
+| Task                                | Script                                      |
+|-------------------------------------|---------------------------------------------|
+| Update packages on multiple servers | `bash bin/run_update_upgrade.sh`            |
+| Shut down multiple servers          | `bash bin/run_shutdown.sh`                  |
+| Ensure playbooks follow standards   | `bash bin/run_ansible_lint.sh`              |
+| Configure SSH                       | `bash bin/setup_ssh_key_authentication.sh`  |
+| Clean bloatware from Ubuntu         | `bash bin/run_remove_bloatware_packages.sh` |
 
 
-##  Revisión de sintaxis de ansible lint
+## Core Roles
 
-Para asegurar que los playbooks siguen los estándares:
+| Role | Purpose | Key File |
+|------|---------|----------|
+| `aide` | Install and configure AIDE | `tasks/main.yml` |
+| `auditd` | Configure auditd and audit rules | `tasks/main.yml` |
+| `fail2ban` | Protect against failed login attempts | `tasks/main.yml` |
+| `gnome` | Configure desktop (banners, wallpaper, etc.) | `tasks/main.yml` |
+| `hardening_debian` | Apply kernel, sysctl, and AppArmor hardening | `tasks/main.yml` |
+| `remove_bloatware_packages` | Remove unnecessary packages | `tasks/main.yml` |
+| `remove_unused_accounts_groups` | Clean unused accounts and groups | `tasks/main.yml` |
+| `rkhunter` | Install and run Rootkit Hunter | `tasks/main.yml` |
+| `sshd` | Harden SSH (key‑only access, port, banner, etc.) | `tasks/main.yml` |
+| `sudo` | Configure sudo permissions and expiration policy | `tasks/main.yml` |
+| `tripwire` | Install and configure Tripwire for change detection | `tasks/main.yml` |
+| `unattended_upgrades` | Automate security patches | `tasks/main.yml` |
+| `update_upgrade` | Run `apt update` and `apt upgrade` | `tasks/main.yml` |
+
+## Ansible Lint Syntax Check
+
+To ensure playbooks follow the standards:
 
 ```bash
-# Ejecutar ansible-lint sobre todos los playbooks
+# Run ansible-lint on all playbooks
 bash bin/run_ansible_lint.sh
 ```
 
-## 📚 Recursos y documentación
+## 📚 Resources and Documentation
 
 - [Ansible Official Docs](https://docs.ansible.com/)
 - [Lynis Hardening Guide](https://cisofy.com/lynis/)
 - [Wazuh Documentation](https://documentation.wazuh.com/)
 - [Debian Hardening](https://wiki.debian.org/SecureDebootstrap)
-- [Ubuntu Security Standard](https://ubuntu.com/security/security-standards)
-- [Ubuntu hardening](https://ubuntu.com/engage/a-guide-to-infrastructure-hardening)
+- [Ubuntu Security Standards](https://ubuntu.com/security/security-standards)
+- [Ubuntu Hardening](https://ubuntu.com/engage/a-guide-to-infrastructure-hardening)
 
-## 📜 Licencia
-Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+## 📜 License
+This project is licensed under the MIT License. See the `LICENSE` file for details.
