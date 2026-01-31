@@ -20,7 +20,7 @@
     - sudo
     - aide
     - fail2ban
-    - gnome                 # Configure gsettings list-recursively | grep privacy
+    - gnome # Configure gsettings list-recursively | grep privacy
     - otpclient
     - rkhunter
     - sshd
