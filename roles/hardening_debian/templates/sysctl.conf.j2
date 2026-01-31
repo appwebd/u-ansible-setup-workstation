@@ -1,5 +1,5 @@
 # https://madaidans-insecurities.github.io/guides/linux-hardening.html
-# projaso 2025 12 21
+# https://linux-audit.com/linux-hardening-with-sysctl/
 
 # 2.2.1 Kernel self-protection
 
@@ -57,7 +57,7 @@ fs.suid_dumpable=0
 kernel.core_pattern=/var/crash/core.%u.%e.%p
 kernel.core_uses_pid=1
 kernel.ctrl-alt-del=0
-kernel.modules_disabled=1
+# kernel.modules_disabled=1                                               # Ubuntu does not work well enabling this item
 kernel.msgmax=65535
 kernel.msgmnb=65535
 kernel.pid_max=65535
