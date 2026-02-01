@@ -10,7 +10,7 @@
   roles:
     - configure_local_login_banner
     - configure-timezone
-    - grub_audit_backlog
+    - configure_grub
     - update_upgrade
     - file_permission
     - configure_login_defs
