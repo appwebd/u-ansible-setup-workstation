@@ -1,29 +1,46 @@
 # /etc/security/pwquality.conf
 # Password quality configuration
 
-# 33194 - Ensure minimum password length is configured
+#  Wazuh id 35679 - Ensure password number of changed characters is configured
+difok = 4
+
+# Wazuh id 35680 - Ensure minimum password length is configured
 minlen = 14
 
-# 33195 - Ensure password complexity is configured
+#  Wazuh id 35681 - Ensure password complexity is configured
+
+#| Parameter  | Recommended value | Comment |
+#|------------|-------------------|---------|
+#| `minclass` |  `3` | Requires the password to contain at least 3 of the 4 character classes (uppercase, lowercase, digits, symbols). |
+#| `dcredit`  | `-1` | Penalizes each digit, forcing at least one digit. |
+#| `ucredit`  | `-1` | Penalizes each uppercase letter, forcing at least one uppercase. |
+#| `lcredit`  | `-1` | Penalizes each lowercase letter, forcing at least one lowercase. |
+#| `ocredit`  | `-1` | Penalizes each “other” character (special symbol).
+
+#| Policy level | Suggested values                                                                                       |
+#|--------------|--------------------------------------------------------------------------------------------------------|
+#| **Medium**   | `minclass = 2`, `dcredit = 0`, `ucredit = 0`, `lcredit = 0`, `ocredit = 0`                             |
+#| **High**     | `minclass = 4`, `dcredit = -2`, `ucredit = -1`, `lcredit = -1`, `ocredit = -1`                         |
+#| **Custom**   | Adjust each parameter to match your business requirements (e.g., only digits and letters, no symbols). |
+
+minclass = 3     # minclass = 4 requires digits, uppercase, lower case, and special characters
 dcredit = -1     # at least 1 digit
 ucredit = -1     # at least 1 uppercase letter
 lcredit = -1     # at least 1 lowercase letter
 ocredit = -1     # at least 1 special character
 
-# 33193 - Ensure password number of changed characters is configured
-difok = 4
 
-# 33196 - Ensure password same consecutive characters is configured
+# Wazuh id 35682 - Ensure password same consecutive characters is configured.
 maxrepeat = 3
 
-# 33197 - Ensure password maximum sequential characters is configured
+#  Wazuh id 35683 - Ensure password maximum sequential characters is configured
 maxsequence = 3
 
-# 33198 - Ensure password dictionary check is enabled
+#  Wazuh id 35684 - Ensure password dictionary check is enabled
 dictcheck = 1
 
-# 33199 - Ensure password quality checking is enforced
+#  Wazuh id 35685 - Ensure password quality checking is enforced
 enforcing = 1
 
-# 33200 - Ensure password quality is enforced for the root user
+#  Wazuh id 35686 - Ensure password quality is enforced for the root user
 enforce_for_root
