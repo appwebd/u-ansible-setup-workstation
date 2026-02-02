@@ -39,37 +39,31 @@
     group: root
   when: file_stat.stat.exists
 
+# Wazuh id 35594 - Ensure permissions on /etc/crontab are configured.
 - name: Remove group and other permissions in /etc/crontab
   ansible.builtin.file:
     path: /etc/crontab
-    mode: "0600" # Equivalent:  chmod og-rwx
+    mode: "0600"                        # Equivalent: chmod og-rwx
     owner: root
     group: root
 
+# Wazuh id 35595 - Ensure permissions on /etc/cron.hourly are configured.
 - name: Ensure owner root:root in /etc/cron.hourly
   ansible.builtin.file:
     path: /etc/cron.hourly
-    owner: root
+    owner: root                         # chown root:root /etc/cron.hourly/
     group: root
-    mode: "0700"
+    mode: "0700"                        # chmod og-rwx /etc/cron.hourly/
 
-- name: Ensure og-rwx permissions in /etc/cron.hourly
-  ansible.builtin.file:
-    path: /etc/cron.hourly
-    mode: "0700"
-
+# Wazuh id 35596 - Ensure permissions on /etc/cron.daily are configured.
 - name: Ensure root:root ownership in /etc/cron.daily
   ansible.builtin.file:
     path: /etc/cron.daily
-    owner: root
+    owner: root                       # chown root:root /etc/cron.daily/
     group: root
-    mode: "0700"
+    mode: "0700"                      #  chmod og-rwx /etc/cron.daily/
 
-- name: Ensure og-rwx permissions in /etc/cron.daily
-  ansible.builtin.file:
-    path: /etc/cron.daily
-    mode: "0700"
-
+# Wazuh id 35597- Ensure permissions on /etc/cron.weekly are configured.
 - name: Ensure root:root ownership in /etc/cron.weekly
   ansible.builtin.file:
     path: /etc/cron.weekly
@@ -77,11 +71,7 @@
     group: root
     mode: "0700"
 
-- name: Ensure og-rwx permissions in /etc/cron.weekly
-  ansible.builtin.file:
-    path: /etc/cron.weekly
-    mode: "0700"
-
+# Wazuh id 35598 - Ensure permissions on /etc/cron.monthly are configured.
 - name: Ensure root:root ownership in /etc/cron.monthly
   ansible.builtin.file:
     path: /etc/cron.monthly
@@ -89,11 +79,7 @@
     group: root
     mode: "0700"
 
-- name: Ensure og-rwx permissions in /etc/cron.monthly
-  ansible.builtin.file:
-    path: /etc/cron.monthly
-    mode: "0700"
-
+# Wazuh id 35599 - Ensure permissions on /etc/cron.d are configured.
 - name: Ensure root:root ownership in /etc/cron.d
   ansible.builtin.file:
     path: /etc/cron.d
@@ -101,16 +87,12 @@
     group: root
     mode: "0700"
 
-- name: Ensure og-rwx permissions in /etc/cron.d
-  ansible.builtin.file:
-    path: /etc/cron.d
-    mode: "0700"
-
 - name: Check if /etc/security/opasswd exists
   ansible.builtin.stat:
     path: /etc/security/opasswd
   register: opasswd_stat
 
+# Wazuh id 35770 - Ensure permissions on /etc/security/opasswd are configured.
 - name: Set secure permissions for /etc/security/opasswd if it exists
   ansible.builtin.file:
     path: /etc/security/opasswd
@@ -125,6 +107,7 @@
     path: /etc/security/opasswd.old
   register: opasswd_old_stat
 
+# Wazuh id 35770 - Ensure permissions on /etc/security/opasswd are configured.
 - name: Set secure permissions for /etc/security/opasswd.old if it exists
   ansible.builtin.file:
     path: /etc/security/opasswd.old
@@ -139,11 +122,14 @@
     path: /boot/grub/grub.cfg
   register: grub_stat
 
+# Wazuh id 35541 - Ensure access to bootloader config is configured.
+# chown root:root /boot/grub/grub.cfg
+# chmod u-x,go-rwx /boot/grub/grub.cfg.
 - name: Set secure permissions for /boot/grub/grub.cfg if it exists
   ansible.builtin.file:
     path: /boot/grub/grub.cfg
-    mode: "0600"
-    owner: root
+    mode: "0600"                                       # chmod u-x,go-rwx /boot/grub/grub.cfg
+    owner: root                                        # chmod root:root /boot/grub/grub.cfg
     group: root
     state: file
   when: grub_stat.stat.exists
