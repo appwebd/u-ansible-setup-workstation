@@ -19,7 +19,7 @@
 - name: Disabled variable WEB_CMD
   ansible.builtin.replace:
     path: /etc/rkhunter.conf
-    regexp: '^WEB_CMD=/bin/false'
+    regexp: '^WEB_CMD="/bin/false"'
     replace: 'WEB_CMD=""'
 
 - name: Download mirrors.dat
