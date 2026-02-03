@@ -1,30 +1,71 @@
 ---
-- name: Ensure aide package is installed (Debian family)
+- name: Install AIDE (Debian/Ubuntu)
   ansible.builtin.package:
-    name: aide
+    name: "{{ aide_package_name }}"
     state: present
     update_cache: true
-    cache_valid_time: 86400 # 24h
-  when: ansible_facts['os_family'] == 'Debian'
+    cache_valid_time: 86400                    # 24h
+  when: ansible_facts.os_family == "Debian"
 
-- name: Create /etc/aide/aide.conf.d directory if missing
+- name: Ensure AIDE DB directory exists
   ansible.builtin.file:
-    path: /etc/aide/aide.conf.d
+    path: "{{ aide_db_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Ensure AIDE config directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
     owner: root
     group: root
     mode: "0755"
+  loop:
+    - "{{ aide_conf_dir }}"
+    - "{{ aide_conf_d_dir }}"
 
-- name: Template local excludes file
+- name: Deploy main AIDE config
   ansible.builtin.template:
-    src: 00_local_excludes.j2
-    dest: "/etc/aide/aide.conf.d/{{ aide_exclude_file | default('00_local_excludes') }}"
+    src: aide.conf.j2
+    dest: "{{ aide_conf_path }}"
     owner: root
     group: root
-    mode: "0640"
+    mode: "0644"
+  notify: Aide_init_database
 
-- name: Initialize or update aide database when needed
-  ansible.builtin.command:
-    cmd: "aide --init --config /etc/aide/aide.conf"
-    creates: /var/lib/aide/aide.db.gz
-  notify: Restart aide
+- name: Deploy local excludes (conf.d)
+  ansible.builtin.template:
+    src: 00_local_excludes.j2
+    dest: "{{ aide_conf_d_dir }}/{{ aide_local_excludes_filename }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Aide_init_database
+
+- name: Check if AIDE database exists
+  ansible.builtin.stat:
+    path: "{{ aide_db_dir }}/{{ aide_db_file }}"
+  register: aide_db_stat
+
+# Initialize only if baseline does not exist
+- name: Initialize AIDE DB if missing
+  ansible.builtin.command: "aide --init --config {{ aide_conf_path }}"
+  changed_when: true
+  when: not aide_db_stat.stat.exists
+
+- name: Activate baseline (move .new -> current) if missing
+  ansible.builtin.command: >
+    bash -lc 'mv -f "{{ aide_db_dir }}/{{ aide_db_new_file }}" "{{ aide_db_dir }}/{{ aide_db_file }}"'
+  changed_when: true
+  when: not aide_db_stat.stat.exists
+
+- name: Schedule daily AIDE check (cron)
+  ansible.builtin.cron:
+    name: "AIDE integrity check"
+    minute: "{{ aide_check_time.split(':')[1] }}"
+    hour: "{{ aide_check_time.split(':')[0] }}"
+    user: root
+    job: "{{ aide_check_job }}"
+  when: aide_enable_cron | bool

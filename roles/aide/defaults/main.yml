@@ -1,2 +1,92 @@
 ---
-aide_exclude_file: "00_local_excludes"
+# Package name for AIDE
+aide_package_name: aide
+
+# Config
+aide_conf_path: /etc/aide/aide.conf
+aide_conf_dir: /etc/aide
+aide_conf_d_dir: /etc/aide/aide.conf.d
+
+# Database Ubuntu/Debian
+aide_db_dir: /var/lib/aide
+aide_db_file: aide.db.gz
+aide_db_new_file: aide.db.new.gz
+
+# Cron jobs schedule
+aide_enable_cron: false
+aide_check_time: "03:30"
+aide_check_job: "/usr/bin/aide --check --config /etc/aide/aide.conf | /usr/bin/logger -t aide"
+
+# Email reporting
+aide_email_enable: false
+aide_email_to: "security-team@example.com"
+aide_email_from: "aide@{{ inventory_hostname }}"
+aide_email_subject: "[AIDE] Reporte de integridad en {{ inventory_hostname }}"
+
+# Requiere un MTA/local mailer funcional. En Debian/Ubuntu suele venir con mailutils (mailx)
+aide_email_mail_bin: "/usr/bin/mail"
+
+# Opcional: instala mailutils (recomendado si no tienes /usr/bin/mail)
+aide_email_install_mailutils: true
+
+# Paths to scan (adjust to your policy)
+aide_watch_paths:
+  - /etc
+  - /bin
+  - /sbin
+  - /usr/bin
+  - /usr/sbin
+  - /lib
+  - /lib64
+  - /usr/lib
+
+# Local exclude (other template file)
+aide_local_excludes_filename: 00_local_excludes
+aide_local_excludes:
+  - "/var/log/.*"
+  - "/var/tmp/.*"
+  - "/tmp/.*"
+
+# Virtual filesystems and other files
+  - "/proc"
+  - "/sys"
+  - "/dev"
+  - "/run"
+
+# cache files and data variable
+  - "/var/cache"
+  - "/var/lib/systemd"
+  - "/var/lib/dbus"
+  - "/var/lib/NetworkManager"
+  - "/var/lib/upower"
+  - "/var/lib/colord"
+  - "/var/lib/sss"
+  - "/var/lib/docker"
+  - "/var/lib/containers"
+
+# Logs
+  - "/var/log"
+  - "/var/log/journal"
+  - "/var/cache"
+
+# Systems status and locks files
+  - "/var/lib/rsyslog"
+  - "/var/lock"
+  - "/var/run"
+
+# Users – caches and dynamic configuration
+  - "/home/"
+
+# Snap / Flatpak
+  - "/snap"
+  - "/var/snap"
+  - "/var/lib/snapd"
+  - "/var/lib/flatpak"
+
+# Removables media and automatics mount point
+  - "/media"
+  - "/mnt"
+
+# Swap files and hibernation
+  - "/swapfile"
+  - "/var/lib/systemd/coredump"

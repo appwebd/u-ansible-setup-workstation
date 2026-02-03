@@ -1,50 +1,6 @@
-# Exclusions locales para AIDE
-# Environment: Workstation
+# {{ ansible_managed }}
+# Local exclusions
 
-# Virtual filesystems and other files
-!/proc
-!/sys
-!/dev
-!/run
-
-# Temporal directories
-!/tmp
-!/var/tmp
-
-# cache files and data variable
-!/var/cache
-!/var/lib/systemd
-!/var/lib/dbus
-!/var/lib/NetworkManager
-!/var/lib/upower
-!/var/lib/colord
-!/var/lib/sss
-!/var/lib/docker
-!/var/lib/containers
-
-# Logs
-!/var/log
-!/var/log/journal
-
-# Systems status and locks files
-!/var/lib/rsyslog
-!/var/lock
-!/var/run
-
-# Users – caches and dynamic configuration
-!/home/
-
-
-# Snap / Flatpak
-!/snap
-!/var/snap
-!/var/lib/snapd
-!/var/lib/flatpak
-
-# Removables media and automatics mount point
-!/media
-!/mnt
-
-# Swap files and hibernation
-!/swapfile
-!/var/lib/systemd/coredump
+{% for ex in aide_local_excludes %}
+!{{ ex }}
+{% endfor %}
