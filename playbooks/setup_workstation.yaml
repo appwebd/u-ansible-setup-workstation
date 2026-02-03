@@ -1,7 +1,6 @@
 ---
 - name: Apply updates && install packages
   hosts: dev.local
-  connection: local
   become: true
   gather_facts: true
   vars_files:
@@ -9,7 +8,7 @@
 
   roles:
     - configure_local_login_banner
-    - configure-timezone
+    - configure_timezone
     - configure_grub
     - update_upgrade
     - file_permission
