@@ -1,18 +1,30 @@
 ---
-- name: Install chrony and tzdata (Debian/Ubuntu)
-  ansible.builtin.apt:
-    name:
-      - tzdata
-      - chrony
+- name: Ensure aide package is installed (Debian family)
+  ansible.builtin.package:
+    name: aide
     state: present
     update_cache: true
-    cache_valid_time: 3600
-  when: ansible_os_family == "Debian"
+    cache_valid_time: 86400 # 24h
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Ensure tzdata is installed
+  ansible.builtin.package:
+    name: tzdata
+    state: present
+  when: ansible_facts['os_family'] == 'Debian'
 
 - name: Setting your timezone
   community.general.timezone:
     name: "{{ timezone }}"
   become: true
+
+- name: Install chrony and tzdata (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: chrony
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_facts['os_family'] == 'Debian'
 
 - name: Ensure /etc/chrony/sources.d/local-ntp-server.conf exists
   ansible.builtin.file:

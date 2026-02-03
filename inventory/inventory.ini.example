@@ -1,0 +1,12 @@
+[localhost]
+localhost ansible_connection=local ansible_host=localhost ansible_user=root ansible_become=yes
+
+[ubuntu_servers]
+caddy      ansible_host=192.168.88.145 ansible_user=pro ansible_become=yes
+gitlab     ansible_host=192.168.88.16  ansible_user=pro ansible_become=yes
+mysql      ansible_host=192.168.88.107 ansible_user=root ansible_become=yes ansible_become_method=sudo ansible_ssh_common_args='-o PreferredAuthentications=password -o PubkeyAuthentication=no'
+postgres   ansible_host=192.168.88.101 ansible_user=pro ansible_become=yes
+sonarqube  ansible_host=192.168.88.106 ansible_user=pro ansible_become=yes
+teamcity   ansible_host=192.168.88.105 ansible_user=pro ansible_become=yes
+wazuh_host ansible_host=192.168.88.13  ansible_user=pro ansible_become=yes
+
