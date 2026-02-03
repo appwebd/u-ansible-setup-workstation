@@ -2,3 +2,18 @@
   ansible.builtin.service:
     name: aide
     state: restarted
+
+# Handler named exactly as the notify in tasks/main.yml.
+- name: aide_init_database
+  ansible.builtin.command: "aide --init --config {{ aide_conf_path }}"
+  args:
+    creates: "{{ aide_db_dir }}/{{ aide_db_file }}"
+
+- name: Activate AIDE baseline (move .new -> current)
+  ansible.builtin.shell: |
+    set -euo pipefail
+    if [ ! -f "{{ aide_db_dir }}/{{ aide_db_file }}" ] && [ -f "{{ aide_db_dir }}/{{ aide_db_new_file }}" ]; then
+      mv -f "{{ aide_db_dir }}/{{ aide_db_new_file }}" "{{ aide_db_dir }}/{{ aide_db_file }}"
+    fi
+  args:
+    executable: /bin/bash
