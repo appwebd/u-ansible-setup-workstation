@@ -1,0 +1,53 @@
+Unattended-Upgrade::Origins-Pattern {
+    // Only allow security updates from official Ubuntu repositories
+    "origin=Ubuntu,archive=${distro_codename}-security,label=Ubuntu";
+    // Enable Extended Security Maintenance (ESM) for critical infrastructure
+    "origin=UbuntuESM,archive=${distro_codename}-infra-security,label=Ubuntu";
+    "origin=UbuntuESMApps,archive=${distro_codename}-apps-security,label=Ubuntu";
+};
+
+// Block potentially disruptive packages from auto-updating
+Unattended-Upgrade::Package-Blacklist {
+    "linux-image-.*";
+    "linux-headers-.*";
+    "mysql-server.*";
+    "postgresql.*";
+};
+
+// Automatically fix interrupted package management
+Unattended-Upgrade::AutoFixInterruptedDpkg "true";
+
+// Download and install upgrades only on AC power (laptops)
+Unattended-Upgrade::OnlyOnACPower "true";
+
+// Skip updates on metered connections to avoid data charges
+Unattended-Upgrade::Skip-Updates-On-Metered-Connections "true";
+
+// Remove unused dependencies after updates
+Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+
+// Remove unused kernel packages to save space and reduce attack surface
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+
+// Do NOT automatically reboot — avoid unexpected downtime
+Unattended-Upgrade::Automatic-Reboot "false";
+
+// If reboot is needed, notify but don't force
+// Admin should schedule reboots manually after testing
+
+// Send email reports only when errors occur
+Unattended-Upgrade::Mail "admin@example.com";
+Unattended-Upgrade::MailReport "only-on-error";
+
+// Enable verbose logging for auditing and troubleshooting
+Unattended-Upgrade::SyslogEnable "true";
+Unattended-Upgrade::SyslogFacility "daemon";
+
+// Limit bandwidth usage during updates (e.g., 100 KB/s)
+// Acquire::http::Dl-Limit "100";
+
+// Never allow downgrades (security risk)
+Unattended-Upgrade::Allow-downgrade "false";
+
+// Use minimal steps to allow interruption during upgrades
+Unattended-Upgrade::MinimalSteps "true";
