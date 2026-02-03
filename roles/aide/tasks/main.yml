@@ -33,7 +33,7 @@
     owner: root
     group: root
     mode: "0644"
-  notify: aide_init_database
+  notify: Aide_init_database
 
 - name: Deploy local excludes (conf.d)
   ansible.builtin.template:
@@ -42,7 +42,7 @@
     owner: root
     group: root
     mode: "0644"
-  notify: aide_init_database
+  notify: Aide_init_database
 
 - name: Check if AIDE database exists
   ansible.builtin.stat:
