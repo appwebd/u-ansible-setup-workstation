@@ -48,22 +48,22 @@ project_root/
 ## 3. Handlers
 
 * Handlers are triggered by tasks with `notify`.
-* Keep handler names descriptive: `restart nginx`, `reload sshd`.
+* Keep handler names descriptive: `Restart nginx`, `Reload sshd`.
 * Register a variable in a task and notify handler based on its value.
 
 ```yaml
 - name: Update nginx config
-  template:
+  ansible.builtin.template:
     src: nginx.conf.j2
     dest: /etc/nginx/nginx.conf
-  notify: reload nginx
+  notify: Reload nginx
 
 - name: Restart SSH if config changed
-  copy:
+  ansible.builtin.copy:
     src: sshd_config
     dest: /etc/ssh/sshd_config
   notify:
-    - restart sshd
+    - Restart sshd
 ```
 
 ---
@@ -76,7 +76,7 @@ project_root/
 
 ```yaml
 - name: Ensure nginx is latest
-  apt:
+  ansible.builtin.apt:
     name: nginx
     state: latest
 ```
@@ -87,7 +87,7 @@ project_root/
 
 ```yaml
 - name: Install developer tools on Debian
-  apt:
+  ansible.builtin.apt:
     name: "{{ dev_tools }}"
     state: present
   when: ansible_facts['os_family'] == 'Debian'
@@ -105,7 +105,7 @@ project_root/
 
 ```yaml
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   loop: "{{ dev_packages }}"
@@ -122,7 +122,7 @@ project_root/
 
 ```yaml
 - name: Install Docker
-  apt:
+  ansible.builtin.apt:
     name: docker.io
     state: present
   tags:
@@ -153,12 +153,12 @@ PasswordAuthentication {{ ssh_password_auth | default('no') }}
 ```yaml
 - block:
     - name: Create user
-      user:
+      ansible.builtin.user:
         name: "{{ user_name }}"
         state: present
   rescue:
     - name: Fail with message
-      fail:
+      ansible.builtin.fail:
         msg: "Could not create user {{ user_name }}"
 ```
 
@@ -184,7 +184,7 @@ Add a `.ansible-lint` configuration to ignore known issues.
 
 ```yaml
 - name: Retrieve API key
-  uri:
+  ansible.builtin.uri:
     url: https://api.example.com/key
     method: GET
   no_log: true
