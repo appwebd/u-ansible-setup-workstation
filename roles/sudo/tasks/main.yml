@@ -7,6 +7,7 @@
   register: result
   until: result is success
 
+# 35662 - Ensure sudo is installed.
 - name: Ensure sudo is installed
   become: true
   ansible.builtin.apt:
@@ -17,15 +18,7 @@
   retries: 10
   delay: 5
 
-
-- name: Configure log of sudo
-  ansible.builtin.template:
-    src: 10-sudo-logging.j2
-    dest: /etc/sudoers.d/10-sudo-logging
-    owner: root
-    group: root
-    mode: '0440'
-
+# 35667 - Ensure sudo authentication timeout is configured correctly
 - name: Configure sudo authentication timeout
   ansible.builtin.template:
     src: 20-sudo-authentication-timeout.j2
@@ -33,3 +26,16 @@
     owner: root
     group: root
     mode: '0440'
+
+# 35664 - Ensure sudo log file exists. File: /etc/sudoers
+- name: Ensure that /etc/sudoers contains the log line.
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: '^Defaults\s+logfile="/var/log/sudo.log"$'
+    line: 'Defaults logfile="/var/log/sudo.log"'
+    insertafter: EOF
+    validate: 'visudo -cf %s'
+    owner: root
+    group: root
+    mode: '0440'
+  tags: sudoers_logfile
