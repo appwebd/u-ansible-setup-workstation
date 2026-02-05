@@ -17,6 +17,9 @@
 #  org.gnome.desktop.privacy show-full-name-in-top-bar true
 #  org.gnome.desktop.privacy usb-protection true
 #  org.gnome.desktop.privacy usb-protection-level 'lockscreen'
+#
+# Setting a new value
+#            gsettings set org.gnome.desktop.privacy usb-protection false
 
 - name: Disable camera access
   community.general.dconf:
