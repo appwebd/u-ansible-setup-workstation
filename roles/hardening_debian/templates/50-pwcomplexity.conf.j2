@@ -1,0 +1,21 @@
+#  Wazuh id 35681 - Ensure password complexity is configured
+
+#| Parameter  | Recommended value | Comment |
+#|------------|-------------------|---------|
+#| `minclass` |  `3` | Requires the password to contain at least 3 of the 4 character classes (uppercase, lowercase, digits, symbols). |
+#| `dcredit`  | `-1` | Penalizes each digit, forcing at least one digit. |
+#| `ucredit`  | `-1` | Penalizes each uppercase letter, forcing at least one uppercase. |
+#| `lcredit`  | `-1` | Penalizes each lowercase letter, forcing at least one lowercase. |
+#| `ocredit`  | `-1` | Penalizes each “other” character (special symbol).
+
+#| Policy level | Suggested values                                                                                       |
+#|--------------|--------------------------------------------------------------------------------------------------------|
+#| **Medium**   | `minclass = 2`, `dcredit = 0`, `ucredit = 0`, `lcredit = 0`, `ocredit = 0`                             |
+#| **High**     | `minclass = 4`, `dcredit = -2`, `ucredit = -1`, `lcredit = -1`, `ocredit = -1`                         |
+#| **Custom**   | Adjust each parameter to match your business requirements (e.g., only digits and letters, no symbols). |
+
+minclass = 4     # minclass = 4 requires digits, uppercase, lower case, and special characters
+dcredit = -1     # at least 1 digit
+ucredit = -1     # at least 1 uppercase letter
+lcredit = -1     # at least 1 lowercase letter
+ocredit = -1     # at least 1 special character
