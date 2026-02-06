@@ -1,4 +1,4 @@
-# 35704 - Ensure nologin is not listed in /etc/shells                                | /etc/shells                                                                                                                                    | Result: Passed   |
+# 35704 - Ensure nologin is not listed in /etc/shells
 
 - name: Create or Update file /etc/shells
   ansible.builtin.template:
