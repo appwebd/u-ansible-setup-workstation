@@ -1,5 +1,5 @@
 ---
-- name: Apply updates && install packages
+- name: Setup Workstation
   hosts: dev.local
   become: true
   gather_facts: true
@@ -7,19 +7,19 @@
     - roles/setup_tripwire/vars/main.yml
 
   roles:
-    - configure_local_login_banner
+    - configure_local_login_banner         # 35547 35548 files /etc/issue and /etc/issue.net
     - configure_timezone
     - configure_grub
     - update_upgrade
     - file_permission
     - configure_login_defs
-    - auditd
+    - auditd                               # 35723 35724
     - suggested_software_packages
     - suggested_software_packages_desktop
-    - sudo
-    - aide
+    - sudo                                 # 35662 35667 35664
+    - aide                                 # 35758 - Ensure AIDE is installed.
     - fail2ban
-    - gnome # Configure gsettings list-recursively | grep privacy
+    - gnome                                # Configure gsettings list-recursively | grep privacy
     - otpclient
     - rkhunter
     - sshd
@@ -27,3 +27,8 @@
     - tripwire
     - unattended_upgrades
     - hardening_debian
+    - root                                 # 35703 - Ensure root user umask is configured.
+    - prelink                              # 35544 - Ensure prelink is not installed.
+    - shells_nologin                       # 35704 - Ensure nologin is not listed in /etc/shells
+    - sysctl_conf                          # 35543 - Ensure core dumps are restricted.
+    - pam_pwhistory                        # 35687 - Ensure password history remember is configured.
