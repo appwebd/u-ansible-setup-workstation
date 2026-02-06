@@ -1,0 +1,18 @@
+---
+# Role defaults (change if you prefer different filenames)
+
+# /etc/security/limits.d entry – can be any unique name
+wazuh_limits_file: '/etc/security/limits.d/wazuh-core.conf'
+
+# sysctl file under /etc/sysctl.d/
+# If you already have a custom file you want to override, change this
+wazuh_sysctl_file: '/etc/sysctl.d/60-fs_sysctl.conf'
+wazuh_sysctl_content: |
+  fs.suid_dumpable = 0
+
+# systemd‑coredump settings (only applied if the package exists)
+systemd_coredump_storage: 'none'
+systemd_coredump_process_size_max: '0'
+
+# Whether to force a reload of sysctl after writing the file
+wazuh_sysctl_reload: true

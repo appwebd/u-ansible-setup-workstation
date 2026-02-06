@@ -1,0 +1,45 @@
+---
+#
+#  35687 - Ensure password history remember is configured.
+#
+- name: "Detect existing pam_pwhistory profile"
+  ansible.builtin.shell: |
+    for f in /usr/share/pam-configs/*; do
+      if grep -q '\bpam_pwhistory\.so\b' "$f"; then
+        echo "$(basename $f)"
+        exit 0
+      fi
+    done
+  register: _pwhistory_detected
+  changed_when: false          # detection is never a change
+
+- name: "Set profile name fact"
+  ansible.builtin.set_fact:
+    pwhistory_profile_name: "{{ _pwhistory_detected.stdout | default(pwhistory_profile_name) }}"
+
+- name: "Create pam_pwhistory profile file"
+  ansible.builtin.copy:
+    dest: "/usr/share/pam-configs/{{ pwhistory_profile_name }}"
+    mode: '0644'
+    content: |
+      Name: {{ pwhistory_profile_name }} password history checking
+      Default: yes
+      Priority: {{ pwhistory_priority }}
+      Password-Type: Primary
+      Password: requisite pam_pwhistory.so remember={{ pwhistory_remember }} enforce_for_root try_first_pass use_authtok
+  when: _pwhistory_detected.stdout == ''
+  register: _profile_created
+
+- name: "Check if profile is already enabled in /etc/pam.d/common-password"
+  ansible.builtin.shell:
+    cmd: |
+      grep -q '^{{ pwhistory_profile_name }}$' /etc/pam.d/common-password || exit 1
+  register: _profile_enabled_check
+  ignore_errors: true          # we only care about the return code
+
+- name: "Enable profile with pam-auth-update"
+  ansible.builtin.command:
+    cmd: pam-auth-update --enable {{ pwhistory_profile_name }}
+  when:
+    - _pwhistory_detected.stdout == ''          # no existing file → we created one
+    - _profile_enabled_check.rc != 0           # or it was not enabled yet

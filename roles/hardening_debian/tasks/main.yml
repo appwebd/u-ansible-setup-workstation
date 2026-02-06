@@ -12,12 +12,13 @@
     path: /etc/security/pwquality.conf.d
     state: directory
     mode: "0755"
+
 #
 # Wazuh id 35681 - Ensure password complexity is configured
 #
 - name: Create a file /etc/security/pwquality.conf.d/50-pwcomplexity.conf
   ansible.builtin.template:
-    src: pwquality.conf.j2
+    src: 50-pwcomplexity.conf.j2
     dest: /etc/security/pwquality.conf.d/50-pwcomplexity.conf
     owner: root
     group: root

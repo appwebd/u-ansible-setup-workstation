@@ -1,0 +1,7 @@
+---
+# Wazuh id 35544 - Ensure prelink is not installed.
+- name: Ensure prelink is not installed.
+  ansible.builtin.apt:
+    name: prelink
+    state: absent
+    purge: true

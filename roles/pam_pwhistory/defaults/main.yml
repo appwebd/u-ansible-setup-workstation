@@ -1,0 +1,6 @@
+---
+# Default variables – feel free to override in your playbook or inventory
+
+pwhistory_profile_name: pwhistory         # name of the profile file (without extension)
+pwhistory_priority: 1024                  # ordering priority
+pwhistory_remember: 24                    # number of remembered passwords

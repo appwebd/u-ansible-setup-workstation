@@ -1,0 +1,9 @@
+# 35704 - Ensure nologin is not listed in /etc/shells
+
+- name: Create or Update file /etc/shells
+  ansible.builtin.template:
+    src: shells.j2
+    dest: /etc/shells
+    owner: root
+    group: root
+    mode: "0644"
