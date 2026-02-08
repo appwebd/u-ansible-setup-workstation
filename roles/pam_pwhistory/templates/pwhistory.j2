@@ -6,23 +6,16 @@
 #
 # root account's passwords are also remembered.
 # Enabled if option is present.
-# enforce_for_root
+enforce_for_root
 #
 # Number of passwords to remember.
 # The default is 10.
-# remember = 10
+remember = 10
 #
 # Number of times to prompt for the password.
 # The default is 1.
-# retry = 1
+retry = 1
 #
 # The directory where the last passwords are kept.
 # The default is /etc/security/opasswd.
-# file = /etc/security/opasswd
-
-Name: {{ pamhistory_profile_name }} password history checking
-Default: yes
-Priority: {{ pamhistory_priority }}
-Password-Type: Primary
-Password:
- requisite pam_pwhistory.so remember=24 enforce_for_root try_first_pass use_authtok
+file = /etc/security/opasswd
