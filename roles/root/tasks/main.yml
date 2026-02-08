@@ -7,7 +7,7 @@
     path: /root/.bash_profile
   register: bashprofile_stat
 
-- name: "Umask‑Root | fixing /root/.bash_profile"
+- name: "Umask‑Root - fixing /root/.bash_profile"
   when: bashprofile_stat.stat.exists
   become: true
   block:
@@ -24,13 +24,12 @@
         insertafter: EOF
         create: false
 
-
 - name: Check if /root/.bashrc exists
   ansible.builtin.stat:
     path: /root/.bashrc
   register: bashrc_stat
 
-- name: "Umask‑Root | fixing /root/.bashrc"
+- name: "Umask‑Root- fixing /root/.bashrc"
   when: bashrc_stat.stat.exists
   become: true
   block:

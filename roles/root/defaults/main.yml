@@ -1,6 +1,6 @@
 ---
 # umask value
-umask_value: "027"
+umask_value: "umask 027"
 
 # Update the following files
 root_bash_files:
