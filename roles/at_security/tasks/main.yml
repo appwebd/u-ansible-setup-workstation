@@ -9,7 +9,8 @@
   ansible.builtin.command:
     cmd: getent group daemon
   register: getent_daemon
-  ignore_errors: true
+  changed_when: false
+  failed_when: false
 
 - name: Determine which group to use (daemon or root)
   ansible.builtin.set_fact:

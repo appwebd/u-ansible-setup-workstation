@@ -3,7 +3,8 @@
   ansible.builtin.command:
     cmd: getent group daemon
   register: getent_daemon
-  ignore_errors: true
+  changed_when: false
+  failed_when: false
 
 - name: Determine which group to use (daemon or root)
   ansible.builtin.set_fact:
@@ -20,7 +21,7 @@
   ignore_errors: true                                   # if the file does not exist, continue with an empty list
 
 - name: Decode and convert existing users to a list
-  set_fact:
+  ansible.builtin.set_fact:
     at_deny_users: >-
       {{
         (
@@ -30,7 +31,7 @@
           | list
         )
       }}
-  ignore_errors: true
+  failed_when: false
 
 - name: Combine existing and new users without duplicates
   ansible.builtin.set_fact:
@@ -42,5 +43,5 @@
     dest: /etc/at.deny
     owner: root
     group: root
-    mode: 0640
-    backup: yes
+    mode: "0640"
+    backup: true
