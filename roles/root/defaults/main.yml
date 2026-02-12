@@ -1,8 +1,0 @@
----
-# umask value
-umask_value: "umask 027"
-
-# Update the following files
-root_bash_files:
-  - "/root/.bash_profile"
-  - "/root/.bashrc"

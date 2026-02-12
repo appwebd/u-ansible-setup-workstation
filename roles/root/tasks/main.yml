@@ -20,7 +20,7 @@
     - name: Add compliant umask line
       ansible.builtin.lineinfile:
         path: /root/.bash_profile
-        line: "{{ umask_value }}"
+        line: "umask 027"
         insertafter: EOF
         create: false
 
@@ -42,6 +42,6 @@
     - name: Add compliant umask line
       ansible.builtin.lineinfile:
         path: /root/.bashrc
-        line: "{{ umask_value }}"
+        line: "umask 027"
         insertafter: EOF
         create: false
