@@ -1,0 +1,94 @@
+---
+# Role        : pam_pwquality
+# Description : This role is designed to be idempotent, meaning you can run it multiple times,
+#              and it will only make changes if the system is not in the desired state.
+#              It follows Ansible best practices by using handlers, templates, and variables.
+#
+#              This role solve the wazuh id 35674 - Ensure pam_pwquality module is enabled.
+
+- name: Create a file /etc/security/pwquality.conf
+  ansible.builtin.template:
+    src: pwquality.conf.j2
+    dest: /etc/security/pwquality.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure that directory /etc/security/pwquality.conf.d/ exists
+  file:
+    path: /etc/security/pwquality.conf.d
+    state: directory
+    mode: "0755"
+
+- name: Check for an existing pam_pwquality profile
+  ansible.builtin.shell: |
+    set -o pipefail
+    grep -P -- '\bpam_pwquality\.so\b' /usr/share/pam-configs/* | head -n1 || true
+  args:
+    executable: /bin/bash
+  register: pwsearch_result
+  changed_when: false
+
+- name: Extract the profile name from grep output (if any)
+  ansible.builtin.set_fact:
+    existing_profile_name: >-
+      {{
+        pwsearch_result.stdout
+          | regex_replace('^/usr/share/pam-configs/(.*?):', '\\1')
+      }}
+  when: pwsearch_result.stdout != ""
+
+- name: Decide which profile to enable
+  ansible.builtin.set_fact:
+    target_profile: >
+      {{ existing_profile_name |
+         default(site_specific_pam_pwquality) |
+         default('pwquality') }}
+
+# ------------------------------------------------------------------
+# 1. If a real profile was found or a site‑specific one was supplied, enable it.
+# 2. Otherwise create the default pwquality profile and enable that.
+# ------------------------------------------------------------------
+- name: Enable existing or site‑specific pam_pwquality profile
+  when:
+    - existing_profile_name | length > 0
+    - site_specific_pam_pwquality | length == 0   # we only want this branch if no custom one was supplied
+  ansible.builtin.command: pam-auth-update --enable "{{ target_profile }}"
+  register: enable_existing
+  changed_when: enable_existing.rc == 0
+
+- name: Enable site‑specific profile (if provided)
+  when:
+    - existing_profile_name | length == 0
+    - site_specific_pam_pwquality | length > 0
+  ansible.builtin.command: pam-auth-update --enable "{{ target_profile }}"
+  register: enable_site_specific
+  changed_when: enable_site_specific.rc == 0
+
+- name: Create the default pwquality profile file
+  when:
+    - existing_profile_name | length == 0
+    - site_specific_pam_pwquality | length == 0
+  ansible.builtin.template:
+    src: pwquality.conf.j2
+    dest: /usr/share/pam-configs/pwquality
+    owner: root
+    group: root
+    mode: '0644'
+  register: create_default
+
+- name: Enable the newly created default profile
+  when:
+    - existing_profile_name | length == 0
+    - site_specific_pam_pwquality | length == 0
+  ansible.builtin.command: pam-auth-update --enable --package pwquality
+  register: enable_default
+  changed_when: enable_default.rc == 0
+
+- name: Debug – summary of actions performed
+  ansible.builtin.debug:
+    msg:
+      - "Existing profile found: {{ existing_profile_name | default('N/A') }}"
+      - "Site‑specific profile used: {{ site_specific_pam_pwquality | default('None') }}"
+      - "Target profile enabled: {{ target_profile }}"
+
