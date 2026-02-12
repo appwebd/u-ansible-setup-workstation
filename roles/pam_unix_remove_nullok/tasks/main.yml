@@ -1,0 +1,58 @@
+---
+# Role: pam_unix_remove_nullok
+# Description: Remove nullok argument from pam_unix.so lines in PAM configuration files
+#
+# other wazuh id about pam_unix.so
+#
+# 35690 - Ensure pam_unix does not include nullok.
+# 35672 - Ensure pam_unix module is enabled.
+# 35691 - Ensure pam_unix does not include remember.
+# 35692 - Ensure pam_unix includes a strong password hashing algorithm.
+# 35693 - Ensure pam_unix includes use_authtok.
+# noqa: no-handler
+#
+
+- name: Find files with pam_unix.so and nullok in /usr/share/pam-configs
+  ansible.builtin.shell: |
+    set -o pipefail
+    grep -PH -- '^\h*([^#\n\r]+\h+)?pam_unix.so\h+([^#\n\r]+\h+)?nullok\b' /usr/share/pam-configs/* | cut -d: -f1 | sort -u
+  register: grep_result
+  changed_when: false
+  failed_when: false
+  args:
+    executable: /bin/bash
+
+- name: Set fact for found files
+  ansible.builtin.set_fact:
+    found_files: "{{ grep_result.stdout_lines }}"
+
+- name: Remove nullok argument from pam_unix.so lines in found files
+  ansible.builtin.replace:
+    path: "{{ item }}"
+    regexp: '(.*pam_unix\.so.*)\s+nullok\b'
+    replace: '\1'
+  loop: "{{ found_files }}"
+  when: found_files | length > 0
+  register: file_changes
+  changed_when: file_changes is changed
+
+- name: Check if pam-auth-update command exists
+  ansible.builtin.command: which pam-auth-update
+  register: pam_auth_update_check
+  changed_when: false
+  failed_when: false
+
+# For pam‑auth‑update to run more quickly, it should be invoked with the --package option
+
+- name: Check if unix profile is enabled
+  ansible.builtin.command: pam-auth-update --list --package
+  register: pam_list
+  changed_when: false
+
+- name: Run pam-auth-update to enable unix profile (if not using custom files)
+  ansible.builtin.command: pam-auth-update --enable --package unix
+  when:
+    - "'Unix authentication' not in pam_list.stdout"
+    - pam_auth_update_check.rc == 0
+    - not pam_custom_files | default(false)
+  changed_when: true
