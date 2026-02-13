@@ -1,20 +1,23 @@
 ---
+# Role: configure_login_defs
+# Description: login.defs configuration based on Wazuh recommendations.
+
 # Wazuh id 35694 - Ensure password expiration is configured.
-- name: Configure login.def PASS_MAX_DAYS
+- name: "Configure login.def PASS_MAX_DAYS"
   ansible.builtin.replace:
     path: /etc/login.defs
     regexp: "^PASS_MAX_DAYS.*99999"
     replace: "PASS_MAX_DAYS 90"
 
 # Wazuh id 35695 - Ensure minimum password days is configured.
-- name: Configure login.def PASS_MIN_DAYS.*0
+- name: "Configure login.def PASS_MIN_DAYS.*0"
   ansible.builtin.replace:
     path: /etc/login.defs
     regexp: "^PASS_MIN_DAYS.*0"
     replace: "PASS_MIN_DAYS 1"
 
 # Wazuh id 35697 - Ensure strong password hashing algorithm is configured. ENCRYPT_METHOD SHA512
-- name: Configure login.def ENCRYPT_METHOD
+- name: "Configure login.def ENCRYPT_METHOD"
   ansible.builtin.replace:
     path: /etc/login.defs
     regexp: "^ENCRYPT_METHOD.*"
@@ -22,7 +25,7 @@
     backup: true
 
 # Wazuh id 35706 - Ensure default user umask is configured.
-- name: Setting UMASK 027 in /etc/login.defs
+- name: "Setting UMASK 027 in /etc/login.defs"
   ansible.builtin.lineinfile:
     path: /etc/login.defs
     regexp: '^UMASK\s'

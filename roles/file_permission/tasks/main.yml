@@ -1,7 +1,9 @@
 ---
-# File permission tasks for system hardening
+# Role: file_permission
+# Description: Set permissions on files/directories based on Wazuh recommendations.
+#
 # Wazuh ID 35594 - Ensure permissions on /etc/crontab are configured
-- name: Set secure permissions for /etc/crontab
+- name: "Set secure permissions for /etc/crontab"
   ansible.builtin.file:
     path: /etc/crontab
     mode: "0600"                        # Equivalent: chmod og-rwx
@@ -9,7 +11,7 @@
     group: root
 
 # Wazuh id 35595 - Ensure permissions on /etc/cron.hourly are configured.
-- name: Ensure owner root:root in /etc/cron.hourly
+- name: "Ensure owner root:root in /etc/cron.hourly"
   ansible.builtin.file:
     path: /etc/cron.hourly
     owner: root                         # chown root:root /etc/cron.hourly/
@@ -17,7 +19,7 @@
     mode: "0700"                        # chmod og-rwx /etc/cron.hourly/
 
 # Wazuh id 35596 - Ensure permissions on /etc/cron.daily are configured.
-- name: Ensure root:root ownership in /etc/cron.daily
+- name: "Ensure root:root ownership in /etc/cron.daily"
   ansible.builtin.file:
     path: /etc/cron.daily
     owner: root                       # chown root:root /etc/cron.daily/
@@ -25,7 +27,7 @@
     mode: "0700"                      #  chmod og-rwx /etc/cron.daily/
 
 # Wazuh id 35597- Ensure permissions on /etc/cron.weekly are configured.
-- name: Ensure root:root ownership in /etc/cron.weekly
+- name: "Ensure root:root ownership in /etc/cron.weekly"
   ansible.builtin.file:
     path: /etc/cron.weekly
     owner: root
@@ -33,7 +35,7 @@
     mode: "0700"
 
 # Wazuh id 35598 - Ensure permissions on /etc/cron.monthly are configured.
-- name: Ensure root:root ownership in /etc/cron.monthly
+- name: "Ensure root:root ownership in /etc/cron.monthly"
   ansible.builtin.file:
     path: /etc/cron.monthly
     owner: root
@@ -41,7 +43,7 @@
     mode: "0700"
 
 # Wazuh id 35599 - Ensure permissions on /etc/cron.d are configured.
-- name: Ensure root:root ownership in /etc/cron.d
+- name: "Ensure root:root ownership in /etc/cron.d"
   ansible.builtin.file:
     path: /etc/cron.d
     owner: root
@@ -49,12 +51,12 @@
     mode: "0700"
 
 # Wazuh ID 35770 - Ensure permissions on /etc/security/opasswd are configured
-- name: Check if /etc/security/opasswd exists
+- name: "Check if /etc/security/opasswd exists"
   ansible.builtin.stat:
     path: /etc/security/opasswd
   register: opasswd_stat
 
-- name: Create /etc/security/opasswd if it does not exist
+- name: "Create /etc/security/opasswd if it does not exist"
   ansible.builtin.file:
     path: /etc/security/opasswd
     state: touch
@@ -64,7 +66,7 @@
   when: not opasswd_stat.stat.exists
 
 # Wazuh id 35770 - Ensure permissions on /etc/security/opasswd are configured.
-- name: Set secure permissions for /etc/security/opasswd if it exists
+- name: "Set secure permissions for /etc/security/opasswd if it exists"
   ansible.builtin.file:
     path: /etc/security/opasswd
     mode: "0600"
@@ -72,12 +74,12 @@
     group: root
   when: opasswd_stat.stat.exists
 
-- name: Check if /etc/security/opasswd.old exists
+- name: "Check if /etc/security/opasswd.old exists"
   ansible.builtin.stat:
     path: /etc/security/opasswd.old
   register: opasswd_old_stat
 
-- name: Create /etc/security/opasswd.old if it does not exist
+- name: "Create /etc/security/opasswd.old if it does not exist"
   ansible.builtin.file:
     path: /etc/security/opasswd.old
     state: touch
@@ -87,7 +89,7 @@
   when: not opasswd_old_stat.stat.exists
 
 # Wazuh id 35770 - Ensure permissions on /etc/security/opasswd are configured.
-- name: Set secure permissions for /etc/security/opasswd.old if it exists
+- name: "Set secure permissions for /etc/security/opasswd.old if it exists"
   ansible.builtin.file:
     path: /etc/security/opasswd.old
     mode: "0600"
@@ -96,7 +98,7 @@
   when: opasswd_old_stat.stat.exists
 
 # Wazuh ID 35541 - Ensure access to bootloader config is configured
-- name: Check if /boot/grub/grub.cfg exists
+- name: "Check if /boot/grub/grub.cfg exists"
   ansible.builtin.stat:
     path: /boot/grub/grub.cfg
   register: grub_stat
@@ -104,7 +106,7 @@
 # Wazuh id 35541 - Ensure access to bootloader config is configured.
 # chown root:root /boot/grub/grub.cfg
 # chmod u-x,go-rwx /boot/grub/grub.cfg.
-- name: Set secure permissions for /boot/grub/grub.cfg if it exists
+- name: "Set secure permissions for /boot/grub/grub.cfg if it exists"
   ansible.builtin.file:
     path: /boot/grub/grub.cfg
     mode: "0600"                                       # chmod u-x,go-rwx /boot/grub/grub.cfg
@@ -114,12 +116,12 @@
   when: grub_stat.stat.exists
 
 # Wazuh ID 33052 - Ensure permissions on /etc/issue are configured
-- name: Check if /etc/issue exists
+- name: "Check if /etc/issue exists"
   ansible.builtin.stat:
     path: /etc/issue
   register: etc_issue_stat
 
-- name: Set secure permissions for /etc/issue if it exists
+- name: "Set secure permissions for /etc/issue if it exists"
   ansible.builtin.file:
     path: /etc/issue
     mode: "0644" # chmod u-x,go-wx $(readlink -e /etc/issue)
@@ -129,12 +131,12 @@
   when: etc_issue_stat.stat.exists
 
 # Wazuh ID 33053 - Ensure permissions on /etc/issue.net are configured
-- name: Check if /etc/issue.net exists
+- name: "Check if /etc/issue.net exists"
   ansible.builtin.stat:
     path: /etc/issue.net
   register: etc_issue_net_stat
 
-- name: Set secure permissions for /etc/issue.net if it exists
+- name: "Set secure permissions for /etc/issue.net if it exists"
   ansible.builtin.file:
     path: /etc/issue.net
     mode: "0644" # chmod u-x,go-wx $(readlink -e /etc/issue.net)
@@ -144,12 +146,12 @@
   when: etc_issue_net_stat.stat.exists
 
 # Additional file permissions
-- name: Check if /etc/cups/cupsd.conf exists
+- name: "Check if /etc/cups/cupsd.conf exists"
   ansible.builtin.stat:
     path: /etc/cups/cupsd.conf
   register: cupsd_conf_stat
 
-- name: Set secure permissions for /etc/cups/cupsd.conf
+- name: "Set secure permissions for /etc/cups/cupsd.conf"
   ansible.builtin.file:
     path: /etc/cups/cupsd.conf
     mode: "0700"
@@ -157,12 +159,12 @@
     group: root
   when: cupsd_conf_stat.stat.exists
 
-- name: Check if /etc/sysctl.conf exists
+- name: "Check if /etc/sysctl.conf exists"
   ansible.builtin.stat:
     path: /etc/sysctl.conf
   register: sysctl_conf_stat
 
-- name: Set secure permissions for /etc/sysctl.conf
+- name: "Set secure permissions for /etc/sysctl.conf"
   ansible.builtin.file:
     path: /etc/sysctl.conf
     state: touch
@@ -171,12 +173,12 @@
     group: root
   when: sysctl_conf_stat.stat.exists
 
-- name: Check if /usr/bin/as exists
+- name: "Check if /usr/bin/as exists"
   ansible.builtin.stat:
     path: /usr/bin/as
   register: as_stat
 
-- name: Set secure permissions for /usr/bin/as
+- name: "Set secure permissions for /usr/bin/as"
   ansible.builtin.file:
     path: /usr/bin/as
     mode: "0444"

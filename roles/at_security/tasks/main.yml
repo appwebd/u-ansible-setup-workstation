@@ -1,18 +1,20 @@
-# 35601 - Ensure at is restricted to authorized users.
 ---
-- name: Ensure the 'at' package is installed
+# Role: at_security
+# Description: Ensure at is restricted to authorized users. Solve Wazuh ID 35601
+
+- name: "Ensure the 'at' package is installed"
   ansible.builtin.package:
     name: at
     state: present
 
-- name: Check if group 'daemon' exists
+- name: "Check if group 'daemon' exists"
   ansible.builtin.command:
     cmd: getent group daemon
   register: getent_daemon
   changed_when: false
   failed_when: false
 
-- name: Determine which group to use (daemon or root)
+- name: "Determine which group to use (daemon or root)"
   ansible.builtin.set_fact:
     at_group: "{{ 'daemon' if getent_daemon.rc == 0 else 'root' }}"
 
@@ -22,12 +24,12 @@
 
 #
 # ---------- /etc/at.allow ----------
-- name: Check if /etc/at.allow exists
+- name: "Check if /etc/at.allow exists"
   ansible.builtin.stat:
     path: /etc/at.allow
   register: at_allow_stat
 
-- name: Ensure /etc/at.allow exists and is configured
+- name: "Ensure /etc/at.allow exists and is configured"
   ansible.builtin.file:
     path: /etc/at.allow
     state: touch
@@ -36,7 +38,7 @@
     mode: '0640'
   when: (ansible_facts['os_family'] is defined)                  # idempotence, always is true
 
-- name: Enforce permissions on /etc/at.allow
+- name: "Enforce permissions on /etc/at.allow"
   ansible.builtin.file:
     path: /etc/at.allow
     owner: root
@@ -45,19 +47,19 @@
   when: (ansible_facts['os_family'] is defined)                  # idempotence, always is true
 
 # ---------- /etc/at.deny ----------
-- name: Check if /etc/at.deny exists
+- name: "Check if /etc/at.deny exists"
   ansible.builtin.stat:
     path: /etc/at.deny
   register: at_deny_stat
 
-- name: Change owner of /etc/at.deny (if it exists)
+- name: "Change owner of /etc/at.deny (if it exists)"
   ansible.builtin.file:
     path: /etc/at.deny
     owner: root
     group: "{{ at_group }}"
   when: at_deny_stat.stat.exists
 
-- name: Set restrictive permissions on /etc/at.deny (if it exists)
+- name: "Set restrictive permissions on /etc/at.deny (if it exists)"
   ansible.builtin.file:
     path: /etc/at.deny
     mode: '0640'

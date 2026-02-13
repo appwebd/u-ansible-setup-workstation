@@ -1,11 +1,14 @@
 ---
-- name: Ensure auditd is installed
+# Role: auditd
+# Description: Install and configure the package software auditd
+
+- name: "Ensure auditd is installed"
   ansible.builtin.package:
     name: auditd
     state: present
     update_cache: true
 
-- name: Ensure audit log directory exists
+- name: "Ensure audit log directory exists"
   ansible.builtin.file:
     path: /var/log/audit
     state: directory
@@ -13,7 +16,7 @@
     group: root
     mode: '0700'
 
-- name: Create a file /etc/audit/auditd.conf
+- name: "Create a file /etc/audit/auditd.conf"
   ansible.builtin.template:
     src: auditd.conf.j2
     dest: /etc/audit/auditd.conf
@@ -21,7 +24,7 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/50-scope.rules
+- name: "Create a file /etc/audit/rules.d/50-scope.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for sudoers modifications (CIS 6.2.3.1)
@@ -37,7 +40,7 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/50-user_emulation.rules
+- name: "Create a file /etc/audit/rules.d/50-user_emulation.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for user emulation/privilege escalation (CIS 6.2.3.2)
@@ -53,7 +56,7 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/50-time-change.rules
+- name: "Create a file /etc/audit/rules.d/50-time-change.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for date and time modifications (CIS 6.2.3.4)
@@ -91,7 +94,7 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/50-system_locale.rules
+- name: "Create a file /etc/audit/rules.d/50-system_locale.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for network environment changes (CIS 6.2.3.5)
@@ -126,7 +129,7 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/50-access.rules
+- name: "Create a file /etc/audit/rules.d/50-access.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for unsuccessful file access attempts (CIS 6.2.3.7)
@@ -159,7 +162,7 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/50-identity.rules
+- name: "Create a file /etc/audit/rules.d/50-identity.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for user/group information modifications (CIS 6.2.3.8)
@@ -206,7 +209,7 @@
     mode: '0640'
 
 
-- name: Create a file /etc/audit/rules.d/50-perm_mod.rules
+- name: "Create a file /etc/audit/rules.d/50-perm_mod.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for discretionary access control permission modifications (CIS 6.2.3.9)
@@ -245,7 +248,7 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/50-mounts.rules
+- name: "Create a file /etc/audit/rules.d/50-mounts.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for file system mounts (CIS 6.2.3.10)
@@ -267,7 +270,7 @@
     mode: '0640'
 
 
-- name: Create a file /etc/audit/rules.d/50-session.rules
+- name: "Create a file /etc/audit/rules.d/50-session.rules"
   ansible.builtin.copy:
     content: |
       ## Audit rule for session initiation information (CIS 6.2.3.11)
@@ -298,7 +301,7 @@
     group: root
     mode: '0640'
 
-- name: Create rules file /etc/audit/rules.d/50-usermod.rules for usermod command
+- name: "Create rules file /etc/audit/rules.d/50-usermod.rules for usermod command"
   ansible.builtin.copy:
     content: |
       ## Audit rule for usermod command (CIS 6.2.3.18)
@@ -312,7 +315,7 @@
     group: root
     mode: '0640'
 
-- name: Create a file /etc/audit/rules.d/50-kernel_modules.rules
+- name: "Create a file /etc/audit/rules.d/50-kernel_modules.rules"
   ansible.builtin.copy:
     content: |
       ## Rule ID: 33271 OK -  Rule for auditing kernel module loading, unloading, and modifications
@@ -330,7 +333,7 @@
     mode: '0640'
 
 
-- name: Create a file /etc/audit/rules.d/99-finalize.rules
+- name: "Create a file /etc/audit/rules.d/99-finalize.rules"
   ansible.builtin.copy:
     content: |
       ## Rule ID: 33272 OK - inmutable Contiguration (Always at the end)
@@ -342,19 +345,19 @@
 
 # ---
 
-- name: Load audit rules
+- name: "Load audit rules"
   ansible.builtin.command: augenrules --load
   changed_when: false
   # This ensures rules are valid before starting service
 
-- name: Ensure auditd service is running
+- name: "Ensure auditd service is running"
   ansible.builtin.service:
     name: auditd
     state: started
     enabled: true
     use: service  # Use init script wrapper for reliability
 
-- name: Reload auditd configuration to apply changes
+- name: "Reload auditd configuration to apply changes"
   ansible.builtin.systemd:
     name: auditd
     state: restarted

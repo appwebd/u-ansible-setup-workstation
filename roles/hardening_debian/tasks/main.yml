@@ -1,22 +1,10 @@
 ---
-- name: Create a file /etc/security/pwquality.conf
-  ansible.builtin.template:
-    src: pwquality.conf.j2
-    dest: /etc/security/pwquality.conf
-    owner: root
-    group: root
-    mode: "0644"
-
-- name: Ensure that directory /etc/security/pwquality.conf.d/ exists
-  file:
-    path: /etc/security/pwquality.conf.d
-    state: directory
-    mode: "0755"
-
+# Role: hardening_debian
+# Description: Hardening Ubuntu
+# TODO: New roles will be created to identify the Wazuh recommendation ID
 #
 # Wazuh id 35681 - Ensure password complexity is configured
-#
-- name: Create a file /etc/security/pwquality.conf.d/50-pwcomplexity.conf
+- name: "Create a file /etc/security/pwquality.conf.d/50-pwcomplexity.conf"
   ansible.builtin.template:
     src: 50-pwcomplexity.conf.j2
     dest: /etc/security/pwquality.conf.d/50-pwcomplexity.conf
@@ -26,13 +14,13 @@
 
 #
 # Wazuh id 35545 - Ensure Automatic Error Reporting is not enabled.
-- name: Ensure Automatic Error Reporting is not enabled
+- name: "Ensure Automatic Error Reporting is not enabled"
   ansible.builtin.apt:
     name: apport
     state: absent
     purge: true
 
-- name: Create a file /etc/modprobe.d/blacklisting.conf don't load this modules
+- name: "Create a file /etc/modprobe.d/blacklisting.conf don't load this modules"
   ansible.builtin.template:
     src: blacklisting.conf.j2
     dest: /etc/modprobe.d/blacklisting.conf
@@ -40,7 +28,7 @@
     group: root
     mode: "0644"
 
-- name: Create file /etc/security/faillock.conf
+- name: "Create file /etc/security/faillock.conf"
   ansible.builtin.template:
     src: faillock.conf.j2
     dest: /etc/security/faillock.conf

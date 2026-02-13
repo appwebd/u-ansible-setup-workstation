@@ -1,5 +1,8 @@
 ---
-- name: Install fail2ban + python3-systemd prereq
+# Role: fail2ban
+# Description: Install and configure package software called "fail2ban"
+
+- name: "Install fail2ban + python3-systemd prereq"
   ansible.builtin.apt:
     name:
       - python3-systemd
@@ -9,7 +12,7 @@
     update_cache: true
   when: ansible_os_family == 'Debian'
 
-- name: Configure fail2ban local jail
+- name: "Configure fail2ban local jail"
   ansible.builtin.template:
     src: jail.local.j2
     dest: /etc/fail2ban/jail.local
@@ -18,7 +21,7 @@
     mode: '0644'
   notify: Restart fail2ban
 
-- name: Ensure fail2ban is running and enabled
+- name: "Ensure fail2ban is running and enabled"
   ansible.builtin.service:
     name: fail2ban
     state: started
