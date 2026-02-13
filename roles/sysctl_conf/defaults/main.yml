@@ -1,7 +1,7 @@
 ---
 # Role defaults (change if you prefer different filenames)
 
-# /etc/security/limits.d entry – can be any unique name
+# /etc/security/limits.d entry - can be any unique name
 wazuh_limits_file: '/etc/security/limits.d/wazuh-core.conf'
 
 # sysctl file under /etc/sysctl.d/

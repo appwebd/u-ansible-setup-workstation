@@ -1,6 +1,8 @@
 ---
+# Role: sysctl_conf
+# Description: Wazuh id 35543 - Ensure core dumps are restricted.
 
-- name: Create file /etc/sysctl.conf
+- name: "Create file /etc/sysctl.conf"
   ansible.builtin.template:
     src: sysctl.conf.j2
     dest: /etc/sysctl.conf
@@ -8,10 +10,8 @@
     group: root
     mode: "0640"
 
-# Wazuh id 35543 - Ensure core dumps are restricted.
-
 # 1. Hard‑core limit
-- name: Ensure hard core limit is set in limits.d
+- name: "Ensure hard core limit is set in limits.d"
   ansible.builtin.lineinfile:
     path: "{{ wazuh_limits_file }}"
     regexp: '^\\*\\s+hard\\s+core'
@@ -20,8 +20,8 @@
     mode: '0644'
   become: true
 
-# 2. sysctl – fs.suid_dumpable = 0
-- name: Ensure /etc/sysctl.d/60‑fs_sysctl.conf exists
+# 2. sysctl - fs.suid_dumpable = 0
+- name: "Ensure /etc/sysctl.d/60‑fs_sysctl.conf exists"
   ansible.builtin.copy:
     dest: "{{ wazuh_sysctl_file }}"
     content: "{{ wazuh_sysctl_content | trim }}\n"
@@ -29,7 +29,7 @@
   become: true
 
 # Apply the setting immediately (idempotent)
-- name: Set active kernel parameter fs.suid_dumpable
+- name: "Set active kernel parameter fs.suid_dumpable"
   ansible.posix.sysctl:
     name: fs.suid_dumpable
     value: 0
@@ -37,17 +37,17 @@
     reload: "{{ wazuh_sysctl_reload }}"
   become: true
 
-# 3. Optional – systemd‑coredump configuration
-- name: Gather package facts (required for checking systemd‑coredump)
+# 3. Optional - systemd‑coredump configuration
+- name: "Gather package facts (required for checking systemd-coredump)"
   ansible.builtin.package_facts:
     manager: auto
   become: false   # reading facts does not need sudo
 
-- name: Configure systemd‑coredump if installed
+- name: "Configure systemd-coredump if installed"
   when: "'systemd-coredump' in ansible_facts.packages"
   block:
 
-    - name: Ensure Storage=none line exists
+    - name: "Ensure Storage=none line exists"
       ansible.builtin.lineinfile:
         path: /etc/systemd/coredump.conf
         regexp: '^Storage='
@@ -56,7 +56,7 @@
         mode: '0644'
       notify: Reload systemd
 
-    - name: Ensure ProcessSizeMax=0 line exists
+    - name: "Ensure ProcessSizeMax=0 line exists"
       ansible.builtin.lineinfile:
         path: /etc/systemd/coredump.conf
         regexp: '^ProcessSizeMax='
