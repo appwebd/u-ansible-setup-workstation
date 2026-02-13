@@ -3,14 +3,7 @@
 # Description: Hardening Ubuntu
 # TODO: New roles will be created to identify the Wazuh recommendation ID
 #
-# Wazuh id 35681 - Ensure password complexity is configured
-- name: "Create a file /etc/security/pwquality.conf.d/50-pwcomplexity.conf"
-  ansible.builtin.template:
-    src: 50-pwcomplexity.conf.j2
-    dest: /etc/security/pwquality.conf.d/50-pwcomplexity.conf
-    owner: root
-    group: root
-    mode: "0644"
+
 
 #
 # Wazuh id 35545 - Ensure Automatic Error Reporting is not enabled.
