@@ -1,0 +1,34 @@
+---
+# Role: disable_kernel_modules
+# Description: Disable the following kernel modules
+#
+# 35500 - Ensure mounting of cramfs filesystems is disabled.
+# 35501 - Ensure freevxfs kernel module is not available.
+# 35502 - Ensure hfs kernel module is not available.
+# 35503 - Ensure hfsplus kernel module is not available.
+# 35504 - Ensure jffs2 kernel module is not available.
+# 35505 - Ensure overlayfs kernel module is not available.
+# 35506 - Ensure squashfs kernel module is not available.
+# 35507 - Ensure udf kernel module is not available.
+# 35508 - Ensure usb-storage kernel module is not available.
+# 35509 - Ensure unused filesystems afs kernel modules are not available.   FAILED
+# 35602 - Ensure wireless interfaces are disabled (wifi, wwan).             FAILED
+# 35604 - Ensure dccp kernel module is not available.
+# 35605 - Ensure tipc kernel module is not available.
+# 35606 - Ensure rds kernel module is not available.
+# 35607 - Ensure sctp kernel module is not available.
+
+- name: "Filter kernel modules excluding exceptions"
+  ansible.builtin.set_fact:
+    filtered_filesystem_modules: "{{ disable_kernel_modules_list | difference(filesystem_module_exceptions) }}"
+
+- name: "Unload kernel modules if enabled"
+  ansible.builtin.import_tasks: unload.yml
+  when: unload_modules | bool
+
+- name: "Disable kernel modules"
+  ansible.builtin.import_tasks: disable.yml
+  when: enforce_disable | bool
+
+- name: "Verify compliance"
+  ansible.builtin.import_tasks: verify.yml

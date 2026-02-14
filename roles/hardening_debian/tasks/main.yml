@@ -13,14 +13,6 @@
     state: absent
     purge: true
 
-- name: "Create a file /etc/modprobe.d/blacklisting.conf don't load this modules"
-  ansible.builtin.template:
-    src: blacklisting.conf.j2
-    dest: /etc/modprobe.d/blacklisting.conf
-    owner: root
-    group: root
-    mode: "0644"
-
 - name: "Create file /etc/security/faillock.conf"
   ansible.builtin.template:
     src: faillock.conf.j2
