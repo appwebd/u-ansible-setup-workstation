@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Author      : Patricio Rojas
+# Description : Allows you to apply Wazuh and lynis recommendations primarily on a workstation.
 
 set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.
 set +o history
