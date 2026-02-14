@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Author      : Patricio Rojas
+# Description : Remove software bloatware. Review before use.
 
 set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.
 set +o history
