@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail          # Terminar al fallo, no usar variables no inicializadas y capturar errores de pipelines
+set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.
 
 export ANSIBLE_VAULT_PASSWORD_FILE=.vault_password
 
