@@ -1,3 +1,6 @@
+# Role: gnome
+# Description: Improve the privacy options of the GNOME Shell desktop.
+#
 # gsettings list-schemas
 # gsettings list-recursively | grep privacy
 #
@@ -21,82 +24,82 @@
 # Setting a new value
 #            gsettings set org.gnome.desktop.privacy usb-protection false
 
-- name: Disable camera access
+- name: "Disable camera access"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/disable-camera
     value: 'true'
 
-- name: Disable microphone access
+- name: "Disable microphone access"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/disable-microphone
     value: 'true'
 
-- name: Disable sound output access
+- name: "Disable sound output access"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/disable-sound-output
     value: 'false'
 
-- name: Hide user identity
+- name: "Hide user identity"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/hide-identity
     value: 'true'
 
-- name: Set old files age to 30 days
+- name: "Set old files age to 30 days"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/old-files-age
     value: '3'
 
-- name: Setting privacy screen
+- name: "Setting privacy screen"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/privacy-screen
     value: 'false'
 
-- name: Do not limit recent files age
+- name: "Do not limit recent files age"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/recent-files-max-age
     value: '1'
 
-- name: Remember application usage
+- name: "Remember application usage"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/remember-app-usage
     value: 'false'
 
-- name: Remember recent files
+- name: "Remember recent files"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/remember-recent-files
     value: 'true'
 
-- name: Remove old temporary files
+- name: "Remove old temporary files"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/remove-old-temp-files
     value: 'true'
 
-- name: Remove old trash files
+- name: "Remove old trash files"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/remove-old-trash-files
     value: 'true'
 
-- name: Report technical problems
+- name: "Report technical problems"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/report-technical-problems
     value: 'false'
 
-- name: Send software usage statistics
+- name: "Send software usage statistics"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/send-software-usage-stats
     value: 'false'
 
-- name: Show full name in top bar
+- name: "Show full name in top bar"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/show-full-name-in-top-bar
     value: 'true'
 
-- name: Enable USB protection
+- name: "Enable USB protection"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/usb-protection
     value: 'false'
 
-- name: Set USB protection level to lockscreen
+- name: "Set USB protection level to lockscreen"
   community.general.dconf:
     key: /org/gnome/desktop/privacy/usb-protection-level
     value: "'lockscreen'"

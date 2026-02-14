@@ -1,24 +1,19 @@
 ---
-- name: Ensure aide package is installed (Debian family)
-  ansible.builtin.package:
-    name: aide
-    state: present
-    update_cache: true
-    cache_valid_time: 86400 # 24h
-  when: ansible_facts['os_family'] == 'Debian'
+# Role: configure_timezone
+# Description: Install and configure the Software Package called "tzdata and chrony"
 
-- name: Ensure tzdata is installed
+- name: "Ensure tzdata is installed"
   ansible.builtin.package:
     name: tzdata
     state: present
   when: ansible_facts['os_family'] == 'Debian'
 
-- name: Setting your timezone
+- name: "Setting your timezone"
   community.general.timezone:
     name: "{{ timezone }}"
   become: true
 
-- name: Install chrony and tzdata (Debian/Ubuntu)
+- name: "Install chrony and tzdata (Debian/Ubuntu)"
   ansible.builtin.apt:
     name: chrony
     state: present
@@ -26,7 +21,7 @@
     cache_valid_time: 3600
   when: ansible_facts['os_family'] == 'Debian'
 
-- name: Ensure /etc/chrony/sources.d/local-ntp-server.conf exists
+- name: "Ensure /etc/chrony/sources.d/local-ntp-server.conf exists"
   ansible.builtin.file:
     path: /etc/chrony/sources.d/local-ntp-server.conf
     state: touch
@@ -34,14 +29,14 @@
     group: root
     mode: '0700'
 
-- name: Add NTP servers to the Chrony configuration file
+- name: "Add NTP servers to the Chrony configuration file"
   ansible.builtin.lineinfile:
     path: /etc/chrony/sources.d/local-ntp-server.conf
     regexp: '^servers ='
     line: "{{ item }}"
   with_items: "{{ chrony_ntp_servers }}"
 
-- name: Enable and start chrony
+- name: "Enable and start chrony"
   ansible.builtin.service:
     name: chronyd
     state: started

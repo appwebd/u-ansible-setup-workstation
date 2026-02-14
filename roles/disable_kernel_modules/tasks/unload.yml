@@ -1,0 +1,15 @@
+---
+- name: "Check if module is loaded"
+  ansible.builtin.shell: "set -o pipefail | lsmod | grep -w {{ item }}"
+  register: module_loaded
+  failed_when: false
+  changed_when: false
+  loop: "{{ filtered_filesystem_modules }}"
+
+- name: "Unload loaded kernel modules"
+  ansible.builtin.shell: "set -o pipefail && modprobe -r {{ item.item }} || rmmod {{ item.item }} || true"
+  register: unload_result
+  changed_when: false
+  when: item.rc == 0
+  loop: "{{ module_loaded.results }}"
+  become: true

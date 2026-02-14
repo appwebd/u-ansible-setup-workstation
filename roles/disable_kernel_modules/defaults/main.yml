@@ -1,0 +1,83 @@
+---
+# List of filesystem kernel modules to disable (CIS 1.1.1.10)
+
+disable_kernel_modules_list:
+
+# Filesystem Kernel Modules
+  - afs
+  - ceph
+  - cifs
+  - cramfs
+  - exfat
+  - ext
+  - fat
+  - freevxfs
+  - fuse
+  - gfs2
+  - hfs
+  - hfsplus
+  - jffs2
+  - nfs
+  - nfs_common
+  - nfsd
+  - nfsv3
+  - nfsv4
+  - smbfs_common
+  - squashfs
+  - udf
+  - overlayfs                 # CIS 1.1.1.1 Legacy rarely used today in docker, kubernetes, containers
+  - rds
+  - sctp
+  - tipc
+  - dccp
+
+# Network Protocol Modules
+  - af_802154
+  - appletalk
+  - atm
+  - ax25
+  - can
+  - dccp
+  - decnet
+  - econet
+  - ipx
+  - netrom
+  - n-hdlc
+  - p8022
+  - p8023
+  - psnap
+  - rds
+  - rose
+  - sctp
+  - tipc
+  - x25
+
+# Bluetooth Modules
+  - bluetooth
+  - btusb
+
+# hardware drivers/subsystem modules
+  - firewire
+  - ohci
+
+# Video / Media Drivers
+  - uvcvideo
+  - vivid
+
+# Caching / SMB / Modern Network FS
+  - fscache
+  - ksmbd
+
+# Wireless drivers/subsystem
+  - cfg80211
+  - mac80211
+  - iwlwifi
+
+# Set to true to unload modules if currently loaded
+unload_modules: true
+
+# Set to true to enforce denylist and install /bin/false
+enforce_disable: true
+
+# Modules to exclude (if required in your environment)
+filesystem_module_exceptions: []

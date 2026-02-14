@@ -74,7 +74,7 @@ aide_local_excludes:
   - "/var/lock"
   - "/var/run"
 
-# Users – caches and dynamic configuration
+# Users - caches and dynamic configuration
   - "/home/"
 
 # Snap / Flatpak

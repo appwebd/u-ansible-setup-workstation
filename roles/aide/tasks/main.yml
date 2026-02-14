@@ -1,5 +1,8 @@
 ---
-- name: Install AIDE (Debian/Ubuntu)
+# Role        : aide
+# Description : Install and configure the Software Package called "AIDE"
+
+- name: "Install AIDE (Debian/Ubuntu)"
   ansible.builtin.package:
     name: "{{ aide_package_name }}"
     state: present
@@ -7,7 +10,7 @@
     cache_valid_time: 86400                    # 24h
   when: ansible_facts.os_family == "Debian"
 
-- name: Ensure AIDE DB directory exists
+- name: "Ensure AIDE DB directory exists"
   ansible.builtin.file:
     path: "{{ aide_db_dir }}"
     state: directory
@@ -15,7 +18,7 @@
     group: root
     mode: "0700"
 
-- name: Ensure AIDE config directories exist
+- name: "Ensure AIDE config directories exist"
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -26,7 +29,7 @@
     - "{{ aide_conf_dir }}"
     - "{{ aide_conf_d_dir }}"
 
-- name: Deploy main AIDE config
+- name: "Deploy main AIDE config"
   ansible.builtin.template:
     src: aide.conf.j2
     dest: "{{ aide_conf_path }}"
@@ -35,7 +38,7 @@
     mode: "0644"
   notify: Aide_init_database
 
-- name: Deploy local excludes (conf.d)
+- name: "Deploy local excludes (conf.d)"
   ansible.builtin.template:
     src: 00_local_excludes.j2
     dest: "{{ aide_conf_d_dir }}/{{ aide_local_excludes_filename }}.conf"
@@ -44,24 +47,24 @@
     mode: "0644"
   notify: Aide_init_database
 
-- name: Check if AIDE database exists
+- name: "Check if AIDE database exists"
   ansible.builtin.stat:
     path: "{{ aide_db_dir }}/{{ aide_db_file }}"
   register: aide_db_stat
 
 # Initialize only if baseline does not exist
-- name: Initialize AIDE DB if missing
+- name: "Initialize AIDE DB if missing"
   ansible.builtin.command: "aide --init --config {{ aide_conf_path }}"
   changed_when: true
   when: not aide_db_stat.stat.exists
 
-- name: Activate baseline (move .new -> current) if missing
+- name: "Activate baseline (move .new -> current) if missing"
   ansible.builtin.command: >
     bash -lc 'mv -f "{{ aide_db_dir }}/{{ aide_db_new_file }}" "{{ aide_db_dir }}/{{ aide_db_file }}"'
   changed_when: true
   when: not aide_db_stat.stat.exists
 
-- name: Schedule daily AIDE check (cron)
+- name: "Schedule daily AIDE check (cron)"
   ansible.builtin.cron:
     name: "AIDE integrity check"
     minute: "{{ aide_check_time.split(':')[1] }}"

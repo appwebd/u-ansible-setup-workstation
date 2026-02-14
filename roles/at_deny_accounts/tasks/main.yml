@@ -1,12 +1,15 @@
 ---
-- name: Check if group 'daemon' exists
+# Role        : at_deny_account
+# Description : Add operating system accounts to /etc/at.deny
+
+- name: "Check if group 'daemon' exists"
   ansible.builtin.command:
     cmd: getent group daemon
   register: getent_daemon
   changed_when: false
   failed_when: false
 
-- name: Determine which group to use (daemon or root)
+- name: "Determine which group to use (daemon or root)"
   ansible.builtin.set_fact:
     at_group: "{{ 'daemon' if getent_daemon.rc == 0 else 'root' }}"
 
@@ -14,30 +17,30 @@
   ansible.builtin.debug:
     msg: "at_group = '{{ at_group | default('NOT SET') }}'"
 
-- name: Slurp current /etc/at.deny
+- name: "Slurp current /etc/at.deny"
   ansible.builtin.slurp:
     path: /etc/at.deny
   register: at_deny_content
   ignore_errors: true                                   # if the file does not exist, continue with an empty list
 
-- name: Decode and convert existing users to a list
+- name: "Decode and convert existing users to a list"
   ansible.builtin.set_fact:
     at_deny_users: >-
       {{
         (
           (at_deny_slurped.content | b64decode if not at_deny_slurped.failed else '')
           | split('\n')
-          | reject('equalto', '')                # remove empty lines
+          | reject('equalto', '')                    # remove empty lines
           | list
         )
       }}
   failed_when: false
 
-- name: Combine existing and new users without duplicates
+- name: "Combine existing and new users without duplicates"
   ansible.builtin.set_fact:
     at_deny_users_combined: "{{ at_deny_users | default([]) + at_deny_account_new_users | unique }}"
 
-- name: Write updated /etc/at.deny
+- name: "Write updated /etc/at.deny"
   ansible.builtin.copy:
     content: "{{ at_deny_users_combined | join('\n') }}"
     dest: /etc/at.deny
