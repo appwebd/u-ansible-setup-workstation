@@ -2,7 +2,6 @@
 remove_bloatware_packages_:
   #  - geoclue-2.0           # A package with a high dependency on the GNOME desktop shell.
   #  - nftables              # docker.io : Dependency with : containerd (>= 1.2.6-0ubuntu1~)
-  #  - tnftp                 # This removes ubuntu-standard TODO: Check what implications it has
   - apache2-bin
   - avahi-daemon
   - avahi-utils
@@ -13,6 +12,7 @@ remove_bloatware_packages_:
   - dovecot-imapd
   - dovecot-pop3d
   - evolution
+  - ftp
   - gnome-bluetooth-sendto
   - gnome-characters
   - gnome-maps
@@ -26,6 +26,7 @@ remove_bloatware_packages_:
   - ldap-utils
   - libvirt-daemon*
   - nfs-kernel-server
+  - nginx
   - nis
   - open-iscsi
   - rsh-client
@@ -35,7 +36,10 @@ remove_bloatware_packages_:
   - snmpd
   - talk
   - telnet*
-  - tftpd-hpa tftp-hpa
+  - tftp-hpa
+  - tftpd-hpa
+  - tnftp
+  - tnftp                    # This removes ubuntu-standard (ubuntu-standard is a metapackage)
   - vsftpd
   - xinetd
 #  - yelp                    # Dependencias with gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp
