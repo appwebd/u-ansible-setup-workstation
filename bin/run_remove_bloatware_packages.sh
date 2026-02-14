@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-set -euo pipefail          # Terminar al fallo, no usar variables no inicializadas y capturar errores de pipelines
+set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.
 set +o history
 
-# | Opción  | Propósito                                              |
-# | -vvv    | Proporciona detalle de debug completo.                 |
-# | --check | Realiza una simulación (dry‑run) sin aplicar cambios.  |
-# | --diff  | Muestra diferencias antes de aplicar.                  |
+#| Option  | Purpose                                                 |
+#| -vvv    | Provides full debugging details.                        |
+#| --check | Performs a dry‑run simulation without making changes.   |
+#| --diff  | Shows differences before applying.                      |
 
 ansible-playbook -i inventory/inventory.ini -v playbooks/remove_bloatware_packages.yaml -b -K
