@@ -1,0 +1,58 @@
+---
+# Role: SSHD Privilege Separation Fix
+# Description: Ensures that the SSH daemon operates with privilege separation and configures systemd tmpfiles for the required directory.
+# Dependencies: None
+# Variables:
+#   sshd_privsep_dir: Path to the privilege separation directory
+#   sshd_tmpfiles_path: Path to the tmpfiles.d configuration file
+#   sshd_owner: Owner of the privilege separation directory
+#   sshd_group: Group of the privilege separation directory
+#   sshd_mode: Mode of the privilege separation directory
+#   sshd_service_name: Name of the SSH service
+
+- name: Check if privilege separation directory exists
+  ansible.builtin.stat:
+    path: "{{ sshd_privsep_dir }}"
+  register: sshd_dir_stat
+
+- name: Create privilege separation directory if missing
+  ansible.builtin.file:
+    path: "{{ sshd_privsep_dir }}"
+    state: directory
+    owner: "{{ sshd_owner }}"
+    group: "{{ sshd_group }}"
+    mode: "{{ sshd_mode }}"
+  when: not sshd_dir_stat.stat.exists
+
+- name: Ensure tmpfiles.d configuration exists for sshd
+  ansible.builtin.copy:
+    dest: "{{ sshd_tmpfiles_path }}"
+    content: |
+      d {{ sshd_privsep_dir }} {{ sshd_mode }} {{ sshd_owner }} {{ sshd_group }} -
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Apply tmpfiles configuration
+
+- name: Apply systemd tmpfiles configuration
+  ansible.builtin.command: systemd-tmpfiles --create
+  changed_when: false
+
+- name: Gather service facts
+  ansible.builtin.service_facts:
+
+- name: Set SSH service name dynamically
+  ansible.builtin.set_fact:
+    ssh_service_name: >-
+      {{ 'sshd' if 'sshd.service' in ansible_facts.services
+         else 'ssh' }}
+
+
+- name: Verify sshd configuration
+  ansible.builtin.command: sshd -T
+  register: sshd_test
+  changed_when: false
+
+- name: Display sshd validation output
+  ansible.builtin.debug:
+    var: sshd_test.stdout_lines

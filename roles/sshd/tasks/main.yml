@@ -1,8 +1,179 @@
 ---
-- name: Create a file /etc/ssh/sshd_config
-  ansible.builtin.template:
-    src: sshd_config.j2
-    dest: /etc/ssh/sshd_config
+# Role: sshd
+# Description: This role configures SSH daemon settings on the system.
+#
+#              The following have been reviewed:
+#
+# 35640 - Ensure permissions on /etc/ssh/sshd_config are configured.
+# 35643 - Ensure sshd access is configured.
+# 35644 - Ensure sshd Banner is configured.
+# 35646 - Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
+# 35647 - Ensure sshd DisableForwarding is enabled.
+# 35648 - Ensure sshd GSSAPIAuthentication is disabled.
+# 35649 - Ensure sshd HostbasedAuthentication is disabled.
+# 35650 - Ensure sshd IgnoreRhosts is enabled.
+# 35652 - Ensure sshd LoginGraceTime is configured.
+# 35653 - Ensure sshd LogLevel is configured.
+# 35655 - Ensure sshd MaxAuthTries is configured.
+# 35656 - Ensure sshd MaxSessions is configured.
+# 35657 - Ensure sshd MaxStartups is configured.
+# 35658 - Ensure sshd PermitEmptyPasswords is disabled.
+# 35659 - Ensure sshd PermitRootLogin is disabled.
+# 35660 - Ensure sshd PermitUserEnvironment is disabled.
+# 35661 - Ensure sshd UsePAM is enabled.
+
+# 35645 - Ensure sshd Ciphers are configured. 
+# 35651 - Ensure sshd KexAlgorithms is configured. 
+# 35654 - Ensure sshd MACs are configured. 
+
+- name: Ensure sshd_config permissions are configured (35640)
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config
     owner: root
     group: root
-    mode: '0640'
+    mode: '0600'
+
+- name: Configure SSH access - AllowUsers (35643)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^AllowUsers'
+    line: "AllowUsers {{ ssh_allow_users | join(' ') }}"
+    create: yes
+  when: ssh_allow_users | length > 0
+  notify: Restart sshd
+
+- name: Configure SSH access - AllowGroups (35643)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^AllowGroups'
+    line: "AllowGroups {{ ssh_allow_groups | join(' ') }}"
+  when: ssh_allow_groups | length > 0
+  notify: Restart sshd
+
+- name: Configure Banner (35644)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^Banner'
+    line: "Banner {{ ssh_banner_path }}"
+  notify: Restart sshd
+
+- name: Configure ClientAliveInterval and ClientAliveCountMax (35646)
+  ansible.builtin.blockinfile:
+    path: /etc/ssh/sshd_config
+    marker: "# {mark} ANSIBLE CLIENT ALIVE SETTINGS"
+    block: |
+      ClientAliveInterval {{ ssh_client_alive_interval }}
+      ClientAliveCountMax {{ ssh_client_alive_count_max }}
+  notify: Restart sshd
+
+- name: Configure DisableForwarding (35647)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^DisableForwarding'
+    line: "DisableForwarding {{ ssh_disable_forwarding }}"
+  notify: Restart sshd
+
+- name: Configure GSSAPIAuthentication (35648)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^GSSAPIAuthentication'
+    line: "GSSAPIAuthentication {{ ssh_gssapi_authentication }}"
+  notify: Restart sshd
+
+- name: Configure HostbasedAuthentication (35649)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^HostbasedAuthentication'
+    line: "HostbasedAuthentication {{ ssh_hostbased_authentication }}"
+  notify: Restart sshd
+
+- name: Configure IgnoreRhosts (35650)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^IgnoreRhosts'
+    line: "IgnoreRhosts {{ ssh_ignore_rhosts }}"
+  notify: Restart sshd
+
+- name: Configure LoginGraceTime (35652)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^LoginGraceTime'
+    line: "LoginGraceTime {{ ssh_login_grace_time }}"
+  notify: Restart sshd
+
+- name: Configure LogLevel (35653)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^LogLevel'
+    line: "LogLevel {{ ssh_log_level }}"
+  notify: Restart sshd
+
+- name: Configure MaxAuthTries (35655)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^MaxAuthTries'
+    line: "MaxAuthTries {{ ssh_max_auth_tries }}"
+  notify: Restart sshd
+
+- name: Configure MaxSessions (35656)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^MaxSessions'
+    line: "MaxSessions {{ ssh_max_sessions }}"
+  notify: Restart sshd
+
+- name: Configure MaxStartups (35657)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^MaxStartups'
+    line: "MaxStartups {{ ssh_max_startups }}"
+  notify: Restart sshd
+
+- name: Configure PermitEmptyPasswords (35658)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitEmptyPasswords'
+    line: "PermitEmptyPasswords {{ ssh_permit_empty_passwords }}"
+  notify: Restart sshd
+
+- name: Configure PermitRootLogin (35659)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: "PermitRootLogin {{ ssh_permit_root_login }}"
+  notify: Restart sshd
+
+- name: Configure PermitUserEnvironment (35660)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitUserEnvironment'
+    line: "PermitUserEnvironment {{ ssh_permit_user_environment }}"
+  notify: Restart sshd
+
+- name: Configure UsePAM (35661)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^UsePAM'
+    line: "UsePAM {{ ssh_use_pam }}"
+  notify: Restart sshd
+
+- name: Configure Ciphers (35645)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^Ciphers'
+    line: "Ciphers {{ ssh_ciphers }}"
+  notify: Restart sshd
+
+- name: Configure KexAlgorithms (35651)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^KexAlgorithms'
+    line: "KexAlgorithms {{ ssh_kex_algorithms }}"
+  notify: Restart sshd
+
+- name: Configure MACs (35654)
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^MACs'
+    line: "MACs {{ ssh_macs }}"
+  notify: Restart sshd
