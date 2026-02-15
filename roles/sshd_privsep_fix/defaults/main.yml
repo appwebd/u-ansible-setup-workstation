@@ -1,0 +1,7 @@
+---
+sshd_privsep_dir: "/run/sshd"
+sshd_tmpfiles_path: "/usr/lib/tmpfiles.d/sshd.conf"
+sshd_owner: "root"
+sshd_group: "root"
+sshd_mode: "0755"
+
