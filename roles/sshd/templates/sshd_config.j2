@@ -1,79 +1,131 @@
-# /etc/ssh/sshd_config
-# Secure SSH configuration - Audit compliant
+# =====================================================================
+# SSHD CONFIGURATION FILE - Hardened
+# Wazuh SCA Compliance (Rules 35640 - 35661)
+# =====================================================================
 
-# --------------------------------------------------
-# 33157 - Ensure sshd access is configured
-# --------------------------------------------------
+# ---------------------------------------------------------------------
+# 35640 - Ensure permissions on /etc/ssh/sshd_config are configured
+# NOTE: File must be owned by root:root and mode 0600
+# ---------------------------------------------------------------------
+
+# ---------------------------------------------------------------------
+# 35643 - Ensure sshd access is configured
+# Restrict which users or groups can log in
+# ---------------------------------------------------------------------
+AllowUsers adminuser
+#AllowGroups sshusers
+
+# ---------------------------------------------------------------------
+# 35644 - Ensure sshd Banner is configured
+# ---------------------------------------------------------------------
+Banner /etc/issue.net
+
+# ---------------------------------------------------------------------
+# 35646 - Ensure ClientAliveInterval and ClientAliveCountMax are configured
+# ---------------------------------------------------------------------
+ClientAliveInterval 300
+ClientAliveCountMax 0
+
+# ---------------------------------------------------------------------
+# 35647 - Ensure DisableForwarding is enabled
+# ---------------------------------------------------------------------
+DisableForwarding yes
+
+# ---------------------------------------------------------------------
+# 35648 - Ensure GSSAPIAuthentication is disabled
+# ---------------------------------------------------------------------
+GSSAPIAuthentication no
+
+# ---------------------------------------------------------------------
+# 35649 - Ensure HostbasedAuthentication is disabled
+# ---------------------------------------------------------------------
+HostbasedAuthentication no
+
+# ---------------------------------------------------------------------
+# 35650 - Ensure IgnoreRhosts is enabled
+# ---------------------------------------------------------------------
+IgnoreRhosts yes
+
+# ---------------------------------------------------------------------
+# 35652 - Ensure LoginGraceTime is configured
+# ---------------------------------------------------------------------
+LoginGraceTime 60
+
+# ---------------------------------------------------------------------
+# 35653 - Ensure LogLevel is configured
+# ---------------------------------------------------------------------
+LogLevel VERBOSE
+
+# ---------------------------------------------------------------------
+# 35655 - Ensure MaxAuthTries is configured
+# ---------------------------------------------------------------------
+MaxAuthTries 4
+
+# ---------------------------------------------------------------------
+# 35656 - Ensure MaxSessions is configured
+# ---------------------------------------------------------------------
+MaxSessions 4
+
+# ---------------------------------------------------------------------
+# 35657 - Ensure MaxStartups is configured
+# Format: start:rate:full
+# ---------------------------------------------------------------------
+MaxStartups 10:30:60
+
+# ---------------------------------------------------------------------
+# 35658 - Ensure PermitEmptyPasswords is disabled
+# ---------------------------------------------------------------------
+PermitEmptyPasswords no
+
+# ---------------------------------------------------------------------
+# 35659 - Ensure PermitRootLogin is disabled
+# ---------------------------------------------------------------------
+PermitRootLogin no
+
+# ---------------------------------------------------------------------
+# 35660 - Ensure PermitUserEnvironment is disabled
+# ---------------------------------------------------------------------
+PermitUserEnvironment no
+
+# ---------------------------------------------------------------------
+# 35661 - Ensure UsePAM is enabled
+# ---------------------------------------------------------------------
+UsePAM yes
+PasswordAuthentication yes
+ChallengeResponseAuthentication no
+KbdInteractiveAuthentication no
+
+# ---------------------------------------------------------------------
+# 35645 - Ensure Ciphers are configured
+# ---------------------------------------------------------------------
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
+
+# ---------------------------------------------------------------------
+# 35651 - Ensure KexAlgorithms are configured
+# ---------------------------------------------------------------------
+KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512
+
+# ---------------------------------------------------------------------
+# 35654 - Ensure MACs are configured
+# ---------------------------------------------------------------------
+MACs hmac-sha2-512,hmac-sha2-256
+
+# ---------------------------------------------------------------------
+# Additional Secure Defaults (Recommended)
+# ---------------------------------------------------------------------
+
 Protocol 2
 Port 22
 AddressFamily any
 ListenAddress 0.0.0.0
 ListenAddress ::
 
-# --------------------------------------------------
-# Authentication
-# --------------------------------------------------
-UsePAM yes
-PasswordAuthentication yes
-PermitEmptyPasswords no
-ChallengeResponseAuthentication no
-KbdInteractiveAuthentication no
-
-# --------------------------------------------------
-# 33173 - Ensure sshd PermitRootLogin is disabled
-# --------------------------------------------------
-PermitRootLogin no
-
-# --------------------------------------------------
-# 33166 - Ensure sshd LoginGraceTime is configured
-# --------------------------------------------------
-LoginGraceTime 30
-
-# --------------------------------------------------
-# 33169 - Ensure sshd MaxAuthTries is configured
-# --------------------------------------------------
-MaxAuthTries 3
-
-# --------------------------------------------------
-# 33171 - Ensure sshd MaxStartups is configured
-# --------------------------------------------------
-MaxStartups 10:30:60
-
-# --------------------------------------------------
-# 33160 - Ensure sshd ClientAliveInterval and CountMax
-# --------------------------------------------------
-ClientAliveInterval 300
-ClientAliveCountMax 3
-
-# --------------------------------------------------
-# 33161 - Ensure sshd DisableForwarding is enabled
-# --------------------------------------------------
-DisableForwarding yes
+X11Forwarding no
 AllowTcpForwarding no
 AllowAgentForwarding no
-X11Forwarding no
-
-# --------------------------------------------------
-# 33158 - Ensure sshd Banner is configured
-# --------------------------------------------------
-Banner /etc/issue.net
-
-# --------------------------------------------------
-# 33168 - Ensure sshd MACs are configured
-# --------------------------------------------------
-MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
-
-# --------------------------------------------------
-# Additional hardening (safe for audits)
-# --------------------------------------------------
-IgnoreRhosts yes
-HostbasedAuthentication no
-PermitUserEnvironment no
+PermitTunnel no
+PrintMotd no
 TCPKeepAlive no
 Compression no
-
-# --------------------------------------------------
-# Logging
-# --------------------------------------------------
-SyslogFacility AUTH
-LogLevel VERBOSE
+StrictModes yes
+SyslogFacility AUTHPRIV

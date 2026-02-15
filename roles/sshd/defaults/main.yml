@@ -1,0 +1,59 @@
+---
+
+# 35643 - Ensure sshd access is configured. File: /etc/ssh/sshd_config
+ssh_allow_users: []
+ssh_allow_groups: []
+
+# 35644 - Ensure sshd Banner is configured.
+ssh_banner_path: /etc/issue.net
+
+# 35646 - Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
+ssh_client_alive_interval: 300
+ssh_client_alive_count_max: 0
+
+# 35647 - Ensure sshd DisableForwarding is enabled.
+ssh_disable_forwarding: "yes"
+
+# # 35648 - Ensure sshd GSSAPIAuthentication is disabled.
+ssh_gssapi_authentication: "no"
+
+# 35649 - Ensure sshd HostbasedAuthentication is disabled.
+ssh_hostbased_authentication: "no"
+
+# 35650 - Ensure sshd IgnoreRhosts is enabled.
+ssh_ignore_rhosts: "yes"
+
+# 35652 - Ensure sshd LoginGraceTime is configured.
+ssh_login_grace_time: 60
+
+# 35653 - Ensure sshd LogLevel is configured.
+ssh_log_level: "VERBOSE"
+
+# 35655 - Ensure sshd MaxAuthTries is configured.
+ssh_max_auth_tries: 4
+
+# 35656 - Ensure sshd MaxSessions is configured.
+ssh_max_sessions: 4
+
+# 35657 - Ensure sshd MaxStartups is configured.
+ssh_max_startups: "10:30:60"
+
+# 35658 - Ensure sshd PermitEmptyPasswords is disabled.
+ssh_permit_empty_passwords: "no"
+
+# 35659 - Ensure sshd PermitRootLogin is disabled.
+ssh_permit_root_login: "no"
+
+# 35660 - Ensure sshd PermitUserEnvironment is disabled.
+ssh_permit_user_environment: "no"
+
+# 35661 - Ensure sshd UsePAM is enabled.
+ssh_use_pam: "yes"
+
+# Crypto settings
+# 35645 - Ensure sshd Ciphers are configured.
+# 35651 - Ensure sshd KexAlgorithms is configured.
+# 35654 - Ensure sshd MACs are configured.
+ssh_ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr"
+ssh_kex_algorithms: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512"
+ssh_macs: "hmac-sha2-512,hmac-sha2-256"
