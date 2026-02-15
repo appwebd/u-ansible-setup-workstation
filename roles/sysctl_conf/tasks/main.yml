@@ -1,6 +1,28 @@
 ---
 # Role: sysctl_conf
-# Description: Wazuh id 35543 - Ensure core dumps are restricted.
+# Description: Setting sysctl configurations for the system
+#
+# 35543 - Ensure core dumps are restricted.
+# TODO 35608 - Ensure ip forwarding is disabled.       FAILED?
+# 35616 - Ensure suspicious packets are logged.
+# 35542 - Ensure address space layout randomization is enabled.
+# 35543 - Ensure core dumps are restricted.
+# 35609 - Ensure packet redirect sending is disabled.
+# 35610 - Ensure bogus icmp responses are ignored.
+# 35611 - Ensure broadcast icmp requests are ignored.
+# 35612 - Ensure icmp redirects are not accepted.
+# 35613 - Ensure secure icmp redirects are not accepted.
+# 35614 - Ensure reverse path filtering is enabled.
+# 35615 - Ensure source routed packets are not accepted.
+# 35617 - Ensure tcp syn cookies is enabled.
+# 35618 - Ensure ipv6 router advertisements are not accepted.
+#
+# PROBLEM SOLVING
+#
+# Using the command
+#     grep -rwn /etc/ -e 'net.ipv4.ip_forward'
+#
+# You will see the place WHERE that string is used, for example, in /etc/ufw.
 
 - name: "Create file /etc/sysctl.conf"
   ansible.builtin.template:
@@ -21,7 +43,7 @@
   become: true
 
 # 2. sysctl - fs.suid_dumpable = 0
-- name: "Ensure /etc/sysctl.d/60‑fs_sysctl.conf exists"
+- name: "Ensure /etc/sysctl.d/60-fs_sysctl.conf exists"
   ansible.builtin.copy:
     dest: "{{ wazuh_sysctl_file }}"
     content: "{{ wazuh_sysctl_content | trim }}\n"
