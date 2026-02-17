@@ -1,13 +1,21 @@
 ---
 galaxy_info:
-  role_name: ssh_hardening
-  author: your_name
+  role_name: sshd
+  author: Patricio Rojas
   description: Harden SSH configuration to comply with Wazuh rules 35640-35661
   license: MIT
   min_ansible_version: "2.16"
   platforms:
     - name: Ubuntu
-      versions: [18.04, 20.04, 22.04, 23.04, 24.04]
+      versions:
+        - bionic    # 18.04
+        - focal     # 20.04
+        - jammy     # 22.04
+        - kinetic   # 23.04
+        - noble     # 24.04
     - name: Debian
-      versions: [10, 11, 12]
+      versions:
+        - buster    # 10
+        - bullseye  # 11
+        - bookworm  # 12
 dependencies: []
