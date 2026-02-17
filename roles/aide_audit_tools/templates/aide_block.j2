@@ -1,0 +1,4 @@
+# Audit Tools
+{% for tool in audit_tools %}
+{{ real_sbin_path }}{{ tool.path_suffix }} {{ audit_tool_permissions }}
+{% endfor %}

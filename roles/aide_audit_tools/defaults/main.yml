@@ -1,0 +1,29 @@
+---
+# List of audit tools to be monitored by AIDE.
+audit_tools:
+  - name: auditctl
+    path_suffix: /auditctl
+  - name: auditd
+    path_suffix: /auditd
+  - name: ausearch
+    path_suffix: /ausearch
+  - name: aureport
+    path_suffix: /aureport
+  - name: autrace
+    path_suffix: /autrace
+  - name: augenrules
+    path_suffix: /augenrules
+
+# Permissions string used for all entries.
+audit_tool_permissions: "p+i+n+u+g+s+b+acl+xattrs+sha512"
+
+# Marker tags for blockinfile – change if you need a different marker
+aide_block_marker_start: "# BEGIN audit-tools"
+aide_block_marker_end:   "# END audit-tools"
+
+# Directory that will be included via @@x_include (if present)
+# The role will create it only if needed.
+audit_includes_dir: /etc/aide.conf.d
+
+# File mode for per‑tool config files
+audit_executable_file_mode: "0644"

@@ -1,0 +1,80 @@
+---
+# Role: aide_audit_tools
+# Description: This role configures AIDE (Advanced Intrusion Detection Environment) to monitor critical audit tools 
+#              as required by Wazuh and CIS benchmarks.
+# 
+#  35760 - Ensure cryptographic mechanisms are used to protect the integrity of audit tools.
+
+- name: "Detect real /sbin path (non‑symlink)"
+  ansible.builtin.command: readlink -f /sbin
+  register: sbin_path_result
+  changed_when: false          # never considered a change
+
+- name: Set fact for real sbin path
+  ansible.builtin.set_fact:
+    real_sbin_path: "{{ sbin_path_result.stdout }}"
+
+- name: Ensure /etc/aide/aide.conf exists (owned by root)
+  ansible.builtin.file:
+    path: "/etc/aide/aide.conf"
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+# ------------------------------------------------------------------
+# Main block – add selection lines for audit tools.
+# ------------------------------------------------------------------
+- name: "Insert audit‑tool selection block into aide.conf"
+  ansible.builtin.blockinfile:
+    path: "/etc/aide/aide.conf"
+    marker_begin: "{{ aide_block_marker_start }}"
+    marker_end:   "{{ aide_block_marker_end }}"
+    content: |
+      # Audit Tools
+      {% for tool in audit_tools %}
+      {{ real_sbin_path }}{{ tool.path_suffix }} {{ audit_tool_permissions }}
+      {% endfor %}
+  register: aide_conf_block
+
+# ------------------------------------------------------------------
+# Optional handling of @@x_include directive.
+# ------------------------------------------------------------------
+- name: "Detect if @@@x_include is present in aide.conf"
+  ansible.builtin.shell: grep -q '@@x_include' /etc/aide/aide.conf && echo yes || echo no
+  changed_when: false
+  register: x_include_check
+
+- name: "Create include directory if needed"
+  ansible.builtin.file:
+    path: "{{ audit_includes_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  when: "'yes' == x_include_check.stdout"
+
+# ------------------------------------------------------------------
+# Generate per‑tool config files under the include dir.
+# ------------------------------------------------------------------
+- name: "Create individual config file for each audit tool"
+  ansible.builtin.template:
+    src: executable_conf.j2
+    dest: "{{ audit_includes_dir }}/{{ item.name }}.conf"
+    owner: root
+    group: root
+    mode: "{{ audit_executable_file_mode }}"
+  loop: "{{ audit_tools }}"
+  when: "'yes' == x_include_check.stdout"
+
+# ------------------------------------------------------------------
+# Notify AIDE to reload config if the block changed or files were created.
+# ------------------------------------------------------------------
+- name: "Reload AIDE (if installed) to pick up new configuration"
+  ansible.builtin.service:
+    name: aide
+    state: restarted
+  when:
+    - aide_conf_block.changed
+    - "'yes' == x_include_check.stdout"
+  # This task is optional – remove if you don't want automatic reload.

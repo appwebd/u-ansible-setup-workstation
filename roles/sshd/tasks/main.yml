@@ -22,9 +22,14 @@
 # 35660 - Ensure sshd PermitUserEnvironment is disabled.
 # 35661 - Ensure sshd UsePAM is enabled.
 
-# 35645 - Ensure sshd Ciphers are configured. 
-# 35651 - Ensure sshd KexAlgorithms is configured. 
-# 35654 - Ensure sshd MACs are configured. 
+# 35645 - Ensure sshd Ciphers are configured.
+# 35651 - Ensure sshd KexAlgorithms is configured.
+# 35654 - Ensure sshd MACs are configured.
+#
+# NOTE:
+#    The template file sshd_config.j2 serves as an example model of the final
+#    configuration.
+#
 
 - name: Ensure sshd_config permissions are configured (35640)
   ansible.builtin.file:
@@ -38,7 +43,10 @@
     path: /etc/ssh/sshd_config
     regexp: '^AllowUsers'
     line: "AllowUsers {{ ssh_allow_users | join(' ') }}"
-    create: yes
+    create: true
+    owner: root
+    group: root
+    mode: '0600'
   when: ssh_allow_users | length > 0
   notify: Restart sshd
 
