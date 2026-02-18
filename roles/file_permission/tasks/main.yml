@@ -65,15 +65,7 @@
     group: root
   when: not opasswd_stat.stat.exists
 
-# Wazuh id 35770 - Ensure permissions on /etc/security/opasswd are configured.
-- name: "Set secure permissions for /etc/security/opasswd if it exists"
-  ansible.builtin.file:
-    path: /etc/security/opasswd
-    mode: "0600"
-    owner: root
-    group: root
-  when: opasswd_stat.stat.exists
-
+# Wazuh id 35770 - Ensure permissions on /etc/security/opasswd.old are configured.
 - name: "Check if /etc/security/opasswd.old exists"
   ansible.builtin.stat:
     path: /etc/security/opasswd.old
@@ -88,14 +80,6 @@
     group: root
   when: not opasswd_old_stat.stat.exists
 
-# Wazuh id 35770 - Ensure permissions on /etc/security/opasswd are configured.
-- name: "Set secure permissions for /etc/security/opasswd.old if it exists"
-  ansible.builtin.file:
-    path: /etc/security/opasswd.old
-    mode: "0600"
-    owner: root
-    group: root
-  when: opasswd_old_stat.stat.exists
 
 # Wazuh ID 35541 - Ensure access to bootloader config is configured
 - name: "Check if /boot/grub/grub.cfg exists"
