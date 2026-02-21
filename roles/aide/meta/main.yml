@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: aide
-  author: Patricio Rojas
+  author: Patricio Rojas Ortiz
   description: Install and configure AIDE (Advanced Intrusion Detection Environment) for file integrity monitoring
   license: MIT
   min_ansible_version: "2.16"

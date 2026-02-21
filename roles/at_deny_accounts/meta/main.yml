@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: at_deny_accounts
-  author: "Patricio Rojas"
+  author: Patricio Rojas Ortiz
   description: "Allows adding non-authorized accounts that can use cron/at to the at.deny file."
   license: "MIT"
   min_ansible_version: "2.16"

@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: sshd
-  author: Patricio Rojas
+  author: Patricio Rojas Ortiz
   description: Harden SSH configuration to comply with Wazuh rules 35640-35661
   license: MIT
   min_ansible_version: "2.16"

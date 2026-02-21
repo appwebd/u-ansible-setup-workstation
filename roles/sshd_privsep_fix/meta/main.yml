@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: sshd_privsep_fix
-  author: Patricio Rojas
+  author: Patricio Rojas Ortiz
   description: Fixes Missing privilege separation directory /run/sshd error
   license: MIT
   min_ansible_version: 2.9
