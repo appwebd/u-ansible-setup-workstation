@@ -1,0 +1,27 @@
+---
+# Role: ensure_shadows
+# Description: Ensure /etc/shadow file exists
+
+- name: Ensure system is Ubuntu 24.04
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution == "Ubuntu"
+      - ansible_distribution_version is version("24.04", "==")
+    fail_msg: "This role only supports Ubuntu 24.04."
+    success_msg: "Running on supported OS."
+
+- name: Ensure /etc/shadow file exists
+  ansible.builtin.file:
+    path: "{{ shadow_file_path }}"
+    state: touch
+    owner: "{{ shadow_owner }}"
+    group: "{{ shadow_group }}"
+    mode: "{{ shadow_mode }}"
+
+- name: Ensure correct permissions on /etc/shadow
+  ansible.builtin.file:
+    path: "{{ shadow_file_path }}"
+    owner: "{{ shadow_owner }}"
+    group: "{{ shadow_group }}"
+    mode: "{{ shadow_mode }}"
+    state: file
