@@ -1,0 +1,14 @@
+---
+# Desired PASS_MAX_DAYS value – override in inventory if needed
+login_defs_pass_max_days: 90
+
+# Desired PASS_MIN_DAYS value – override in inventory if needed
+login_defs_pass_min_days: 1
+
+
+# Optional: whether to force root last‑change date population
+login_defs_populate_root_last_change: true
+
+
+login_defs_umask: "027"
+login_defs_encrypted_method: "SHA512"

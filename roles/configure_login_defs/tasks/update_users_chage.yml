@@ -1,0 +1,18 @@
+---
+# Gather all users that have a password set (i.e., $ in the second field)
+- name: Find users with passwords and check max days
+  ansible.builtin.shell: |
+    awk -F: '($2 ~ /^\$[0-9]+\$/) {
+      if ($5 > {{ login_defs_pass_max_days }} || $5 < 1) print $1
+    }' /etc/shadow
+  register: users_to_update
+  changed_when: false   # this task is read‑only
+
+# Apply chage to each offending user
+- name: Update password max days for affected users
+  when: users_to_update.stdout_lines | length > 0
+  loop: "{{ users_to_update.stdout_lines }}"
+  ansible.builtin.command: "{{ chage_command_template }}"
+  register: chage_results
+  changed_when: "'maxdays' in chage_results.stdout"
+  failed_when: chage_results.rc != 0 and chage_results.rc != 2   # rc=2 means no change needed

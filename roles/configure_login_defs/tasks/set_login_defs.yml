@@ -1,0 +1,39 @@
+---
+# idempotent edit of /etc/login.defs
+# Wazuh id 35694 - Ensure password expiration is configured.
+- name: Set PASS_MAX_DAYS in login.defs
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: "{{ pass_max_days_regex }}"
+    line: "PASS_MAX_DAYS {{ login_defs_pass_max_days }}"
+    state: present
+    backrefs: no
+  notify: Reload_sshd   # optional – only if you want to restart sshd after change
+
+# Wazuh id 35695 - Ensure minimum password days is configured.
+- name: Set PASS_MIN_DAYS in login.defs
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: "{{ pass_min_days_regex }}"
+    line: "PASS_MIN_DAYS {{ login_defs_pass_min_days }}"
+    state: present
+    backrefs: no
+  notify: Reload_sshd   # optional – only if you want to restart sshd after change
+
+
+# Wazuh id 35697 - Ensure strong password hashing algorithm is configured. ENCRYPT_METHOD SHA512
+- name: "Configure login.def ENCRYPT_METHOD"
+  ansible.builtin.replace:
+    path: /etc/login.defs
+    regexp: "{{ encrypted_method }}"
+    replace: "ENCRYPT_METHOD {{ login_defs_encrypted_method }}"
+    backup: true
+
+# Wazuh id 35706 - Ensure default user umask is configured.
+- name: "Setting UMASK 027 in /etc/login.defs"
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: "{{ umask_number }}"
+    line: "UMASK {{ login_defs_umask }}"
+    state: present
+    backup: true
