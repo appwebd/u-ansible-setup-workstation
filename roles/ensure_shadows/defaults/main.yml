@@ -1,0 +1,5 @@
+---
+shadow_file_path: /etc/shadow
+shadow_owner: root
+shadow_group: shadow
+shadow_mode: '0640'
