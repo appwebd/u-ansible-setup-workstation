@@ -1,0 +1,16 @@
+---
+# Check if root's last‑change field is unset (i.e., zero)
+- name: Verify root last-change date
+  ansible.builtin.command:
+    cmd: "awk -F: '($1==\"root\") {print $5}' /etc/shadow"
+  register: root_last_change
+  changed_when: false
+
+- name: Populate root last-change if needed
+  when:
+    - login_defs_populate_root_last_change | bool
+    - root_last_change.stdout == "0"
+  ansible.builtin.command: >
+    chage -d "$(date +%Y-%m-%d)" root
+  register: root_chage_result
+  changed_when: "'maxdays' in root_chage_result.stdout"

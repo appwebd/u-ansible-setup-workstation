@@ -1,0 +1,11 @@
+---
+# Regular expression used to locate the PASS_MAX_DAYS line
+pass_max_days_regex: '^\\s*PASS_MAX_DAYS\\s+\\d+'
+
+# Regular expression used to locate the PASS_MIN_DAYS line
+pass_min_days_regex: '^\\s*PASS_MIN_DAYS\\s+\\d+'
+
+encrypted_method: "^ENCRYPT_METHOD.*"
+umask_number: '^UMASK\s'
+# Command that will be executed for each user needing an update
+chage_command_template: "chage --maxdays {{ login_defs_pass_max_days }} {{ item }}"

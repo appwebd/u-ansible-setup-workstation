@@ -2,33 +2,22 @@
 # Role: configure_login_defs
 # Description: login.defs configuration based on Wazuh recommendations.
 
-# Wazuh id 35694 - Ensure password expiration is configured.
-- name: "Configure login.def PASS_MAX_DAYS"
-  ansible.builtin.replace:
-    path: /etc/login.defs
-    regexp: "^PASS_MAX_DAYS.*99999"
-    replace: "PASS_MAX_DAYS 90"
+# Wazuh Summary
+# 35694 - Ensure password expiration is configured. PASSED
+# 35695 - Ensure minimum password days is configured. FAILED
+# TODO 35696 - Ensure password expiration warning days is configured. PASSED
+# 35697 - Ensure strong password hashing algorithm is configured. PASSED
+# 35706 - Ensure default user umask is configured. PASSED
 
-# Wazuh id 35695 - Ensure minimum password days is configured.
-- name: "Configure login.def PASS_MIN_DAYS.*0"
-  ansible.builtin.replace:
-    path: /etc/login.defs
-    regexp: "^PASS_MIN_DAYS.*0"
-    replace: "PASS_MIN_DAYS 1"
 
-# Wazuh id 35697 - Ensure strong password hashing algorithm is configured. ENCRYPT_METHOD SHA512
-- name: "Configure login.def ENCRYPT_METHOD"
-  ansible.builtin.replace:
-    path: /etc/login.defs
-    regexp: "^ENCRYPT_METHOD.*"
-    replace: "ENCRYPT_METHOD SHA512"
-    backup: true
 
-# Wazuh id 35706 - Ensure default user umask is configured.
-- name: "Setting UMASK 027 in /etc/login.defs"
-  ansible.builtin.lineinfile:
-    path: /etc/login.defs
-    regexp: '^UMASK\s'
-    line: "UMASK 027"
-    state: present
-    backup: true
+- name: Ensure PASS_MAX_DAYS in /etc/login.defs
+  import_tasks: set_login_defs.yml
+
+- name: Update users whose password age violates policy
+  import_tasks: update_users_chage.yml
+
+- name: Populate root last-change date if required
+  when: login_defs_populate_root_last_change | bool
+  import_tasks: populate_root_last_change.yml
+
