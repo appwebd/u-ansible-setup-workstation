@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Author      : Patricio Rojas
+# Author      : Patricio Rojas Ortiz
 # Description : Review Ansible best practices
 
 set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.

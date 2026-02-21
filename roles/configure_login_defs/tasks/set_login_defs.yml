@@ -7,7 +7,7 @@
     regexp: "{{ pass_max_days_regex }}"
     line: "PASS_MAX_DAYS {{ login_defs_pass_max_days }}"
     state: present
-    backrefs: no
+    backrefs: false
   notify: Reload_sshd   # optional – only if you want to restart sshd after change
 
 # Wazuh id 35695 - Ensure minimum password days is configured.
@@ -17,7 +17,7 @@
     regexp: "{{ pass_min_days_regex }}"
     line: "PASS_MIN_DAYS {{ login_defs_pass_min_days }}"
     state: present
-    backrefs: no
+    backrefs: false
   notify: Reload_sshd   # optional – only if you want to restart sshd after change
 
 

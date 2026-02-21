@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: aide_audit_tools
-  author: "Patricio Rojas"
+  author: Patricio Rojas Ortiz
   description: "Configure AIDE to monitor Linux audit tools."
   license: "MIT"
   min_ansible_version: "2.16"

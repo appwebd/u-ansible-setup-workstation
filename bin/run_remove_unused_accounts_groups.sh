@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Author      : Patricio Rojas
+# Author      : Patricio Rojas Ortiz
 # Description : Allows you to delete some accounts from the system. Review before use.
 
 set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.
