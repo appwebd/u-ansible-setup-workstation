@@ -1,0 +1,15 @@
+cups_remove_cups:
+   - cups
+   - cups-browsed
+   - cups-bsd
+   - cups-client
+   - cups-common
+   - cups-common
+   - cups-core-drivers
+   - cups-daemon
+   - cups-filters
+   - cups-filters-core-drivers
+   - cups-ipp-utils
+   - cups-pk-helper
+   - cups-ppdc
+   - cups-server-common
