@@ -1,5 +1,7 @@
 ---
-#
+# Role: root
+# Description: Ensure root user umask is configured.
+
 # 35703 - Ensure root user umask is configured.
 
 - name: Check if /root/.bash_profile exists
@@ -20,7 +22,7 @@
     - name: Add compliant umask line
       ansible.builtin.lineinfile:
         path: /root/.bash_profile
-        line: "umask 027"
+        line: "umask {{ root_umask_defined }}"
         insertafter: EOF
         create: false
 
@@ -42,6 +44,6 @@
     - name: Add compliant umask line
       ansible.builtin.lineinfile:
         path: /root/.bashrc
-        line: "umask 027"
+        line: "umask {{ root_umask_defined }}"
         insertafter: EOF
         create: false
