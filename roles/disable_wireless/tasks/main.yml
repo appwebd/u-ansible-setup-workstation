@@ -1,0 +1,50 @@
+---
+# Role: disable_wireless
+# Description: Disable wireless.
+#              Wazuh id: 35602 - Ensure wireless interfaces are disabled.
+
+- name: Gather wireless modules
+  ansible.builtin.command: >
+    find /sys/class/net/*/ -type d -name wireless
+  register: wireless_dirs
+  changed_when: false
+  failed_when: false
+
+- name: Resolve module names from driver directories
+  ansible.builtin.set_fact:
+    discovered_modules: >-
+      {{
+        wireless_dirs.stdout_lines
+        | map('dirname')
+        | map('dirname')
+        | map('basename')
+        | list
+      }}
+  when: wireless_dirs.stdout_lines | length > 0
+
+- name: Merge discovered modules with user‑supplied list
+  ansible.builtin.set_fact:
+    wireless_modules: >-
+      {{
+        (wireless_modules | default([]))
+        + (discovered_modules | default([]))
+      }}
+      | unique
+  when: discovered_modules is defined
+
+- name: Ensure wireless modules are disabled
+  ansible.builtin.template:
+    src: modprobe.d.j2
+    dest: "{{ modprobe_dir }}/{{ item }}.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ wireless_modules }}"
+  notify: Reload modules load service
+  when: wireless_modules | length > 0
+
+- name: Unload currently loaded wireless modules
+  ansible.builtin.command: "modprobe -r {{ item }}"
+  loop: "{{ wireless_modules }}"
+  ignore_errors: true
+  when: wireless_modules | length > 0
