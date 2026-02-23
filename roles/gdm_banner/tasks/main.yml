@@ -1,0 +1,78 @@
+---
+# Role: gmd_banner
+# Description: 35553 - Ensure GDM login banner is configured.
+#   
+# Ensure the system‑wide dconf profile exists
+- name: Create /etc/dconf/profile/gdm if missing
+  ansible.builtin.file:
+    path: "{{ gdm_dconf_profile_path }}"
+    state: touch
+    mode: '0644'
+  notify: Restart GDM
+
+# Populate the profile with the required database references
+- name: Populate /etc/dconf/profile/gdm
+  ansible.builtin.lineinfile:
+    path: "{{ gdm_dconf_profile_path }}"
+    line: "{{ item }}"
+    create: true
+    mode: '0644'
+  loop:
+    - "user-db:user"
+    - "system-db:gdm"
+    - "file-db:/usr/share/gdm/greeter-dconf-defaults"
+  notify: Restart GDM
+
+- name: Ensure gdm path directories /etc/dconf/db/gdm.d/ exist
+  ansible.builtin.file:
+    path: "{{ gdm_dconf_db_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'  
+  
+# Create the system‑wide banner keyfile
+- name: Create /etc/dconf/db/gdm.d/01-banner-message
+  ansible.builtin.copy:
+    dest: "{{ gdm_dconf_db_path_and_file }}"
+    content: |
+      [org/gnome/login-screen]
+      banner-message-enable={{ gdm_banner_enable | bool | lower }}
+      banner-message-text='{{ gdm_banner_text }}'
+    mode: '0644'
+  notify: Restart GDM
+
+# Ensure CIS‑CAT checks pass – add required lines to greeter.dconf-defaults
+- name: Ensure banner-message-enable line exists in greeter.dconf-defaults
+  ansible.builtin.lineinfile:
+    path: "{{ gdm_greeter_defaults }}"
+    regexp: '^banner-message-enable='
+    line: "banner-message-enable=true"
+    create: true
+    mode: '0644'
+  notify: Restart GDM
+
+- name: Ensure banner-message-text line exists in greeter.dconf-defaults
+  ansible.builtin.lineinfile:
+    path: "{{ gdm_greeter_defaults }}"
+    regexp: '^banner-message-text='
+    line: 'banner-message-text="Authorized uses only. All activity may be monitored and reported"'
+    create: true
+    mode: '0644'
+  notify: Restart GDM
+
+# Update dconf databases
+- name: Run dconf update
+  ansible.builtin.command: dconf update
+  changed_when: false
+  notify: Restart GDM
+
+#
+# Reboot the system to apply changes (CIS‑CAT requirement)
+#- name: Reboot the machine to apply banner changes
+#  ansible.builtin.reboot:
+#    msg: "Rebooting to apply GDM banner configuration"
+#    pre_reboot_delay: 5
+#    post_reboot_delay: 30
+#    reboot_timeout: 600
+#  when: reboot_required | default(false)
