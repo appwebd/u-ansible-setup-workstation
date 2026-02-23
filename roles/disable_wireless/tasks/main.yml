@@ -44,7 +44,9 @@
   when: wireless_modules | length > 0
 
 - name: Unload currently loaded wireless modules
-  ansible.builtin.command: "modprobe -r {{ item }}"
-  loop: "{{ wireless_modules }}"
-  ignore_errors: true
+  ansible.builtin.command: "modprobe -r -v {{ item }}"
+  register: modprobe_check
   when: wireless_modules | length > 0
+  failed_when: "'install /bin/false' not in modprobe_check.stdout"
+  changed_when: "'Module not found' not in modprobe_check.stderr"
+  loop: "{{ wireless_modules }}"
