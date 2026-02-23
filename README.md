@@ -11,20 +11,18 @@ This project automates the preparation, hardening, and customization of a workst
 It follows the hardening guides of *Lynis* and *Wazuh*, and installs a set of critical tools for auditing, intrusion detection, and access control.
 
 
-## 🚀 Installation and Usage
-
-1. **Install Ansible**  
-   If you don't already have it installed, run the included script:
-
-```bash
-bash bin/install-ansible.sh
-```
-
+## Installation and Usage
 ## Clone the Repository
 
 ```bash
 git clone https://github.com/appwebd/u-ansible-setup-workstation.git
 cd u-ansible-setup-workstation
+```
+## Install Ansible  
+   If you don't already have it installed, run the included script:
+
+```bash
+bash bin/install-ansible.sh
 ```
 
 ## Configure Vault
