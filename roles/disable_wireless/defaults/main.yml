@@ -1,0 +1,14 @@
+---
+# Default variables for the role
+# ------------------------------------------------------------------
+# List of wireless driver modules that should be disabled.
+# The role will discover them automatically, but you can override
+# the list if you know the exact modules.
+wireless_modules: []
+
+# Path to the modprobe.d directory
+modprobe_dir: /etc/modprobe.d
+
+# Name of the systemd service that loads modules at boot
+# (used only for the handler)
+modules_load_service: systemd-modules-load.service

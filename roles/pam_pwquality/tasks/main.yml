@@ -1,8 +1,8 @@
 ---
 # Role        : pam_pwquality
 # Description : This role is designed to be idempotent, meaning you can run it multiple times,
-#              and it will only make changes if the system is not in the desired state.
-#              It follows Ansible best practices by using handlers, templates, and variables.
+#               and it will only make changes if the system is not in the desired state.
+#               It follows Ansible best practices by using handlers, templates, and variables.
 #
 # This role solve the the following wazuh id
 #
