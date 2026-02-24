@@ -2,7 +2,7 @@
 # Role: gmd_banner
 # Description: 35553 - Ensure GDM login banner is configured.
 #   
-# Ensure the system‑wide dconf profile exists
+# Ensure the system-wide dconf profile exists
 - name: Create /etc/dconf/profile/gdm if missing
   ansible.builtin.file:
     path: "{{ gdm_dconf_profile_path }}"
@@ -25,6 +25,7 @@
 
 - name: Ensure gdm path directories /etc/dconf/db/gdm.d/ exist
   ansible.builtin.file:
+  in.file:
     path: "{{ gdm_dconf_db_path }}"
     state: directory
     owner: root
@@ -42,7 +43,7 @@
     mode: '0644'
   notify: Restart GDM
 
-# Ensure CIS‑CAT checks pass – add required lines to greeter.dconf-defaults
+# Ensure CIS‑CAT checks pass - add required lines to greeter.dconf-defaults
 - name: Ensure banner-message-enable line exists in greeter.dconf-defaults
   ansible.builtin.lineinfile:
     path: "{{ gdm_greeter_defaults }}"
@@ -68,7 +69,7 @@
   notify: Restart GDM
 
 #
-# Reboot the system to apply changes (CIS‑CAT requirement)
+# Reboot the system to apply changes (CIS-CAT requirement)
 #- name: Reboot the machine to apply banner changes
 #  ansible.builtin.reboot:
 #    msg: "Rebooting to apply GDM banner configuration"

@@ -23,7 +23,7 @@
     mode: '0644'
 
 # ------------------------------------------------------------------
-# Main block – add selection lines for audit tools.
+# Main block - add selection lines for audit tools.
 # ------------------------------------------------------------------
 - name: "Insert audit‑tool selection block into aide.conf"
   ansible.builtin.blockinfile:
@@ -77,4 +77,4 @@
   when:
     - aide_conf_block.changed
     - "'yes' == x_include_check.stdout"
-  # This task is optional – remove if you don't want automatic reload.
+  # This task is optional - remove if you don't want automatic reload.

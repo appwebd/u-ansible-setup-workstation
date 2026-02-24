@@ -1,4 +1,4 @@
-# Default banner text – override in inventory or playbook if needed
+# Default banner text - override in inventory or playbook if needed
 gdm_banner_text: "Authorized users only. All activity may be monitored and reported."
 
 # Enable the banner (boolean)

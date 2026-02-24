@@ -7,7 +7,7 @@ set +o history
 
 #| Option  | Purpose                                                 |
 #| -vvv    | Provides full debugging details.                        |
-#| --check | Performs a dry‑run simulation without making changes.   |
+#| --check | Performs a dry-run simulation without making changes.   |
 #| --diff  | Shows differences before applying.                      |
 
 

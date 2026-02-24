@@ -24,7 +24,7 @@ project_root/
 └─ requirements.yml        # Collections and roles dependencies
 ```
 
-* Keep roles reusable – each role should be self‑contained.
+* Keep roles reusable - each role should be self‑contained.
 * Use `defaults/main.yml` for default variables and `vars/main.yml` for role‑specific variables that override defaults.
 * Keep playbooks short and delegating to roles.
 
@@ -43,7 +43,7 @@ project_root/
 ### Rules
 
 1. Use descriptive names (`app_version`, `db_host`).
-2. Avoid hard‑coding sensitive data – use Vault.
+2. Avoid hard‑coding sensitive data - use Vault.
 3. Prefer `{{ variable | default('value') }}` to avoid undefined errors.
 
 ---
@@ -119,7 +119,7 @@ Handles service name differences across distributions (sshd vs ssh):
 ## 4. Idempotency
 
 * Use modules instead of shell commands when possible.
-* Modules have built‑in checks – they only apply changes when needed.
+* Modules have built‑in checks - they only apply changes when needed.
 * Example: `apt` module with `state=latest` ensures the package is present.
 
 ```yaml

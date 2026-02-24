@@ -38,17 +38,17 @@ ansible-playbook -i inventory/production playbooks/setup_workstation.yaml
 
 ## 5. Configuration
 
-- **Variables** – Set at the inventory level (`group_vars`, `host_vars`) or override with `--extra-vars`.
-- **Vault** – Encrypt secrets with Ansible Vault (`ansible-vault encrypt_string`).
-- **Roles** – Enable or disable roles in `playbooks/setup_workstation.yaml`.
+- **Variables** - Set at the inventory level (`group_vars`, `host_vars`) or override with `--extra-vars`.
+- **Vault** - Encrypt secrets with Ansible Vault (`ansible-vault encrypt_string`).
+- **Roles** - Enable or disable roles in `playbooks/setup_workstation.yaml`.
 
 ## 6. Best Practices
 
-1. **Keep Roles Small** – Each role should perform a single responsibility.
-2. **Use `defaults` over `vars`** – Provides a fallback that can be overridden.
-3. **Avoid `shell`** – Prefer modules for idempotency.
-4. **Tagging** – Tag tasks for selective execution.
-5. **Logging** – Use `no_log` for sensitive information.
+1. **Keep Roles Small** - Each role should perform a single responsibility.
+2. **Use `defaults` over `vars`** - Provides a fallback that can be overridden.
+3. **Avoid `shell`** - Prefer modules for idempotency.
+4. **Tagging** - Tag tasks for selective execution.
+5. **Logging** - Use `no_log` for sensitive information.
 
 ## 7. Contribution
 

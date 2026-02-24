@@ -15,10 +15,10 @@ this repository. Your help makes the project safer for everyone.
      `Security:`.
 
 2. **Provide detailed information**  
-   - **Description** – Explain the issue and how it can be reproduced.  
-   - **Impact** – Outline the potential consequences for users or the system.  
-   - **Suggested fix** – If you have a patch or a workaround, include it.  
-   - **Screenshots / logs** – Attach any relevant evidence.
+   - **Description** - Explain the issue and how it can be reproduced.  
+   - **Impact** - Outline the potential consequences for users or the system.  
+   - **Suggested fix** - If you have a patch or a workaround, include it.  
+   - **Screenshots / logs** - Attach any relevant evidence.
 
 3. **Do not publish the details publicly**  
    - Until the issue is resolved, keep the description and any
