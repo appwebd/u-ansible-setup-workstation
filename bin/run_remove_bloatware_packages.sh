@@ -7,7 +7,7 @@ set +o history
 
 #| Option  | Purpose                                                 |
 #| -vvv    | Provides full debugging details.                        |
-#| --check | Performs a dry‑run simulation without making changes.   |
+#| --check | Performs a dry-run simulation without making changes.   |
 #| --diff  | Shows differences before applying.                      |
 
 ansible-playbook -i inventory/inventory.ini -v playbooks/remove_bloatware_packages.yaml -b -K

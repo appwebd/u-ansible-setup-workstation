@@ -8,7 +8,7 @@
     line: "PASS_MAX_DAYS {{ login_defs_pass_max_days }}"
     state: present
     backrefs: false
-  notify: Reload_sshd   # optional – only if you want to restart sshd after change
+  notify: Reload_sshd   # optional - only if you want to restart sshd after change
 
 # Wazuh id 35695 - Ensure minimum password days is configured.
 - name: Set PASS_MIN_DAYS in login.defs
@@ -18,7 +18,7 @@
     line: "PASS_MIN_DAYS {{ login_defs_pass_min_days }}"
     state: present
     backrefs: false
-  notify: Reload_sshd   # optional – only if you want to restart sshd after change
+  notify: Reload_sshd   # optional - only if you want to restart sshd after change
 
 
 # Wazuh id 35697 - Ensure strong password hashing algorithm is configured. ENCRYPT_METHOD SHA512
