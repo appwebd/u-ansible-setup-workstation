@@ -1,0 +1,30 @@
+# tasks/set_perms.yml
+---
+- name: Resolve real path of /etc/motd (handles symlinks)
+  ansible.builtin.command: readlink -e /etc/motd
+  register: motd_real_path
+  changed_when: false
+
+- name: Ensure correct ownership on /etc/motd
+  ansible.builtin.file:
+    path: "{{ motd_real_path.stdout }}"
+    owner: "{{ motd_owner }}"
+    group: "{{ motd_group }}"
+    mode: "{{ motd_mode }}"
+    state: touch   # ensures the file exists
+  register: motd_chown
+
+- name: Ensure correct permissions on /etc/motd
+  ansible.builtin.file:
+    path: "{{ motd_real_path.stdout }}"
+    owner: "{{ motd_owner }}"
+    group: "{{ motd_group }}"
+    mode: "{{ motd_mode }}"
+  register: motd_chmod
+
+- name: Log changes
+  ansible.builtin.debug:
+    msg: |
+      /etc/motd ownership set to {{ motd_owner }}:{{ motd_group }}
+      /etc/motd permissions set to {{ motd_mode }}
+  when: motd_chown.changed or motd_chmod.changed

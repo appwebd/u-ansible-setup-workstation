@@ -1,0 +1,20 @@
+---
+# Role: configure_motd
+# Description: Ensure access to /etc/motd is configured.
+#              wazuh id: 35549 - Ensure access to /etc/motd is configured. File: /etc/motd
+
+- name: Apply /etc/motd security policy
+  block:
+
+    - name: "Delete /etc/motd if requested"
+      ansible.builtin.include_tasks: delete_motd.yml
+      when: motd_remove | bool
+
+    - name: "Set ownership & permissions on /etc/motd"
+      ansible.builtin.include_tasks: set_perms.yml
+      when: not (motd_remove | bool)
+
+  rescue:
+    - name: Report failure
+      ansible.builtin.debug:
+        msg: "Failed to enforce /etc/motd policy."

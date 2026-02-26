@@ -1,0 +1,5 @@
+# handlers/main.yml
+---
+- name: Log /etc/motd deletion
+  ansible.builtin.debug:
+    msg: "/etc/motd removed."

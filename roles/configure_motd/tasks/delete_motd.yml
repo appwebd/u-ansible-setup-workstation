@@ -1,0 +1,8 @@
+# tasks/delete_motd.yml
+---
+- name: Ensure /etc/motd is absent
+  ansible.builtin.file:
+    path: /etc/motd
+    state: absent
+  register: motd_removed
+  notify: Log /etc/motd deletion
