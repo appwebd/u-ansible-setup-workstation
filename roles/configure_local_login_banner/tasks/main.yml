@@ -10,12 +10,3 @@
     owner: root
     group: root
     mode: '0644'
-
-# Wazuh id 35548 - Ensure remote login warning banner is configured properly.
-- name: "Create a file /etc/issue.net"
-  ansible.builtin.template:
-    src: issue.j2
-    dest: /etc/issue.net
-    owner: root
-    group: root
-    mode: '0644'
