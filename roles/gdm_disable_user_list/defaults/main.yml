@@ -1,0 +1,9 @@
+---
+# Default variables for gdm_disable_user_list role
+
+gdm_dconf_profile_path: "/etc/dconf/profile/gdm"
+gdm_dconf_db_dir: "/etc/dconf/db/gdm.d"
+gdm_dconf_keyfile: "{{ gdm_dconf_db_dir }}/00-login-screen"
+
+# Ensure idempotency: only write if needed
+gdm_disable_user_list_enabled: true

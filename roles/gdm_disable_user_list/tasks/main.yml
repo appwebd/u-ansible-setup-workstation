@@ -1,0 +1,52 @@
+---
+# Role: gdm_disable_user_list
+# Description: 35554 - Ensure GDM disable-user-list option is enabled.
+#
+
+- name: Ensure dconf database directory exists
+  ansible.builtin.file:
+    path: "{{ gdm_dconf_db_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Create or update /etc/dconf/profile/gdm
+  ansible.builtin.copy:
+    content: |
+      user-db:user
+      system-db:gdm
+      file-db:/usr/share/gdm/greeter-dconf-defaults
+    dest: "{{ gdm_dconf_profile_path }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+
+- name: Create or update GDM dconf keyfile for login-screen settings
+  ansible.builtin.copy:
+    content: |
+      [org/gnome/login-screen]
+      # Do not show the user list
+      disable-user-list=true
+    dest: "{{ gdm_dconf_keyfile }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+
+- name: Update dconf database
+  ansible.builtin.command: dconf update
+  register: dconf_update_result
+  changed_when: false
+  notify: Restart gdm
+
+- name: Verify disable-user-list is set correctly (idempotency check)
+  ansible.builtin.shell: |
+    grep -E '^\s*disable-user-list\s*=\s*true' "{{ gdm_dconf_keyfile }}" || true
+  register: verify_disable_user_list
+  changed_when: false
+  failed_when: false
+
+- name: Fail if disable-user-list is not properly configured
+  ansible.builtin.fail:
+    msg: "Failed to enforce 'disable-user-list=true' in GDM dconf configuration."
+  when: verify_disable_user_list.stdout | trim != "disable-user-list=true"

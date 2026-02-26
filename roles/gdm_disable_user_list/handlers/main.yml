@@ -1,0 +1,8 @@
+---
+- name: Restart gdm
+  ansible.builtin.systemd:
+    name: gdm
+    state: restarted
+    enabled: true
+  # Note: On some systems (e.g., Ubuntu), service may be named 'gdm3'
+  # Consider using `ansible_service_mgr` for dynamic detection if needed.
