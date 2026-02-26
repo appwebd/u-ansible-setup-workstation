@@ -1,0 +1,10 @@
+---
+# Role: remove_apport
+# Description: Wazuh id 35545 - Ensure Automatic Error Reporting is not enabled.
+#
+
+- name: "Ensure Automatic Error Reporting is not enabled"
+  ansible.builtin.apt:
+    name: apport
+    state: absent
+    purge: true
