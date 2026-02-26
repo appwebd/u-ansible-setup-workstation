@@ -29,7 +29,7 @@ this repository. Your help makes the project safer for everyone.
 
 4. **Contact information**  
    - For direct communication, email:  
-     **security@appwebd.com**  
+     **security@examples.com**  
      (Please do not send sensitive details over public channels.)
 
 5. **Timeline**  
@@ -45,7 +45,7 @@ this repository. Your help makes the project safer for everyone.
 ### Security Incident Handling
 
 - If you suspect a security incident (e.g., data breach, unauthorized
-  access), contact **security@appwebd.com** immediately.  
+  access), contact **security@example.com** immediately.  
 - Use the same email and follow the same reporting steps, but prefix the
   subject with `Incident:`.
 
