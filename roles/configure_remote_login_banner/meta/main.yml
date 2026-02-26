@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: prelink
+  role_name: configure_remote_login_banner
   author: Patricio Rojas Ortiz
-  description: Ensure prelink package is not installed
+  description: Ensure remote login warning banner is configured properly.
   license: MIT
   min_ansible_version: "2.16"
   platforms:

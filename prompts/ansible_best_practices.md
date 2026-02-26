@@ -1,3 +1,5 @@
+# Ansible best practices
+## Project structure
 
 ```text
 project_root/
@@ -27,6 +29,7 @@ project_root/
 * Keep roles reusable - each role should be self‑contained.
 * Use `defaults/main.yml` for default variables and `vars/main.yml` for role‑specific variables that override defaults.
 * Keep playbooks short and delegating to roles.
+* For the name of a role, always follow the verb + object rule.
 
 ---
 
@@ -45,6 +48,7 @@ project_root/
 1. Use descriptive names (`app_version`, `db_host`).
 2. Avoid hard‑coding sensitive data - use Vault.
 3. Prefer `{{ variable | default('value') }}` to avoid undefined errors.
+4. Any variable that holds yes or no should preferably use true or false.
 
 ---
 
@@ -441,7 +445,7 @@ MIT
 
 ## Author Information
 Your name/team
-```
+
 
 ### Best Practices:
 * Keep playbooks short and delegating to roles
