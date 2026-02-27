@@ -1,7 +1,7 @@
 ---
 # Role: configure_gmd_banner
 # Description: 35553 - Ensure GDM login banner is configured.
-#   
+#
 # Ensure the system-wide dconf profile exists
 - name: Create /etc/dconf/profile/gdm if missing
   ansible.builtin.file:
@@ -30,7 +30,7 @@
     owner: root
     group: root
     mode: '0755'
-  
+
 # Create the system‑wide banner keyfile
 - name: Create /etc/dconf/db/gdm.d/01-banner-message
   ansible.builtin.copy:
@@ -69,7 +69,7 @@
 
 #
 # Reboot the system to apply changes (CIS-CAT requirement)
-#- name: Reboot the machine to apply banner changes
+# - name: Reboot the machine to apply banner changes
 #  ansible.builtin.reboot:
 #    msg: "Rebooting to apply GDM banner configuration"
 #    pre_reboot_delay: 5
