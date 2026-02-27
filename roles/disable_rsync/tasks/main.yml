@@ -1,0 +1,95 @@
+---
+# Role: disable_rsync
+# Description: Wazuh id 35573 - Ensure rsync services are not in use.
+#
+# Remediation
+#     Run the following commands to stop rsync.service, and remove the rsync package:
+#
+#     systemctl stop rsync.service
+#     apt purge rsync
+#                     - OR -
+#     - IF - the rsync package is required as a dependency:
+#
+#     Run the following commands to stop and mask rsync.service:
+#
+#     systemctl stop rsync.service
+#     systemctl mask rsync.service.
+#
+# Description
+#     The rsync service can be used to synchronize files between systems over network links.
+#
+# Checks (Condition: any)
+#     c:dpkg-query -s rsync -> r:package 'rsync' is not installed
+#     not c:systemctl show rsync.service -> r:^LoadState=loaded|^ActiveState=active
+
+- name: Check if rsync package is installed
+  ansible.builtin.command: dpkg-query -s rsync
+  register: rsync_pkg_check
+  failed_when: false
+  changed_when: false
+
+- name: Set fact if rsync is installed
+  ansible.builtin.set_fact:
+    rsync_installed: "{{ rsync_pkg_check.rc == 0 }}"
+
+# OPTION 1: Remove rsync package completely (Recommended)
+
+- name: Stop rsync service if installed
+  ansible.builtin.systemd:
+    name: rsync.service
+    state: stopped
+  when:
+    - rsync_remove_package
+    - rsync_installed
+
+- name: Purge rsync package
+  ansible.builtin.apt:
+    name: rsync
+    state: absent
+    purge: true
+    autoremove: true
+  when:
+    - rsync_remove_package
+    - rsync_installed
+
+# OPTION 2: Keep package but stop and mask service
+
+- name: Stop rsync service if package must remain
+  ansible.builtin.systemd:
+    name: rsync.service
+    state: stopped
+  when:
+    - not rsync_remove_package
+    - rsync_installed
+  register: rsync_stop
+  failed_when:
+    - rsync_stop is defined
+    - rsync_stop.failed
+    - rsync_stop.msg is defined
+    - "'service not found' not in rsync_stop.msg"
+
+- name: Mask rsync service
+  ansible.builtin.systemd:
+    name: rsync.service
+    masked: true
+    enabled: false
+  when:
+    - not rsync_remove_package
+    - rsync_installed
+
+# Compliance Validation (Wazuh-aligned logic)
+
+- name: Gather rsync service facts
+  ansible.builtin.systemd:
+    name: rsync.service
+  register: rsync_service_status
+  failed_when: false
+  changed_when: false
+
+- name: Assert compliance - package removed OR service not active
+  ansible.builtin.assert:
+    that:
+      - (not rsync_installed) or
+        (rsync_service_status.status.ActiveState != "active")
+    fail_msg: "Rsync hardening failed: service is active."
+    success_msg: "Rsync hardening compliant."
