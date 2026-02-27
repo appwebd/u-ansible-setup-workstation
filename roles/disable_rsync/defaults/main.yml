@@ -1,0 +1,4 @@
+---
+# If true, rsync package will be completely removed (apt purge)
+# If false, rsync will be kept but the service will be stopped and masked
+rsync_remove_package: false

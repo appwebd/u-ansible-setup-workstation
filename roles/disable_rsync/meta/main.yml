@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: gdm_banner
-  author: "Patricio Rojas Ortiz"
-  description: "Configures a GNOME login banner per Wazuh/CIS‑CAT requirements."
+  role_name: disable_rsync
+  author: Patricio Rojas Ortiz
+  description: Ensure rsync services are not in use.
   license: MIT
   min_ansible_version: "2.16"
   platforms:

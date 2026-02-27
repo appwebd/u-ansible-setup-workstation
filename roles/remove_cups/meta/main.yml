@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: cups
+  role_name: remove_cups
   author: Patricio Rojas Ortiz
   description: Ensure cups is not installed
   license: MIT

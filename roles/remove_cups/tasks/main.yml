@@ -1,8 +1,7 @@
 ---
-# Role: cups
-# Description: Ensure cups is not installed.
-
-# Wazuh id 35544 - Ensure cups is not installed. PASSED
+# Role: remove_cups
+# Description: Wazuh id 35544 - Ensure cups is not installed. PASSED
+#
 - name: Remove useless packages from the cache /var/cache/apt/archives
   ansible.builtin.apt:
     autoclean: true

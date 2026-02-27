@@ -1,5 +1,5 @@
 ---
-# Role: gmd_banner
+# Role: configure_gmd_banner
 # Description: 35553 - Ensure GDM login banner is configured.
 #   
 # Ensure the system-wide dconf profile exists
@@ -25,12 +25,11 @@
 
 - name: Ensure gdm path directories /etc/dconf/db/gdm.d/ exist
   ansible.builtin.file:
-  in.file:
     path: "{{ gdm_dconf_db_path }}"
     state: directory
     owner: root
     group: root
-    mode: '0755'  
+    mode: '0755'
   
 # Create the system‑wide banner keyfile
 - name: Create /etc/dconf/db/gdm.d/01-banner-message
