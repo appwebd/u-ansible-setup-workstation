@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: gdm_banner
+  role_name: configure_gdm_banner
   author: "Patricio Rojas Ortiz"
   description: "Configures a GNOME login banner per Wazuh/CIS‑CAT requirements."
   license: MIT
