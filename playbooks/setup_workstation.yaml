@@ -21,8 +21,8 @@
      - configure_timezone
      - configure_grub
      - configure_login_defs
-     - disable_rsync                          # 35573 - Ensure rsync services are not in use.
-     - remove_apport                          # 35545 - Ensure Automatic Error Reporting is not enabled.
+     - disable_rsync                          # 35573 - Ensure rsync services are not in use. PASSED
+     - remove_apport                          # 35545 - Ensure Automatic Error Reporting is not enabled. PASSED
      - remove_prelink                         # 35544 - Ensure prelink is not installed. PASSED
      - remove_cups                            # 35571 - Ensure print server services are not in use. PASSED
      - update_upgrade
@@ -38,8 +38,8 @@
      - aide_audit_tools                      # 35760 - Ensure cryptographic mechanisms are used to protect the integrity of audit tools. PASSED
      - fail2ban
      - gnome                                 # Configure gsettings list-recursively | grep privacy
-     - gdm_remove                            # 35552 - Ensure GDM is removed.
-     - gdm_disable_user_list                 # 35554 Ensure GDM disable-user-list option is enabled.    
+#     - remove_gdm                            # 35552 - Ensure GDM is removed.
+     - disable_user_list_gdm                 # 35554 Ensure GDM disable-user-list option is enabled. PASSED
      - otpclient
      - rkhunter
      - sshd
