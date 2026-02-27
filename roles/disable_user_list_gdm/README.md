@@ -22,4 +22,4 @@ This role enforces the CIS/Wazuh requirement to disable the user list on GNOME D
 - hosts: desktops
   become: yes
   roles:
-    - role: gdm_disable_user_list
+    - role: disable_user_list_gdm

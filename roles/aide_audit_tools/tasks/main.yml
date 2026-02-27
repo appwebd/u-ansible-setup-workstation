@@ -1,8 +1,8 @@
 ---
 # Role: aide_audit_tools
-# Description: This role configures AIDE (Advanced Intrusion Detection Environment) to monitor critical audit tools 
+# Description: This role configures AIDE (Advanced Intrusion Detection Environment) to monitor critical audit tools
 #              as required by Wazuh and CIS benchmarks.
-# 
+#
 #  35760 - Ensure cryptographic mechanisms are used to protect the integrity of audit tools.
 
 - name: "Detect real /sbin path (non‑symlink)"
@@ -29,7 +29,7 @@
   ansible.builtin.blockinfile:
     path: "/etc/aide/aide.conf"
     marker_begin: "{{ aide_block_marker_start }}"
-    marker_end:   "{{ aide_block_marker_end }}"
+    marker_end: "{{ aide_block_marker_end }}"
     content: |
       # Audit Tools
       {% for tool in audit_tools %}

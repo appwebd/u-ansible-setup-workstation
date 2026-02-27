@@ -6,7 +6,7 @@ gdm_banner_enable: true
 
 # Path to the system‑wide dconf database
 gdm_dconf_profile_path: /etc/dconf/profile/gdm
-gdm_dconf_db_path:  /etc/dconf/db/gdm.d/
+gdm_dconf_db_path: /etc/dconf/db/gdm.d/
 gdm_dconf_db_path_and_file: /etc/dconf/db/gdm.d/01-banner-message
 
 # File that CIS‑CAT checks against

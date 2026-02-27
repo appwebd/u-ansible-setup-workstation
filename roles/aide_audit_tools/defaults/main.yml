@@ -19,7 +19,7 @@ audit_tool_permissions: "p+i+n+u+g+s+b+acl+xattrs+sha512"
 
 # Marker tags for blockinfile - change if you need a different marker
 aide_block_marker_start: "# BEGIN audit-tools"
-aide_block_marker_end:   "# END audit-tools"
+aide_block_marker_end: "# END audit-tools"
 
 # Directory that will be included via @@x_include (if present)
 # The role will create it only if needed.
