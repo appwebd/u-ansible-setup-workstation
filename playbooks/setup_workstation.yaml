@@ -3,32 +3,63 @@
   hosts: dev.local
   become: true
   gather_facts: true
+  gather_subset:
+    - '!all'                  # start from the minimal set
+    - '!min'                  # then drop the “minimal” subset as well
+    - 'network'               # only network‑related facts (IP, MAC)
+
   vars_files:
     - roles/setup_tripwire/vars/main.yml
 
   roles:
-    - configure_local_login_banner         # 35547 35548 files /etc/issue and /etc/issue.net
-    - configure_timezone
-    - configure_grub
-    - update_upgrade
-    - file_permission
-    - configure_login_defs
-    - auditd                               # 35723 35724
-    - suggested_software_packages
-    - suggested_software_packages_desktop
-    - sudo                                 # 35662 35667 35664
-    - aide                                 # 35758 - Ensure AIDE is installed.
-    - fail2ban
-    - gnome                                # Configure gsettings list-recursively | grep privacy
-    - otpclient
-    - rkhunter
-    - sshd
-    - sysstat
-    - tripwire
-    - unattended_upgrades
-    - hardening_debian
-    - root                                 # 35703 - Ensure root user umask is configured.
-    - prelink                              # 35544 - Ensure prelink is not installed.
-    - shells_nologin                       # 35704 - Ensure nologin is not listed in /etc/shells
-    - sysctl_conf                          # 35543 - Ensure core dumps are restricted.
-    - pam_pwhistory                        # 35687 - Ensure password history remember is configured.
+     - configure_local_login_banner           # 35547 Ensure local login warning banner is configured properly. PASSED
+                                              # 35550 Ensure access to /etc/issue is configured. PASSED
+     - configure_remote_login_banner          # 35548 Ensure remote login warning banner is configured properly. PASSED
+                                              # 35551 Ensure access to /etc/issue.net is configured. PASSED
+     - configure_gdm_banner                   # 35553 - Ensure GDM login banner is configured. PASSED
+     - configure_motd                         # 35549 Ensure access to /etc/motd is configured OR remote this file. PASSED
+     - configure_timezone
+     - configure_grub
+     - configure_login_defs
+     - disable_rsync                          # 35573 - Ensure rsync services are not in use.
+     - remove_apport                          # 35545 - Ensure Automatic Error Reporting is not enabled.
+     - remove_prelink                         # 35544 - Ensure prelink is not installed. PASSED
+     - remove_cups                            # 35571 - Ensure print server services are not in use. PASSED
+     - update_upgrade
+     - file_permission
+     - ensure_shadows
+     - auditd                                # 35723 35724
+     - suggested_software_packages
+     - suggested_software_packages_desktop
+     - at_security                           # 35601 - Ensure at is restricted to authorized users. PASSED
+     - at_deny_accounts
+     - sudo                                  # 35662 35667 35664 PASSED
+     - aide                                  # 35758 - Ensure AIDE is installed. PASSED
+     - aide_audit_tools                      # 35760 - Ensure cryptographic mechanisms are used to protect the integrity of audit tools. PASSED
+     - fail2ban
+     - gnome                                 # Configure gsettings list-recursively | grep privacy
+     - gdm_remove                            # 35552 - Ensure GDM is removed.
+     - gdm_disable_user_list                 # 35554 Ensure GDM disable-user-list option is enabled.    
+     - otpclient
+     - rkhunter
+     - sshd
+     - sshd_privsep_fix
+     - sysstat
+     - tripwire
+     - unattended_upgrades
+     - disable_kernel_modules
+     - disable_wireless                      # 35602 - Ensure wireless interfaces are disabled.
+     - hardening_debian
+     - root_umask                            # 35703 - Ensure root user umask is configured. PASSED     
+     - shells_nologin                        # 35704 - Ensure nologin is not listed in /etc/shells PASSED
+     - sysctl_conf
+     - pam_pwhistory_module_is_enable        # TODO FAILED 35675,
+                                             # TODO FAILED 35689
+                                             # PASSED: 35687, 35688
+     - pam_pwhistory                         # 35687 - Ensure password history remember is configured. PASSED
+                                             # TODO FAILED 35689 - Ensure pam_pwhistory includes use_authtok
+     - pam_pwquality                         # 35674,35679, 35680, 35681, 35682, 35683, 35684, 35685, 35686 PASSED
+     - pam_unix_remove_nullok                # 35690 - Ensure pam_unix does not include nullok. PASSED
+     - pam_unix_remove_nullok_in_pam.d       # 35690 - Ensure pam_unix does not include nullok. PASSED
+#     - ssl_certs                             # for testing only
+#     - systemd_journal_upload                # TODO FAILED 35710 - Ensure systemd-journal-upload authentication is configured.
