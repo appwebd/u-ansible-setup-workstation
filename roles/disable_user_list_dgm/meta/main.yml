@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: gdm_disable_user_list
+  role_name: disable_user_list_gdm
   author: Patricio Rojas Ortiz
   description: Ensure GDM disable-user-list option is enabled.
   license: MIT

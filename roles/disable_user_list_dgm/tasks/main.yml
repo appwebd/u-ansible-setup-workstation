@@ -1,5 +1,5 @@
 ---
-# Role: gdm_disable_user_list
+# Role: disable_user_list_gdm
 # Description: 35554 - Ensure GDM disable-user-list option is enabled.
 #
 
