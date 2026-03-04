@@ -1,0 +1,37 @@
+---
+# Role: wazuh_inactive_password_lock
+# Description: Solve wazuh ID 35698 - Ensure inactive password lock is configured.
+
+
+# 1.  Set the *default* inactivity period for new accounts
+
+- name: "Set the default password inactivity period to NRO days"
+  ansible.builtin.command: >
+    useradd -D -f {{ password_inactivity_default }}
+  register: _useradd_default
+  # The command is idempotent – we only report a change if the
+  # current value is larger than the desired value.
+  changed_when: >
+    _useradd_default.stdout | regex_search('INACTIVE\\s*=\\s*(\\d+)') is not none
+    and (_useradd_default.stdout | regex_search('INACTIVE\\s*=\\s*(\\d+)') | regex_replace('[^0-9]', '') | int) > password_inactivity_default
+  failed_when: false
+  tags: ['password_inactivity']
+
+
+# 2.  Update all existing users whose inactivity value is > 45 or < 0
+
+- name: "Update inactivity period for all users with passwords that are > NRO days or unset"
+  ansible.builtin.shell: |
+    awk -F: '
+      ($2~/^\$.+\$/) {if($7 > {{ password_inactivity_default | trim }} || $7 < 0)
+        system("chage --inactive {{ password_inactivity_default | trim }} " $1)
+      }' /etc/shadow
+  register: result
+  ignore_errors: true
+  changed_when: false
+  tags: ['password_inactivity']
+
+- name: Warn if the command failed
+  ansible.builtin.debug:
+    msg: "Command failed with rc {{ result.rc }}"
+  when: result.rc != 0

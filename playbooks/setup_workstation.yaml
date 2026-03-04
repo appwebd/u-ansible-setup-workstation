@@ -22,6 +22,8 @@
     - configure_grub
     - configure_login_defs
     - disable_rsync                          # 35573 - Ensure rsync services are not in use. PASSED
+    - enable_systemd_timesyncd               # TODO FAILED 35589 - Ensure systemd-timesyncd is enabled and running.
+    - lock_inactive_password                 # 35698 - Ensure inactive password lock is configured. PASSED
     - remove_apport                          # 35545 - Ensure Automatic Error Reporting is not enabled. PASSED
     - remove_prelink                         # 35544 - Ensure prelink is not installed. PASSED
     - remove_cups                            # 35571 - Ensure print server services are not in use. PASSED
@@ -37,7 +39,7 @@
     - aide                                  # 35758 - Ensure AIDE is installed. PASSED
     - aide_audit_tools                      # 35760 - Ensure cryptographic mechanisms are used to protect the integrity of audit tools. PASSED
     - fail2ban
-    - gnome                                 # Configure gsettings list-recursively | grep privacy
+    - gnome                                 # Configure privacy
 #     - remove_gdm                            # 35552 - Ensure GDM is removed.
     - disable_user_list_gdm                 # 35554 Ensure GDM disable-user-list option is enabled. PASSED
     - otpclient
