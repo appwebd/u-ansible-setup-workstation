@@ -1,0 +1,3 @@
+---
+# Default inactivity period (days) – must be <= 45
+password_inactivity_default: 45

@@ -1,0 +1,4 @@
+---
+# Default variables for the role
+
+rsyslog_service_name: "rsyslog"

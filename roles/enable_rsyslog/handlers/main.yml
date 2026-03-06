@@ -1,0 +1,9 @@
+---
+# Handlers to restart services if needed
+
+- name: Restart rsyslog service
+  ansible.builtin.systemd:
+    name: "{{ rsyslog_service_name }}"
+    state: restarted
+    enabled: true
+  when: rsyslog_enabled.changed or rsyslog_started.changed
