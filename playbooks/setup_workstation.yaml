@@ -29,6 +29,8 @@
     - remove_cups                            # 35571 - Ensure print server services are not in use. PASSED
     - update_upgrade
     - file_permission
+    - enable_rsyslog                         # 35717 - Ensure rsyslog service is enabled and active. PASSED
+#    - ensure_login_defs_pass_min_days        # 35695 - Ensure minimum password days is configured.
     - ensure_shadows
     - auditd                                # 35723 35724
     - suggested_software_packages

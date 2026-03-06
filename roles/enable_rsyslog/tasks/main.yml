@@ -1,0 +1,23 @@
+---
+# Role: enable_rsyslog
+# Description: Ensure rsyslog service is enabled and active wazuh id: 35717
+
+- name: Check if rsyslog service is active
+  ansible.builtin.systemd:
+    name: "{{ rsyslog_service_name }}"
+    state: started
+    enabled: true
+  register: rsyslog_started
+
+- name: Ensure rsyslog service is enabled
+  ansible.builtin.systemd:
+    name: "{{ rsyslog_service_name }}"
+    enabled: true
+  when: not rsyslog_started.enabled
+  register: rsyslog_enabled
+
+- name: Start rsyslog service if not running
+  ansible.builtin.systemd:
+    name: "{{ rsyslog_service_name }}"
+    state: started
+  when: not rsyslog_started.state == "active"
