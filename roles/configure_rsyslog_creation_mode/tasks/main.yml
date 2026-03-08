@@ -1,0 +1,30 @@
+---
+# Role: configure_rsyslog_creation_mode
+# Description: Ensure rsyslog log file creation mode is configured wazud id: 35719.
+
+- name: Ensure /etc/rsyslog.d directory exists
+  ansible.builtin.file:
+    path: /etc/rsyslog.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Configure rsyslog FileCreateMode in /etc/rsyslog.conf or a dedicated .conf file
+  block:
+    - name: Check if $FileCreateMode is set correctly in /etc/rsyslog.conf
+      ansible.builtin.lineinfile:
+        path: /etc/rsyslog.conf
+        regexp: '^\$FileCreateMode'
+        line: '$FileCreateMode {{ file_create_mode }}'
+        state: present
+      register: rsyslog_conf
+
+    - name: Create 60-rsyslog.conf if $FileCreateMode is not set in /etc/rsyslog.conf
+      ansible.builtin.template:
+        src: 60-rsyslog.conf.j2
+        dest: /etc/rsyslog.d/60-rsyslog.conf
+        owner: root
+        group: root
+        mode: '0640'
+      changed_when: false
