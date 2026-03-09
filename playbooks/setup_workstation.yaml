@@ -21,6 +21,7 @@
     - configure_timezone
     - configure_grub
     - configure_login_defs
+    - configure_rsyslog_creation_mode        # 35719 - Ensure rsyslog log file creation mode is configured. PASSED
     - disable_rsync                          # 35573 - Ensure rsync services are not in use. PASSED
     - enable_systemd_timesyncd               # TODO FAILED 35589 - Ensure systemd-timesyncd is enabled and running.
     - lock_inactive_password                 # 35698 - Ensure inactive password lock is configured. PASSED
@@ -30,7 +31,7 @@
     - update_upgrade
     - file_permission
     - enable_rsyslog                         # 35717 - Ensure rsyslog service is enabled and active. PASSED
-#    - ensure_login_defs_pass_min_days        # 35695 - Ensure minimum password days is configured.
+    - ensure_login_defs_pass_min_days        # 35695 - Ensure minimum password days is configured.
     - ensure_shadows
     - auditd                                # 35723 35724
     - suggested_software_packages
@@ -65,5 +66,5 @@
     - pam_pwquality                         # 35674,35679, 35680, 35681, 35682, 35683, 35684, 35685, 35686 PASSED
     - pam_unix_remove_nullok                # 35690 - Ensure pam_unix does not include nullok. PASSED
     - pam_unix_remove_nullok_in_pam.d       # 35690 - Ensure pam_unix does not include nullok. PASSED
-#    - ssl_certs                             # for testing only
-#    - systemd_journal_upload                # TODO FAILED 35710 - Ensure systemd-journal-upload authentication is configured.
+#     - ssl_certs                             # for testing only
+#     - systemd_journal_upload                # TODO FAILED 35710 - Ensure systemd-journal-upload authentication is configured.
