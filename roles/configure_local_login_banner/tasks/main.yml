@@ -1,8 +1,8 @@
 ---
 # Role: configure_local_login_banner
-# Description: Local login banner configuration based on Wazuh recommendations.
+# Description: Ensure local login warning banner is configured properly Wazuh ID 35547
+#
 
-# Wazuh id 35547 - Ensure local login warning banner is configured properly.
 - name: "Create a file /etc/issue"
   ansible.builtin.template:
     src: issue.j2
