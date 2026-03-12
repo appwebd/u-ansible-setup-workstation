@@ -1,0 +1,11 @@
+---
+# Role: configure_cron_hourly_permissionss
+# Description: Ensure permissions on /etc/cron.hourly are configured - Wazuh ID 35595
+
+
+- name: "Ensure owner root:root in /etc/cron.hourly"
+  ansible.builtin.file:
+    path: /etc/cron.hourly
+    owner: root                         # chown root:root /etc/cron.hourly/
+    group: root
+    mode: "0700"                        # chmod og-rwx /etc/cron.hourly/
