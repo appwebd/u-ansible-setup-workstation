@@ -4,4 +4,7 @@
 
 set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.
 
-apt install ansible ansible-lint
+sudo apt install ansible ansible-lint
+sudo apt install python3-pip
+sudo pip install --upgrade ansible-lint   
+ansible-lint --version   
