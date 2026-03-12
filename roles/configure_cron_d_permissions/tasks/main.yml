@@ -1,0 +1,10 @@
+---
+# Role: configure_cron_d_permissions
+# Description: Ensure permissions on /etc/cron.d are configured Wazuh ID 35599
+
+- name: "Ensure root:root ownership in /etc/cron.d"
+  ansible.builtin.file:
+    path: /etc/cron.d
+    owner: root
+    group: root
+    mode: "0700"

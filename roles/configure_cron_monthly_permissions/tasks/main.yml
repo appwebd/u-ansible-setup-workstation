@@ -1,0 +1,11 @@
+---
+# Role: configure_cron_monthly_permissions
+# Description: Ensure permissions on /etc/cron.monthly are configured - Wazuh ID 35598
+#
+
+- name: "Ensure root:root ownership in /etc/cron.monthly"
+  ansible.builtin.file:
+    path: /etc/cron.monthly
+    owner: root
+    group: root
+    mode: "0700"

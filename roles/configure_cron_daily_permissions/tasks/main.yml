@@ -1,0 +1,10 @@
+---
+# Role: configure_cron_daily_permissions
+# Description: Ensure permissions on /etc/cron.daily are configured Wazuh ID 35596
+
+- name: "Ensure root:root ownership in /etc/cron.daily"
+  ansible.builtin.file:
+    path: /etc/cron.daily
+    owner: root                       # chown root:root /etc/cron.daily/
+    group: root
+    mode: "0700"                      #  chmod og-rwx /etc/cron.daily/

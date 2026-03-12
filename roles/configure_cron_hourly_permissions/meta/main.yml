@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: configure_cron_hourly_permissions
+  author: Patricio Rojas Ortiz
+  description: Ensure permissions on /etc/crontab are configured wazuh id 35594
+  license: MIT
+
+  min_ansible_version: "2.16"
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+
+  galaxy_tags:
+    - security
+    - hardening
+    - cron
+    - permissions
+    - compliance
+
+dependencies: []
