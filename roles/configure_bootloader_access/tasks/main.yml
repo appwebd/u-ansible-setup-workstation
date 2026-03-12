@@ -1,0 +1,18 @@
+---
+# Role: Configure_bootloader_access
+# Description: Ensure access to bootloader config is configured Wazuh ID 35541
+#
+
+- name: "Check if /boot/grub/grub.cfg exists"
+  ansible.builtin.stat:
+    path: /boot/grub/grub.cfg
+  register: grub_stat
+
+- name: "Set secure permissions for /boot/grub/grub.cfg if it exists"
+  ansible.builtin.file:
+    path: /boot/grub/grub.cfg
+    mode: "0600"                                       # chmod u-x,go-rwx /boot/grub/grub.cfg
+    owner: root                                        # chmod root:root /boot/grub/grub.cfg
+    group: root
+    state: file
+  when: grub_stat.stat.exists
