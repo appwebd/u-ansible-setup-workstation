@@ -1,0 +1,11 @@
+---
+# Role: configure_crontab_permissions
+# Description: Ensure permissions on /etc/crontab are configured Wazuh ID 35594.
+#
+
+- name: "Set secure permissions for /etc/crontab"
+  ansible.builtin.file:
+    path: /etc/crontab
+    mode: "0600"                        # Equivalent: chmod og-rwx
+    owner: root
+    group: root
