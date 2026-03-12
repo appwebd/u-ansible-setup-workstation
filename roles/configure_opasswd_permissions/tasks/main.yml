@@ -1,0 +1,31 @@
+---
+# Role: configure_opasswd_permissions
+# Description: Ensure permissions on /etc/security/opasswd are configured Wazuh ID 35770
+
+- name: "Check if /etc/security/opasswd exists"
+  ansible.builtin.stat:
+    path: /etc/security/opasswd
+  register: opasswd_stat
+
+- name: "Create /etc/security/opasswd if it does not exist"
+  ansible.builtin.file:
+    path: /etc/security/opasswd
+    state: touch
+    mode: "0600"
+    owner: root
+    group: root
+  when: not opasswd_stat.stat.exists
+
+- name: "Check if /etc/security/opasswd.old exists"
+  ansible.builtin.stat:
+    path: /etc/security/opasswd.old
+  register: opasswd_old_stat
+
+- name: "Create /etc/security/opasswd.old if it does not exist"
+  ansible.builtin.file:
+    path: /etc/security/opasswd.old
+    state: touch
+    mode: "0600"
+    owner: root
+    group: root
+  when: not opasswd_old_stat.stat.exists
