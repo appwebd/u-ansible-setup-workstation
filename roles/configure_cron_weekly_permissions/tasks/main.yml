@@ -1,0 +1,11 @@
+---
+# Role: configure_cron_weekly_permissions
+# Description: Ensure permissions on /etc/cron.weekly are configured Wazuh ID 35597
+#
+
+- name: "Ensure root:root ownership in /etc/cron.weekly"
+  ansible.builtin.file:
+    path: /etc/cron.weekly
+    owner: root
+    group: root
+    mode: "0700"
