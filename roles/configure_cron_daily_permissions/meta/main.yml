@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: configure_cron_daily_permissions
+  author: Patricio Rojas Ortiz
+  description: Ensure permissions on /etc/cron.daily are configured Wazuh ID 35596
+  license: MIT
+
+  min_ansible_version: "2.16"
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+
+  galaxy_tags:
+    - security
+    - hardening
+    - cron
+    - permissions
+    - compliance
+
+dependencies: []
