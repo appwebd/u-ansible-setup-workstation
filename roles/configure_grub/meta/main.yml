@@ -1,0 +1,31 @@
+---
+galaxy_info:
+  role_name: configure_grub
+  author: Patricio Rojas Ortiz
+  description: Configure GRUB following Wazuh security rules for bootloader hardening
+  license: MIT
+  min_ansible_version: "2.16"
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+
+  galaxy_tags:
+    - security
+    - hardening
+    - grub
+    - bootloader
+    - wazuh
+    - audit
+    - apparmor
+    - compliance
+
+dependencies: []

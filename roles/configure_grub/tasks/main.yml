@@ -2,45 +2,71 @@
 # Role: configure_grub
 # Description: Configure GRUB following the rules of Wazuh.
 
-- name: "Read the current information of /etc/default/grub"
-  ansible.builtin.slurp:
-    path: /etc/default/grub
-  register: grub_file
-  changed_when: false
-
-# Solving Wazuh id 35725 Ensure auditing for processes that start prior to auditd is enabled.
-# Solving Wazuh id 35726 Ensure audit_backlog_limit is sufficient.
-- name: "Ensure audit_backlog_limit is sufficient."
-  ansible.builtin.lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX="((?!.*audit=1 audit_backlog_limit=8192).*)"$'
-    line: 'GRUB_CMDLINE_LINUX="\1 audit=1 audit_backlog_limit=8192"'
-    backrefs: true
-  notify: Update grub
-
-# Solving Wazuh id 35537 Ensure AppArmor is enabled in the bootloader configuration.
-- name: "Ensure AppArmor is enabled in the bootloader configuration."
-  ansible.builtin.lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_CMDLINE_LINUX="((?!.*apparmor=1 security=apparmor).*)"$'
-    line: 'GRUB_CMDLINE_LINUX="\1 apparmor=1 security=apparmor"'
-    backrefs: true
-  notify: Update grub
-
 - name: "Check if /boot/grub/grub.cfg exists"
   ansible.builtin.stat:
     path: /boot/grub/grub.cfg
   register: grub_cfg_stat
 
-# Solving Wazuh id 35541 #Ensure access to bootloader config is configured.
-- name: "Ensure access to bootloader config is configured."
-  ansible.builtin.file:
+- name: Check variable grub_cfg_stat
+  ansible.builtin.debug:
+    msg: "grub_cfg_stat.stat.exists: {{ grub_cfg_stat.stat.exists }}"
+
+- name: "Show message if grub.cfg not found"
+  ansible.builtin.debug:
+    msg: "/boot/grub/grub.cfg Not applicable"
+  when: not grub_cfg_stat.stat.exists
+
+- name: "Check if /boot/grub/grub.cfg exists"
+  ansible.builtin.stat:
     path: /boot/grub/grub.cfg
-    mode: "0600"                     # chmod u-x,go-rwx /boot/grub/grub.cfg.
-    owner: root                      # chown root:root /boot/grub/grub.cfg
-    group: root
-    state: file
-  when: grub_cfg_stat.stat.exists
+  register: grub_cfg_exists
+  failed_when: false
+
+- name: "Configure grub (only if file exists)"
+  become: true
+  when: grub_cfg_exists.stat.exists | bool
+  notify: Update grub
+  block:
+
+    - name: "Read the current information of /etc/default/grub"
+      ansible.builtin.slurp:
+        path: "{{ configure_grub_path_default_grub }}"
+      register: grub_file
+      changed_when: false
+
+    # Solving Wazuh id 35725 Ensure auditing for processes that start prior to auditd is enabled.
+    # Solving Wazuh id 35726 Ensure audit_backlog_limit is sufficient.
+
+    - name: "Ensure audit_backlog_limit is sufficient."
+      ansible.builtin.lineinfile:
+        path: "{{ configure_grub_path_default_grub }}"
+        regexp: '^GRUB_CMDLINE_LINUX="((?!.*audit=1 audit_backlog_limit=8192).*)"$'
+        line: 'GRUB_CMDLINE_LINUX="\1 audit=1 audit_backlog_limit=8192"'
+        backrefs: true
+
+    # Solving Wazuh id 35537 Ensure AppArmor is enabled in the bootloader configuration.
+    - name: "Ensure AppArmor is enabled in the bootloader configuration."
+      ansible.builtin.lineinfile:
+        path: "{{ configure_grub_path_default_grub }}"
+        regexp: '^GRUB_CMDLINE_LINUX="((?!.*apparmor=1 security=apparmor).*)"$'
+        line: 'GRUB_CMDLINE_LINUX="\1 apparmor=1 security=apparmor"'
+        backrefs: true
+
+    - name: "Check if /boot/grub/grub.cfg exists"
+      ansible.builtin.stat:
+        path: /boot/grub/grub.cfg
+      register: grub_cfg_stat
+
+    # Solving Wazuh id 35541 #Ensure access to bootloader config is configured.
+    - name: "Ensure access to bootloader config is configured."
+      ansible.builtin.file:
+        path: /boot/grub/grub.cfg
+        mode: "0600"                     # chmod u-x,go-rwx /boot/grub/grub.cfg.
+        owner: root                      # chown root:root /boot/grub/grub.cfg
+        group: root
+        state: file
+      when: grub_cfg_stat.stat.exists
+
 
 # Solving Wazuh id 35540 - Ensure bootloader password is set.
-#  grub-mkpasswd-pbkdf2 --iteration-count=600000 --salt=64
+# grub-mkpasswd-pbkdf2 --iteration-count=600000 --salt=64
