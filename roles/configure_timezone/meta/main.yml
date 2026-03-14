@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  author: Patricio Rojas Ortiz
+  description: Set the system's time zone
+  license: MIT
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+  galaxy_tags:
+    - system
+    - time
+    - timezone
+
+dependencies:
+  - role: configure_crontab_permissions
+    name: Configurar permisos de crontab
+  - role: configure_motd
+    name: Configurar mensaje del día de inicio
+  - role: configure_login_defs
+    name: Configurar login_defs
