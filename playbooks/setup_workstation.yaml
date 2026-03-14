@@ -12,18 +12,24 @@
     - roles/setup_tripwire/vars/main.yml
 
   roles:
+    - configure_bootloader_access            # 35541 Ensure access to bootloader config is configured
     - configure_local_login_banner           # 35547 Ensure local login warning banner is configured properly. PASSED
                                              # 35550 Ensure access to /etc/issue is configured. PASSED
     - configure_remote_login_banner          # 35548 Ensure remote login warning banner is configured properly. PASSED
                                              # 35551 Ensure access to /etc/issue.net is configured. PASSED
-    - configure_gdm_banner                   # 35553 - Ensure GDM login banner is configured. PASSED
+   # - configure_gdm_banner                   # 35553 Ensure GDM login banner is configured. PASSED
     - configure_motd                         # 35549 Ensure access to /etc/motd is configured OR remote this file. PASSED
     - configure_timezone
-    - configure_grub
+    - configure_grub                         # 35725 Ensure auditing for processes that start prior to auditd is enabled. PASSED
+                                             # 35726 Ensure audit_backlog_limit is sufficient. PASSED
+                                             # 35537 Ensure AppArmor is enabled in the bootloader configuration. PASSED
+                                             # 35541 Ensure access to bootloader config is configured. PASSED
+
     - configure_login_defs
     - configure_rsyslog_creation_mode        # 35719 - Ensure rsyslog log file creation mode is configured. PASSED
+#    - configure_rsyslog_forward_logs         # TODO FAILED 35720 - Ensure rsyslog is configured to send logs to a remote log host
     - disable_rsync                          # 35573 - Ensure rsync services are not in use. PASSED
-    - enable_systemd_timesyncd               # TODO FAILED 35589 - Ensure systemd-timesyncd is enabled and running.
+#    - enable_systemd_timesyncd               # TODO FAILED 35589 - Ensure systemd-timesyncd is enabled and running.
     - lock_inactive_password                 # 35698 - Ensure inactive password lock is configured. PASSED
     - remove_apport                          # 35545 - Ensure Automatic Error Reporting is not enabled. PASSED
     - remove_prelink                         # 35544 - Ensure prelink is not installed. PASSED
@@ -31,6 +37,13 @@
     - update_upgrade
     - file_permission
     - enable_rsyslog                         # 35717 - Ensure rsyslog service is enabled and active. PASSED
+    - configure_opasswd_permissions          # 35770 - Ensure permissions on /etc/security/opasswd are configured.
+    - configure_crontab_permissions          # 35594 - Ensure permissions on /etc/crontab are configured.
+    - configure_cron_hourly_permissions      # 35595 - Ensure permissions on /etc/cron.hourly are configured.
+    - configure_cron_daily_permissions       # 35596 - Ensure permissions on /etc/cron.daily are configured.
+    - configure_cron_weekly_permissions      # 35597 - Ensure permissions on /etc/cron.weekly are configured.
+    - configure_cron_monthly_permissions     # 35598 - Ensure permissions on /etc/cron.monthly are configure.
+    - configure_cron_d_permissions           # 35599 - Ensure permissions on /etc/cron.d are configure.
     - ensure_login_defs_pass_min_days        # 35695 - Ensure minimum password days is configured.
     - ensure_shadows
     - auditd                                # 35723 35724
@@ -58,13 +71,14 @@
     - root_umask                            # 35703 - Ensure root user umask is configured. PASSED
     - shells_nologin                        # 35704 - Ensure nologin is not listed in /etc/shells PASSED
     - sysctl_conf
-    - pam_pwhistory_module_is_enable        # TODO FAILED 35675,
-                                            # TODO FAILED 35689
-                                            # PASSED: 35687, 35688
+#    - pam_pwhistory_module_is_enable        # TODO FAILED 35675,
+#                                            # TODO FAILED 35689
+#                                            # PASSED: 35687, 35688
     - pam_pwhistory                         # 35687 - Ensure password history remember is configured. PASSED
                                             # TODO FAILED 35689 - Ensure pam_pwhistory includes use_authtok
     - pam_pwquality                         # 35674,35679, 35680, 35681, 35682, 35683, 35684, 35685, 35686 PASSED
     - pam_unix_remove_nullok                # 35690 - Ensure pam_unix does not include nullok. PASSED
     - pam_unix_remove_nullok_in_pam.d       # 35690 - Ensure pam_unix does not include nullok. PASSED
+
 #     - ssl_certs                             # for testing only
 #     - systemd_journal_upload                # TODO FAILED 35710 - Ensure systemd-journal-upload authentication is configured.
