@@ -1,0 +1,19 @@
+---
+# Role        : disable_freevxfs
+# Description : Ensure freevxfs kernel module is not available
+# Wazuh ID    : 35501
+
+- name: Create modprobe configuration to blacklist the freevxfs module
+  ansible.builtin.template:
+    src: "disable-freevxfs.conf.j2"
+    dest: "{{ modprobe_conf_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload Modprobe Configuration
+
+- name: Ensure freevxfs module is not loaded
+  ansible.builtin.command:
+    cmd: "modprobe -r {{ blacklist_module }} && rmmod {{ blacklist_module }}"
+  failed_when: false # Ignore errors if the module is not currently loaded
+  changed_when: false

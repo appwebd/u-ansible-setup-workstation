@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Author      : Patricio Rojas Ortiz
+# Description : Allows you to copy the ssh key to another workstation
+
+set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.
+set +o history
+
+# Copy your ssh key to the workstation
+ssh-copy-id -i ~/.ssh/id_rsa.pub pro@192.168.1.89
+

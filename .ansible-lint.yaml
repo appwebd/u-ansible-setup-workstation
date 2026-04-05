@@ -1,0 +1,38 @@
+# .ansible-lint.yml
+
+profile: production  # min, basic, moderate, safety, shared, production
+
+strict: true
+
+exclude_paths:
+  - .idea/
+  - .vscode/
+  - bin/
+  - docs/
+  - prompts/
+  - build/
+  - dist/
+  - tmp/
+
+skip_list:
+  - yaml[line-length]   # Ignore specifics rules like line-le
+  - name[casing]
+
+warn_list:
+  - experimental        # Only warn about experimental rules, not fail on themonly like warnings for experimental rules
+  - fqcn-builtins       # Warnings if you don't use FQCN
+
+use_default_rules: true
+
+offline: false
+
+parseable: false
+
+verbosity: 1
+
+kinds:
+  - playbook
+  - tasks
+  - handlers
+  - role
+  - meta

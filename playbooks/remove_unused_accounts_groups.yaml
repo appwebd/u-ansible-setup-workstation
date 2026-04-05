@@ -1,0 +1,6 @@
+---
+- name: Remove unused accounts and groups
+  hosts: dev.local
+  become: true
+  roles:
+    - remove_unused_accounts_groups

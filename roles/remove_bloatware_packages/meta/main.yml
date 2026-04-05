@@ -1,0 +1,7 @@
+---
+galaxy_info:
+  author: "Patricio Rojas Ortiz"
+  description: "Role to remove unnecessary bloatware packages from Ubuntu"
+  license: "Apache 2.0"
+  min_ansible_version: "2.9"
+dependencies: []

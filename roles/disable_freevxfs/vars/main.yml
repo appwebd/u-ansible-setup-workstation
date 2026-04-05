@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the disable_freevxfs role
+
+modprobe_conf_file: "/etc/modprobe.d/disable-freevxfs.conf"
+blacklist_module: "freevxfs"

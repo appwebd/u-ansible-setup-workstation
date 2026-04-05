@@ -1,0 +1,45 @@
+---
+remove_bloatware_packages_:
+  #  - geoclue-2.0           # A package with a high dependency on the GNOME desktop shell.
+  #  - nftables              # docker.io : Dependency with : containerd (>= 1.2.6-0ubuntu1~)
+  - apache2-bin
+  - avahi-daemon
+  - avahi-utils
+  - bind9
+  - bluez
+  - bluez-cups
+  - bluez-obexd
+  - dovecot-imapd
+  - dovecot-pop3d
+  - evolution
+  - ftp
+  - gnome-bluetooth-sendto
+  - gnome-characters
+  - gnome-maps
+  - gnome-remote-desktop
+  - gnome-tour
+  - gnome-weather
+  - inetutils-telnet
+  - inetutils-telnetd
+  - iptables-persistent
+  - isc-dhcp-server
+  - ldap-utils
+  - libvirt-daemon*
+  - nfs-kernel-server
+  - nginx
+  - nis
+  - open-iscsi
+  - rsh-client
+  - rsh-server
+  - samba
+  - slapd
+  - snmpd
+  - talk
+  - telnet*
+  - tftp-hpa
+  - tftpd-hpa
+  - tnftp
+  - tnftp                    # This removes ubuntu-standard (ubuntu-standard is a metapackage)
+  - vsftpd
+  - xinetd
+#  - yelp                    # Dependencias with gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp
