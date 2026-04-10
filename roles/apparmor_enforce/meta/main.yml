@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  role_name: apparmor_enforce
+  author: Patricio Rojas Ortiz
+  description: Enforce or switch AppArmor profiles to complain mode across the system (Wazuh 35760)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - apparmor
+    - compliance
+    - sysadmin
+
+dependencies: []

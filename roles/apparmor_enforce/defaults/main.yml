@@ -1,0 +1,13 @@
+---
+# defaults/main.yml
+# Default variables for the apparmor_enforce role
+# These values can be overridden by inventory or playbook vars
+
+# Mode to set AppArmor profiles: 'enforce' or 'complain'
+apparmor_profile_mode: enforce
+
+# Path to AppArmor profiles directory
+apparmor_profiles_dir: /etc/apparmor.d
+
+# Whether to reload AppArmor after changing profile modes
+apparmor_reload_profiles: true

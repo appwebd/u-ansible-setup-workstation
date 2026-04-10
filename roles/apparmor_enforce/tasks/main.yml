@@ -1,0 +1,121 @@
+---
+# Role        : apparmor_enforce
+# Description : Enforce or complain AppArmor profiles system-wide
+# Wazuh ID    : 35760
+
+- name: "Ensure AppArmor package is installed (Debian/Ubuntu)"
+  ansible.builtin.package:
+    name: "apparmor"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  when: ansible_facts.os_family == "Debian"
+
+- name: "Ensure AppArmor service is started and enabled"
+  ansible.builtin.service:
+    name: "{{ apparmor_service_name }}"
+    state: started
+    enabled: true
+  when: apparmor_reload_profiles | bool
+
+- name: "Check whether AppArmor loaded profiles file exists"
+  ansible.builtin.stat:
+    path: /sys/kernel/security/apparmor/profiles
+  register: apparmor_profiles_file
+
+- name: "Read loaded AppArmor profiles"
+  ansible.builtin.command: cat /sys/kernel/security/apparmor/profiles
+  register: apparmor_loaded_profiles
+  changed_when: false
+  when: apparmor_profiles_file.stat.exists
+
+- name: "Build list of base loaded AppArmor profile names"
+  ansible.builtin.set_fact:
+    apparmor_loaded_profile_names: >-
+      {{
+        apparmor_loaded_profiles.stdout_lines
+        | default([])
+        | map('regex_replace', '\\s.*$', '')
+        | map('regex_replace', '//.*$', '')
+        | unique
+        | list
+      }}
+  when: apparmor_profiles_file.stat.exists
+
+- name: "Check which AppArmor profile files exist"
+  ansible.builtin.stat:
+    path: "{{ apparmor_profiles_dir }}/{{ item }}"
+  loop: "{{ apparmor_loaded_profile_names | default([]) }}"
+  register: apparmor_profile_file_stats
+  when:
+    - apparmor_profile_mode in ["enforce", "complain"]
+    - apparmor_loaded_profile_names | default([]) | length > 0
+
+- name: "Build list of existing AppArmor profile files"
+  ansible.builtin.set_fact:
+    apparmor_existing_profiles: >-
+      {{
+        apparmor_profile_file_stats.results
+        | selectattr('stat.exists')
+        | map(attribute='item')
+        | list
+      }}
+  when:
+    - apparmor_profile_mode in ["enforce", "complain"]
+    - apparmor_profile_file_stats is defined
+
+- name: "Show AppArmor profiles that will be applied"
+  ansible.builtin.debug:
+    msg:
+      - "Mode: {{ apparmor_profile_mode }}"
+      - "Explicit enforce profiles: {{ apparmor_enforce_profiles | default([]) }}"
+      - "Explicit complain profiles: {{ apparmor_complain_profiles | default([]) }}"
+      - "Auto-detected existing profiles: {{ apparmor_existing_profiles | default([]) }}"
+  when: apparmor_debug | default(false) | bool
+
+- name: "Apply explicit AppArmor enforce profiles"
+  ansible.builtin.command:
+    cmd: "/usr/sbin/apparmor_parser -r -W {{ apparmor_profiles_dir }}/{{ item }}"
+  loop: "{{ apparmor_enforce_profiles | default([]) }}"
+  when:
+    - apparmor_profile_mode == "enforce"
+    - apparmor_enforce_profiles | default([]) | length > 0
+
+- name: "Apply auto-detected AppArmor enforce profiles"
+  ansible.builtin.command:
+    cmd: "/usr/sbin/apparmor_parser -r -W {{ apparmor_profiles_dir }}/{{ item }}"
+  loop: "{{ apparmor_existing_profiles | default([]) }}"
+  when:
+    - apparmor_profile_mode == "enforce"
+    - apparmor_enforce_profiles | default([]) | length == 0
+    - apparmor_existing_profiles | default([]) | length > 0
+
+- name: "Apply explicit AppArmor complain profiles"
+  ansible.builtin.command:
+    cmd: "/usr/sbin/apparmor_parser -r -W {{ apparmor_profiles_dir }}/{{ item }}"
+  loop: "{{ apparmor_complain_profiles | default([]) }}"
+  when:
+    - apparmor_profile_mode == "complain"
+    - apparmor_complain_profiles | default([]) | length > 0
+
+- name: "Apply auto-detected AppArmor complain profiles"
+  ansible.builtin.command:
+    cmd: "/usr/sbin/apparmor_parser -r -W {{ apparmor_profiles_dir }}/{{ item }}"
+  loop: "{{ apparmor_existing_profiles | default([]) }}"
+  when:
+    - apparmor_profile_mode == "complain"
+    - apparmor_complain_profiles | default([]) | length == 0
+    - apparmor_existing_profiles | default([]) | length > 0
+
+- name: "Ensure AppArmor is reloaded after mode changes"
+  ansible.builtin.service:
+    name: "{{ apparmor_service_name }}"
+    state: reloaded
+  when: apparmor_reload_profiles | bool
+
+- name: "Verify AppArmor enforcement status"
+  ansible.builtin.command: "{{ apparmor_status_command }}"
+  changed_when: false
+  register: apparmor_status_output
+  check_mode: true
+  failed_when: false

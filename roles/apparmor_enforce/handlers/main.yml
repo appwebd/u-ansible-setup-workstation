@@ -1,0 +1,8 @@
+---
+# Role: apparmor_enforce
+# Description: Handlers for the apparmor_enforce role
+
+- name: Reload AppArmor
+  ansible.builtin.service:
+    name: "{{ apparmor_service_name }}"
+    state: reloaded
