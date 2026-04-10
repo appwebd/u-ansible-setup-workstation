@@ -1,6 +1,6 @@
 ---
-# Role: apparmor_enforce
-# Description: Handlers for the apparmor_enforce role
+# Role: enforce_apparmor
+# Description: Handlers for the enforce_apparmor role
 
 - name: Reload AppArmor
   ansible.builtin.service:
