@@ -1,0 +1,6 @@
+31a35c8 Fri Apr 10 16:52:55 2026 -0400 docs: Add Apache 2.0 license to `remove_bloatware_packages` role
+7ec2706 Fri Apr 10 16:52:10 2026 -0400 fea: Add `remove_unused_accounts_groups` role with tasks, metadata, and licensing
+e434077 Fri Apr 10 15:54:00 2026 -0400 fix: Rename `apparmor_enforce` role to `enforce_apparmor` for consistency.
+eb592ca Thu Apr 9 20:22:56 2026 -0400 fea: Add id: 35538 Ensure all AppArmor Profiles are in enforce or complain mode.
+973378e Sun Apr 5 19:44:15 2026 -0400 Initial commit
+98d24fd Sun Apr 5 16:01:09 2026 -0400 Initial commit
