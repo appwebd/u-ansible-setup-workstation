@@ -1,5 +1,0 @@
----
-# vars/main.yml
-# Internal constants for the disable_cramfs role
-
-cramfs_kernel_module: cramfs
