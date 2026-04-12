@@ -17,6 +17,7 @@
     msg: "/boot/grub/grub.cfg Not applicable"
   when: not grub_cfg_stat.stat.exists
 
+# VM does not have a bootloader.
 - name: "Check if /boot/grub/grub.cfg exists"
   ansible.builtin.stat:
     path: /boot/grub/grub.cfg
