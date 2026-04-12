@@ -3,6 +3,14 @@
 # Description : Ensure mounting of cramfs filesystems is disabled.
 # Wazuh ID    : 35500
 
+- name: "Ensure modprobe configuration directory exists"
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
 - name: "Check if cramfs kernel module is loaded"
   ansible.builtin.command:
     cmd: lsmod | grep {{ cramfs_kernel_module }}
@@ -10,12 +18,16 @@
   changed_when: false
   failed_when: modprobe_check.rc != 1 and modprobe_check.rc != 0
 
-- name: "Remove cramfs kernel module if loaded"
-  ansible.builtin.command:
-    cmd: modprobe -r {{ cramfs_kernel_module }} && rmmod {{ cramfs_kernel_module }}
-  when: modprobe_check.rc == 0
-  register: modprobe_output
-  changed_when: "'Changed:' in modprobe_output.stdout"
+- name: "Unload loaded kernel modules"
+  become: true
+  ansible.builtin.shell:
+    cmd: |
+      set -euo pipefail
+      modprobe -r {{ item.item }} || rmmod {{ item.item }} || true
+  register: unload_result
+  changed_when: false
+  when: item.rc == 0
+  loop: "{{ module_loaded.results }}"
 
 - name: "Ensure cramfs is blacklisted in modprobe.d"
   ansible.builtin.copy:
