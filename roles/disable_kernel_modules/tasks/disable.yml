@@ -1,0 +1,12 @@
+---
+- name: "Create modprobe disable configuration"
+  ansible.builtin.copy:
+    dest: "/etc/modprobe.d/{{ item }}.conf"
+    content: |
+      install {{ item }} /bin/false
+      blacklist {{ item }}
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ filtered_filesystem_modules }}"
+  become: true

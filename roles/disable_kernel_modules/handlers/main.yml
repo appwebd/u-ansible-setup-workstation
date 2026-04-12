@@ -1,0 +1,11 @@
+---
+# Role: disable_freevxfs
+# Description: Handlers for the disable_freevxfs role
+
+- name: Restart System
+  ansible.builtin.reboot:
+    msg: "System reboot initiated by Ansible to apply changes"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
