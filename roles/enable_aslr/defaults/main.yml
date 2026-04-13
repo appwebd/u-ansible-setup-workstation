@@ -1,9 +1,9 @@
 ---
 # defaults/main.yml
 # Default variables for enable_aslr role
-# Address Space Layout Randomization (ASLR) settings
 
-aslr_enabled: true
-aslr_level: 2
+# sysctl configuration file for persistence
 aslr_sysctl_file: /etc/sysctl.d/60-aslr.conf
-aslr_sysctl_key: kernel.randomize_va_space
+
+# Active kernel parameter setting
+aslr_sysctl_reload: true

@@ -2,5 +2,7 @@
 # vars/main.yml
 # Internal constants for enable_aslr role
 
-aslr_current_value: 2
-aslr_expected_value: 2
+aslr_sysctl_name: kernel.randomize_va_space
+
+# ASLR mode: 0 = off, 1 = conservative, 2 = aggressive
+aslr_sysctl_value: "2"

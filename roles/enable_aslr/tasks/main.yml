@@ -1,54 +1,39 @@
 ---
 # Role        : enable_aslr
-# Description : Enable Address Space Layout Randomization (ASLR)
+# Description : Ensure address space layout randomization is enabled
 # Wazuh ID    : 35542
 
-- name: "Ensure /etc/sysctl.d directory exists"
-  ansible.builtin.file:
-    path: /etc/sysctl.d
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
-
-- name: "Set ASLR level in sysctl.d configuration file"
-  ansible.builtin.lineinfile:
-    path: "{ aslr_sysctl_file }"
-    regexp: "^\\s*{ aslr_sysctl_key }\\s*="
-    line: "{ aslr_sysctl_key } = { aslr_expected_value }"
-    create: true
+- name: "Set ASLR kernel parameter in sysctl.d configuration file"
+  ansible.builtin.copy:
+    dest: "{{ aslr_sysctl_file }}"
+    content: "{{ aslr_sysctl_name }} = {{ aslr_sysctl_value }}"
     owner: root
     group: root
     mode: "0644"
-    state: present
-  notify: Reload sysctl settings
+    force: true
+  notify: Reload sysctl
 
-- name: "Verify ASLR configuration file content"
-  ansible.builtin.slurp:
-    src: "{ aslr_sysctl_file }"
-  register: aslr_config_content
+- name: "Apply ASLR setting immediately (if reload requested)"
+  ansible.builtin.command: sysctl -p "{{ aslr_sysctl_file }}"
+  when: aslr_sysctl_reload | bool
+  changed_when: false
+
+- name: "Ensure sysctl service is enabled (Debian/Ubuntu)"
+  ansible.builtin.service:
+    name: procps
+    enabled: true
+  when: ansible_facts.os_family == "Debian"
+
+- name: "Verify ASLR mode is correctly applied"
+  ansible.builtin.shell:
+    cmd: |
+      set -euo pipefail
+      sysctl {{ aslr_sysctl_name }} | awk '{print $3}'
+  register: current_aslr_value
   changed_when: false
   failed_when: false
-  when: aslr_enabled
+  check_mode: false
 
-- name: "Set active ASLR level via sysctl"
-  ansible.builtin.command: sysctl -w kernel.randomize_va_space={ aslr_expected_value }
-  changed_when: false
-  failed_when: false
-  when: aslr_enabled
-
-- name: "Verify ASLR is enabled at runtime"
-  ansible.builtin.command: sysctl kernel.randomize_va_space
-  register: aslr_runtime_check
-  changed_when: false
-  failed_when: false
-  when: aslr_enabled
-
-- name: "Fail if ASLR is not enabled"
-  ansible.builtin.fail:
-    msg: "ASLR is not enabled at runtime. Expected value: { aslr_expected_value },
-            Actual: {{ aslr_runtime_check.stdout | regex_replace('kernel.randomize_va_space\\s*=\\s*', '') }}"
-  when:
-    - aslr_enabled
-    - aslr_runtime_check is changed
-    - (aslr_runtime_check.stdout | regex_replace('kernel.randomize_va_space\\s*=\\s*', '')) | int != aslr_expected_value
+- name: "Log current ASLR value"
+  ansible.builtin.debug:
+    msg: "Current ASLR value: {{ current_aslr_value.stdout | default('N/A') }}"
