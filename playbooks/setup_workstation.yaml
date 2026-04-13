@@ -17,30 +17,30 @@
 
 # 9) System and Configuration
 # Kernel / módulos / boot / MAC:
-    - disable_cramfs                    # 35500 Ensure mounting of cramfs filesystems is disabled.
-    - disable_freevxfs                  # 35501 Ensure freevxfs kernel module is not available.
+    - disable_kernel_modules             # 35500 Ensure mounting of cramfs filesystems is disabled.
+                                         # 35501 Ensure freevxfs kernel module is not available.
+                                         # 35502 Ensure hfs kernel module is not available
+                                         # 35503 Ensure hfsplus kernel module is not available
+                                         # 35504 Ensure jffs2 kernel module is not available
+                                         # 35505 Ensure overlayfs kernel module is not available
+                                         # 35506 Ensure squashfs kernel module is not available
+                                         # 35507 Ensure udf kernel module is not available
+                                         # 35508 Ensure usb-storage kernel module is not available
+                                         # 35509 Ensure unused filesystems kernel modules are not available
+                                         # 35604 Ensure dccp kernel module is not available
+                                         # 35605 Ensure tipc kernel module is not available
+                                         # 35606 Ensure rds kernel module is not available
+                                         # 35607 Ensure sctp kernel module is not available
 
-# 35502 Ensure hfs kernel module is not available
-# 35503 Ensure hfsplus kernel module is not available
-# 35504 Ensure jffs2 kernel module is not available
-# 35505 Ensure overlayfs kernel module is not available
-# 35506 Ensure squashfs kernel module is not available
-# 35507 Ensure udf kernel module is not available
-# 35508 Ensure usb-storage kernel module is not available
-# 35509 Ensure unused filesystems kernel modules are not available
-# 35604 Ensure dccp kernel module is not available
-# 35605 Ensure tipc kernel module is not available
-# 35606 Ensure rds kernel module is not available
-# 35607 Ensure sctp kernel module is not available
-# 35542 Ensure address space layout randomization is enabled
-# 35543 Ensure core dumps are restricted
-# 35544 Ensure prelink is not installed
-# 35536 Ensure AppArmor is installed
-# 35537 Ensure AppArmor is enabled in the bootloader configuration
-# 35538 Ensure all AppArmor Profiles are in enforce or complain mode
-# 35539 Ensure all AppArmor Profiles are enforcing
-# 35540 Ensure bootloader password is set
-# 35541 Ensure access to bootloader config is configured
+    - enable_aslr                       # 35542 Ensure address space layout randomization is enabled
+    - restrict_core_dumps               # 35543 Ensure core dumps are restricted.
+    - remove_prelink                    # 35544 Ensure prelink is not installed
+    - install_apparmor                  # 35536 Ensure AppArmor is installed.
+    - enable_apparmor                   # 35537 Ensure AppArmor is enabled in the bootloader configuration.
+    - enforce_apparmor                  # 35538 Ensure all AppArmor Profiles are in enforce or complain mode.
+    - enforce_apparmor_profiles         # 35539 Ensure all AppArmor Profiles are enforcing.
+#    - set_grub_password                 # 35540 Ensure bootloader password is set.
+    - configure_bootloader_access       # 35541 Ensure access to bootloader config is configured.
 
 # Time / NTP:**
 
@@ -221,7 +221,7 @@
 
 # Network services/daemons that should not be in use (surface reduction):
 
-# 35562 Ensure avahi daemon services are not in use
+#   - remove_avahi_daemon               # 35562 Ensure avahi daemon services are not in use
 # 35563 Ensure dhcp server services are not in use
 # 35564 Ensure dns server services are not in use
 # 35565 Ensure dnsmasq services are not in use
@@ -252,32 +252,32 @@
 
 # Partitioning / mount options:**
 
-# 35510 Ensure /tmp is a separate partition
-# 35511 Ensure nodev option set on /tmp partition
-# 35512 Ensure nosuid option set on /tmp partition
-# 35513 Ensure noexec option set on /tmp partition
-# 35514 Ensure /dev/shm is a separate partition
-# 35515 Ensure nodev option set on /dev/shm partition
-# 35516 Ensure nosuid option set on /dev/shm partition
-# 35517 Ensure noexec option set on /dev/shm partition
-# 35518 Ensure separate partition exists for /home
-# 35519 Ensure nodev option set on /home partition
-# 35520 Ensure nosuid option set on /home partition
-# 35521 Ensure separate partition exists for /var
-# 35522 Ensure nodev option set on /var partition
-# 35523 Ensure nosuid option set on /var partition
-# 35524 Ensure separate partition exists for /var/tmp
-# 35525 Ensure nodev option set on /var/tmp partition
-# 35526 Ensure nosuid option set on /var/tmp partition
-# 35527 Ensure noexec option set on /var/tmp partition
-# 35528 Ensure separate partition exists for /var/log
-# 35529 Ensure nodev option set on /var/log partition
-# 35530 Ensure nosuid option set on /var/log partition
-# 35531 Ensure noexec option set on /var/log partition
-# 35532 Ensure separate partition exists for /var/log/audit
-# 35533 Ensure nodev option set on /var/log/audit partition
-# 35534 Ensure nosuid option set on /var/log/audit partition
-# 35535 Ensure noexec option set on /var/log/audit partition
+                                        # 35510 Ensure /tmp is a separate partition
+                                        # 35511 Ensure nodev option set on /tmp partition
+                                        # 35512 Ensure nosuid option set on /tmp partition
+                                        # 35513 Ensure noexec option set on /tmp partition
+                                        # 35514 Ensure /dev/shm is a separate partition
+                                        # 35515 Ensure nodev option set on /dev/shm partition
+                                        # 35516 Ensure nosuid option set on /dev/shm partition
+                                        # 35517 Ensure noexec option set on /dev/shm partition
+                                        # 35518 Ensure separate partition exists for /home
+                                        # 35519 Ensure nodev option set on /home partition
+                                        # 35520 Ensure nosuid option set on /home partition
+                                        # 35521 Ensure separate partition exists for /var
+                                        # 35522 Ensure nodev option set on /var partition
+                                        # 35523 Ensure nosuid option set on /var partition
+                                        # 35524 Ensure separate partition exists for /var/tmp
+                                        # 35525 Ensure nodev option set on /var/tmp partition
+                                        # 35526 Ensure nosuid option set on /var/tmp partition
+                                        # 35527 Ensure noexec option set on /var/tmp partition
+                                        # 35528 Ensure separate partition exists for /var/log
+                                        # 35529 Ensure nodev option set on /var/log partition
+                                        # 35530 Ensure nosuid option set on /var/log partition
+                                        # 35531 Ensure noexec option set on /var/log partition
+                                        # 35532 Ensure separate partition exists for /var/log/audit
+                                        # 35533 Ensure nodev option set on /var/log/audit partition
+                                        # 35534 Ensure nosuid option set on /var/log/audit partition
+                                        # 35535 Ensure noexec option set on /var/log/audit partition
 
 # 10) Compliance (PCI, HIPAA, GDPR, CIS, etc.)
 # *(Your controls seem aligned with CIS, but they are not explicitly labeled as “compliance”;
