@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the uninstall_prelink role
+
+prelink_purge_cmd: |
+  prelink -ua

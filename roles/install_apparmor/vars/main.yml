@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for ensure_apparmor_installed role
+# These are not intended to be overridden by users
+
+apparmor_modprobe_dir: /etc/modprobe.d
+apparmor_modprobe_conf: "{{ apparmor_modprobe_dir }}/apparmor.conf"

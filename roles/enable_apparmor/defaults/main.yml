@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default variables for enable_apparmor role
+# These values are safe defaults and can be overridden by inventory or extra vars
+
+configure_grub_path_default_grub: /etc/default/grub
+apparmor_kernel_params: "apparmor=1 security=apparmor"
+apparmor_grub_update_command: /usr/sbin/update-grub

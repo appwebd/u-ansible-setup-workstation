@@ -1,0 +1,7 @@
+---
+# Role        : uninstall_prelink
+# Description : Handlers for the uninstall_prelink role
+
+- name: Restart System
+  ansible.builtin.reboot:
+    reboot_timeout: 300

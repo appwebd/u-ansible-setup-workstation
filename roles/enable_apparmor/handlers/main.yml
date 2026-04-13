@@ -1,0 +1,12 @@
+---
+# Role        : enable_apparmor
+# Description : Handlers for the enable_apparmor role
+
+- name: Update GRUB configuration
+  ansible.builtin.command: "{{ apparmor_grub_update_command }}"
+  changed_when: true
+
+- name: Reload systemd systemd-journald to apply AppArmor changes (if needed)
+  ansible.builtin.systemd:
+    daemon_reload: true
+  changed_when: false

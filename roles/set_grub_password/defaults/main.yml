@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for the set_grub_password role
+# These are intended to be overridden by users
+grub_superuser: "admin"
+grub_password_hash: ""
+grub_grub_cfg_path: "/boot/grub/grub.cfg"
+grub_backup_enabled: true
+grub_backup_path: "/etc/grub.cfg.backup"

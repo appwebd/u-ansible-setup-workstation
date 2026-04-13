@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Default variables for ensure_apparmor_installed role
+# Safest defaults for production environments
+
+apparmor_packages:
+  - apparmor
+  - apparmor-utils
+
+apparmor_service_name: apparmor

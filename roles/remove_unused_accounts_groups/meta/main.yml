@@ -1,6 +1,4 @@
 ---
-# Ansible role meta information for remove_unused_accounts_groups
-# This file can be extended with dependencies, author, license, etc.
 galaxy_info:
   role_name: "remove_unused_accounts_groups"
   author: "Patricio Rojas Ortiz"

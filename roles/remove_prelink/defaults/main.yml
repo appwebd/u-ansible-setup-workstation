@@ -1,0 +1,6 @@
+---
+# defaults/main.yml
+# Default values for the uninstall_prelink role
+# These are not intended to be overridden by users
+
+prelink_package_name: prelink

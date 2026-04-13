@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: enable_apparmor
+  author: Patricio Rojas Ortiz
+  description: Ensure AppArmor is enabled via kernel boot parameters
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - apparmor
+    - kernel
+    - compliance
+    - sysadmin
+
+dependencies: []

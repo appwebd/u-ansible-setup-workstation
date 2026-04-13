@@ -1,0 +1,73 @@
+---
+# Role        : set_grub_password
+# Description : Set superuser and encrypted password in GRUB configuration to prevent unauthorized boot modification
+# Wazuh ID    : 35757
+
+- name: "Determine OS family and set GRUB package list"
+  ansible.builtin.set_fact:
+    grub_package_names: "{{
+        ansible_facts.os_family == 'Debian' | ternary(grub_package_names_debian, grub_package_names_redhat)
+      }}"
+  when: ansible_facts.os_family is defined
+
+- name: "Ensure GRUB package is installed"
+  ansible.builtin.package:
+    name: "{{ grub_package_names }}"
+    state: present
+  register: grub_install_result
+  failed_when: false
+
+- name: "Back up current GRUB configuration"
+  ansible.builtin.copy:
+    src: "{{ grub_grub_cfg_path }}"
+    dest: "{{ grub_backup_path }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0600"
+  when:
+    - grub_backup_enabled | bool
+    - ansible_facts.files is defined or ansible_facts.grub_cfg is defined or grub_grub_cfg_path | file_exists
+  notify: "Regenerate GRUB config"
+
+- name: "Check if superuser and password are already configured"
+  ansible.builtin.shell: |
+    grep -E '^\s*set\s+superusers\s*=\s*"{grub_superuser}"' "{{ grub_grub_cfg_path }}" && \
+    grep -E '^\s*password_pbkdf2\s+{grub_superuser}\s+' "{{ grub_grub_cfg_path }}"
+  register: grub_config_check
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: "Set superuser and encrypted password in GRUB config"
+  ansible.builtin.lineinfile:
+    path: "{{ grub_grub_cfg_path }}"
+    regexp: '^\s*(set\s+superusers\s*=).*'
+    line: "set superusers=\"{{ grub_superuser }}\""
+    backrefs: true
+    create: true
+    mode: "0600"
+    owner: root
+    group: root
+  when: grub_password_hash | length > 0
+
+- name: "Add or update password_pbkdf2 entry"
+  ansible.builtin.lineinfile:
+    path: "{{ grub_grub_cfg_path }}"
+    regexp: '^\s*password_pbkdf2\s+{grub_superuser}\s+.*'
+    line: "password_pbkdf2 {grub_superuser} {{ grub_password_hash }}"
+    backrefs: true
+    create: true
+    mode: "0600"
+    owner: root
+    group: root
+  when: grub_password_hash | length > 0
+
+- name: "Notify to regenerate GRUB configuration if changes were made"
+  ansible.builtin.debug:
+    msg: "GRUB superuser and password are now configured. Run 'grub-mkconfig -o {{ grub_grub_cfg_path }}' to apply changes."
+  when:
+    - grub_password_hash | length > 0
+    - not (grub_config_check.rc == 0)

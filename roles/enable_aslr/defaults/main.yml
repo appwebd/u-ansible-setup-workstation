@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for enable_aslr role
+
+# sysctl configuration file for persistence
+aslr_sysctl_file: /etc/sysctl.d/60-aslr.conf
+
+# Active kernel parameter setting
+aslr_sysctl_reload: true

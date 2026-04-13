@@ -1,0 +1,48 @@
+---
+# Role        : restrict_core_dumps
+# Description : Disable core dumps to prevent sensitive memory information leakage
+# Wazuh ID    : 35543
+
+- name: "Set ulimit for core dumps (soft/hard)"
+  ansible.builtin.lineinfile:
+    path: "{{ restrict_core_dumps_limits_file }}"
+    create: true
+    mode: "0644"
+    line: "{{ restrict_core_dumps_limits_content }}"
+    regex: "^\\*\\s+hard\\s+core\\s+.*$"
+    insertafter: "EOF"
+  when: restrict_core_dumps_enabled
+
+- name: "Ensure core dump restrictions are applied at runtime"
+  ansible.posix.sysctl:
+    name: fs.suid_dumpable
+    value: "{{ restrict_core_dumps_sysctl_value }}"
+    state: present
+    reload: true
+    sysctl_file: "{{ restrict_core_dumps_sysctl_file }}"
+    ignoreerrors: true
+  when: restrict_core_dumps_enabled
+
+- name: "Configure systemd-coredump to disable storage (if package is installed)"
+  ansible.builtin.lineinfile:
+    path: "{{ restrict_core_dumps_coredump_conf }}"
+    regexp: '^({{ item.key }})=.*$'
+    line: "{{ item.key }}={{ item.value }}"
+    create: true
+    mode: "0644"
+    state: present
+  loop:
+    - { key: "Storage", value: "none" }
+    - { key: "ProcessSizeMax", value: "0" }
+    - { key: "MaxUse", value: "0" }
+  when:
+    - restrict_core_dumps_enabled
+    - restrict_core_dumps_remove_systemd_coredump | bool
+
+- name: "Disable core dump via sysctl (runtime only)"
+  ansible.builtin.command: sysctl -w fs.suid_dumpable=0
+  changed_when: false
+  failed_when: false
+  when:
+    - restrict_core_dumps_enabled
+    - ansible_facts.kernel is not regex('^4\\.')

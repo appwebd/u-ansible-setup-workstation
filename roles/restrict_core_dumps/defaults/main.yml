@@ -1,0 +1,17 @@
+---
+# defaults/main.yml
+# Default values for restrict_core_dumps role
+# These can be overridden by users
+
+restrict_core_dumps_enabled: true
+restrict_core_dumps_core_limit: 0
+restrict_core_dumps_hard_limit: true
+restrict_core_dumps_sysctl_value: 0
+
+# Files and paths
+restrict_core_dumps_limits_file: /etc/security/limits.d/99-core-dump-restrict.conf
+restrict_core_dumps_sysctl_file: /etc/sysctl.d/60-fs-sysctl.conf
+restrict_core_dumps_coredump_conf: /etc/systemd/coredump.conf
+
+# Package handling
+restrict_core_dumps_remove_systemd_coredump: false

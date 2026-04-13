@@ -1,10 +1,13 @@
 ---
+# Role       : remove_unused_accounts_groups
+# Description: Remove unused accounts and groups
+
 - name: Remove specifics accounts with homes folder
   ansible.builtin.user:
     name: "{{ item }}"
     state: absent
-    remove: "{{ remove_unused_accounts_groups_user_remove_options.remove_home | default(true) }}"
-    force: "{{ remove_unused_accounts_groups_user_remove_options.force | default(true) }}"
+    remove: "{{ remove_unused_accounts_groups_user_remove_options.remove_home | bool }}"
+    force: "{{ remove_unused_accounts_groups_user_remove_options.force | bool }}"
   loop: "{{ remove_unused_accounts_groups_users_to_remove }}"
   become: true
 
@@ -12,8 +15,8 @@
   ansible.builtin.user:
     name: "{{ item }}"
     state: absent
-    remove: true
-    force: true
+    remove: "{{ remove_unused_accounts_groups_user_remove_options.remove_home | bool }}"
+    force: "{{ remove_unused_accounts_groups_user_remove_options.force | bool }}"
   loop: "{{ remove_unused_accounts_groups_additional_users }}"
   become: true
 

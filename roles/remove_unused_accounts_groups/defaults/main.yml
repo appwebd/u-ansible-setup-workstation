@@ -1,5 +1,5 @@
 ---
-# User account list to remove in debian 13
+# User account list to remove in Ubuntu
 remove_unused_accounts_groups_users_to_remove:
   - games
   - irc

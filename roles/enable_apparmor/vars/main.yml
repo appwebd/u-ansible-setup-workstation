@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the enable_apparmor role
+
+# No additional variables needed; all configuration is driven by defaults/main.yml
+# and the task logic handles the remediation

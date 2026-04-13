@@ -1,0 +1,35 @@
+---
+# Role        : install_apparmor
+# Description : Ensure AppArmor is installed and active on Ubuntu 24.04
+# Wazuh ID    : 35536
+
+- name: "Ensure AppArmor packages are installed"
+  ansible.builtin.apt:
+    name: "{{ apparmor_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  when: ansible_facts.os_family == "Debian"
+  register: apparmor_install_result
+
+- name: "Verify AppArmor packages are correctly installed"
+  ansible.builtin.command: dpkg-query -s apparmor apparmor-utils
+  changed_when: false
+  failed_when: false
+  register: dpkg_check
+  check_mode: false
+  # Only run in check mode for validation; skip in actual run
+
+- name: "Enable and start AppArmor service"
+  ansible.builtin.systemd:
+    name: "{{ apparmor_service_name }}"
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: "Confirm AppArmor is active"
+  ansible.builtin.command: apparmor_status
+  changed_when: false
+  failed_when: false
+  register: apparmor_status_result
+  check_mode: false

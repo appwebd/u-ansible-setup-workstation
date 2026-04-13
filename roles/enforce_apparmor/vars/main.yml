@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the apparmor_enforce role
+
+apparmor_service_name: apparmor
+apparmor_status_command: "/usr/sbin/apparmor_status"
