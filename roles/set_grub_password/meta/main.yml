@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: set_grub_password
+  author: Patricio Rojas Ortiz
+  description: Ensure bootloader password is set (Wazuh 35540)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - grub
+    - compliance
+    - boot
+    - authentication
+
+dependencies: []

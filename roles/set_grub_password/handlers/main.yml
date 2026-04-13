@@ -1,0 +1,9 @@
+---
+# Role: set_grub_password
+# Description: Handlers for the set_grub_password role
+
+- name: Regenerate GRUB config
+  ansible.builtin.command: grub-mkconfig -o "{{ grub_grub_cfg_path }}"
+  register: grub_regen_result
+  changed_when: grub_regen_result.rc == 0
+  failed_when: grub_regen_result.rc != 0

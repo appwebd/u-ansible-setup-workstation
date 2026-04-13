@@ -1,0 +1,17 @@
+---
+# vars/main.yml
+# Internal constants for the set_grub_password role
+# These are not intended to be overridden by users
+
+grub_package_names_debian:
+  - "grub2"
+  - "grub-pc"
+
+grub_package_names_redhat:
+  - "grub2"
+  - "grub2-efi"
+  - "grub2-tools"
+
+grub_cfg_paths:
+  - "/boot/grub/grub.cfg"
+  - "/boot/grub2/grub.cfg"
