@@ -1,0 +1,24 @@
+---
+# vars/main.yml
+# Internal constants for the restrict_core_dumps role
+# Not intended for override
+
+# Core dump related packages (Debian/Ubuntu vs RHEL-based)
+core_dumps_packages_debian:
+  - "systemd-coredump"
+  - "gdb"
+
+core_dumps_packages_rhel:
+  - "systemd"
+  - "gdb"
+
+# Paths and services
+core_dumps_sysctl_file: "/etc/sysctl.d/99-restrict-coredump.conf"
+core_dumps_limits_conf: "/etc/security/limits.d/99-restrict-coredump.conf"
+core_dumps_systemd_conf: "/etc/systemd/coredump.conf"
+core_dumps_systemd_limits_conf: "/etc/systemd/limits.conf"
+core_dumps_pam_limits_conf: "/etc/pam.d/common-limit"
+
+# Service names
+core_dumps_systemd_service_name: "systemd-coredump"
+core_dumps_systemd_socket_name: "systemd-coredump.socket"

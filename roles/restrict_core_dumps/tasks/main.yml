@@ -1,0 +1,126 @@
+---
+# Role        : restrict_core_dumps
+# Description : Restrict core dump generation to prevent information leakage
+# Wazuh ID    : 35771
+
+- name: "Ensure required packages are installed (Debian/Ubuntu)"
+  ansible.builtin.package:
+    name: "{% if restrict_core_dumps_packages_debian is defined %}{{ restrict_core_dumps_packages_debian }}{% else %}{{ core_dumps_packages_debian }}{% endif %}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  when: ansible_facts.os_family == "Debian"
+  tags:
+    - install
+    - dependencies
+
+- name: "Configure core dump size limit to 0 in /etc/security/limits.conf (hard limit)"
+  ansible.builtin.lineinfile:
+    path: "{% if restrict_core_dumps_limits_conf is defined %}{{ restrict_core_dumps_limits_conf }}{% else %}{{ core_dumps_limits_conf }}{% endif %}"
+    state: present
+    regexp: '^\*\s+hard\s+core\s+'
+    line: "* hard core 0"
+    create: yes
+    mode: "0644"
+    owner: root
+    group: root
+  tags:
+    - configuration
+    - limits
+
+- name: "Configure core dump size limit to 0 in /etc/security/limits.conf (soft limit)"
+  ansible.builtin.lineinfile:
+    path: "{% if restrict_core_dumps_limits_conf is defined %}{{ restrict_core_dumps_limits_conf }}{% else %}{{ core_dumps_limits_conf }}{% endif %}"
+    state: present
+    regexp: '^\*\s+soft\s+core\s+'
+    line: "* soft core 0"
+    create: yes
+    mode: "0644"
+    owner: root
+    group: root
+  tags:
+    - configuration
+    - limits
+
+- name: "Configure core dump sysctl kernel parameters"
+  ansible.builtin.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_file: "{% if restrict_core_dumps_sysctl_file is defined %}{{ restrict_core_dumps_sysctl_file }}{% else %}{{ core_dumps_sysctl_file }}{% endif %}"
+    state: present
+    reload: false
+    ignoreerrors: true
+  loop:
+    - { key: "fs.suid_dumpable", value: "{% if restrict_core_dumps_sysctl_fs_suid_dumpable is defined %}{{ restrict_core_dumps_sysctl_fs_suid_dumpable }}{% else %}{{ core_dumps_sysctl_fs_suid_dumpable }}{% endif %}" }
+    - { key: "kernel.core_pattern", value: "|/bin/false" }
+    - { key: "fs.pipe-max-size", value: "1048576" }
+  tags:
+    - configuration
+    - sysctl
+
+- name: "Disable systemd-coredump socket and service"
+  ansible.builtin.systemd:
+    name: "{% if restrict_core_dumps_systemd_socket_name is defined %}{{ restrict_core_dumps_systemd_socket_name }}{% else %}{{ core_dumps_systemd_socket_name }}{% endif %}"
+    state: stopped
+    masked: true
+    daemon_reload: true
+  when: ansible_facts.services is defined and ('systemd-coredump.socket' in ansible_facts.services or 'systemd-coredump.service' in ansible_facts.services)
+  tags:
+    - systemd
+    - service
+
+- name: "Disable core dumps via systemd coredump.conf"
+  ansible.builtin.lineinfile:
+    path: "{% if restrict_core_dumps_systemd_conf is defined %}{{ restrict_core_dumps_systemd_conf }}{% else %}{{ core_dumps_systemd_conf }}{% endif %}"
+    state: present
+    regexp: '^#?Storage='
+    line: "Storage=none"
+    create: yes
+    mode: "0644"
+    owner: root
+    group: root
+  notify: Reload systemd
+  when: ansible_facts.service_mgr == "systemd"
+  tags:
+    - systemd
+    - configuration
+
+- name: "Set max core dump process size to 0 (Debian-based)"
+  ansible.builtin.lineinfile:
+    path: "{% if restrict_core_dumps_systemd_limits_conf is defined %}{{ restrict_core_dumps_systemd_limits_conf }}{% else %}{{ core_dumps_systemd_limits_conf }}{% endif %}"
+    state: present
+    regexp: '^#?ProcessSizeMax='
+    line: "ProcessSizeMax=0"
+    create: yes
+    mode: "0644"
+    owner: root
+    group: root
+  when: ansible_facts.os_family == "Debian"
+  notify: Reload systemd
+  tags:
+    - systemd
+    - configuration
+
+- name: "Apply sysctl changes if requested"
+  ansible.builtin.command: "{% if restrict_core_dumps_sysctl_reload_command is defined %}{{ restrict_core_dumps_sysctl_reload_command }}{% else %}{{ core_dumps_sysctl_reload_command }}{% endif %}"
+  when: restrict_core_dumps_sysctl_reload | default(true)
+  changed_when: false
+  tags:
+    - sysctl
+    - reload
+
+- name: "Verify core dump restrictions"
+  ansible.builtin.command: "ulimit -c"
+  register: core_limit_output
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  tags:
+    - verification
+
+- name: "Log current core dump limit"
+  ansible.builtin.debug:
+    msg: "Current core dump soft limit: {{ core_limit_output.stdout | default('N/A') }}"
+  when: core_limit_output is defined
+  tags:
+    - verification

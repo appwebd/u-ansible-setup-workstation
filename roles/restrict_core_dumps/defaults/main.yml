@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+# Safe defaults for restrict_core_dumps role
+# Users may override these variables in their inventory or playbooks
+
+restrict_core_dumps_core_limit_hard: "0"
+restrict_core_dumps_sysctl_fs_suid_dumpable: "0"
+restrict_core_dumps_coredump_storage: "none"
+restrict_core_dumps_coredump_process_size_max: "0"
+restrict_core_dumps_sysctl_reload_command: "sysctl -p /etc/sysctl.d/*.conf 2>/dev/null || true"
+restrict_core_dumps_sysctl_reload: true
