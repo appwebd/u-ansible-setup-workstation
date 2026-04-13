@@ -1,65 +1,73 @@
 ## Role name: restrict_core_dumps
-## Wazuh ID : 35771
-## Title    : Ensure core dump generation is restricted.
+## Wazuh ID : 35543
+## Title    : Restrict core dumps to prevent memory leaks
     
 ## Description:
-    This Ansible role disables or restricts core dump generation on the system to prevent potential leakage of sensitive information (e.g., memory contents, credentials). Core dumps may contain highly privileged process memory, including secrets. This role addresses security rule **35771** (Wazuh/CIS).
+    This Ansible role disables core dumps on the system to prevent leakage of sensitive memory contents (e.g., passwords, encryption keys).
+    Core dumps contain a snapshot of a process's memory and can expose critical information if not properly restricted.
 
 ## Rationale:
-    Core dumps can expose memory contents—including passwords, encryption keys, or internal application data—to any user with access to the core dump file. Disabling them reduces the attack surface.
+    Core dumps are useful for debugging, but on production systems they pose a security risk. An attacker gaining access to a core dump 
+    could extract sensitive data such as credentials, tokens, or cryptographic keys.
 
 ## Remediation:
-    Add the following to `/etc/security/limits.conf`:
-    ```text
-    * hard core 0
-    * soft core 0
-    ```
-    Apply kernel parameters:
-    ```bash
-    # sysctl -w fs.suid_dumpable=0
-    # sysctl -w kernel.core_pattern="|/bin/false"
-    ```
-    Disable systemd-coredump service:
-    ```bash
-    # systemctl mask systemd-coredump.socket
-    # systemctl stop systemd-coredump.socket
-    ```
+    - Set `* hard core 0` in `/etc/security/limits.d/99-core-dump-restrict.conf`
+    - Set `fs.suid_dumpable = 0` in `/etc/sysctl.d/60-fs-sysctl.conf`
+    - Configure systemd-coredump to disable storage (`Storage=none`)
 
 ## Requirements            
     - Ansible 2.16 or higher
-    - Access to root on target host (become: true)
+    - Root/sudo privileges (become: true)
+    - Linux-based OS (Ubuntu/Debian tested)
+    - `coreutils` and `systemd` (for sysctl and systemd-coredump)
 
-## Default Variables:
-| Variable                                      | Default                                            | Description                                  |
-|-----------------------------------------------|----------------------------------------------------|----------------------------------------------|
-| `restrict_core_dumps_packages_debian`         | `["systemd-coredump", "gdb"]`                      | Packages to install on Debian/Ubuntu systems |
-| `restrict_core_dumps_packages_rhel`           | `["systemd", "gdb"]`                               | Packages to install on RHEL-based systems    |
-| `restrict_core_dumps_sysctl_file`             | `/etc/sysctl.d/99-restrict-coredump.conf`          | Path to sysctl configuration file            |
-| `restrict_core_dumps_limits_conf`             | `/etc/security/limits.d/99-restrict-coredump.conf` | Path to limits configuration file            |
-| `restrict_core_dumps_systemd_conf`            | `/etc/systemd/coredump.conf`                       | Path to systemd core dump configuration file |
-| `restrict_core_dumps_systemd_limits_conf`     | `/etc/systemd/limits.conf`                         | Path to systemd limits file                  |
-| `restrict_core_dumps_systemd_service_name`    | `systemd-coredump`                                 | Name of systemd service                      |
-| `restrict_core_dumps_systemd_socket_name`     | `systemd-coredump.socket`                          | Name of systemd socket                       |
-| `restrict_core_dumps_sysctl_fs_suid_dumpable` | `0`                                                | Value of `fs.suid_dumpable` sysctl parameter |
-| `restrict_core_dumps_sysctl_reload_command`   | `sysctl -p`                                        | Command to reload sysctl settings            |
-| `restrict_core_dumps_sysctl_reload`           | `true`                                             | Whether to reload sysctl settings            |
+## Variables
 
-## Parameters
-    N/A
+| Variable                                      | Default  | Description                                 |
+|-----------------------------------------------|----------|---------------------------------------------|
+| `restrict_core_dumps_enabled`                 | `true`   | Enable/disable the role                     |
+| `restrict_core_dumps_core_limit`              | `0`      | Core file size limit (soft/hard)            |
+| `restrict_core_dumps_hard_limit`              | `true`   | Apply hard limit                            |
+| `restrict_core_dumps_sysctl_value`            | `0`      | Value for `fs.suid_dumpable`                |
+| `restrict_core_dumps_remove_systemd_coredump` | `false`  | Whether to disable systemd-coredump service |
 
 ## Dependencies
     None
 
-## Example Playbook:
+## Compliance mapping
+    'cmmc': ['SI.L2-4.4.1', 'SI.L2-4.4.2'], 
+    'fedramp': ['SI-4', 'SI-4-2'], 
+    'gdpr': ['32'], 
+    'hipaa': ['164.308(a)(1)'], 
+    'iso_27001': ['A.12.1.1', 'A.12.1.2'], 
+    'nist_800_171': ['3.13.1', '3.13.2'], 
+    'nist_800_53': ['SI-4'], 
+    'pci_dss': ['2.2', '6.4'], 
+    'tsc': ['CC6.3', 'CC6.6', 'CC5.1']
+
+## Mitre
+    'tactic': ['TA0001', 'TA0011'], 
+    'technique': ['T1005', 'T1212']
+
+## Conditions
+     all
+
+## Rules
+    - "c:ulimit -H -c 0 -> r:core file size (blocks, -c) 0"
+    - "c:sysctl fs.suid_dumpable -> r:value is 0"
+    - "c:systemctl is-enabled systemd-coredump -> r:unit not enabled"
+
+## Usage
+
 ```yaml
-- hosts: all
+- hosts: servers
   become: true
   roles:
-    - role: restrict_core_dumps
+    - restrict_core_dumps
 ```
 
 ## License
-    Apache 2.0
+  Apache 2.0
 
 ## Author
-    Patricio Rojas Ortiz
+Patricio Rojas Ortiz

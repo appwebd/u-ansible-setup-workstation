@@ -2,6 +2,7 @@
 # Role: restrict_core_dumps
 # Description: Handlers for the restrict_core_dumps role
 
-- name: Reload systemd
+- name: Reload systemd daemon
   ansible.builtin.systemd:
     daemon_reload: true
+  when: restrict_core_dumps_remove_systemd_coredump | bool
