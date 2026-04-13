@@ -27,7 +27,7 @@
 - name: "Verify ASLR mode is correctly applied"
   ansible.builtin.shell:
     cmd: |
-      set -euo pipefail
+      set -eu pipefail
       sysctl {{ aslr_sysctl_name }} | awk '{print $3}'
   register: current_aslr_value
   changed_when: false
