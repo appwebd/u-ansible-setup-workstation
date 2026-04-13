@@ -1,0 +1,19 @@
+---
+# Role        : uninstall_prelink
+# Description : Ensure prelink is not installed
+# Wazuh ID    : 35544
+
+- name: "Ensure prelink is not installed"
+  ansible.builtin.apt:
+    name: "{ prelink_package_name }"
+    state: absent
+    purge: true
+    autoremove: true
+  register: prelink_uninstall_result
+  changed_when: prelink_uninstall_result is changed and prelink_uninstall_result.msg is not none
+
+- name: "Verify prelink is not installed"
+  ansible.builtin.command: dpkg-query -W prelink
+  register: prelink_check_result
+  changed_when: false | bool
+  failed_when: prelink_check_result.rc == 0
