@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for enable_aslr role
+# Author: Patricio Rojas Ortiz
+
+aslr_sysctl_name: kernel.randomize_va_space
+aslr_sysctl_value: "2"

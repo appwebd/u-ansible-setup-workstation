@@ -1,0 +1,7 @@
+---
+# Role: enable_aslr
+# Description: Handlers for the enable_aslr role
+
+- name: Reload sysctl
+  ansible.builtin.command: sysctl --system
+  changed_when: false

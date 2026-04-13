@@ -1,0 +1,13 @@
+---
+# defaults/main.yml
+# Default variables for enable_aslr role
+# Author: Patricio Rojas Ortiz
+
+# ASLR mode: 0 = off, 1 = conservative, 2 = aggressive
+aslr_mode: 2
+
+# sysctl configuration file for persistence
+aslr_sysctl_file: /etc/sysctl.d/60-aslr.conf
+
+# Active kernel parameter setting
+aslr_sysctl_reload: true
