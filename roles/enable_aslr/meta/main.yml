@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: enable_aslr
   author: Patricio Rojas Ortiz
-  description: Ensure address space layout randomization (ASLR) is enabled to reduce exploitability
+  description: Enable Address Space Layout Randomization (ASLR) to reduce exploitability of memory corruption vulnerabilities
   license: Apache 2.0
   min_ansible_version: "2.16"
   platforms:
@@ -15,8 +15,7 @@ galaxy_info:
   galaxy_tags:
     - security
     - compliance
-    - sysadmin
-    - aslr
-    - mitigation
+    - hardening
+    - kernel
 
 dependencies: []
