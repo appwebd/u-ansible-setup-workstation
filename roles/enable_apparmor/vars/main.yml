@@ -1,7 +1,6 @@
 ---
 # vars/main.yml
 # Internal constants for the enable_apparmor role
-# These are not intended to be overridden by users
 
-apparmor_required_packages:
-  - apparmor
+# No additional variables needed; all configuration is driven by defaults/main.yml
+# and the task logic handles the remediation

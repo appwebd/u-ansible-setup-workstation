@@ -1,6 +1,6 @@
 ---
 # Role        : enable_apparmor
-# Description : Enable AppArmor in bootloader configuration for Ubuntu 24.04
+# Description : Ensure AppArmor is enabled in the bootloader configuration
 # Wazuh ID    : 35537
 
 - name: "Check if /boot/grub/grub.cfg exists"
@@ -32,19 +32,14 @@
 
     - name: "Read the current information of /etc/default/grub"
       ansible.builtin.slurp:
-        path: "{{ apparmor_grub_file }}"
+        path: "{{ configure_grub_path_default_grub }}"
       register: grub_file
       changed_when: false
 
     # Solving Wazuh id 35537 Ensure AppArmor is enabled in the bootloader configuration.
     - name: "Ensure AppArmor is enabled in the bootloader configuration."
       ansible.builtin.lineinfile:
-        path: "{{ apparmor_grub_file }}"
-        regexp: '^GRUB_CMDLINE_LINUX="((?!.*{{ apparmor_grub_cmdline_params }}).*)"$'
-        line: 'GRUB_CMDLINE_LINUX="\1 {{ apparmor_grub_cmdline_params }}"'
+        path: "{{ configure_grub_path_default_grub }}"
+        regexp: '^GRUB_CMDLINE_LINUX="((?!.*{{ apparmor_kernel_params }}).*)"$'
+        line: 'GRUB_CMDLINE_LINUX="\1 {{ apparmor_kernel_params }}"'
         backrefs: true
-
-    - name: "Check if /boot/grub/grub.cfg exists"
-      ansible.builtin.stat:
-        path: /boot/grub/grub.cfg
-      register: grub_cfg_stat

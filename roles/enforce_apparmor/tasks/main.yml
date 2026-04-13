@@ -26,7 +26,7 @@
 - name: "Read loaded AppArmor profiles"
   ansible.builtin.command: cat /sys/kernel/security/apparmor/profiles
   register: apparmor_loaded_profiles
-  changed_when: false
+  changed_when: false | bool
   when: apparmor_profiles_file.stat.exists
 
 - name: "Build list of base loaded AppArmor profile names"
@@ -80,6 +80,8 @@
   when:
     - apparmor_profile_mode == "enforce"
     - apparmor_enforce_profiles | default([]) | length > 0
+  register: apparmor_profile
+  changed_when: "'Changed:' in apparmor_profile.stdout"
 
 - name: "Apply auto-detected AppArmor enforce profiles"
   ansible.builtin.command:
@@ -89,6 +91,8 @@
     - apparmor_profile_mode == "enforce"
     - apparmor_enforce_profiles | default([]) | length == 0
     - apparmor_existing_profiles | default([]) | length > 0
+  register: apparmor_profile
+  changed_when: "'Changed:' in apparmor_profile.stdout"
 
 - name: "Apply explicit AppArmor complain profiles"
   ansible.builtin.command:
@@ -97,6 +101,8 @@
   when:
     - apparmor_profile_mode == "complain"
     - apparmor_complain_profiles | default([]) | length > 0
+  register: apparmor_profile
+  changed_when: "'Changed:' in apparmor_profile.stdout"
 
 - name: "Apply auto-detected AppArmor complain profiles"
   ansible.builtin.command:
@@ -106,6 +112,8 @@
     - apparmor_profile_mode == "complain"
     - apparmor_complain_profiles | default([]) | length == 0
     - apparmor_existing_profiles | default([]) | length > 0
+  register: apparmor_profile
+  changed_when: "'Changed:' in apparmor_profile.stdout"
 
 - name: "Ensure AppArmor is reloaded after mode changes"
   ansible.builtin.service:
@@ -115,7 +123,7 @@
 
 - name: "Verify AppArmor enforcement status"
   ansible.builtin.command: "{{ apparmor_status_command }}"
-  changed_when: false
+  changed_when: false | bool
   register: apparmor_status_output
   check_mode: true
   failed_when: false
