@@ -1,0 +1,27 @@
+---
+# Role        : enforce_apparmor_profiles
+# Description : Ensure all AppArmor profiles are in enforcing mode
+# Wazuh ID    : 35539
+
+- name: "Check if AppArmor is installed"
+  ansible.builtin.command: which aa-enforce
+  register: apparmor_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Ensure AppArmor profiles are in enforcing mode"
+  ansible.builtin.command: "{{ apparmor_enforce_bin_path }} {{ apparmor_profiles_dir }}/*"
+  register: enforce_result
+  changed_when: true
+  when:
+    - apparmor_profiles_enforce_enabled | bool
+    - apparmor_check.rc == 0
+  notify: Reload AppArmor
+
+- name: "Fail if AppArmor is not installed but enforcement is enabled"
+  ansible.builtin.fail:
+    msg: "AppArmor (aa-enforce) not found — cannot enforce profiles"
+  when:
+    - apparmor_profiles_enforce_enabled | bool
+    - apparmor_check.rc != 0
