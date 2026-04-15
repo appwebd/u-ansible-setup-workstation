@@ -1,0 +1,18 @@
+---
+# Name of the unit to manage
+timesync_service: systemd-timesyncd.service
+
+# Other services that may perform time sync
+other_time_services:
+  - chronyd.service
+  - ntpd.service
+  - rdate.service
+  - timesyncd.service   # in case the unit is called differently
+  - systemd-timesyncd.service
+  - systemd-timesyncd   # fallback name
+
+# Whether to disable timesyncd service
+disable_timesync: true
+
+# package name
+package_name: systemd-timesyncd

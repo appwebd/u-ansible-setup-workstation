@@ -1,0 +1,55 @@
+---
+# Role: enable_systemd_timesyncd
+# Description: Ensure systemd-timesyncd is enabled and running.
+# Wazuh id: 35589
+
+- name: Check if systemd-timesyncd package is installed
+  ansible.builtin.command: dpkg-query -s systemd-timesyncd
+  register: systemd_timesyncd_installed_check
+  failed_when: false
+  changed_when: false
+
+- name: "Ensure systemd-timesyncd package is installed"
+  ansible.builtin.apt:
+    name: "{{ package_name }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  when:
+    - ansible_facts.os_family == "Debian"
+    - not systemd_timesyncd_installed_check
+  register: systemd_timesynd_result
+
+- name: Remove ConditionVirtualization=!container from systemd-timesyncd.service
+  ansible.builtin.lineinfile:
+    path: /usr/lib/systemd/system/systemd-timesyncd.service
+    regexp: '^ConditionVirtualization=!container\s*$'
+    state: absent
+    backrefs: yes
+  when: systemd_timesyncd_installed_check.rc == 0
+
+- name: "Gather systemd service facts"
+  ansible.builtin.service_facts:
+  tags: [gather]
+
+- name: "Remediate systemd-timesyncd when it is active"
+  ansible.builtin.systemd:
+    name: systemd-timesyncd.service
+    enabled: true          # ensure it will start on boot
+    state: started         # start the service
+    masked: false          # unmask it
+  when:
+    - systemd_timesyncd_installed_check
+  tags: [remediate, timesyncd_active]
+  become: true
+
+- name: "Remediate systemd-timesyncd when it is NOT active"
+  ansible.builtin.systemd:
+    name: systemd-timesyncd.service
+    enabled: false         # no boot start
+    state: stopped         # stop if running
+    masked: true           # mask the unit
+  when:
+    - not systemd_timesyncd_installed_check
+  tags: [remediate, timesyncd_inactive]
+  become: true

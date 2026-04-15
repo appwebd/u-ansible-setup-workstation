@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  role_name: enable_sustemd_timesync
+  author: Patricio Rojas Ortiz
+  description: Ensure systemd-timesyncd is enabled and running.
+  license: MIT
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - buster    # 10
+        - bullseye  # 11
+        - bookworm  # 12
+dependencies: []
