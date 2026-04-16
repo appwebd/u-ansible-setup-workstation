@@ -1,0 +1,21 @@
+---
+# defaults/main.yml
+# Default variables for timesyncd_configuration role
+
+timesyncd_enabled: true
+timesyncd_ntp_servers: ['ntp.shoa.cl']
+timesyncd_fallback_ntp_servers: ['hora.shoa.cl']
+
+# Default authoritative time servers if none provided (NIST public servers)
+default_ntp_servers:
+  - "time.nist.gov"
+
+default_fallback_ntp_servers:
+  - "time-a-g.nist.gov"
+  - "time-b-g.nist.gov"
+  - "time-c-g.nist.gov"
+
+# Configuration file paths
+timesyncd_main_conf_file: /etc/systemd/timesyncd.conf
+timesyncd_conf_dir: /etc/systemd/timesyncd.conf.d
+timesyncd_custom_conf_file: "{{ timesyncd_conf_dir }}/60-timesyncd.conf"

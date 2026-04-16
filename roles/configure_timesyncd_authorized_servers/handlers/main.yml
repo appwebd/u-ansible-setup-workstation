@@ -1,0 +1,10 @@
+---
+# Role        : timesyncd_configuration
+# Description : Handlers for timesyncd_configuration role
+
+- name: Reload systemd-timesyncd
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ timesyncd_service_name }}"
+    state: restarted
+    daemon_reload: true
