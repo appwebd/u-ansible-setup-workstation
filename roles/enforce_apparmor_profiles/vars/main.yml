@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for enforce_apparmor_profiles role
+# These are NOT intended to be overridden by users
+
+apparmor_profiles_enforce_command: "{ apparmor_enforce_bin_path } { apparmor_profiles_dir }/*"

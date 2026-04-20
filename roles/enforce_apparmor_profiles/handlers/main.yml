@@ -1,0 +1,10 @@
+---
+# Role: enforce_apparmor_profiles
+# Description: Handlers for the enforce_apparmor_profiles role
+
+- name: Reload AppArmor
+  become: true
+  ansible.builtin.systemd:
+    name: apparmor
+    state: restarted
+    daemon_reload: true

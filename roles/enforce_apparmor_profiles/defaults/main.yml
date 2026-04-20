@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Safe defaults for enforce_apparmor_profiles role
+# These are user-overridable variables
+
+apparmor_profiles_enforce_enabled: true
+apparmor_enforce_bin_path: /usr/sbin/aa-enforce
+apparmor_profiles_dir: /etc/apparmor.d

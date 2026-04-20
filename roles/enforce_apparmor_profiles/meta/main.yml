@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  role_name: enforce_apparmor_profiles
+  author: Patricio Rojas Ortiz
+  description: Ensure all AppArmor profiles are loaded and in enforcing mode (Wazuh 35539)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - apparmor
+    - compliance
+    - sysadmin
+
+dependencies: []

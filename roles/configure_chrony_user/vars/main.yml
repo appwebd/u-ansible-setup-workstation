@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for chrony_user role
+
+chrony_service_name: chronyd
+chrony_package_name: chrony
+chrony_conf_d_dir: "{{ chrony_conf_dir }}/conf.d"

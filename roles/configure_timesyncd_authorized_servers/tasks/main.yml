@@ -1,0 +1,81 @@
+---
+# Role        : timesyncd_configuration
+# Description : Configure systemd-timesyncd with authorized timeserver
+# Wazuh ID    : 35588
+
+- name: "Ensure required directories exist"
+  ansible.builtin.file:
+    path: "{{ timesyncd_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: timesyncd_enabled
+
+- name: Check if systemd-timesyncd package is installed on Ubuntu
+  ansible.builtin.command: dpkg-query -W -f='${Status}' systemd-timesyncd
+  register: systemd_timesyncd_check
+  changed_when: false
+  failed_when: false
+
+- name: Set fact indicating whether systemd-timesyncd is installed
+  ansible.builtin.set_fact:
+    systemd_timesyncd_installed: "{{ 'install ok installed' in systemd_timesyncd_check.stdout }}"
+
+- name: "Configure systemd-timesyncd package (only if file exists)"
+  become: true
+  when: systemd_timesyncd_installed | bool
+  block:
+
+    - name: "Ensure systemd-timesyncd service is enabled"
+      ansible.builtin.service:
+        name: "{{ timesyncd_service_name }}"
+        enabled: true
+      when: timesyncd_enabled
+      register: service_enabled
+
+    - name: "Configure NTP in systemd-timesyncd main configuration"
+      ansible.builtin.lineinfile:
+        path: "{{ timesyncd_main_conf_file }}"
+        regexp: '^#NTP='
+        line: "NTP={{ timesyncd_ntp_servers | join(' ') }}"
+        create: true
+        owner: root
+        group: root
+        mode: "0644"
+      when: timesyncd_enabled
+      notify: Reload systemd-timesyncd
+
+    - name: "Configure FallbackNTP in systemd-timesyncd main configuration"
+      ansible.builtin.lineinfile:
+        path: "{{ timesyncd_main_conf_file }}"
+        regexp: '^#?FallbackNTP='
+        line: "FallbackNTP={{ timesyncd_fallback_ntp_servers | join(' ') }}"
+        create: true
+        owner: root
+        group: root
+        mode: "0644"
+      when: timesyncd_enabled
+      notify: Reload systemd-timesyncd
+
+    - name: "Reload systemd daemon to apply configuration"
+      ansible.builtin.systemd:
+        daemon_reload: true
+      when: timesyncd_enabled
+
+    - name: "Verify timesyncd service status"
+      ansible.builtin.systemd:
+        name: systemd-timesyncd.service
+        state: started
+      changed_when: false
+      failed_when: false
+      register: timesyncd_status
+      when: timesyncd_enabled
+
+    - name: "Ensure systemd-timesyncd is active and running"
+      ansible.builtin.service:
+        name: "{{ timesyncd_service_name }}"
+        state: restarted
+      when:
+        - timesyncd_enabled
+        - (timesyncd_status.status.ActiveState | default('inactive')) != 'active'

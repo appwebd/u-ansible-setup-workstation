@@ -1,0 +1,63 @@
+---
+# Role: enable_systemd_timesyncd
+# Description: Ensure systemd-timesyncd is enabled and running.
+# Wazuh id: 35589
+
+- name: Check if a package is installed on Ubuntu
+  ansible.builtin.command: dpkg-query -W -f='${Status}' "{{ package_name }}"
+  register: package_check
+  changed_when: false
+  failed_when: false
+
+- name: Set fact if package is installed
+  ansible.builtin.set_fact:
+    package_installed: "{{ 'install ok installed' in package_check.stdout }}"
+
+- name: Show package installation status
+  ansible.builtin.debug:
+    msg: "Package {{ package_name }} installed: {{ package_installed }}"
+
+- name: "Ensure systemd-timesyncd package is installed"
+  ansible.builtin.apt:
+    name: "{{ package_name }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  when:
+    - ansible_facts.os_family == "Debian"
+    - not package_installed
+  register: systemd_timesynd_result
+
+- name: Remove ConditionVirtualization=!container from systemd-timesyncd.service
+  ansible.builtin.lineinfile:
+    path: /usr/lib/systemd/system/systemd-timesyncd.service
+    regexp: '^ConditionVirtualization=!container\s*$'
+    state: absent
+    backrefs: true
+  when: package_installed
+
+- name: "Gather systemd service facts"
+  ansible.builtin.service_facts:
+  tags: [gather]
+
+- name: "Remediate systemd-timesyncd when it is active"
+  ansible.builtin.systemd:
+    name: systemd-timesyncd.service
+    enabled: true          # ensure it will start on boot
+    state: started         # start the service
+    masked: false          # unmask it
+  when:
+    - package_installed
+  tags: [remediate, timesyncd_active]
+  become: true
+
+- name: "Remediate systemd-timesyncd when it is NOT active"
+  ansible.builtin.systemd:
+    name: systemd-timesyncd.service
+    enabled: false         # no boot start
+    state: stopped         # stop if running
+    masked: true           # mask the unit
+  when:
+    - not package_installed
+  tags: [remediate, timesyncd_inactive]
+  become: true

@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+chrony_config_dir: /etc/chrony/sources.d/
+chrony_pool_directives:
+  - "pool time.nist.gov iburst maxsources 4"
+chrony_server_directives:
+  - "server time-a-g.nist.gov iburst"
+  - "server 132.163.97.3 iburst"
+  - "server time-d-b.nist.gov iburst"
+chrony_conf_file: /etc/chrony/chrony.conf
+sources_filename: "60-sources.sources"

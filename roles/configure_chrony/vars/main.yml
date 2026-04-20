@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+chrony_package_name: chrony
+chrony_service_name: chronyd
+chrony_reload_command: systemctl reload-or-restart chronyd

@@ -1,0 +1,8 @@
+---
+# No custom handlers are required, but the file is kept for future extensions.
+# Example handler – can be expanded later
+# - name: restart timesyncd
+#   ansible.builtin.systemd:
+#     name: "{{ timesync_service }}"
+#     state: restarted
+#
