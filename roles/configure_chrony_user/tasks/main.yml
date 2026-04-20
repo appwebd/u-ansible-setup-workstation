@@ -1,0 +1,52 @@
+---
+# Role        : configure_chrony_user
+# Description : Ensure chrony is running as user _chrony
+# Wazuh ID    : 35591
+
+- name: "Ensure chrony package is installed"
+  ansible.builtin.package:
+    name: "{{ chrony_package_name }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  when: ansible_facts.os_family == "Debian"
+
+- name: "Ensure chrony configuration directory exists"
+  ansible.builtin.file:
+    path: "{{ chrony_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Ensure chrony conf.d directory exists"
+  ansible.builtin.file:
+    path: "{{ chrony_conf_d_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Ensure chrony user directive exists in main configuration"
+  ansible.builtin.lineinfile:
+    path: "{{ chrony_conf_file }}"
+    regexp: '^user\s+'
+    line: "{{ chrony_user_line }}"
+    firstmatch: true
+    state: present
+    backup: false
+    create: true
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart chronyd service
+
+- name: "Gather service facts"
+  ansible.builtin.service_facts:
+
+- name: "Ensure no conflicting time synchronization service is active"
+  ansible.builtin.service:
+    name: systemd-timesyncd
+    state: stopped
+    enabled: false
+  when: "'systemd-timesyncd.service' in (ansible_facts.services | default({}))"

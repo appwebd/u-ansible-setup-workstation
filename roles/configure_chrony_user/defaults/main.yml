@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for chrony_user role
+# Ensure chrony runs as user _chrony
+
+chrony_conf_dir: /etc/chrony
+chrony_conf_file: /etc/chrony/chrony.conf
+chrony_user: _chrony
+chrony_user_line: "user {{ chrony_user }}"

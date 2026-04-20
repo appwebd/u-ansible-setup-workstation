@@ -1,0 +1,9 @@
+---
+# Role: configure_chrony_user
+# Description: Handlers for configure_chrony_user role
+
+- name: Restart chronyd service
+  ansible.builtin.service:
+    name: "{{ chrony_service_name }}"
+    state: restarted
+  become: true
