@@ -1,0 +1,51 @@
+---
+# Role        : configure_chrony
+# Description : Ensure chrony is configured with authorized timeserver.
+# Wazuh ID    : 35590
+
+- name: "Ensure chrony is installed (Debian/Ubuntu)"
+  ansible.builtin.package:
+    name: "{{ chrony_package_name }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  when: ansible_facts.os_family == "Debian"
+  register: chrony_install_result
+
+- name: "Ensure chrony configuration directory exists"
+  ansible.builtin.file:
+    path: "{{ chrony_config_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  when: not (ansible_facts.distribution == "Ubuntu")
+
+- name: "Create chrony pool configuration file"
+  ansible.builtin.copy:
+    dest: "{{ chrony_config_dir }}{{ sources_filename }}"
+    content: |
+      # The maxsources option is unique to the pool directive
+      {{ '\n'.join(chrony_pool_directives) }}
+    owner: root
+    group: root
+    mode: '0644'
+  when: chrony_pool_directives | length > 0
+
+- name: "Create chrony server configuration file"
+  ansible.builtin.copy:
+    dest: "{{ chrony_config_dir }}{{ sources_filename }}"
+    content: |
+      {{ '\n'.join(chrony_server_directives) }}
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  when: chrony_server_directives | length > 0
+
+- name: "Ensure chrony service is running"
+  ansible.builtin.systemd:
+    name: "{{ chrony_service_name }}"
+    state: started
+    enabled: true
+  notify: Reload Chrony Service

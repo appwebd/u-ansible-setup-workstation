@@ -1,0 +1,8 @@
+---
+# Role: configure_chrony
+# Description: Handlers for the configure_chrony role
+
+- name: Reload Chrony Service
+  ansible.builtin.systemd:
+    name: "{{ chrony_service_name }}"
+    state: reloaded
