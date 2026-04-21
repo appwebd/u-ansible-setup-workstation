@@ -1,0 +1,56 @@
+---
+# Role        : configure_motd
+# Description : Ensure message of the day is configured properly
+# Wazuh ID    : 35546
+
+- name: "Ensure /etc/motd is absent (removes potentially unsafe content)"
+  ansible.builtin.file:
+    path: "{{ motd_file_path }}"
+    state: "{{ 'absent' if motd_state == 'absent' else 'file' }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: motd_state == 'absent'
+
+- name: "Configure /etc/motd with compliant content"
+  ansible.builtin.template:
+    src: "{{ motd_template_source }}"
+    dest: "{{ motd_file_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  when:
+    - motd_state != 'absent'
+    - motd_ensure_content_safe
+  notify: Reload motd service
+
+- name: "Ensure /etc/motd does not contain dangerous shell escape sequences"
+  ansible.builtin.lineinfile:
+    path: "{{ motd_file_path }}"
+    state: absent
+    regexp: "^[^\\n]*\\\\(v|r|m|s)[^\\n]*$"
+    validate: "cat %s"
+  when:
+    - motd_state != 'absent'
+    - motd_ensure_content_safe
+    - motd_file_path is exists
+  ignore_errors: false
+  failed_when: false
+
+- name: Verify /etc/motd content complies with OS disclosure policy
+  ansible.builtin.shell: |
+    set -o pipefail
+    if [ -f "{{ motd_file_path }}" ]; then
+      if grep -Eq '(\\v|\\r|\\m|\\s|Debian|Ubuntu)' "{{ motd_file_path }}"; then
+        exit 1
+      fi
+    fi
+  register: motd_check_result
+  changed_when: false
+  when:
+    - motd_state != 'absent'
+    - motd_ensure_content_safe | bool
+    - motd_file_path is exists
+  tags:
+    - always

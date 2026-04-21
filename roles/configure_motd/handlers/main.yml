@@ -1,0 +1,11 @@
+---
+# Role: configure_motd
+# Description: Handlers for configure_motd role
+
+- name: Reload motd service
+  ansible.builtin.systemd:
+    name: motd.service
+    state: reloaded
+    enabled: false
+    daemon_reload: true
+  when: ansible_service_mgr == 'systemd'
