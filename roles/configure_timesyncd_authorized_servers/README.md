@@ -1,11 +1,11 @@
 #### Role name: 
-  timesyncd_configuration
+    timesyncd_configuration
 
 #### Wazuh ID : 
-  35588
+    35588
 
 #### Title    : 
-  Ensure systemd-timesyncd configured with authorized timeserver.
+    Ensure systemd-timesyncd configured with authorized timeserver.
 
 #### Description:
     This Ansible role ensures that systemd-timesyncd is properly configured with authorized NTP servers in accordance with organizational policy. It sets both the primary NTP and fallback NTP servers to site-approved time sources, as required by security rule **35588** (Wazuh).
@@ -27,7 +27,8 @@
     ```  
     Note: If this setting appears in a canonically later file, or later in the same file, the setting will be overwritten.
 
-#### Requirements            
+#### Requirements
+
     - Ansible 2.9 or higher  
     - Root/sudo privileges (`become: true`)  
     - systemd-based Linux distributions (e.g., RHEL, CentOS, Ubuntu, Debian)  
@@ -36,17 +37,17 @@
 
 #### Variables
 
-| Variable | Default | Description | file |
-|---------|---------|-------------|------|
-| `timesyncd_enabled` | `true` | Enables or disables the timesyncd service configuration | defaults/main.yml |
-| `timesyncd_ntp_servers` | `[]` | List of primary NTP servers. If empty, defaults to `default_ntp_servers` | defaults/main.yml |
-| `timesyncd_fallback_ntp_servers` | `[]` | List of fallback NTP servers. If empty, defaults to `default_fallback_ntp_servers` | defaults/main.yml |
-| `default_ntp_servers` | `["time.nist.gov"]` | Default primary NTP servers used when `timesyncd_ntp_servers` is empty | defaults/main.yml |
-| `default_fallback_ntp_servers` | `["time-a-g.nist.gov", "time-b-g.nist.gov", "time-c-g.nist.gov"]` | Default fallback NTP servers used when `timesyncd_fallback_ntp_servers` is empty | defaults/main.yml |
-| `timesyncd_main_conf_file` | `/etc/systemd/timesyncd.conf` | Path to the main timesyncd configuration file | vars/main.yml |
-| `timesyncd_conf_dir` | `/etc/systemd/timesyncd.conf.d` | Directory for drop-in configuration files | vars/main.yml |
-| `timesyncd_custom_conf_file` | `/etc/systemd/timesyncd.conf.d/60-timesyncd.conf` | Full path to the custom drop-in configuration file | defaults/main.yml |
-| `timesyncd_service_name` | `systemd-timesyncd` | Name of the systemd service (internal constant) | vars/main.yml |
+| Variable                         | Default                                                           | Description                                                                        | file              |
+|----------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------|-------------------|
+| `timesyncd_enabled`              | `true`                                                            | Enables or disables the timesyncd service configuration                            | defaults/main.yml |
+| `timesyncd_ntp_servers`          | `[]`                                                              | List of primary NTP servers. If empty, defaults to `default_ntp_servers`           | defaults/main.yml |
+| `timesyncd_fallback_ntp_servers` | `[]`                                                              | List of fallback NTP servers. If empty, defaults to `default_fallback_ntp_servers` | defaults/main.yml |
+| `default_ntp_servers`            | `["time.nist.gov"]`                                               | Default primary NTP servers used when `timesyncd_ntp_servers` is empty             | defaults/main.yml |
+| `default_fallback_ntp_servers`   | `["time-a-g.nist.gov", "time-b-g.nist.gov", "time-c-g.nist.gov"]` | Default fallback NTP servers used when `timesyncd_fallback_ntp_servers` is empty   | defaults/main.yml |
+| `timesyncd_main_conf_file`       | `/etc/systemd/timesyncd.conf`                                     | Path to the main timesyncd configuration file                                      | vars/main.yml     |
+| `timesyncd_conf_dir`             | `/etc/systemd/timesyncd.conf.d`                                   | Directory for drop-in configuration files                                          | vars/main.yml     |
+| `timesyncd_custom_conf_file`     | `/etc/systemd/timesyncd.conf.d/60-timesyncd.conf`                 | Full path to the custom drop-in configuration file                                 | defaults/main.yml |
+| `timesyncd_service_name`         | `systemd-timesyncd`                                               | Name of the systemd service (internal constant)                                    | vars/main.yml     |
 
 #### Dependencies
     None
@@ -101,7 +102,7 @@ To use default NIST public servers (if no NTP servers are specified):
 ```
 
 #### License
-  Apache 2.0
+    Apache 2.0
 
 #### Author
-Patricio Rojas Ortiz
+    Patricio Rojas Ortiz

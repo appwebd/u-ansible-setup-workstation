@@ -1,34 +1,37 @@
-## Role name: uninstall_prelink
-## Wazuh ID : 35544
-## Title    : Ensure prelink is uninstalled.
+#### Role name: 
+    uninstall_prelink
+#### Wazuh ID : 
+    35544
+#### Title    : 
+    Ensure prelink is uninstalled.
 
-## Description:
+#### Description:
     This Ansible role ensures that the `prelink` package is uninstalled from Debian/Ubuntu-based systems. The removal of `prelink` helps reduce the attack surface and avoids interference with file integrity monitoring tools such as AIDE. This role addresses security rule **35544** (Wazuh/CIS).
 
-## Rationale:
+#### Rationale:
     Prelink modifies ELF binaries in advance to reduce startup time. However, this modification breaks the expected hash values used by file integrity monitoring (FIM) tools like AIDE, leading to false positives. Removing prelink ensures that binary files remain unchanged and compatible with integrity checks.
 
-## Remediation:
+#### Remediation:
     Run the following command to uninstall the `prelink` package and remove unused dependencies:
     ```bash
     # apt purge prelink
     ```
 
-## Requirements
+#### Requirements
     - Ansible 2.16 or higher
     - Root/sudo privileges (`become: true`)
     - Debian/Ubuntu-based Linux distributions
 
-## Variables
+#### Variables
 
 | Variable               | Default   | Description                      |
 |------------------------|-----------|----------------------------------|
 | `prelink_package_name` | `prelink` | Name of the package to uninstall |
 
-## Dependencies
+#### Dependencies
     None
 
-## Compliance mapping
+#### Compliance mapping
     - 'cmmc': ['AC.L2-3.1.20', 'SI.L2-3.14.4']
     - 'fedramp': ['SI-4', 'SI-5']
     - 'gdpr': ['32']
@@ -40,18 +43,20 @@
     - 'pci_dss': ['1.1', '1.2', '6.4']
     - 'tsc': ['CC6.3', 'CC6.6', 'CC8.1']
 
-## Mitre
+#### Mitre
     - 'tactic': ['TA0005', 'TA0007']
     - 'technique': ['T1036', 'T1564']
 
-## Conditions
+#### Conditions
     - all (Debian/Ubuntu systems where `prelink` may be installed)
 
-## Rules
+#### Rules
     - "c:dpkg-query -s prelink -> r:package 'prelink' is not installed"
 
-## Usage
+#### Usage
+
     Include this role in your playbook:
+
     ```yaml
     - hosts: servers
       become: true
@@ -59,8 +64,8 @@
         - uninstall_prelink
     ```
 
-## License
+#### License
     Apache 2.0
 
-## Author
+#### Author
     Patricio Rojas Ortiz

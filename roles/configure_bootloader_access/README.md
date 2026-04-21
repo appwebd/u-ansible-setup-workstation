@@ -1,24 +1,28 @@
-## Role Name   : configure_bootloader_access
-## Wazuh ID    : 35541 
-## Title       : Ensure access to bootloader config is configured
-## Description : The grub configuration file contains information on boot settings and passwords for unlocking boot options.
+#### Role Name: 
+    configure_bootloader_access
+#### Wazuh ID: 
+    35541 
+#### Title: 
+    Ensure access to bootloader config is configured
+#### Description: 
+    The grub configuration file contains information on boot settings and passwords for unlocking boot options.
 
-## Requirements            
+#### Requirements            
 
     - Ansible 2.14 or higher
     - Root/sudo privileges (become: true)
     - Ubuntu v24.04 family
 
-## Variables
+#### Variables
 
 | Variable                        | Default                | Description                            |
 |---------------------------------|------------------------|----------------------------------------|
 | `boot_grub_cfg_path`            | `/boot/grub/grub.cfg`  | Path to the grub.cfg file              |
 
-## Dependencies
+#### Dependencies
     No dependencies
 
-## Compliance mapping
+#### Compliance mapping
     cis: 1.4.2
     cis_csc_v7: 14.6
     cis_csc_v8: 3.3
@@ -33,7 +37,7 @@
     pci_dss_v4.0: 1.3.1,7.1
     soc_2: CC5.2,CC6.1
 
-## Usage
+#### Usage
 
 Include this role in your playbook:
 
@@ -44,8 +48,8 @@ Include this role in your playbook:
     - configure_bootloader_access               
 ```
 
-## License            
+#### License            
   Apache 2.0
 
-## Author
-Patricio Rojas Ortiz
+#### Author
+    Patricio Rojas Ortiz

@@ -1,28 +1,31 @@
-## Role name: enable_apparmor
-## Wazuh ID : 35537
-## Title    : Ensure AppArmor is enabled via kernel parameters.
+#### Role name: 
+    enable_apparmor
+#### Wazuh ID: 
+    35537
+#### Title: 
+    Ensure AppArmor is enabled via kernel parameters.
     
-## Description:
+#### Description:
     This Ansible role ensures that the AppArmor kernel module is enabled by adding the required boot parameters 
     (`apparmor=1` and `security=apparmor`) to the GRUB configuration. This allows the system to enforce mandatory 
     access control policies at boot time. Addresses Wazuh/CIS rule **35537**.
 
-## Rationale:
+#### Rationale:
     AppArmor provides additional defense-in-depth by confining programs to a limited set of resources. Disabling 
     or not enabling AppArmor increases the system's exposure to compromise, especially if other security layers 
     fail.
 
-## Remediation:
+#### Remediation:
     Edit `/etc/default/grub`, append `apparmor=1 security=apparmor` to `GRUB_CMDLINE_LINUX`, then run `update-grub`.
 
-## Requirements            
+#### Requirements            
     - Ansible 2.16 or higher
     - Root/sudo privileges (become: true)
     - System using GRUB2 (e.g., Ubuntu ≥16.04, Debian ≥9)
     - `grub2` or `grub` package installed (typically `grub-pc` or `grub-efi`)
     - `update-grub` utility available
 
-## Variables
+#### Variables
 
 | Variable                           | Default                               | Description                          |
 |------------------------------------|---------------------------------------|--------------------------------------|
@@ -30,10 +33,10 @@
 | `apparmor_kernel_params`           | `["apparmor=1", "security=apparmor"]` | Kernel parameters to enable AppArmor |
 | `apparmor_grub_update_command`     | `/usr/sbin/update-grub`               | Command to regenerate GRUB config    |
 
-## Dependencies
+#### Dependencies
     None. Compatible with standard GRUB2-based distributions.
 
-## Compliance mapping
+#### Compliance mapping
     'cmmc': ['AC.L2-3.1.20'], 
     'fedramp': ['AC-2', 'AC-2(4)', 'SC-30'], 
     'gdpr': ['32'], 
@@ -45,17 +48,17 @@
     'pci_dss': ['1.3.1', '6.4.2'], 
     'tsc': ['CC6.3', 'CC6.6', 'CC8.1']
 
-## Mitre
+#### Mitre
     'tactic': ['TA0001', 'TA0005'], 
     'technique': ['T1548', 'T1564']
 
-## Conditions
+#### Conditions
      all (Debian-based systems with GRUB2)
 
-## Rules
+#### Rules
     - "c:grub-config-query /etc/default/grub -> r:'apparmor=1' and 'security=apparmor' must be present in GRUB_CMDLINE_LINUX"
 
-## Usage
+#### Usage
 
 Include this role in your playbook:
 
@@ -72,8 +75,8 @@ Optionally override variables in inventory:
 apparmor_grub_cmdline_value: "apparmor=1 security=apparmor quiet splash"
 ```
 
-## License
-  Apache 2.0
+#### License
+    Apache 2.0
 
-## Author
-Patricio Rojas Ortiz
+#### Author
+    Patricio Rojas Ortiz

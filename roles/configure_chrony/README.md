@@ -1,8 +1,8 @@
 #### Role name: 
-  configure_chrony
+    configure_chrony
 
 #### Wazuh ID : 
-  35590
+    35590
 
 #### Title    : 
     Ensure chrony is configured with authorized timeserver.
@@ -34,7 +34,7 @@ chronyc reload sources &>/dev/null
 
 Run the following command to reload the chronyd config: 
 
-# systemctl reload-or-restart chronyd.
+    # systemctl reload-or-restart chronyd.
 
 #### Requirements            
 
