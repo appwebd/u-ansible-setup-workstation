@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+# Safe defaults for configure_motd role
+
+motd_org_name: ""
+motd_monitoring_policy: ""
+motd_file_path: /etc/motd
+motd_content_default: ""
+motd_state: absent
+motd_template_source: motd.j2
+motd_ensure_content_safe: true

@@ -1,11 +1,11 @@
 #### Role name: 
-  configure_chrony_user
+    configure_chrony_user
 
-#### Wazuh ID : 
-  35591
+#### Wazuh ID: 
+    35591
 
-#### Title    : 
-  Ensure chrony is running as user _chrony.
+#### Title: 
+    Ensure chrony is running as user _chrony.
 
 #### Description:
     This Ansible role ensures that the chronyd service runs under the dedicated system user `_chrony` as defined by the chrony package installation. It validates and enforces the `user _chrony` directive in the chrony configuration to prevent the service from running with excessive privileges.
@@ -28,15 +28,15 @@
 
 #### Variables
 
-| Variable | Default | Description | File |
-|----------|---------|-------------|------|
-| `chrony_conf_dir` | `/etc/chrony` | Base directory for chrony configuration | vars/main.yml |
-| `chrony_conf_file` | `/etc/chrony/chrony.conf` | Main chrony configuration file path | defaults/main.yml |
-| `chrony_user` | `_chrony` | System user under which chronyd should run | defaults/main.yml |
-| `chrony_user_line` | `user { { chrony_user } }` | Template line to ensure in config (not used directly; rendered) | defaults/main.yml |
-| `chrony_service_name` | `chrony` | Name of the chrony service | vars/main.yml |
-| `chrony_package_name` | `chrony` | Name of the chrony package | vars/main.yml |
-| `chrony_conf_d_dir` | `/etc/chrony/conf.d` | Directory for additional .conf fragments | vars/main.yml |
+| Variable              | Default                    | Description                                                     | File              |
+|-----------------------|----------------------------|-----------------------------------------------------------------|-------------------|
+| `chrony_conf_dir`     | `/etc/chrony`              | Base directory for chrony configuration                         | vars/main.yml     |
+| `chrony_conf_file`    | `/etc/chrony/chrony.conf`  | Main chrony configuration file path                             | defaults/main.yml |
+| `chrony_user`         | `_chrony`                  | System user under which chronyd should run                      | defaults/main.yml |
+| `chrony_user_line`    | `user { { chrony_user } }` | Template line to ensure in config (not used directly; rendered) | defaults/main.yml |
+| `chrony_service_name` | `chrony`                   | Name of the chrony service                                      | vars/main.yml     |
+| `chrony_package_name` | `chrony`                   | Name of the chrony package                                      | vars/main.yml     |
+| `chrony_conf_d_dir`   | `/etc/chrony/conf.d`       | Directory for additional .conf fragments                        | vars/main.yml     |
 
 #### Dependencies
     None
@@ -77,7 +77,7 @@ Include this role in your playbook:
 ```
 
 #### License
-  Apache 2.0
+    Apache 2.0
 
 #### Author
-Patricio Rojas Ortiz
+    Patricio Rojas Ortiz

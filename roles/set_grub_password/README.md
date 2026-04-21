@@ -1,14 +1,17 @@
-## Role name: set_grub_password
-## Wazuh ID : 35540
-## Title    : Ensure bootloader password is set.
+#### Role name: 
+  set_grub_password
+#### Wazuh ID : 
+  35540
+#### Title    : 
+  Ensure bootloader password is set.
 
-## Description:
+#### Description:
     Setting the boot loader password will require that anyone rebooting the system must enter a password before being able to set command line boot parameters.
 
-## Rationale:
+#### Rationale:
     Requiring a boot password upon execution of the boot loader will prevent an unauthorized user from entering boot parameters or changing the boot partition. This prevents users from weakening security (e.g. turning off AppArmor at boot time).
 
-## Remediation:
+#### Remediation:
 
     Create an encrypted password with grub-mkpasswd-pbkdf2:
         ```bash
@@ -34,14 +37,14 @@
             # update-grub.
         ```
 
-## Requirements
+#### Requirements
     - Ansible 2.16 or higher  
     - Root/sudo privileges (`become: true`)  
     - `grub2` package installed  
     - Physical or console access required to test (security-critical: changes must be verified manually)  
     - `grub-mkpasswd-pbkdf2` available (part of `grub2-common` or `grub2-tools` depending on distro)
 
-## Variables
+#### Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
@@ -57,10 +60,10 @@
 > # Enter password, then copy the long PBKDF2 hash
 > ```
 
-## Dependencies
+#### Dependencies
     None
 
-## Compliance mapping
+#### Compliance mapping
     'cmmc': ['AC.L2-3.5.1', 'SI.L2-3.19.2'],  
     'fedramp': ['AC-3', 'AC-6', 'SI-4'],  
     'gdpr': ['32'],  
@@ -72,16 +75,22 @@
     'pci_dss': ['2.2', '7.1', '7.2'],  
     'tsc': ['CC6.1', 'CC6.6', 'CC8.1', 'CC6.8']
 
-## Mitre
+#### Mitre
     'tactic': ['TA0001', 'TA0005'],  
     'technique': ['T1542.003', 'T1542.004', 'T1542.011']
 
-## Risk
+#### Risk
 - High: Incorrect GRUB configuration can render the system unbootable.
   - Always test in a non-production environment first.
   - Ensure physical/console access is available to recover if needed.
 
-## References
+#### References
 - [CIS Benchmark for RHEL 8/9 - 5.2.2](https://www.cisecurity.org/benchmark/red_hat_enterprise_linux/)
 - [Wazuh Rule 35757](https://www.wazuh.com/blog/wazuh-rule-35757-enforce-grub-superuser-password/)
 - [GNU GRUB Manual - 2.2.2 User accounts](https://www.gnu.org/software/grub/manual/grub/grub.html#User-accounts)
+
+#### License
+  Apache License 2.0
+  
+#### Author Information
+  Patricio Rojas Ortiz  
