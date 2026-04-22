@@ -1,9 +1,9 @@
 #### Role name: 
-  set_grub_password
+    set_grub_password
 #### Wazuh ID : 
-  35540
+    35540
 #### Title    : 
-  Ensure bootloader password is set.
+    Ensure bootloader password is set.
 
 #### Description:
     Setting the boot loader password will require that anyone rebooting the system must enter a password before being able to set command line boot parameters.
@@ -14,21 +14,25 @@
 #### Remediation:
 
     Create an encrypted password with grub-mkpasswd-pbkdf2:
+  
         ```bash
         # grub-mkpasswd-pbkdf2 --iteration-count=600000 --salt=64 
             Enter password: <password> 
             Reenter password: <password>
         ```             
+  
     PBKDF2 hash of your password is <encrypted-password>
 
     Add the following into a custom /etc/grub.d configuration file: 
+  
     ```bash
             cat <<EOF 
                 exec tail -n +2 $0 set superusers="<username>" password_pbkdf2 <username> <encrypted-password> 
             EOF
     ```         
-    The superuser/user information and password should not be contained in the /etc/grub.d/00_header file as this file could be overwritten in a package update. 
-    If there is a requirement to be able to boot/reboot without entering the password, edit /etc/grub.d/10_linux and add --unrestricted to the line CLASS= 
+      The superuser/user information and password should not be contained in the /etc/grub.d/00_header file as this file could be overwritten in a package update. 
+      If there is a requirement to be able to boot/reboot without entering the password, edit /etc/grub.d/10_linux and add --unrestricted to the line CLASS= 
+  
     Example:
         ```bash
             CLASS="--class gnu-linux --class gnu --class os --unrestricted" 
@@ -38,6 +42,7 @@
         ```
 
 #### Requirements
+
     - Ansible 2.16 or higher  
     - Root/sudo privileges (`become: true`)  
     - `grub2` package installed  
@@ -46,13 +51,13 @@
 
 #### Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `grub_superuser` | `"admin"` | GRUB superuser name (must match in `superusers=` and `password_pbkdf2`) |
-| `grub_password_hash` | `""` | PBKDF2 hash generated via `grub-mkpasswd-pbkdf2` — *required for full compliance* |
-| `grub_grub_cfg_path` | `"/boot/grub/grub.cfg"` | Path to GRUB configuration file |
-| `grub_backup_enabled` | `true` | Whether to back up GRUB config before changes |
-| `grub_backup_path` | `"/etc/grub.cfg.backup"` | Backup file location |
+| Variable              | Default                  | Description                                                                       |
+|-----------------------|--------------------------|-----------------------------------------------------------------------------------|
+| `grub_superuser`      | `"admin"`                | GRUB superuser name (must match in `superusers=` and `password_pbkdf2`)           |
+| `grub_password_hash`  | `""`                     | PBKDF2 hash generated via `grub-mkpasswd-pbkdf2` — *required for full compliance* |
+| `grub_grub_cfg_path`  | `"/boot/grub/grub.cfg"`  | Path to GRUB configuration file                                                   |
+| `grub_backup_enabled` | `true`                   | Whether to back up GRUB config before changes                                     |
+| `grub_backup_path`    | `"/etc/grub.cfg.backup"` | Backup file location                                                              |
 
 > **⚠️ Important**: The `grub_password_hash` must be generated **before** running the role. Example:
 > ```bash
@@ -76,21 +81,22 @@
     'tsc': ['CC6.1', 'CC6.6', 'CC8.1', 'CC6.8']
 
 #### Mitre
-    'tactic': ['TA0001', 'TA0005'],  
-    'technique': ['T1542.003', 'T1542.004', 'T1542.011']
+
+    - 'tactic': ['TA0001', 'TA0005'],  
+    - 'technique': ['T1542.003', 'T1542.004', 'T1542.011']
 
 #### Risk
-- High: Incorrect GRUB configuration can render the system unbootable.
-  - Always test in a non-production environment first.
-  - Ensure physical/console access is available to recover if needed.
+    - High: Incorrect GRUB configuration can render the system unbootable.
+    - Always test in a non-production environment first.
+    - Ensure physical/console access is available to recover if needed.
 
 #### References
-- [CIS Benchmark for RHEL 8/9 - 5.2.2](https://www.cisecurity.org/benchmark/red_hat_enterprise_linux/)
-- [Wazuh Rule 35757](https://www.wazuh.com/blog/wazuh-rule-35757-enforce-grub-superuser-password/)
-- [GNU GRUB Manual - 2.2.2 User accounts](https://www.gnu.org/software/grub/manual/grub/grub.html#User-accounts)
+    - [CIS Benchmark for RHEL 8/9 - 5.2.2](https://www.cisecurity.org/benchmark/red_hat_enterprise_linux/)
+    - [Wazuh Rule 35757](https://www.wazuh.com/blog/wazuh-rule-35757-enforce-grub-superuser-password/)
+    - [GNU GRUB Manual - 2.2.2 User accounts](https://www.gnu.org/software/grub/manual/grub/grub.html#User-accounts)
 
 #### License
-  Apache License 2.0
+    Apache License 2.0
   
 #### Author Information
-  Patricio Rojas Ortiz  
+    Patricio Rojas Ortiz  
