@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for the ensure_chrony role
+chrony_service_name: "chrony.service"
+chrony_service_state: "active"
+systemd_timesyncd_check_command: "systemctl show systemd-timesyncd.service | grep 'ActiveState=active'"
+chrony_install_state: "present"
