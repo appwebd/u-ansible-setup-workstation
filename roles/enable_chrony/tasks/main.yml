@@ -40,7 +40,23 @@
     state: started
     enabled: true
 
-- name: Ensure chrony is started
+- name: Ensure chrony service is enabled and started
   ansible.builtin.systemd:
     name: "{{ chrony_service_name }}"
+    enabled: true
     state: started
+    daemon_reload: true
+  register: chrony_systemd_result
+
+- name: Verify chrony is active and enabled
+  ansible.builtin.assert:
+    that:
+      - chrony_systemd_result is succeeded
+      - chrony_systemd_result.status is defined
+      - chrony_systemd_result.status.ActiveState == "active"
+      - chrony_systemd_result.status.UnitFileState in ["enabled", "enabled-runtime"]
+    fail_msg: >-
+      chrony has not been enabled and active.
+      ActiveState={{ chrony_systemd_result.status.ActiveState | default('undefined') }},
+      UnitFileState={{ chrony_systemd_result.status.UnitFileState | default('undefined') }}
+    success_msg: "chrony has been enabled and active."
