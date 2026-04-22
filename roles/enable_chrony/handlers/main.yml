@@ -1,0 +1,8 @@
+---
+# Role: ensure_chrony
+# Description: Handlers for the ensure_chrony role
+
+- name: "Restart chrony service if changes detected"
+  ansible.builtin.systemd:
+    name: "{ chrony_service_name }"
+    state: restarted

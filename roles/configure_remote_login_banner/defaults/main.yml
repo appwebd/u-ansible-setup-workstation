@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Default variables for the configure_remote_login_banner role
+# Wazuh ID: 35548
+
+remote_login_warning_banner_path: /etc/issue.net
+remote_login_warning_banner_content: "Authorized users only. All activity may be monitored and reported.\n\n"
+remote_login_warning_banner_owner: root
+remote_login_warning_banner_group: root
+remote_login_warning_banner_mode: "0644"

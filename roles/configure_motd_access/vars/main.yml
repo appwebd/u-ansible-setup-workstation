@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for the configure_motd_access role
+# These are not intended to be overridden by users
+motd_file_stat_pattern: "Access:\\s*\\(0644/-rw-r--r--\\)\\s*Uid:\\s*\\(\\s*0/\\s*root\\)\\s*Gid:\\s*\\(\\s*0/\\s*root\\)"

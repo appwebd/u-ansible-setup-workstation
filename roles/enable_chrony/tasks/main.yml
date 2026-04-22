@@ -1,0 +1,62 @@
+---
+# Role        : ensure_chrony
+# Description : Ensure chrony is enabled and running.
+# Wazuh ID    : 35592
+
+- name: "Check if systemd-timesyncd is active"
+  ansible.builtin.shell: |
+    "{{ systemd_timesyncd_check_command }}"
+    executable: /bin/bash
+    warn: false
+  register: timesyncd_active
+  changed_when: "'Changed:' in timesyncd_active.stdout"
+  failed_when: false
+
+- name: "Stop and disable systemd-timesyncd if active"
+  ansible.builtin.systemd:
+    name: "systemd-timesyncd.service"
+    state: stopped
+    enabled: false
+  when: "'ActiveState=active' in timesyncd_active.stdout"
+
+- name: "Install chrony package"
+  ansible.builtin.apt:
+    name: "{{ chrony_package_name }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+
+- name: "Unmask chrony service"
+  ansible.builtin.systemd:
+    name: "{{ chrony_service_name }}"
+    enabled: true          # ensure it will start on boot
+    state: started         # start the service
+    masked: false          # unmask it
+  become: true
+
+- name: "Enable and start chrony service"
+  ansible.builtin.systemd:
+    name: "{{ chrony_service_name }}"
+    state: started
+    enabled: true
+
+- name: Ensure chrony service is enabled and started
+  ansible.builtin.systemd:
+    name: "{{ chrony_service_name }}"
+    enabled: true
+    state: started
+    daemon_reload: true
+  register: chrony_systemd_result
+
+- name: Verify chrony is active and enabled
+  ansible.builtin.assert:
+    that:
+      - chrony_systemd_result is succeeded
+      - chrony_systemd_result.status is defined
+      - chrony_systemd_result.status.ActiveState == "active"
+      - chrony_systemd_result.status.UnitFileState in ["enabled", "enabled-runtime"]
+    fail_msg: >-
+      chrony has not been enabled and active.
+      ActiveState={{ chrony_systemd_result.status.ActiveState | default('undefined') }},
+      UnitFileState={{ chrony_systemd_result.status.UnitFileState | default('undefined') }}
+    success_msg: "chrony has been enabled and active."

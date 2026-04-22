@@ -1,0 +1,12 @@
+---
+# vars/main.yml
+# Internal constants for the configure_remote_login_banner role
+# These are not intended to be overridden by users
+
+remote_login_warning_banner_patterns:
+  - "\\\\m"
+  - "\\\\r"
+  - "\\\\s"
+  - "\\\\v"
+  - "Debian"
+  - "Ubuntu"

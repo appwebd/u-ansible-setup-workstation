@@ -1,0 +1,7 @@
+---
+# defaults/main.yml
+# Default values for the ensure_local_login_warning_banner_configured role
+# These values can be overridden by inventory or extra vars
+
+issue_banner_text: "WARNING: Authorized users only.\nAll activity may be monitored and reported.\n\n"
+issue_file_path: "/etc/issue"

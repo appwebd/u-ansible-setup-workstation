@@ -1,0 +1,8 @@
+---
+# Role: configure_motd_access
+# Description: Handlers for the configure_motd_access role
+
+- name: Update motd cache
+  ansible.builtin.systemd:
+    name: motd.service
+    state: restarted

@@ -1,0 +1,12 @@
+---
+# Role: configure_remote_login_banner
+# Description: Handlers for the configure_remote_login_warning_banner role
+
+- name: Restart SSH daemon
+  ansible.builtin.systemd:
+    name: ssh
+    state: restarted
+    daemon_reload: true
+  when: ansible_facts.services | select('eq', 'ssh') | list | length > 0
+  ignore_errors: false
+  failed_when: false
