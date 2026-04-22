@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Wazuh Rule 35549: Ensure access to /etc/motd is configured
+# Default configuration parameters
+motd_file_path: /etc/motd
+motd_owner: root
+motd_group: root
+motd_mode: "0644"
+motd_remove_file: false

@@ -1,0 +1,55 @@
+---
+# Role        : configure_motd_access
+# Description : Ensure access to /etc/motd is configured.
+# Wazuh ID    : 35549
+
+- name: "Check if /etc/motd exists"
+  ansible.builtin.stat:
+    path: "{{ motd_file_path }}"
+  register: motd_stat_result
+  changed_when: false
+
+- name: "Compute MOTD decision flags"
+  ansible.builtin.set_fact:
+    motd_should_remove: "{{ motd_remove_file | default(false) | bool }}"
+    motd_exists: "{{ motd_stat_result.stat.exists | default(false) | bool }}"
+    motd_should_harden: "{{ not (motd_remove_file | default(false) | bool) and (motd_stat_result.stat.exists | default(false) | bool) }}"
+  changed_when: false
+
+- name: "Remove /etc/motd if configured"
+  ansible.builtin.file:
+    path: "{{ motd_file_path }}"
+    state: absent
+  when:
+    - motd_should_remove
+    - motd_exists
+  notify: Update motd cache
+
+- name: "Ensure /etc/motd has correct permissions when file exists"
+  when: motd_should_harden
+  block:
+    - name: "Set owner, group and mode for /etc/motd"
+      ansible.builtin.file:
+        path: "{{ motd_file_path }}"
+        owner: "{{ motd_owner }}"
+        group: "{{ motd_group }}"
+        mode: "{{ motd_mode }}"
+
+    - name: "Re-check /etc/motd metadata"
+      ansible.builtin.stat:
+        path: "{{ motd_file_path }}"
+      register: motd_permission_check
+
+    - name: "Assert /etc/motd is compliant"
+      ansible.builtin.assert:
+        that:
+          - motd_permission_check.stat.exists | bool
+          - motd_permission_check.stat.mode == motd_mode
+          - motd_permission_check.stat.uid == 0
+          - motd_permission_check.stat.gid == 0
+        fail_msg: "Failed to configure /etc/motd with {{ motd_owner }}:{{ motd_group }} and mode {{ motd_mode }}."
+        success_msg: "/etc/motd permissions are compliant."
+  rescue:
+    - name: "Fail with clear error if /etc/motd cannot be secured"
+      ansible.builtin.fail:
+        msg: "Failed to configure /etc/motd access. Ensure file exists and is writable."
