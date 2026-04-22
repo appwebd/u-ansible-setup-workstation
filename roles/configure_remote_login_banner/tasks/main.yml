@@ -1,0 +1,48 @@
+---
+# Role        : configure_remote_login_banner
+# Description : Ensure remote login warning banner is configured properly
+# Wazuh ID    : 35548
+
+- name: "Ensure /etc/issue.net directory exists"
+  ansible.builtin.file:
+    path: "{{ remote_login_warning_banner_path | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Configure remote login warning banner content"
+  ansible.builtin.copy:
+    dest: "{{ remote_login_warning_banner_path }}"
+    content: "{{ remote_login_warning_banner_content }}"
+    owner: "{{ remote_login_warning_banner_owner }}"
+    group: "{{ remote_login_warning_banner_group }}"
+    mode: "{{ remote_login_warning_banner_mode }}"
+    force: true
+  register: banner_file_result
+
+- name: "Verify warning banner does not contain prohibited patterns"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    if grep -E '{{ remote_login_warning_banner_patterns | join("|") }}' "{{ remote_login_warning_banner_path }}" > /dev/null 2>&1; then
+      echo "Prohibited pattern found in {{ remote_login_warning_banner_path }}"
+      exit 1
+    fi
+  args:
+    executable: /bin/bash
+  changed_when: false
+  failed_when: false
+  register: banner_pattern_check
+  check_mode: false
+
+- name: "Ensure warning banner complies with security policy"
+  ansible.builtin.fail:
+    msg: "Warning banner contains prohibited OS-specific information (e.g., machine architecture, OS release)"
+  when: banner_pattern_check.rc != 0
+
+- name: "Set appropriate permissions on warning banner file"
+  ansible.builtin.file:
+    path: "{{ remote_login_warning_banner_path }}"
+    owner: root
+    group: root
+    mode: "{{ remote_login_warning_banner_mode }}"
