@@ -1,0 +1,21 @@
+---
+# Role        : configure_local_login_banner
+# Description : Ensure local login warning banner is configured properly
+# Wazuh ID    : 35547
+
+- name: "Ensure /etc/issue directory exists"
+  ansible.builtin.file:
+    path: "/etc"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Configure /etc/issue warning banner"
+  ansible.builtin.copy:
+    content: "{{ issue_banner_text }}"
+    dest: "{{ issue_file_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Refresh login banners

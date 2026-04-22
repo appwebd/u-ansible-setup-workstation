@@ -1,0 +1,7 @@
+---
+# Role: ensure_local_login_warning_banner_configured
+# Description: Handlers for the ensure_local_login_warning_banner_configured role
+
+- name: Refresh login banners
+  ansible.builtin.debug:
+    msg: "Login banner updated in {{ issue_file_path }} - manual login test recommended to verify"
