@@ -1,0 +1,23 @@
+---
+# Role        : ensure_issue_net_permissions
+# Description : Ensure access to /etc/issue.net is configured (Wazuh ID 35551)
+# Wazuh ID    : 35551
+
+- name: "Check if /etc/issue.net exists"
+  ansible.builtin.stat:
+    path: "{{ issue_net_path }}"
+  register: issue_net_stat
+
+- name: "Debug variable issue_net_stat"
+  ansible.builtin.debug:
+    msg: "debug variable if /etc/issue.net exists : {{ issue_net_stat }}"
+  changed_when: false
+
+- name: "Ensure access to /etc/issue.net is configured."
+  ansible.builtin.file:
+    path: "{{ issue_net_path }}"
+    mode: '0640'                                       # chmod u-x,go-rwx /etc/issue.net
+    owner: root                                        # chmod root:root /etc/issue.net
+    group: root
+    state: file
+  when: issue_net_stat.stat.exists

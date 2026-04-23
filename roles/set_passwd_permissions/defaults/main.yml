@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for the set_passwd_permissions role
+# These values can be overridden in inventory or playbooks
+
+passwd_file_path: /etc/passwd-
+passwd_file_owner: root
+passwd_file_group: root
+passwd_file_mode: "0644"
