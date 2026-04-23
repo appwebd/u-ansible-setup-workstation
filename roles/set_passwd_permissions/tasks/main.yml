@@ -1,0 +1,29 @@
+---
+# Role        : set_passwd_permissions
+# Description : Ensure permissions on /etc/passwd- are configured.
+# Wazuh ID    : 35762
+
+- name: "Ensure /etc/passwd- exists"
+  ansible.builtin.stat:
+    path: "{{ passwd_file_path }}"
+  register: passwd_file_stat
+  changed_when: false
+
+- name: "Set owner and group for /etc/passwd-"
+  ansible.builtin.file:
+    path: "{{ passwd_file_path }}"
+    owner: "{{ passwd_file_owner }}"
+    group: "{{ passwd_file_group }}"
+    mode: "{{ passwd_file_mode }}"
+  when: passwd_file_stat.stat.exists
+  register: file_perms_set
+
+- name: "Ensure /etc/passwd- has correct permissions (no excess)"
+  ansible.builtin.file:
+    path: "{{ passwd_file_path }}"
+    mode: "u-x,go-wx"
+  when: passwd_file_stat.stat.exists
+  register: remove_excess_perms
+  failed_when:
+    - remove_excess_perms is failed and
+      '"No such file or directory" not in remove_excess_perms.msg'
