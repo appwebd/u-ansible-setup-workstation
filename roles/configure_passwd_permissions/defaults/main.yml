@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default values for configure_passwd_permissions role
+
+passwd_file_path: /etc/passwd
+passwd_owner: root
+passwd_group: root
+passwd_mode: '0640'

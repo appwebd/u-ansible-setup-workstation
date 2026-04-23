@@ -1,0 +1,18 @@
+---
+# Role: passwd_permissions
+# Description: Handlers for the configure_passwd_permissions role
+
+- name: Verify passwd permissions
+  ansible.builtin.stat:
+    path: /etc/passwd
+  register: passwd_stat
+  failed_when: false
+
+- name: Log passwd permissions mismatch
+  ansible.builtin.debug:
+    msg: |
+      PASSWD PERMISSIONS ALERT: /etc/passwd has incorrect permissions.
+      Expected: {{ passwd_mode }} (0644)
+      Actual: {{ passwd_stat.stat.mode | default('unknown') }}
+      Please investigate and remediate immediately.
+  when: passwd_stat.stat is defined and passwd_stat.stat.mode != passwd_mode

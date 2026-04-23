@@ -1,0 +1,20 @@
+---
+# Role        : configure_passwd_permissions
+# Description : Ensure permissions on /etc/passwd are configured
+# Wazuh ID    : 35761
+
+- name: "Ensure /etc/passwd has correct ownership (owner: root, group: root)"
+  ansible.builtin.file:
+    path: "{{ passwd_file_path }}"
+    owner: "{{ passwd_owner }}"
+    group: "{{ passwd_group }}"
+    mode: "{{ passwd_mode }}"
+
+- name: "Ensure /etc/passwd permissions do not include world/other write or execute"
+  ansible.builtin.file:
+    path: "{{ passwd_file_path }}"
+    mode: "u=rw,go=r"
+  register: chmod_result
+  failed_when:
+    - chmod_result.failed and "No such file or directory" not in chmod_result.msg | default("")
+  notify: Verify passwd permissions
