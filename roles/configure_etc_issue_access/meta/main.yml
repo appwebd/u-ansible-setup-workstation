@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: configure_etc_issue_access
+  author: Patricio Rojas Ortiz
+  description: Configure ownership and permissions on /etc/issue to prevent unauthorized modification (Wazuh ID 35550)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - system
+    - audit
+
+dependencies: []

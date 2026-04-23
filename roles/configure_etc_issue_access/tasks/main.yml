@@ -1,0 +1,24 @@
+---
+# Role        : configure_etc_issue_access
+# Description : Configure /etc/issue access permissions access
+# Wazuh id    : 3550
+
+
+- name: "Check if /etc/issue exists"
+  ansible.builtin.stat:
+    path: "{{ etc_issue_path }}"
+  register: etc_issue_stat
+
+- name: "Debug variable etc_issue_stat"
+  ansible.builtin.debug:
+    msg: "debug variable if /etc/issue exists value : {{ etc_issue_stat }}"
+  changed_when: false
+
+- name: "Ensure access to /etc/issue is configured."
+  ansible.builtin.file:
+    path: "{{ etc_issue_path }}"
+    mode: '0640'                                       # chmod u-x,go-rwx /etc/issue
+    owner: root                                        # chmod root:root /etc/issue
+    group: root
+    state: file
+  when: etc_issue_stat.stat.exists
