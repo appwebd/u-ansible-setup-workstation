@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: ensure_issue_net_permissions
+  author: Patricio Rojas Ortiz
+  description: Ensure access to /etc/issue.net is configured (Wazuh ID 35551)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - filesystem
+    - hardening
+    - ubuntu2404
+
+dependencies: []
