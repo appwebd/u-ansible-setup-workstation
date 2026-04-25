@@ -1,6 +1,6 @@
 ---
 # defaults/main.yml
-# Default configuration for ensure_permissions_on_etc_group role
+# Default configuration for configure_group_permissions role
 # No sensitive data is stored here
 etc_group_path: /etc/group
 etc_group_owner: root

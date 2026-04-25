@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: ensure_permissions_on_etc_group
+  role_name: configure_group_permissions
   author: Patricio Rojas Ortiz
   description: Ensure permissions on /etc/group are configured (Wazuh ID 35763)
   license: Apache 2.0

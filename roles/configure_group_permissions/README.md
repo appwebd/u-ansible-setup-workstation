@@ -1,5 +1,5 @@
 #### Role name:  
-    configure_etc_group_permissions
+    configure_group_permissions
 
 #### Wazuh ID :  
     35763
