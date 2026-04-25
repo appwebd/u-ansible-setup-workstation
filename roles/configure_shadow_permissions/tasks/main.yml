@@ -1,0 +1,50 @@
+---
+# Role        : configure_shadow_permissions
+# Description : Ensure permissions on /etc/shadow- are configured.
+# Wazuh ID    : 35765
+
+- name: "Check if /etc/shadow exists"
+  ansible.builtin.stat:
+    path: "{{ shadow_file_path }}"
+  register: shadow_file_stat
+  changed_when: false
+
+- name: "Ensure /etc/shadow- ownership is set correctly"
+  ansible.builtin.file:
+    path: "{{ shadow_file_path }}"
+    owner: "{{ expected_owner }}"
+    group: "{{ expected_group }}"
+    state: file
+  when: shadow_file_stat.stat.exists
+
+- name: "Ensure /etc/shadow permissions are set correctly (mode 0640 or 0600)"
+  ansible.builtin.file:
+    path: "{{ shadow_file_path }}"
+    mode: "{{ expected_mode }}"
+    state: file
+  when: shadow_file_stat.stat.exists
+  failed_when: false
+
+- name: "Ensure /etc/shadow has no world-readable or world-writable permissions"
+  ansible.builtin.stat:
+    path: "{{ shadow_file_path }}"
+  register: shadow_perms_check
+  when: shadow_file_stat.stat.exists
+
+- name: "Debug variable check file mode"
+  ansible.builtin.debug:
+    msg: "debug file {{ shadow_file_path }} has mode: {{ shadow_perms_check.stat.mode }}"
+  changed_when: false
+
+- name: "Ensure /etc/shadow has no world-readable or world-writable permissions"
+  ansible.builtin.stat:
+    path: "{{ shadow_file_path }}"
+  register: shadow_perms_check
+  when: shadow_file_stat.stat.exists
+
+- name: "Fail if /etc/shadow permissions are insecure (world-readable or writable)"
+  ansible.builtin.fail:
+    msg: "File /etc/shadow has insecure permissions: {{ shadow_perms_check.mode | default('unknown') }} (allowed: 0600 or 0640)"
+  when:
+    - shadow_file_stat.stat.exists
+    - shadow_perms_check.stat.mode is not defined or shadow_perms_check.stat.mode not in ['0600', '0640']
