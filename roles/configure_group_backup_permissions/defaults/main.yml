@@ -1,0 +1,13 @@
+---
+# defaults/main.yml
+# Default variables for the configure_group_backup_permissions role
+
+# File path for /etc/group-
+group_backup_file: /etc/group-
+
+# Required permissions (u-x,go-wx => 0640)
+group_backup_file_mode: "0640"
+
+# Required ownership
+group_backup_file_owner: root
+group_backup_file_group: root
