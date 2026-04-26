@@ -10,7 +10,7 @@
 
 - name: "Debug variable check file exists"
   ansible.builtin.debug:
-    msg: "debug variable if /etc/issue exists value : {{ file_stat }}"
+    msg: "debug variable if /etc/group exists value : {{ file_stat }}"
   changed_when: false
 
 - name: "Ensure /etc/group has correct ownership and permissions (u-x,go-wx)"
