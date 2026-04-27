@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default configuration for configure_group_permissions role
+# No sensitive data is stored here
+etc_group_path: /etc/group
+etc_group_owner: root
+etc_group_group: root
+etc_group_mode: "0644"

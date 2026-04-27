@@ -1,0 +1,22 @@
+---
+# Role        : configure_group_minus_permissions
+# Description : Ensure permissions on /etc/group- are configured
+# Wazuh ID    : 35764
+
+- name: "Check if /etc/group- exists"
+  ansible.builtin.stat:
+    path: "{{ group_backup_file }}"
+  register: file_stat
+
+- name: "Debug variable check file exists"
+  ansible.builtin.debug:
+    msg: "debug variable if /etc/issue exists value : {{ file_stat }}"
+  changed_when: false
+
+- name: "Ensure /etc/group- has correct ownership and permissions (u-x,go-wx)"
+  ansible.builtin.file:
+    path: "{{ group_backup_file }}"
+    owner: "{{ group_backup_file_owner }}"
+    group: "{{ group_backup_file_group }}"
+    mode: "{{ group_backup_file_mode }}"
+  when: file_stat.stat.exists

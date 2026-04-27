@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: configure_group_minus_permissions
+  author: Patricio Rojas Ortiz
+  description: Ensure that permissions on /etc/group- are configured to protect group password hashes (Wazuh ID 35764)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - sysadmin
+    - permissions
+    - linux
+
+dependencies: []

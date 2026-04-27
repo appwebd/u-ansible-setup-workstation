@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for the configure_shadow_permissions role
+# These values can be overridden by the user if needed
+
+shadow_file_path: /etc/shadow
+expected_owner: root
+expected_group: shadow
+expected_mode: '0600'
