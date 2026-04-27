@@ -1,5 +1,5 @@
 #### Role name: 
-    configure_group_backup_permissions  
+    configure_group_minus_permissions  
 #### Wazuh ID: 
     35764  
 #### Title: 
@@ -62,7 +62,7 @@ Include this role in your playbook:
 - hosts: servers
   become: true
   roles:
-    - configure_group_backup_permissions
+    - configure_group_minus_permissions
 ```
 
 #### License

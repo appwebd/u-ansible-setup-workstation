@@ -1,5 +1,5 @@
 ---
-# Role        : configure_group_backup_permissions
+# Role        : configure_group_minus_permissions
 # Description : Ensure permissions on /etc/group- are configured
 # Wazuh ID    : 35764
 
