@@ -1,6 +1,6 @@
 ---
 # defaults/main.yml
-# Default variables for the configure_shadow_backup_permissions role
+# Default variables for the configure_shadow_minus_permissions role
 # These values can be overridden by the user if needed
 
 shadow_file_path: /etc/shadow-
