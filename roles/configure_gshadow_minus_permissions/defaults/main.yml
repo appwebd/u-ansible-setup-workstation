@@ -1,0 +1,10 @@
+---
+# UTF-8
+# Default variables for configure_gshadow_permissions
+
+gshadow_file_path: "/etc/gshadow-"
+expected_owner: "root"
+expected_group: "shadow"
+
+# Wazuh 35767 allows 0640 or 0600
+expected_mode: "0640"
