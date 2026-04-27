@@ -1,5 +1,5 @@
 ---
-# Role        : configure_shadow_backup_permissions
+# Role        : configure_shadow_minus_permissions
 # Description : Ensure permissions on /etc/shadow- are configured (Wazuh ID 35766)
 # Wazuh ID    : 35766
 
