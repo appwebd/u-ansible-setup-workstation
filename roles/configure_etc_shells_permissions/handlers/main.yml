@@ -1,0 +1,9 @@
+---
+# Role: configure_etc_shells_permissions
+# Description: Handlers for the configure_etc_shells_permissions role
+
+- name: Verify etc_shells integrity
+  ansible.builtin.command: stat --format '%a %U %G' {{ etc_shells_path }}
+  register: verify_result
+  changed_when: false
+  failed_when: verify_result.rc != 0

@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Default variables for the configure_etc_shells_permissions role
+# These are not intended to be overridden by users
+
+etc_shells_path: /etc/shells
+etc_shells_owner: root
+etc_shells_group: root
+etc_shells_mode: "0640"
+etc_shells_dir_mode: "0755"

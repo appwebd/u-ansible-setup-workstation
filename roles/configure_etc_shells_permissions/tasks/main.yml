@@ -1,0 +1,40 @@
+---
+# Role        : configure_etc_shells_permissions
+# Description : Ensure permissions on /etc/shells are configured (Wazuh ID 35769)
+# Wazuh ID    : 35769
+
+- name: "Check if /etc/shells exists"
+  ansible.builtin.stat:
+    path: "{{ etc_shells_path }}"
+  register: etc_shell_stat
+
+- name: "Ensure /etc/shells directory exists with correct permissions"
+  ansible.builtin.file:
+    path: "{{ etc_shells_path | dirname }}"
+    state: directory
+    owner: "{{ etc_shells_owner }}"
+    group: "{{ etc_shells_group }}"
+    mode: "{{ etc_shells_dir_mode }}"
+  when: etc_shell_stat.stat.exists
+
+- name: "Ensure /etc/shells file exists"
+  ansible.builtin.template:
+    src: shells.j2
+    dest: "{{ etc_shells_path }}"
+    owner: "{{ etc_shells_owner }}"
+    group: "{{ etc_shells_group }}"
+    mode: "{{ etc_shells_mode }}"
+    force: false
+    backup: true
+  register: shells_file_result
+  changed_when: shells_file_result is changed and shells_file_result is not skipped
+
+- name: "Ensure /etc/shells has correct permissions (u-x,go-wx)"
+  ansible.builtin.file:
+    path: "{{ etc_shells_path }}"
+    owner: "{{ etc_shells_owner }}"
+    group: "{{ etc_shells_group }}"
+    mode: "{{ etc_shells_mode }}"
+  register: permission_result
+  failed_when: permission_result.failed and '"No such file" not in permission_result.msg'
+  notify: Verify etc_shells integrity
