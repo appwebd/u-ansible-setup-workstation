@@ -1,6 +1,6 @@
 ---
 # defaults/main.yml
-# Default variables for the configure_group_backup_permissions role
+# Default variables for the configure_group_minus_permissions role
 
 # File path for /etc/group-
 group_backup_file: /etc/group-
