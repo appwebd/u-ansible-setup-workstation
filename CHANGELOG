@@ -1,3 +1,61 @@
+aba2b42 Mon Apr 27 14:54:32 2026 -0400 fea: Add `configure_etc_shells_permissions` role to enforce secure permissions for `/etc/shells` and ensure compliance
+e52d813 Mon Apr 27 12:17:55 2026 -0400 fea: Add `configure_gshadow_minus_permissions` role to enforce secure permissions for `/etc/gshadow-` and ensure compliance
+c39782a Mon Apr 27 12:17:35 2026 -0400 fea: Add `configure_gshadow_permissions` role to enforce secure permissions for `/etc/gshadow` and ensure compliance
+bfeaa02 Mon Apr 27 11:58:34 2026 -0400 fix: Correct role name comment in `configure_shadow_minus_permissions` task file
+a99a246 Mon Apr 27 11:51:44 2026 -0400 fix: Update default variable comment to match renamed role `configure_shadow_minus_permissions`
+927350f Mon Apr 27 11:51:10 2026 -0400 fix: Correct default variable comment to reference renamed role `configure_group_minus_permissions`
+c49f6b3 Mon Apr 27 11:50:20 2026 -0400 refactor: Update references to `configure_group_backup_permissions` after renaming role to `configure_group_minus_permissions`
+e1cec95 Mon Apr 27 11:49:09 2026 -0400 refactor: Rename `configure_group_backup_permissions` role to `configure_group_minus_permissions` for consistency with naming conventions
+e6acfb9 Mon Apr 27 11:48:14 2026 -0400 refactor: Rename `configure_shadow_backup_permissions` role to `configure_shadow_minus_permissions` for consistency with naming conventions
+2bc389f Sun Apr 26 18:49:40 2026 -0400 fix: Correct debug message to reference `/etc/group` instead of `/etc/issue` in `configure_group_permissions` role
+393799a Sat Apr 25 19:50:33 2026 -0400 fea: Add `configure_shadow_backup_permissions` role to enforce secure permissions for `/etc/shadow-` and ensure compliance
+9e0df43 Sat Apr 25 19:49:10 2026 -0400 fea: Add `configure_shadow_permissions` role to enforce secure permissions for `/etc/shadow` and ensure compliance
+90e2296 Sat Apr 25 19:13:39 2026 -0400 fea: Add `configure_group_backup_permissions` role to enforce secure permissions for `/etc/group-` and ensure compliance
+a4a208d Sat Apr 25 19:12:45 2026 -0400 refactor: Rename and simplify `ensure_permissions_on_etc_group` role to `configure_group_permissions` for consistency and improved maintainability
+eddef72 Fri Apr 24 13:58:30 2026 -0400 fea: Add role to enforce /etc/group permissions
+777f5a7 Thu Apr 23 19:27:38 2026 -0400 fea: Add `set_passwd_permissions` role to enforce secure permissions for `/etc/passwd-` and ensure compliance
+47b193d Thu Apr 23 19:14:49 2026 -0400 fea: Add `configure_passwd_permissions` role to enforce secure permissions for `/etc/passwd` and ensure compliance
+03885fc Thu Apr 23 17:13:36 2026 -0400 fea: Add `configure_etc_issue_net_access` role to enforce secure permissions for `/etc/issue.net` and ensure compliance
+33de195 Thu Apr 23 17:10:55 2026 -0400 fea: Add `configure_etc_issue_access` role to enforce secure permissions for `/etc/issue` and ensure compliance
+10bde7c Wed Apr 22 18:33:14 2026 -0400 refactor: Standardize README formatting for `set_grub_password` role to improve readability and consistency
+4704dcf Wed Apr 22 16:31:25 2026 -0400 fix: Update remote login banner content format for improved readability
+2abc67f Wed Apr 22 16:29:23 2026 -0400 fea: Add `configure_motd_access` role to enforce secure access permissions for `/etc/motd` and ensure compliance
+eb26889 Wed Apr 22 16:05:37 2026 -0400 fea: Add `configure_remote_login_banner` role to enforce remote login warning banner for security compliance
+7894e84 Wed Apr 22 15:56:46 2026 -0400 fea: Add `configure_local_login_banner` role to enforce local login warning banner for security compliance
+e1cf8e7 Wed Apr 22 14:57:23 2026 -0400 fea: Enhance `enable_chrony` role to verify chrony service is active and enabled
+e30f73e Wed Apr 22 14:49:19 2026 -0400 fea: Add `enable_chrony` role to ensure chrony is enabled and running for compliance and time synchronization
+c7e3d98 Tue Apr 21 19:20:53 2026 -0400 fea: Add `configure_motd` role to manage MOTD configuration for security and compliance
+4fe5917 Tue Apr 21 18:35:30 2026 -0400 refactor: Standardize README formatting across roles for improved consistency and readability
+3eaca87 Mon Apr 20 18:56:59 2026 -0400 fea: Add `configure_chrony_user` role to enforce chronyd runs as `_chrony` user for improved security and compliance
+04f6213 Mon Apr 20 18:35:45 2026 -0400 fix: Add `-vv` flag to `run_setup_workstation.sh` for increased verbosity during playbook execution
+35fbb2f Mon Apr 20 18:35:28 2026 -0400 refactor: Simplify package installation check in `enable_systemd_timesyncd` role by using a fact-based approach
+135653a Mon Apr 20 18:34:56 2026 -0400 refactor: Improve `configure_timesyncd_authorized_servers` with conditional service configuration and package validation
+7cbd02d Mon Apr 20 18:34:09 2026 -0400 fea: Add `configure_chrony` role to ensure chrony is installed and configured with authorized NTP servers for time synchronization and compliance
+e19f4eb Thu Apr 16 18:28:15 2026 -0400 fea: Add `configure_timesyncd_authorized_servers` role to configure systemd-timesyncd with authorized NTP servers for time synchronization and compliance
+4a9b97b Wed Apr 15 19:36:03 2026 -0400 fix: Correct `backrefs` value and ensure EOF consistency in `enable_systemd_timesyncd` role
+414572f Wed Apr 15 19:35:08 2026 -0400 fea: Add `enable_systemd_timesyncd` role to ensure systemd-timesyncd is installed, enabled, and running for time synchronization and compliance
+00189f2 Mon Apr 13 20:00:36 2026 -0400 fea: Add `enforce_apparmor_profiles` role to ensure AppArmor profiles are enforced for improved security and compliance
+9f4edad Mon Apr 13 19:48:48 2026 -0400 refactor: Consolidate kernel module and security configuration roles for improved clarity and task management
+ebca492 Mon Apr 13 19:48:19 2026 -0400 docs: Add documentation for `set_grub_password` role to configure GRUB bootloader password
+9b4efa8 Mon Apr 13 19:38:14 2026 -0400 fix: Remove redundant `-v` flag in `run_setup_workstation.sh` script
+080252e Mon Apr 13 19:37:12 2026 -0400 docs: Revise and expand `enable_apparmor` role documentation, improve kernel parameter management and task structure
+b54dfe6 Mon Apr 13 19:31:21 2026 -0400 refactor: Simplify and enhance `enable_aslr` role with improved task structure, variable usage, and sysctl configuration management
+a0da363 Mon Apr 13 16:51:36 2026 -0400 fea: Add `install_apparmor` role to ensure AppArmor is installed and active on Ubuntu 24.04 for security and compliance
+6f86e8a Mon Apr 13 15:33:53 2026 -0400 fea: Add `uninstall_prelink` role to remove the prelink package for security and compliance purposes
+9f89e50 Mon Apr 13 15:19:39 2026 -0400 docs: Update `restrict_core_dumps` role documentation, variables, and tasks for clarity and functionality
+0acc353 Mon Apr 13 14:44:36 2026 -0400 docs: Revise and expand `enable_aslr` role documentation, variables, and tasks
+5078f25 Mon Apr 13 14:07:30 2026 -0400 fea: Add `restrict_core_dumps` role to disable or limit core dump generation
+2bbe648 Mon Apr 13 13:49:12 2026 -0400 fix: Remove `-o` flag from shell command in ASLR verification task
+962c147 Mon Apr 13 13:43:58 2026 -0400 fea: Add `enable_aslr` role to enforce Address Space Layout Randomization (ASLR)
+08c04c5 Mon Apr 13 13:43:29 2026 -0400 docs: Update compliance mappings in `configure_bootloader_access` role
+c976e59 Mon Apr 13 13:31:00 2026 -0400 fea: Add `configure_bootloader_access` role to secure GRUB configuration
+0d5f452 Sun Apr 12 19:28:23 2026 -0400 fea: Add `disable_kernel_modules` role to disable unused kernel modules
+4779b76 Sun Apr 12 19:27:45 2026 -0400 fix: Removed role modules
+16b3b4d Sun Apr 12 19:26:42 2026 -0400 fix: Removed unused variables and module references in disable_freevxfs, disable_cramsfs roles
+54f6467 Sun Apr 12 18:48:03 2026 -0400 fix: Ensure modprobe directory exists and refactor cramfs module unloading
+daabee3 Sun Apr 12 17:09:18 2026 -0400 fix: Add missing comment in `enable_apparmor` role task
+e382eb7 Sun Apr 12 16:52:07 2026 -0400 docs: Add initial CHANGELOG with recent updates
+6eb5e80 Sun Apr 12 16:51:41 2026 -0400 fea: Add id: 35537 Enable AppArmor in bootloader configuration for Ubuntu 24.04
 31a35c8 Fri Apr 10 16:52:55 2026 -0400 docs: Add Apache 2.0 license to `remove_bloatware_packages` role
 7ec2706 Fri Apr 10 16:52:10 2026 -0400 fea: Add `remove_unused_accounts_groups` role with tasks, metadata, and licensing
 e434077 Fri Apr 10 15:54:00 2026 -0400 fix: Rename `apparmor_enforce` role to `enforce_apparmor` for consistency.
