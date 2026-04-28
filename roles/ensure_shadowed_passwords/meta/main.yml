@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: ensure_shadowed_passwords
+  author: Patricio Rojas Ortiz
+  description: Ensure accounts in /etc/passwd use shadowed passwords (Wazuh ID 35771)
+  license: Apache 2.0
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - authentication
+    - compliance
+    - sysadmin
+    - shadow
+
+dependencies: []
