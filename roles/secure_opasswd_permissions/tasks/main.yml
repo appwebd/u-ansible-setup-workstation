@@ -1,0 +1,64 @@
+---
+# Role        : fix_opasswd_permissions
+# Description : Ensure permissions on /etc/security/opasswd are configured (Wazuh ID 35770)
+# Wazuh ID    : 35770
+
+- name: "Check if /etc/security/opasswd exists"
+  ansible.builtin.stat:
+    path: "{{ opasswd_file }}"
+  register: file_stat
+
+- name: "Debug variable check file exists"
+  ansible.builtin.debug:
+    msg: "debug variable if file {{ opasswd_file }} exists : {{ file_stat }}"
+  changed_when: false
+
+- name: "Change permissions on /etc/security/opasswd if it exists"
+  when: file_stat.stat.exists
+  block:
+
+    - name: "Ensure /etc/security/opasswd has correct permissions if it exists"
+      ansible.builtin.file:
+        path: "{{ opasswd_file }}"
+        owner: "{{ opasswd_owner }}"
+        group: "{{ opasswd_group }}"
+        mode: "{{ opasswd_mode }}"
+        follow: false
+      when: file_stat.stat.exists
+      register: opasswd_file_result
+      failed_when: opasswd_file_result is failed and '"No such file" not in opasswd_file_result.msg'
+
+  rescue:
+    - name: "Fail file /etc/security/opasswd does not exist"
+      ansible.builtin.fail:
+        msg: "Failed to configure /etc/security/opasswd access. Ensure file exists and is writable."
+
+- name: "Check if /etc/security/opasswd exists"
+  ansible.builtin.stat:
+    path: "{{ opasswd_backup_file }}"
+  register: file_backup_stat
+
+- name: "Debug variable check file exists"
+  ansible.builtin.debug:
+    msg: "debug variable if file {{ opasswd_backup_file }} exists : {{ file_backup_stat }}"
+  changed_when: false
+
+- name: "Change permissions on /etc/security/opasswd if it exists"
+  when: file_backup_stat.stat.exists
+  block:
+
+    - name: "Ensure /etc/security/opasswd.old has correct permissions if it exists"
+      ansible.builtin.file:
+        path: "{{ opasswd_backup_file }}"
+        owner: "{{ opasswd_owner }}"
+        group: "{{ opasswd_group }}"
+        mode: "{{ opasswd_mode }}"
+        follow: false
+      when: file_backup_stat.stat.exists
+      register: opasswd_backup_result
+      failed_when: opasswd_backup_result is failed and '"No such file" not in opasswd_backup_result.msg'
+
+  rescue:
+    - name: "Fail file /etc/security/opasswd.old does not exist"
+      ansible.builtin.fail:
+        msg: "Failed to configure /etc/security/opasswd.old access. Ensure file exists and is writable."
