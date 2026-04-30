@@ -1,5 +1,6 @@
 ---
-- name: "Create modprobe disable configuration"
+- name: "disable | Create modprobe disable configuration"
+  become: true
   ansible.builtin.copy:
     dest: "/etc/modprobe.d/{{ item }}.conf"
     content: |
@@ -9,4 +10,3 @@
     group: root
     mode: '0644'
   loop: "{{ filtered_filesystem_modules }}"
-  become: true
