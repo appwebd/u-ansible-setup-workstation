@@ -13,6 +13,7 @@
     insertafter: "EOF"
   when: restrict_core_dumps_enabled
 
+# Install module ansible.posix.sysctl using: ansible-galaxy collection install ansible.posix
 - name: "Ensure core dump restrictions are applied at runtime"
   ansible.posix.sysctl:
     name: fs.suid_dumpable

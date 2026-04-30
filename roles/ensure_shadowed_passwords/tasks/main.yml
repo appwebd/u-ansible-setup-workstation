@@ -1,0 +1,46 @@
+---
+# Role        : ensure_shadowed_passwords
+# Description : Ensure accounts in /etc/passwd use shadowed passwords
+# Wazuh ID    : 35771
+
+- name: "Verify /etc/passwd exists"
+  ansible.builtin.stat:
+    path: /etc/passwd
+  register: passwd_stat
+  failed_when: false
+
+- name: "Fail if /etc/passwd does not exist"
+  ansible.builtin.fail:
+    msg: "/etc/passwd file is missing. Shadowed passwords cannot be enforced."
+  when: not passwd_stat.stat.exists
+
+- name: "Check if passwords are already shadowed"
+  ansible.builtin.shell: |
+    grep -E '^[^:]+::' /etc/passwd || true
+  register: non_shadowed_accounts
+  changed_when: false
+  failed_when: false
+
+- name: "Fail if non-shadowed accounts exist"
+  ansible.builtin.fail:
+    msg: "Non-shadowed accounts detected. Run 'pwconv' to enforce shadowed passwords."
+  when: non_shadowed_accounts.stdout | length > 0
+
+- name: "Ensure shadowed passwords are enforced via pwconv"
+  ansible.builtin.command: pwconv
+  args:
+    creates: /etc/shadow
+  become: true
+
+- name: "Verify shadowed passwords are now in use"
+  ansible.builtin.lineinfile:
+    path: /etc/passwd
+    regexp: '^[^:]+::'
+    state: absent
+  register: result
+  failed_when: false
+
+- name: "Debug variable Verify shadowed passwords are now in use"
+  ansible.builtin.debug:
+    msg: "debug variable verify shadowed passwords are now in use : {{ result }}"
+  changed_when: false

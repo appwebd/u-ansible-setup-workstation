@@ -1,5 +1,5 @@
 ---
-- name: "Check if module is loaded"
+- name: "unload | Check if module is loaded"
   ansible.builtin.shell:
     cmd: |
       set -euo pipefail
@@ -9,7 +9,7 @@
   changed_when: false
   loop: "{{ filtered_filesystem_modules }}"
 
-- name: "Unload loaded kernel modules"
+- name: "unload | Unload loaded kernel modules"
   become: true
   ansible.builtin.shell:
     cmd: |

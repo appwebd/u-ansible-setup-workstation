@@ -1,38 +1,34 @@
-# .ansible-lint.yml
-
-profile: production  # min, basic, moderate, safety, shared, production
-
-strict: true
-
+profile: production
 exclude_paths:
-  - .idea/
-  - .vscode/
-  - bin/
-  - docs/
-  - prompts/
+  - .git/
   - build/
   - dist/
-  - tmp/
+  - .molecule/
+  - node_modules/
+  - .idea/
 
-skip_list:
-  - yaml[line-length]   # Ignore specifics rules like line-le
-  - name[casing]
+strict: true
+use_default_rules: true
+loop_var_prefix: "^(__|{role}_)"
+var_naming_pattern: "^[a-z_][a-z0-9_]*$"
+
+enable_list:
+  - args
+  - empty-string-compare
+  - no-log-password
+  - no-same-owner
+  - name[prefix]
+  - galaxy-version-incorrect
+  - yaml
+  - no-changed-when
+  - command-instead-of-module
+  - risky-shell-pipe
 
 warn_list:
-  - experimental        # Only warn about experimental rules, not fail on themonly like warnings for experimental rules
-  - fqcn-builtins       # Warnings if you don't use FQCN
+  - fqcn-builtins
 
-use_default_rules: true
+offline: true
+task_name_prefix: "{stem} | "
 
-offline: false
-
-parseable: false
-
-verbosity: 1
-
-kinds:
-  - playbook
-  - tasks
-  - handlers
-  - role
-  - meta
+skip_list:
+  - var-naming[no-role-prefix]

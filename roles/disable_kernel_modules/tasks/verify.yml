@@ -1,12 +1,12 @@
 ---
-- name: "Verify modprobe configuration"
+- name: "verify | Verify modprobe configuration"
   ansible.builtin.command: "set -euo pipefail | modprobe -n -v {{ item }}"
   register: modprobe_check
   changed_when: false
   failed_when: "'install /bin/false' not in modprobe_check.stdout"
   loop: "{{ filtered_filesystem_modules }}"
 
-- name: "Verify module is not loaded"
+- name: "verify | Verify module is not loaded"
   ansible.builtin.shell:
     cmd: |
       set -euo pipefail

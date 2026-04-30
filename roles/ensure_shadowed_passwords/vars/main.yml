@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the ensure_shadowed_passwords role
+
+shadowed_password_check_file: /etc/passwd
+shadowed_password_pattern: '^[\\w@-]+:x:'

@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Default variables for the secure_opasswd_permissions role
+# These values can be overridden by inventory or playbook variables
+
+opasswd_file: /etc/security/opasswd
+opasswd_backup_file: /etc/security/opasswd.old
+opasswd_owner: root
+opasswd_group: root
+opasswd_mode: "0600"
