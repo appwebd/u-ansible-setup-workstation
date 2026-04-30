@@ -1,0 +1,8 @@
+---
+# Role: ssh_access_control
+# Description: Handlers for the ssh_access_control role
+
+- name: Restart SSH Service
+  ansible.builtin.service:
+    name: "{{ ssh_service_name }}"
+    state: restarted
