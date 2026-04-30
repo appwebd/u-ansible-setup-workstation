@@ -1,0 +1,23 @@
+---
+# Role        : sshd_usepam
+# Description : Ensure sshd UsePAM is enabled (Wazuh ID 35661)
+# Wazuh ID    : 35661
+
+- name: "Ensure UsePAM is set to yes in sshd_config"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^\s*#?\s*UsePAM\s+'
+    line: "{{ sshd_usepam_line }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    backrefs: true
+  notify: Restart sshd
+
+- name: "Verify UsePAM setting is enabled"
+  ansible.builtin.command: sshd -T
+  register: sshd_test_output
+  changed_when: false
+  failed_when: "'usepam yes' not in sshd_test_output.stdout.lower()"
+  check_mode: false
