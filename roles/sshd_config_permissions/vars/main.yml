@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for sshd_config_permissions role
+
+sshd_config_permissions:
+  file: "{{ sshd_config_file }}"
+  dir: "{{ sshd_config_dir }}"
