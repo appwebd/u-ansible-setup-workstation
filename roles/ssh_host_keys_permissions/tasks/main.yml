@@ -1,0 +1,51 @@
+---
+# Role        : ssh_host_keys_permissions
+# Description : Ensure permissions on SSH public host key files are configured (Wazuh ID 35642)
+# Wazuh ID    : 35642
+
+- name: "Ensure SSH public host key files exist and have correct permissions, owner, and group"
+  ansible.builtin.stat:
+    path: "{{ item }}"
+    get_attributes: false
+    get_checksum: false
+    get_mime: false
+  register: ssh_key_stat_result
+  loop: "{{ ssh_public_key_files }}"
+  loop_control:
+    label: "{{ item }}"
+  changed_when: false
+  failed_when: false
+
+- name: "Set permissions, owner, and group for SSH public host key files"
+  ansible.builtin.file:
+    path: "{{ item.item }}"
+    mode: "{{ ssh_host_keys_permissions_mode }}"
+    owner: "{{ ssh_host_keys_permissions_owner }}"
+    group: "{{ ssh_host_keys_permissions_group }}"
+  loop: "{{ ssh_key_stat_result.results | selectattr('stat.exists', 'equalto', true) | list }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists | bool
+  notify: "Restart SSH service"
+
+- name: "Verify SSH public host key files have correct permissions"
+  ansible.builtin.command: "stat -c '%a:%U:%G' {{ item }}"
+  register: ssh_key_permissions_check
+  changed_when: false
+  failed_when: false
+  loop: "{{ ssh_public_key_files }}"
+  loop_control:
+    label: "{{ item }}"
+  when: item in ansible_facts.files | default([]) | selectattr('path', 'defined') | map(attribute='path') | list
+
+- name: "Ensure SSH public host key files are not world-readable or group-writable"
+  ansible.builtin.assert:
+    that:
+      - "not (item.stat.wgrp | default(false))"
+      - "not (item.stat.woth | default(false))"
+    fail_msg: "SSH public host key file {{ item.item }} has insecure permissions (group-writable or world-writable)"
+    success_msg: "SSH public host key file {{ item.item }} permissions are secure"
+  loop: "{{ ssh_key_stat_result.results | selectattr('stat.exists', 'equalto', true) | list }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists | bool

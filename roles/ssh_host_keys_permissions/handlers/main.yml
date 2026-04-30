@@ -1,0 +1,9 @@
+---
+# Role: ssh_host_keys_permissions
+# Description: Handlers for the ssh_host_keys_permissions role
+
+- name: Restart SSH service
+  ansible.builtin.service:
+    name: "{{ ssh_service_name }}"
+    state: restarted
+  when: ssh_service_name is defined
