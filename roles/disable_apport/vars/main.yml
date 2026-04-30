@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the disable_apport role
+# These are not intended to be overridden by users
+
+apport_package_name: apport

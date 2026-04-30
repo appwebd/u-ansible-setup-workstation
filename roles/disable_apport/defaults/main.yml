@@ -1,0 +1,7 @@
+---
+# defaults/main.yml
+# Default variables for disable_apport role
+
+apport_enabled_value: 0
+apport_config_file: /etc/default/apport
+apport_service_name: apport.service
