@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default variables for sshd_usepam role
+# Ensure UsePAM is enabled in sshd_config
+
+sshd_config_file: /etc/ssh/sshd_config
+sshd_usepam_value: "yes"
+sshd_usepam_line: "UsePAM {{ sshd_usepam_value }}"

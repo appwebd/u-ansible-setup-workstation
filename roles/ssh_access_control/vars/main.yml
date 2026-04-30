@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for ssh_access_control role
+
+ssh_access_config_file: "{{ ssh_config_include_dir }}/99-ssh-access-control.conf"

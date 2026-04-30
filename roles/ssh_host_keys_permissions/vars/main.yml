@@ -1,0 +1,8 @@
+---
+# vars/main.yml
+# Internal constants for ssh_host_keys_permissions role
+
+ssh_public_key_files:
+  - "/etc/ssh/ssh_host_rsa_key.pub"
+  - "/etc/ssh/ssh_host_ecdsa_key.pub"
+  - "/etc/ssh/ssh_host_ed25519_key.pub"

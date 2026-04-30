@@ -1,0 +1,7 @@
+---
+# Role: disable_apport
+# Description: Handlers for the disable_apport role
+
+- name: Restart System
+  ansible.builtin.debug:
+    msg: "A system restart may be required to fully apply changes"

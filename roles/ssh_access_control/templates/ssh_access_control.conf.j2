@@ -1,0 +1,19 @@
+# SSH Access Control Configuration
+# Managed by Ansible (Wazuh ID 35643)
+# Generated: {{ lookup('pipe', 'date "+%Y-%m-%d_%H-%M-%S"') }}
+
+{% if ssh_access_allow_users | length > 0 %}
+AllowUsers {{ ssh_access_allow_users | join(' ') }}
+{% endif %}
+
+{% if ssh_access_allow_groups | length > 0 %}
+AllowGroups {{ ssh_access_allow_groups | join(' ') }}
+{% endif %}
+
+{% if ssh_access_deny_users | length > 0 %}
+DenyUsers {{ ssh_access_deny_users | join(' ') }}
+{% endif %}
+
+{% if ssh_access_deny_groups | length > 0 %}
+DenyGroups {{ ssh_access_deny_groups | join(' ') }}
+{% endif %}

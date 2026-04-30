@@ -1,0 +1,38 @@
+---
+# Role        : disable_apport
+# Description : Ensure Automatic Error Reporting is not enabled
+# Wazuh ID    : 35545
+
+- name: "Ensure Apport is not enabled in configuration file"
+  ansible.builtin.lineinfile:
+    path: "{{ apport_config_file }}"
+    regexp: '^enabled\s*=\s*\d+'
+    line: 'enabled={{ apport_enabled_value }}'
+    create: true
+    owner: root
+    group: root
+    mode: '0644'
+    state: present
+
+- name: "Ensure Apport service is stopped"
+  ansible.builtin.systemd:
+    name: "{{ apport_service_name }}"
+    state: stopped
+    daemon_reload: true
+  failed_when: false
+
+- name: "Ensure Apport service is masked"
+  ansible.builtin.systemd:
+    name: "{{ apport_service_name }}"
+    masked: true
+    daemon_reload: true
+
+- name: "Ensure Apport package is removed (purge)"
+  ansible.builtin.apt:
+    name: "{{ apport_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
+  register: apport_purge_result
+  failed_when:
+    - apport_purge_result is failed and 'No package found' not in apport_purge_result.stderr
