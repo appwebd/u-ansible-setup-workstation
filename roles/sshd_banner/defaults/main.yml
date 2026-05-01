@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for sshd_banner role
+# Safe defaults for Ubuntu 24.04 server deployment
+
+sshd_banner_enabled: true
+sshd_banner_file: /etc/issue.net
+sshd_banner_content: "Authorized users only. All activity may be monitored and reported."
+sshd_config_path: /etc/ssh/sshd_config

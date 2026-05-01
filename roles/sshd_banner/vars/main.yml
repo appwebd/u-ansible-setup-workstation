@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for sshd_banner role
+
+sshd_service_name: sshd
+sshd_config_dir: /etc/ssh
