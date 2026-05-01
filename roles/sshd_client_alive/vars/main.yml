@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for sshd_client_alive role
+# These are not intended to be overridden by users
+
+sshd_service_name: sshd
+sshd_package_name: openssh-server

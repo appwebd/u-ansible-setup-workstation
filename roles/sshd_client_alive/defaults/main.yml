@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for sshd_client_alive role
+# These values can be overridden by inventory or extra vars
+
+sshd_client_alive_interval: 15
+sshd_client_alive_count_max: 3
+sshd_config_file: /etc/ssh/sshd_config
+sshd_include_dir: /etc/ssh/sshd_config.d
