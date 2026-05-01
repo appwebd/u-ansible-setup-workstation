@@ -1,0 +1,10 @@
+---
+# Role: sshd_banner
+# Description: Handlers for sshd_banner role
+
+- name: Restart sshd
+  ansible.builtin.systemd:
+    name: "{{ sshd_service_name }}"
+    state: restarted
+    daemon_reload: true
+  become: true

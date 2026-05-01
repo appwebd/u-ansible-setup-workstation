@@ -13,8 +13,8 @@
 
   roles:
 
-  # 1. Filesystems and Partitioning
-  # Disable filesystem modules
+# 1. Filesystems and Partitioning
+# Disable filesystem modules
     - disable_kernel_modules                   # 35500 Ensure mounting of cramfs filesystems is disabled.
                                                # 35501 Ensure freevxfs kernel module is not available.
                                                # 35502 Ensure hfs kernel module is not available
@@ -74,7 +74,7 @@
     - enable_aslr                              # 35542 Ensure address space layout randomization is enabled
     - restrict_core_dumps                      # 35543 Ensure core dumps are restricted.
     - remove_prelink                           # 35544 Ensure prelink is not installed
-#    - disable_apport                           # 35545 Ensure Automatic Error Reporting is not enabled.
+    - disable_apport                           # 35545 Ensure Automatic Error Reporting is not enabled.
 
 # 4. Login Banners and Warnings
     - configure_motd                           # 35546 Ensure message of the day is configured properly
@@ -97,35 +97,35 @@
 
 # 6. Unnecessary Services (Service Hardening)
 # Unneeded network services
-# 35561 Ensure autofs services are not in use.
-# 35562 Ensure avahi daemon services are not in use.
-# 35563 Ensure dhcp server services are not in use.
-# 35564 Ensure dns server services are not in use.
-# 35565 Ensure dnsmasq services are not in use.
-# 35566 Ensure ftp server services are not in use.
-# 35567 Ensure ldap server services are not in use.
-# 35568 Ensure message access server services are not in use.
-# 35569 Ensure network file system services are not in use.
-# 35570 Ensure nis server services are not in use.
-# 35571 Ensure print server services are not in use.
-# 35572 Ensure rpcbind services are not in use.
-# 35573 Ensure rsync services are not in use.
-# 35574 Ensure samba file server services are not in use.
-# 35575 Ensure snmp services are not in use.
-# 35576 Ensure tftp server services are not in use.
-# 35577 Ensure web proxy server services are not in use.
-# 35578 Ensure web server services are not in use.
-# 35579 Ensure xinetd services are not in use.
-# 35580 Ensure X window server services are not in use.
+                                                # 35561 Ensure autofs services are not in use.
+                                                # 35562 Ensure avahi daemon services are not in use.
+                                                # 35563 Ensure dhcp server services are not in use.
+                                                # 35564 Ensure dns server services are not in use.
+                                                # 35565 Ensure dnsmasq services are not in use.
+                                                # 35566 Ensure ftp server services are not in use.
+                                                # 35567 Ensure ldap server services are not in use.
+                                                # 35568 Ensure message access server services are not in use.
+                                                # 35569 Ensure network file system services are not in use.
+                                                # 35570 Ensure nis server services are not in use.
+                                                # 35571 Ensure print server services are not in use.
+                                                # 35572 Ensure rpcbind services are not in use.
+                                                # 35573 Ensure rsync services are not in use.
+                                                # 35574 Ensure samba file server services are not in use.
+                                                # 35575 Ensure snmp services are not in use.
+                                                # 35576 Ensure tftp server services are not in use.
+                                                # 35577 Ensure web proxy server services are not in use.
+                                                # 35578 Ensure web server services are not in use.
+                                                # 35579 Ensure xinetd services are not in use.
+                                                # 35580 Ensure X window server services are not in use.
 
 # Unneeded client packages
-# 35581 Ensure mail transfer agent is configured for local-only mode.
-# 35582 Ensure NIS Client is not installed.
-# 35583 Ensure rsh client is not installed.
-# 35584 Ensure talk client is not installed.
-# 35585 Ensure telnet client is not installed.
-# 35586 Ensure ldap client is not installed.
-# 35587 Ensure ftp client is not installed.
+                                                # 35581 Ensure mail transfer agent is configured for local-only mode.
+                                                # 35582 Ensure NIS Client is not installed.
+                                                # 35583 Ensure rsh client is not installed.
+                                                # 35584 Ensure talk client is not installed.
+                                                # 35585 Ensure telnet client is not installed.
+                                                # 35586 Ensure ldap client is not installed.
+                                                # 35587 Ensure ftp client is not installed.
 
 ## 7. Time Synchronization
     - configure_timesyncd_authorized_servers   # 35588 Ensure systemd-timesyncd configured with authorized timeserver.
@@ -135,204 +135,204 @@
     - enable_chrony                            # 35592 Ensure chrony is enabled and running.
 
 # 8. Job Scheduling (cron / at)
-# 35593 Ensure cron daemon is enabled and active.
-# 35594 Ensure permissions on /etc/crontab are configured.
-# 35595 Ensure permissions on /etc/cron.hourly are configured.
-# 35596 Ensure permissions on /etc/cron.daily are configured.
-# 35597 Ensure permissions on /etc/cron.weekly are configured.
-# 35598 Ensure permissions on /etc/cron.monthly are configured.
-# 35599 Ensure permissions on /etc/cron.d are configured.
-# 35600 Ensure crontab is restricted to authorized users.
-# 35601 Ensure at is restricted to authorized users.
+                                                # 35593 Ensure cron daemon is enabled and active.
+                                                # 35594 Ensure permissions on /etc/crontab are configured.
+                                                # 35595 Ensure permissions on /etc/cron.hourly are configured.
+                                                # 35596 Ensure permissions on /etc/cron.daily are configured.
+                                                # 35597 Ensure permissions on /etc/cron.weekly are configured.
+                                                # 35598 Ensure permissions on /etc/cron.monthly are configured.
+                                                # 35599 Ensure permissions on /etc/cron.d are configured.
+                                                # 35600 Ensure crontab is restricted to authorized users.
+                                                # 35601 Ensure at is restricted to authorized users.
 
 # 9. Network Interfaces and Devices
-# 35602 Ensure wireless interfaces are disabled.
-# 35603 Ensure bluetooth services are not in use.
+                                                # 35602 Ensure wireless interfaces are disabled.
+                                                # 35603 Ensure bluetooth services are not in use.
 
 # 10. Network Stack Hardening (Kernel Networking)
-# 35608 Ensure ip forwarding is disabled.
-# 35609 Ensure packet redirect sending is disabled.
-# 35610 Ensure bogus icmp responses are ignored.
-# 35611 Ensure broadcast icmp requests are ignored.
-# 35612 Ensure icmp redirects are not accepted.
-# 35613 Ensure secure icmp redirects are not accepted.
-# 35614 Ensure reverse path filtering is enabled.
-# 35615 Ensure source routed packets are not accepted.
-# 35616 Ensure suspicious packets are logged.
-# 35617 Ensure tcp syn cookies is enabled.
-# 35618 Ensure ipv6 router advertisements are not accepted.
+                                                # 35608 Ensure ip forwarding is disabled.
+                                                # 35609 Ensure packet redirect sending is disabled.
+                                                # 35610 Ensure bogus icmp responses are ignored.
+                                                # 35611 Ensure broadcast icmp requests are ignored.
+                                                # 35612 Ensure icmp redirects are not accepted.
+                                                # 35613 Ensure secure icmp redirects are not accepted.
+                                                # 35614 Ensure reverse path filtering is enabled.
+                                                # 35615 Ensure source routed packets are not accepted.
+                                                # 35616 Ensure suspicious packets are logged.
+                                                # 35617 Ensure tcp syn cookies is enabled.
+                                                # 35618 Ensure ipv6 router advertisements are not accepted.
 
 # 11. Firewall Configuration (UFW, nftables, iptables)
-# 35619 Ensure a single firewall configuration utility is in use.
-# 35620 Ensure ufw is installed.
-# 35621 Ensure iptables-persistent is not installed with ufw.
-# 35622 Ensure ufw service is enabled.
-# 35623 Ensure ufw loopback traffic is configured.
-# 35624 Ensure ufw default deny firewall policy.
-# 35625 Ensure nftables is installed.
-# 35626 Ensure ufw is uninstalled or disabled with nftables.
-# 35627 Ensure iptables are flushed with nftables.
-# 35628 Ensure a nftables table exists.
-# 35629 Ensure nftables base chains exist.
-# 35630 Ensure nftables default deny firewall policy.
-# 35631 Ensure nftables service is enabled.
-# 35632 Ensure nftables rules are permanent.
-# 35633 Ensure iptables packages are installed.
-# 35634 Ensure nftables is not in use with iptables.
-# 35635 Ensure ufw is not in use with iptables.
-# 35636 Ensure iptables default deny firewall policy.
-# 35637 Ensure iptables loopback traffic is configured.
-# 35638 Ensure ip6tables default deny firewall policy.
-# 35639 Ensure ip6tables loopback traffic is configured.
+                                                # 35619 Ensure a single firewall configuration utility is in use.
+                                                # 35620 Ensure ufw is installed.
+                                                # 35621 Ensure iptables-persistent is not installed with ufw.
+                                                # 35622 Ensure ufw service is enabled.
+                                                # 35623 Ensure ufw loopback traffic is configured.
+                                                # 35624 Ensure ufw default deny firewall policy.
+                                                # 35625 Ensure nftables is installed.
+                                                # 35626 Ensure ufw is uninstalled or disabled with nftables.
+                                                # 35627 Ensure iptables are flushed with nftables.
+                                                # 35628 Ensure a nftables table exists.
+                                                # 35629 Ensure nftables base chains exist.
+                                                # 35630 Ensure nftables default deny firewall policy.
+                                                # 35631 Ensure nftables service is enabled.
+                                                # 35632 Ensure nftables rules are permanent.
+                                                # 35633 Ensure iptables packages are installed.
+                                                # 35634 Ensure nftables is not in use with iptables.
+                                                # 35635 Ensure ufw is not in use with iptables.
+                                                # 35636 Ensure iptables default deny firewall policy.
+                                                # 35637 Ensure iptables loopback traffic is configured.
+                                                # 35638 Ensure ip6tables default deny firewall policy.
+                                                # 35639 Ensure ip6tables loopback traffic is configured.
 
 # 12. SSH Configuration
-# 35640 Ensure permissions on /etc/ssh/sshd_config are configured.
-# 35641 Ensure permissions on SSH private host key files are configured.
-# 35642 Ensure permissions on SSH public host key files are configured.
-# 35643 Ensure sshd access is configured.
-# 35644 Ensure sshd Banner is configured.
-# 35645 Ensure sshd Ciphers are configured.
-# 35646 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
-# 35647 Ensure sshd DisableForwarding is enabled.
-# 35648 Ensure sshd GSSAPIAuthentication is disabled.
-# 35649 Ensure sshd HostbasedAuthentication is disabled.
-# 35650 Ensure sshd IgnoreRhosts is enabled.
-# 35651 Ensure sshd KexAlgorithms is configured.
-# 35652 Ensure sshd LoginGraceTime is configured.
-# 35653 Ensure sshd LogLevel is configured.
-# 35654 Ensure sshd MACs are configured.
-# 35655 Ensure sshd MaxAuthTries is configured.
-# 35656 Ensure sshd MaxSessions is configured.
-# 35657 Ensure sshd MaxStartups is configured.
-# 35658 Ensure sshd PermitEmptyPasswords is disabled.
-# 35659 Ensure sshd PermitRootLogin is disabled.
-# 35660 Ensure sshd PermitUserEnvironment is disabled.
-# 35661 Ensure sshd UsePAM is enabled.
+    - sshd_config_permissions                   # 35640 Ensure permissions on /etc/ssh/sshd_config are configured.
+    - ssh_host_keys_permissions                 # 35641 Ensure permissions on SSH private host key files are configured.
+    - ssh_host_keys_permissions                 # 35642 Ensure permissions on SSH public host key files are configured.
+    - ssh_access_control                        # 35643 Ensure sshd access is configured.
+    - sshd_banner                               # 35644 Ensure sshd Banner is configured.
+    - sshd_ciphers                              # 35645 Ensure sshd Ciphers are configured.
+#    - sshd_client_alive                         # 35646 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
+#    - sshd_disable_forwarding                   # 35647 Ensure sshd DisableForwarding is enabled.
+#    - sshd_gssapi_authentication                # 35648 Ensure sshd GSSAPIAuthentication is disabled.
+#    - sshd_hostbasedauthentication_disabled     # 35649 Ensure sshd HostbasedAuthentication is disabled.
+#    - sshd_ignore_rhosts                        # 35650 Ensure sshd IgnoreRhosts is enabled.
+#    - sshd_kexalgorithms                        # 35651 Ensure sshd KexAlgorithms is configured.
+#    - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
+#    - sshd_loglevel                             # 35653 Ensure sshd LogLevel is configured.
+#    - sshd_macs                                 # 35654 Ensure sshd MACs are configured.
+#    - sshd_maxauthtries                         # 35655 Ensure sshd MaxAuthTries is configured.
+#    - sshd_maxsessions                          # 35656 Ensure sshd MaxSessions is configured.
+#    - sshd_maxstartups                          # 35657 Ensure sshd MaxStartups is configured.
+#    - sshd_permitemptypasswords_disabled        # 35658 Ensure sshd PermitEmptyPasswords is disabled.
+#    - sshd_permitrootlogin_disabled             # 35659 Ensure sshd PermitRootLogin is disabled.
+#    - sshd_permituserenvironment                # 35660 Ensure sshd PermitUserEnvironment is disabled.
+#    - sshd_usepam                               # 35661 Ensure sshd UsePAM is enabled.
 
 # 13. Privilege Escalation and sudo
-# 35662 Ensure sudo is installed.
-# 35663 Ensure sudo commands use pty.
-# 35664 Ensure sudo log file exists.
-# 35665 Ensure users must provide password for privilege escalation.
-# 35666 Ensure re-authentication for privilege escalation is not disabled globally.
-# 35667 Ensure sudo authentication timeout is configured correctly.
-# 35668 Ensure access to the su command is restricted.
+                                                # 35662 Ensure sudo is installed.
+                                                # 35663 Ensure sudo commands use pty.
+                                                # 35664 Ensure sudo log file exists.
+                                                # 35665 Ensure users must provide password for privilege escalation.
+                                                # 35666 Ensure re-authentication for privilege escalation is not disabled globally.
+                                                # 35667 Ensure sudo authentication timeout is configured correctly.
+                                                # 35668 Ensure access to the su command is restricted.
 
 # 14. PAM and Authentication Policies
 # PAM modules and setup
-# 35669 Ensure latest version of pam is installed.
-# 35670 Ensure libpam-modules is installed.
-# 35671 Ensure libpam-pwquality is installed.
-# 35672 Ensure pam_unix module is enabled.
-# 35673 Ensure pam_faillock module is enabled.
-# 35674 Ensure pam_pwquality module is enabled.
-# 35675 Ensure pam_pwhistory module is enabled.
+                                                # 35669 Ensure latest version of pam is installed.
+                                                # 35670 Ensure libpam-modules is installed.
+                                                # 35671 Ensure libpam-pwquality is installed.
+                                                # 35672 Ensure pam_unix module is enabled.
+                                                # 35673 Ensure pam_faillock module is enabled.
+                                                # 35674 Ensure pam_pwquality module is enabled.
+                                                # 35675 Ensure pam_pwhistory module is enabled.
 
 # Account lockout policies
-# 35676 Ensure password failed attempts lockout is configured.
-# 35677 Ensure password unlock time is configured.
-# 35678 Ensure password failed attempts lockout includes root account.
+                                                # 35676 Ensure password failed attempts lockout is configured.
+                                                # 35677 Ensure password unlock time is configured.
+                                                # 35678 Ensure password failed attempts lockout includes root account.
 
 # Password complexity rules
-# 35679 Ensure password number of changed characters is configured.
-# 35680 Ensure minimum password length is configured.
-# 35681 Ensure password complexity is configured.
-# 35682 Ensure password same consecutive characters is configured.
-# 35683 Ensure password maximum sequential characters is configured.
-# 35684 Ensure password dictionary check is enabled.
-# 35685 Ensure password quality checking is enforced.
-# 35686 Ensure password quality is enforced for the root user.
+                                                # 35679 Ensure password number of changed characters is configured.
+                                                # 35680 Ensure minimum password length is configured.
+                                                # 35681 Ensure password complexity is configured.
+                                                # 35682 Ensure password same consecutive characters is configured.
+                                                # 35683 Ensure password maximum sequential characters is configured.
+                                                # 35684 Ensure password dictionary check is enabled.
+                                                # 35685 Ensure password quality checking is enforced.
+                                                # 35686 Ensure password quality is enforced for the root user.
 
 # Password history enforcement
-# 35687 Ensure password history remember is configured.
-# 35688 Ensure password history is enforced for the root user.
-# 35689 Ensure pam_pwhistory includes use_authtok.
-# 35690 Ensure pam_unix does not include nullok.
-# 35691 Ensure pam_unix does not include remember.
-# 35692 Ensure pam_unix includes a strong password hashing algorithm.
-# 35693 Ensure pam_unix includes use_authtok.
+                                                # 35687 Ensure password history remember is configured.
+                                                # 35688 Ensure password history is enforced for the root user.
+                                                # 35689 Ensure pam_pwhistory includes use_authtok.
+                                                # 35690 Ensure pam_unix does not include nullok.
+                                                # 35691 Ensure pam_unix does not include remember.
+                                                # 35692 Ensure pam_unix includes a strong password hashing algorithm.
+                                                # 35693 Ensure pam_unix includes use_authtok.
 
 # Password aging and expiration
-# 35694 Ensure password expiration is configured.
-# 35695 Ensure minimum password days is configured.
-# 35696 Ensure password expiration warning days is configured.
-# 35697 Ensure strong password hashing algorithm is configured.
-# 35698 Ensure inactive password lock is configured.
+                                                # 35694 Ensure password expiration is configured.
+                                                # 35695 Ensure minimum password days is configured.
+                                                # 35696 Ensure password expiration warning days is configured.
+                                                # 35697 Ensure strong password hashing algorithm is configured.
+                                                # 35698 Ensure inactive password lock is configured.
 
 # 15. User Accounts and Identity Management
-# 35699 Ensure root is the only UID 0 account.
-# 35700 Ensure root is the only GID 0 account.
-# 35701 Ensure group root is the only GID 0 group.
-# 35702 Ensure root account access is controlled.
-# 35703 Ensure root user umask is configured.
-# 35704 Ensure nologin is not listed in /etc/shells.
-# 35705 Ensure default user shell timeout is configured.
-# 35706 Ensure default user umask is configured.
+                                                # 35699 Ensure root is the only UID 0 account.
+                                                # 35700 Ensure root is the only GID 0 account.
+                                                # 35701 Ensure group root is the only GID 0 group.
+                                                # 35702 Ensure root account access is controlled.
+                                                # 35703 Ensure root user umask is configured.
+                                                # 35704 Ensure nologin is not listed in /etc/shells.
+                                                # 35705 Ensure default user shell timeout is configured.
+                                                # 35706 Ensure default user umask is configured.
 
 # 16. Logging (journald / rsyslog)
-# 35707 Ensure journald service is enabled and active.
-# 35708 Ensure journald log file rotation is configured.
-# 35709 Ensure systemd-journal-remote is installed.
-# 35710 Ensure systemd-journal-upload authentication is configured.
-# 35711 Ensure systemd-journal-upload is enabled and active.
-# 35712 Ensure systemd-journal-remote service is not in use.
-# 35713 Ensure journald ForwardToSyslog is disabled.
-# 35714 Ensure journald Compress is configured.
-# 35715 Ensure journald Storage is configured.
-# 35716 Ensure rsyslog is installed.
-# 35717 Ensure rsyslog service is enabled and active.
-# 35718 Ensure journald is configured to send logs to rsyslog.
-# 35719 Ensure rsyslog log file creation mode is configured.
-# 35720 Ensure rsyslog is configured to send logs to a remote log host.
-# 35721 Ensure rsyslog is not configured to receive logs from a remote client.
-# 35722 Ensure access to all logfiles has been configured.
+                                                # 35707 Ensure journald service is enabled and active.
+                                                # 35708 Ensure journald log file rotation is configured.
+                                                # 35709 Ensure systemd-journal-remote is installed.
+                                                # 35710 Ensure systemd-journal-upload authentication is configured.
+                                                # 35711 Ensure systemd-journal-upload is enabled and active.
+                                                # 35712 Ensure systemd-journal-remote service is not in use.
+                                                # 35713 Ensure journald ForwardToSyslog is disabled.
+                                                # 35714 Ensure journald Compress is configured.
+                                                # 35715 Ensure journald Storage is configured.
+                                                # 35716 Ensure rsyslog is installed.
+                                                # 35717 Ensure rsyslog service is enabled and active.
+                                                # 35718 Ensure journald is configured to send logs to rsyslog.
+                                                # 35719 Ensure rsyslog log file creation mode is configured.
+                                                # 35720 Ensure rsyslog is configured to send logs to a remote log host.
+                                                # 35721 Ensure rsyslog is not configured to receive logs from a remote client.
+                                                # 35722 Ensure access to all logfiles has been configured.
 
 # 17. Auditing (auditd)
 # Audit service configuration
-# 35723 Ensure auditd packages are installed.
-# 35724 Ensure auditd service is enabled and active.
-# 35725 Ensure auditing for processes that start prior to auditd is enabled.
-# 35726 Ensure audit_backlog_limit is sufficient.
-# 35727 Ensure audit log storage size is configured.
-# 35728 Ensure audit logs are not automatically deleted.
-# 35729 Ensure system is disabled when audit logs are full.
-# 35730 Ensure system warns when audit logs are low on space.
+                                                # 35723 Ensure auditd packages are installed.
+                                                # 35724 Ensure auditd service is enabled and active.
+                                                # 35725 Ensure auditing for processes that start prior to auditd is enabled.
+                                                # 35726 Ensure audit_backlog_limit is sufficient.
+                                                # 35727 Ensure audit log storage size is configured.
+                                                # 35728 Ensure audit logs are not automatically deleted.
+                                                # 35729 Ensure system is disabled when audit logs are full.
+                                                # 35730 Ensure system warns when audit logs are low on space.
 
 # Audit rules (tracked events)
-# 35731 Ensure changes to system administration scope (sudoers) is collected.
-# 35732 Ensure actions as another user are always logged.
-# 35733 Ensure events that modify the sudo log file are collected.
-# 35734 Ensure events that modify date and time information are collected.
-# 35735 Ensure events that modify the system's network environment are collected.
-# 35736 Ensure unsuccessful file access attempts are collected.
-# 35737 Ensure events that modify user/group information are collected.
-# 35738 Ensure discretionary access control permission modification events are collected.
-# 35739 Ensure successful file system mounts are collected.
-# 35740 Ensure session initiation information is collected.
-# 35741 Ensure login and logout events are collected.
-# 35742 Ensure file deletion events by users are collected.
-# 35743 Ensure events that modify the system's Mandatory Access Controls are collected.
-# 35744 Ensure successful and unsuccessful attempts to use the chcon command are collected.
-# 35745 Ensure successful and unsuccessful attempts to use the setfacl command are collected.
-# 35746 Ensure successful and unsuccessful attempts to use the chacl command are collected.
-# 35747 Ensure successful and unsuccessful attempts to use the usermod command are collected.
-# 35748 Ensure kernel module loading unloading and modification is collected.
+                                                # 35731 Ensure changes to system administration scope (sudoers) is collected.
+                                                # 35732 Ensure actions as another user are always logged.
+                                                # 35733 Ensure events that modify the sudo log file are collected.
+                                                # 35734 Ensure events that modify date and time information are collected.
+                                                # 35735 Ensure events that modify the system's network environment are collected.
+                                                # 35736 Ensure unsuccessful file access attempts are collected.
+                                                # 35737 Ensure events that modify user/group information are collected.
+                                                # 35738 Ensure discretionary access control permission modification events are collected.
+                                                # 35739 Ensure successful file system mounts are collected.
+                                                # 35740 Ensure session initiation information is collected.
+                                                # 35741 Ensure login and logout events are collected.
+                                                # 35742 Ensure file deletion events by users are collected.
+                                                # 35743 Ensure events that modify the system's Mandatory Access Controls are collected.
+                                                # 35744 Ensure successful and unsuccessful attempts to use the chcon command are collected.
+                                                # 35745 Ensure successful and unsuccessful attempts to use the setfacl command are collected.
+                                                # 35746 Ensure successful and unsuccessful attempts to use the chacl command are collected.
+                                                # 35747 Ensure successful and unsuccessful attempts to use the usermod command are collected.
+                                                # 35748 Ensure kernel module loading unloading and modification is collected.
 
 # Audit configuration integrity
-# 35749 Ensure the audit configuration is immutable.
-# 35750 Ensure the running and on disk configuration is the same.
-# 35751 Ensure audit log files group owner is configured.
-# 35752 Ensure audit configuration files mode is configured.
-# 35753 Ensure audit configuration files owner is configured.
-# 35754 Ensure audit configuration files group owner is configured.
-# 35755 Ensure audit tools mode is configured.
-# 35756 Ensure audit tools owner is configured.
-# 35757 Ensure audit tools group owner is configured.
+                                                # 35749 Ensure the audit configuration is immutable.
+                                                # 35750 Ensure the running and on disk configuration is the same.
+                                                # 35751 Ensure audit log files group owner is configured.
+                                                # 35752 Ensure audit configuration files mode is configured.
+                                                # 35753 Ensure audit configuration files owner is configured.
+                                                # 35754 Ensure audit configuration files group owner is configured.
+                                                # 35755 Ensure audit tools mode is configured.
+                                                # 35756 Ensure audit tools owner is configured.
+                                                # 35757 Ensure audit tools group owner is configured.
 
 # 18. File Integrity Monitoring (AIDE)
-# 35758 Ensure AIDE is installed.
-# 35759 Ensure filesystem integrity is regularly checked.
-# 35760 Ensure cryptographic mechanisms are used to protect the integrity of audit tools.
+                                                # 35758 Ensure AIDE is installed.
+                                                # 35759 Ensure filesystem integrity is regularly checked.
+                                                # 35760 Ensure cryptographic mechanisms are used to protect the integrity of audit tools.
 
 # 19. Critical File Permissions
     - configure_passwd_permissions             # 35761 Ensure permissions on /etc/passwd are configured.
@@ -348,7 +348,7 @@
 
 # 20. Account Consistency and Basic Security Checks
     - ensure_shadowed_passwords                # 35771 Ensure accounts in /etc/passwd use shadowed passwords.
-    - shadow_password_fields                   # 35772 Ensure /etc/shadow password fields are not empty.
+#    - shadow_password_fields                   # 35772 Ensure /etc/shadow password fields are not empty.
                                                # 35773 Ensure all groups in /etc/passwd exist in /etc/group.
                                                # 35774 Ensure shadow group is empty.
                                                # 35775 Ensure no duplicate UIDs exist.

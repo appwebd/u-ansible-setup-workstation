@@ -1,0 +1,23 @@
+---
+# defaults/main.yml
+# Default variables for sshd_ciphers role
+# These values can be overridden by inventory or playbook variables
+
+# Only for documentation purposes (sshd_ciphers_blacklist variable is not used)
+sshd_ciphers_blacklist:
+  - "3des-cbc"
+  - "aes128-cbc"
+  - "aes192-cbc"
+  - "aes256-cbc"
+
+sshd_ciphers_whitelist:
+  - "aes256-gcm@openssh.com"
+  - "aes128-gcm@openssh.com"
+  - "aes256-ctr"
+  - "aes192-ctr"
+  - "aes128-ctr"
+
+sshd_config_file: /etc/ssh/sshd_config
+sshd_include_dir: /etc/ssh/sshd_config.d
+sshd_config_include_enabled: false
+sshd_config_include_file: "{{ sshd_include_dir }}/99-wazuh-ciphers.conf"

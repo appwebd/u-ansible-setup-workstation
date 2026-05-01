@@ -1,0 +1,65 @@
+---
+# Role        : sshd_banner
+# Description : Ensure sshd Banner is configured
+# Wazuh ID    : 35644
+
+- name: "Ensure sshd banner file directory exists"
+  ansible.builtin.file:
+    path: "{{ sshd_config_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Ensure sshd banner file exists with correct content"
+  ansible.builtin.copy:
+    dest: "{{ sshd_banner_file }}"
+    content: "{{ sshd_banner_content }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  when: sshd_banner_enabled
+
+- name: "Ensure Banner directive is set in sshd_config"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_path }}"
+    regexp: "^#Banner.*$"
+    line: "Banner {{ sshd_banner_file }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    insertafter: '^\s*#?\s*(Port|Protocol|AddressFamily|ListenAddress|ListenAddress\s+|BindAddress|AddressFamily|SyslogFacility|LogLevel|LoginGraceTime|StrictModes|IgnoreRhosts|HostbasedAuthentication|PermitRootLogin|PermitEmptyPasswords|PasswordAuthentication|PubkeyAuthentication|AuthorizedKeysFile|AuthorizedKeysCommand|AuthorizedKeysCommandUser|HostKey|HostCertificate|HostKeyAgent|KerberosAuthentication|GSSAPIAuthentication|GSSAPICleanupCredentials|KerberosOrLocalPasswd|KerberosTicketCleanup|KerberosGetAFSToken|GSSAPIServerIdentity|GSSAPIKeyExchange|GSSAPIAllowDelegCredentials|GSSAPIStoreCredentials|UsePAM|AllowAgentForwarding|AllowTcpForwarding|AllowUnixForwarding|GatewayPorts|X11Forwarding|X11DisplayOffset|X11UseLocalhost|PermitTTY|PrintMotd|PrintLastLog|TCPKeepAlive|PermitUserEnvironment|Compression|ClientAliveInterval|ClientAliveCountMax|MaxSessions|MaxStartups|PermitOpen|ForceCommand|ChrootDirectory|VersionAddendum|AcceptEnv|Subsystem|Match|Include|Banner)'
+    backup: true
+  notify: Restart sshd
+  when: sshd_banner_enabled
+
+- name: "Ensure Banner directive is absent when disabled"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_path }}"
+    regexp: "^#Banner.*$"
+    state: absent
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  notify: Restart sshd
+  when: not sshd_banner_enabled
+
+- name: "Verify Banner directive is correctly set"
+  ansible.builtin.shell: |
+    sshd -T 2>/dev/null | awk '$1 == "banner" {print $2}'
+  register: sshd_banner_check
+  changed_when: false
+  failed_when: sshd_banner_check.rc != 0 and sshd_banner_check.rc != 255
+  when: sshd_banner_enabled
+  notify: Restart sshd
+
+- name: "Ensure Banner directive points to correct file"
+  ansible.builtin.assert:
+    that:
+      - sshd_banner_check.stdout == sshd_banner_file
+    fail_msg: "sshd Banner directive does not point to {{ sshd_banner_file }}"
+    success_msg: "sshd Banner directive correctly configured"
+  when: sshd_banner_enabled
