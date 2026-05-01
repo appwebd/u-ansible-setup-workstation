@@ -13,8 +13,8 @@
 
   roles:
 
-  # 1. Filesystems and Partitioning
-  # Disable filesystem modules
+# 1. Filesystems and Partitioning
+# Disable filesystem modules
     - disable_kernel_modules                   # 35500 Ensure mounting of cramfs filesystems is disabled.
                                                # 35501 Ensure freevxfs kernel module is not available.
                                                # 35502 Ensure hfs kernel module is not available
@@ -190,8 +190,8 @@
     - ssh_host_keys_permissions                 # 35641 Ensure permissions on SSH private host key files are configured.
     - ssh_host_keys_permissions                 # 35642 Ensure permissions on SSH public host key files are configured.
     - ssh_access_control                        # 35643 Ensure sshd access is configured.
-#    - sshd_banner                               # 35644 Ensure sshd Banner is configured.
-#    - sshd_ciphers                              # 35645 Ensure sshd Ciphers are configured.
+    - sshd_banner                               # 35644 Ensure sshd Banner is configured.
+    - sshd_ciphers                              # 35645 Ensure sshd Ciphers are configured.
 #    - sshd_client_alive                         # 35646 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
 #    - sshd_disable_forwarding                   # 35647 Ensure sshd DisableForwarding is enabled.
 #    - sshd_gssapi_authentication                # 35648 Ensure sshd GSSAPIAuthentication is disabled.
