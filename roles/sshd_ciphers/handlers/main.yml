@@ -1,0 +1,8 @@
+---
+# Role: sshd_ciphers
+# Description: Handlers for the sshd_ciphers role
+
+- name: Restart sshd
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: restarted
