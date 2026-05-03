@@ -1,0 +1,8 @@
+---
+# Role: sshd_ignore_rhosts
+# Description: Handlers for the sshd_ignore_rhosts role
+
+- name: Restart sshd
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: restarted

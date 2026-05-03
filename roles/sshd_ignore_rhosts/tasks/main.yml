@@ -1,0 +1,23 @@
+---
+# Role        : sshd_ignore_rhosts
+# Description : Ensure sshd IgnoreRhosts is enabled
+# Wazuh ID    : 35650
+
+- name: "Ensure sshd IgnoreRhosts is enabled in sshd_config"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^#*\s*IgnoreRhosts\s+'
+    line: "IgnoreRhosts {{ sshd_ignore_rhosts_value }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    insertbefore: '^(Include|Match)\s'
+    backrefs: true
+  notify: Restart sshd
+
+- name: "Ensure sshd service is running and enabled"
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: started
+    enabled: true
