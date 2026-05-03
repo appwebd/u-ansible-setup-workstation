@@ -49,11 +49,13 @@
 
 - name: "Verify Banner directive is correctly set"
   ansible.builtin.shell: |
-    set -eu pipefail
+    set -euo pipefail
     sshd -T 2>/dev/null | awk '$1 == "banner" {print $2}'
+  args:
+    executable: /bin/bash
   register: sshd_banner_check
   changed_when: false
-  failed_when: sshd_banner_check.rc != 0 and sshd_banner_check.rc != 255
+  failed_when: sshd_banner_check.rc not in [0, 255]
   when: sshd_banner_enabled
   notify: Restart sshd
 
