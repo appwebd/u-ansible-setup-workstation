@@ -6,7 +6,7 @@
 - name: "Ensure GSSAPIAuthentication is disabled in sshd_config"
   ansible.builtin.lineinfile:
     path: "{{ sshd_config_file }}"
-    regexp: "^#*\\s*{{ sshd_gssapi_option }}\\s+.*" # Optional #
+    regexp: "^#*\\s*{{ sshd_gssapi_option }}\\s+.*"
     line: "{{ sshd_gssapi_option }} {{ sshd_gssapi_value }}"
     state: present
     owner: root
