@@ -193,7 +193,7 @@
     - sshd_banner                               # 35644 Ensure sshd Banner is configured.
     - sshd_ciphers                              # 35645 Ensure sshd Ciphers are configured.
     - sshd_client_alive                         # 35646 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
-#    - sshd_disable_forwarding                   # 35647 Ensure sshd DisableForwarding is enabled.
+    - sshd_disable_forwarding                   # 35647 Ensure sshd DisableForwarding is enabled.
 #    - sshd_gssapi_authentication                # 35648 Ensure sshd GSSAPIAuthentication is disabled.
 #    - sshd_hostbasedauthentication_disabled     # 35649 Ensure sshd HostbasedAuthentication is disabled.
 #    - sshd_ignore_rhosts                        # 35650 Ensure sshd IgnoreRhosts is enabled.
