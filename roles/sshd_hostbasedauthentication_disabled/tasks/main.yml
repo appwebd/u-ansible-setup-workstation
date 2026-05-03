@@ -28,8 +28,10 @@
 
 - name: "Verify HostbasedAuthentication is set to no"
   ansible.builtin.shell: |
-    set -eu pipefail
+    set -euo pipefail
     sshd -T 2>/dev/null | grep -i '^hostbasedauthentication no$'
+  args:
+    executable: /bin/bash
   changed_when: false
   register: sshd_check_result
   failed_when: >-
