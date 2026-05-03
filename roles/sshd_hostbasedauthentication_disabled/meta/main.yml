@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: sshd_hostbasedauthentication_disabled
+  author: Patricio Rojas Ortiz
+  description: Ensure sshd HostbasedAuthentication is disabled (Wazuh ID 35649)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - ssh
+    - hardening
+
+dependencies: []
