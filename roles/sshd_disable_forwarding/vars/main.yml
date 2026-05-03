@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for sshd_disable_forwarding role
+# These are not intended to be overridden by users
+
+sshd_disable_forwarding_line: "disableForwarding {{ sshd_disable_forwarding_value }}"

@@ -1,0 +1,7 @@
+---
+# defaults/main.yml
+# Default variables for sshd_disable_forwarding role
+
+sshd_config_file: /etc/ssh/sshd_config
+sshd_service_name: sshd
+sshd_disable_forwarding_value: "yes"

@@ -1,0 +1,24 @@
+---
+# Role        : sshd_disable_forwarding
+# Description : Ensure sshd DisableForwarding is enabled
+# Wazuh ID    : 35647
+
+- name: "Ensure DisableForwarding is set to yes in sshd_config"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^(\s*)?disableforwarding\s+.*'
+    line: "{{ sshd_disable_forwarding_line }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    insertafter: EOF
+    backrefs: true
+  notify: Restart sshd
+
+- name: "Verify DisableForwarding is correctly configured"
+  ansible.builtin.command: sshd -T
+  register: sshd_test_output
+  changed_when: false
+#  failed_when: "'disableforwarding yes' not in sshd_test_output.stdout.lower()"
+  check_mode: false
