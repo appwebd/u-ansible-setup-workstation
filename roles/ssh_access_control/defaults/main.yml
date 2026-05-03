@@ -9,7 +9,7 @@
 ssh_access_allow_users: ['pro']
 ssh_access_allow_groups: []
 ssh_access_deny_users: [
-    '_aided'
+    '_aided',
     '_apt',
     '_chrony',
     'backup',

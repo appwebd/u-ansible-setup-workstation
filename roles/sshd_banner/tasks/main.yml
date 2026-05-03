@@ -24,13 +24,13 @@
 - name: "Ensure Banner directive is set in sshd_config"
   ansible.builtin.lineinfile:
     path: "{{ sshd_config_path }}"
-    regexp: "^#Banner.*$"
+    regexp: "^#*Banner.*$"
     line: "Banner {{ sshd_banner_file }}"
     state: present
     owner: root
     group: root
     mode: "0644"
-    insertafter: '^\s*#?\s*(Port|Protocol|AddressFamily|ListenAddress|ListenAddress\s+|BindAddress|AddressFamily|SyslogFacility|LogLevel|LoginGraceTime|StrictModes|IgnoreRhosts|HostbasedAuthentication|PermitRootLogin|PermitEmptyPasswords|PasswordAuthentication|PubkeyAuthentication|AuthorizedKeysFile|AuthorizedKeysCommand|AuthorizedKeysCommandUser|HostKey|HostCertificate|HostKeyAgent|KerberosAuthentication|GSSAPIAuthentication|GSSAPICleanupCredentials|KerberosOrLocalPasswd|KerberosTicketCleanup|KerberosGetAFSToken|GSSAPIServerIdentity|GSSAPIKeyExchange|GSSAPIAllowDelegCredentials|GSSAPIStoreCredentials|UsePAM|AllowAgentForwarding|AllowTcpForwarding|AllowUnixForwarding|GatewayPorts|X11Forwarding|X11DisplayOffset|X11UseLocalhost|PermitTTY|PrintMotd|PrintLastLog|TCPKeepAlive|PermitUserEnvironment|Compression|ClientAliveInterval|ClientAliveCountMax|MaxSessions|MaxStartups|PermitOpen|ForceCommand|ChrootDirectory|VersionAddendum|AcceptEnv|Subsystem|Match|Include|Banner)'
+    insertafter: EOF
     backup: true
   notify: Restart sshd
   when: sshd_banner_enabled
@@ -49,10 +49,13 @@
 
 - name: "Verify Banner directive is correctly set"
   ansible.builtin.shell: |
+    set -euo pipefail
     sshd -T 2>/dev/null | awk '$1 == "banner" {print $2}'
+  args:
+    executable: /bin/bash
   register: sshd_banner_check
   changed_when: false
-  failed_when: sshd_banner_check.rc != 0 and sshd_banner_check.rc != 255
+  failed_when: sshd_banner_check.rc not in [0, 255]
   when: sshd_banner_enabled
   notify: Restart sshd
 
