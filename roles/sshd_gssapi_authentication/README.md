@@ -1,0 +1,76 @@
+#### Role name:
+    disable_sshd_gssapi_authentication
+
+#### Wazuh ID: 
+    35648
+
+#### Title: 
+    Ensure sshd GSSAPIAuthentication is disabled.
+
+#### Description:
+    This Ansible role ensures that the `GSSAPIAuthentication` parameter in the SSH daemon configuration (`/etc/ssh/sshd_config`) is set to `no`. This addresses security rule **35648** (Wazuh).
+
+#### Rationale:
+    Allowing GSSAPI authentication through SSH exposes the system's GSSAPI to remote hosts, and should be disabled to reduce the attack surface of the system.
+
+#### Remediation:
+    Edit the `/etc/ssh/sshd_config` file to set the `GSSAPIAuthentication` parameter to `no` above any `Include` and `Match` entries as follows:  
+    `GSSAPIAuthentication no`  
+    Note: First occurrence of an option takes precedence, `Match` set statements withstanding. If `Include` locations are enabled, used, and order of precedence is understood in your environment, the entry may be created in a file in `Include` location.
+
+#### Requirements
+    - Ansible 2.9 or higher  
+    - Root/sudo privileges (`become: true`)  
+    - Linux systems with OpenSSH server installed (`sshd` package)  
+    - Read/write access to `/etc/ssh/sshd_config` or included configuration files  
+
+#### Variables
+
+| Variable             | Default                | Description                                                                             | File                |
+|----------------------|------------------------|-----------------------------------------------------------------------------------------|---------------------|
+| `sshd_config_file`   | `/etc/ssh/sshd_config` | Path to the main SSH daemon configuration file                                          | `defaults/main.yml` |
+| `sshd_gssapi_option` | `GSSAPIAuthentication` | SSH option name (internal constant)                                                     | `vars/main.yml`     |
+| `sshd_gssapi_value`  | `no`                   | Required value for the option (internal constant)                                       | `vars/main.yml`     |
+
+#### Dependencies
+    None
+
+#### Compliance mapping
+    - 'cmmc': ['IA.L2-3.5.7']  
+    - 'fedramp': ['AC-2', 'IA-2', 'IA-5', 'AC-11', 'AC-7', 'AU-6']  
+    - 'gdpr': ['32']  
+    - 'hipaa': ['164.308(a)(4)', '164.312(a)(1)', '164.312(d)', '164.312(b)']  
+    - 'iso_27001': ['A.9.2.1', 'A.9.2.2', 'A.9.2.5', 'A.9.2.6', 'A.9.2.4', 'A.9.4.2']  
+    - 'nis2': ['21.2.i', '21.2.k']  
+    - 'nist_800_171': ['3.5.7']  
+    - 'nist_800_53': ['AC-2', 'IA-2', 'IA-5', 'AC-11', 'AC-7', 'AU-6']  
+    - 'pci_dss': ['2.2', '8.3', '8.1', '8.2']  
+    - 'tsc': ['CC6.1', 'CC6.2', 'CC6.3', 'CC6.4', 'CC6.5', 'CC6.6', 'CC6.7', 'CC6.8', 'CC7.1', 'CC7.2', 'CC7.3', 'CC7.4', 'CC7.5']
+
+#### Mitre
+    - 'tactic': ['TA0006', 'TA0003']  
+    - 'technique': ['T1078', 'T1098', 'T1110', 'T1136', 'T1556']  
+    - 'subtechnique': ['T1556.001', 'T1550.001', 'T1550.002']
+
+#### Conditions
+    all
+
+#### Rules
+    - "c:sshd -T -> r:^gssapiauthentication\s*\t*no"
+
+#### Usage
+
+Include this role in your playbook:
+
+```code
+- hosts: servers
+  become: true
+  roles:
+    - disable_sshd_gssapi_authentication
+```
+
+#### License
+    Apache 2.0
+
+#### Author
+    Patricio Rojas Ortiz

@@ -1,0 +1,9 @@
+---
+# Role: sshd_gssapi_authentication
+# Description: Handlers for the sshd_gssapi_authentication role
+
+- name: Restart sshd
+  ansible.builtin.systemd:
+    name: ssh
+    state: restarted
+    daemon_reload: true

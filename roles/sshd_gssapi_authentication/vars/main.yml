@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the sshd_gssapi_authentication role
+
+sshd_gssapi_option: "GSSAPIAuthentication"
+sshd_gssapi_value: "no"
