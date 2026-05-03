@@ -195,7 +195,7 @@
     - sshd_client_alive                         # 35646 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
     - sshd_disable_forwarding                   # 35647 Ensure sshd DisableForwarding is enabled.
     - sshd_gssapi_authentication                # 35648 Ensure sshd GSSAPIAuthentication is disabled.
-#    - sshd_hostbasedauthentication_disabled     # 35649 Ensure sshd HostbasedAuthentication is disabled.
+    - sshd_hostbasedauthentication_disabled     # 35649 Ensure sshd HostbasedAuthentication is disabled.
 #    - sshd_ignore_rhosts                        # 35650 Ensure sshd IgnoreRhosts is enabled.
 #    - sshd_kexalgorithms                        # 35651 Ensure sshd KexAlgorithms is configured.
 #    - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
@@ -220,13 +220,13 @@
 
 # 14. PAM and Authentication Policies
 # PAM modules and setup
-                                                # 35669 Ensure latest version of pam is installed.
-                                                # 35670 Ensure libpam-modules is installed.
-                                                # 35671 Ensure libpam-pwquality is installed.
-                                                # 35672 Ensure pam_unix module is enabled.
-                                                # 35673 Ensure pam_faillock module is enabled.
-                                                # 35674 Ensure pam_pwquality module is enabled.
-                                                # 35675 Ensure pam_pwhistory module is enabled.
+#    - update_pam                                # 35669 Ensure latest version of pam is installed.
+#    - ensure_libpam_modules_installed           # 35670 Ensure libpam-modules is installed.
+#    - install_libpam_pwquality                  # 35671 Ensure libpam-pwquality is installed.
+#    - enable_pam_unix                           # 35672 Ensure pam_unix module is enabled.
+#    - enable_pam_faillock                       # 35673 Ensure pam_faillock module is enabled.
+#    - enable_pam_pwquality                      # 35674 Ensure pam_pwquality module is enabled.
+#    - enable_pam_pwhistory                      # 35675 Ensure pam_pwhistory module is enabled.
 
 # Account lockout policies
                                                 # 35676 Ensure password failed attempts lockout is configured.
