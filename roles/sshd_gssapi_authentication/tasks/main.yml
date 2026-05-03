@@ -1,0 +1,24 @@
+---
+# Role        : sshd_gssapi_authentication
+# Description : Ensure sshd GSSAPIAuthentication is disabled
+# Wazuh ID    : 35648
+
+- name: "Ensure GSSAPIAuthentication is disabled in sshd_config"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: "^#*\\s*{{ sshd_gssapi_option }}\\s+.*" # Optional #
+    line: "{{ sshd_gssapi_option }} {{ sshd_gssapi_value }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    backrefs: true
+    create: true
+  notify: Restart sshd
+
+- name: "Verify GSSAPIAuthentication is disabled"
+  ansible.builtin.command: sshd -T
+  register: sshd_config_test
+  changed_when: false
+  failed_when: "'gssapiauthentication yes' in sshd_config_test.stdout.lower()"
+  check_mode: false

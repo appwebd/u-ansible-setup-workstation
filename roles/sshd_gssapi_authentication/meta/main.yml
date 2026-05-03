@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: sshd_gssapi_authentication
+  author: Patricio Rojas Ortiz
+  description: Ensure sshd GSSAPIAuthentication is disabled (Wazuh ID 35648)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - ssh
+    - authentication
+    - hardening
+
+dependencies: []
