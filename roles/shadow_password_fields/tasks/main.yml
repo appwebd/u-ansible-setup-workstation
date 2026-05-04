@@ -24,7 +24,7 @@
 - name: Lock accounts with empty passwords
   ansible.builtin.user:
     name: "{{ item }}"
-    password_lock: yes
+    password_lock: true
   loop: "{{ filtered_empty_passwords }}"
   when: filtered_empty_passwords | length > 0
 
@@ -55,11 +55,11 @@
   ansible.builtin.debug:
     msg: "debug variable filtered expired passwords : {{ filtered_expired_passwords }}"
   changed_when: false
-  
+
 - name: Lock accounts with expired passwords
   ansible.builtin.user:
     name: "{{ item }}"
-    password_lock: yes
+    password_lock: true
   loop: "{{ filtered_expired_passwords }}"
   when: filtered_expired_passwords | length > 0
 
