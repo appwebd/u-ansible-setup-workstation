@@ -1,0 +1,10 @@
+---
+# Role: sshd_kexalgorithms
+# Description: Handlers for sshd_kexalgorithms role
+
+- name: Restart SSH Service
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: restarted
+  register: sshd_restart_result
+  failed_when: sshd_restart_result is failed and '"Failed to restart ssh.service" in sshd_restart_result.msg'

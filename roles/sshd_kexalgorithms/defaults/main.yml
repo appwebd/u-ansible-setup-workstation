@@ -1,0 +1,20 @@
+---
+# defaults/main.yml
+# Default variables for sshd_kexalgorithms role
+# Safe defaults for SSH Key Exchange Algorithms configuration
+
+sshd_kexalgorithms_file: /etc/ssh/sshd_config
+sshd_kexalgorithms_blacklist:
+  - diffie-hellman-group1-sha1
+  - diffie-hellman-group14-sha1
+  - diffie-hellman-group-exchange-sha1
+sshd_kexalgorithms_whitelist:
+  - ecdh-sha2-nistp256
+  - ecdh-sha2-nistp384
+  - ecdh-sha2-nistp521
+  - diffie-hellman-group-exchange-sha256
+  - diffie-hellman-group16-sha512
+  - diffie-hellman-group18-sha512
+  - diffie-hellman-group14-sha256
+sshd_kexalgorithms_line: "{{ sshd_kexalgorithms_whitelist | join(',') }}"
+sshd_kexalgorithms_blacklist_line: "-{{ sshd_kexalgorithms_blacklist | join(',') }}"
