@@ -63,7 +63,7 @@ Include this role in your playbook:
 - hosts: servers
   become: true
   roles:
-    - disable_freevxfs               
+    - disable_kernel_modules               
 ```
 
 ## License            

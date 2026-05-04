@@ -1,0 +1,7 @@
+---
+# Role: shadow_password_fields
+# Description: Handlers for shadow_password_fields role
+
+- name: Log empty password accounts remediation
+  ansible.builtin.debug:
+    msg: "Accounts with empty password fields have been locked: {{ accounts_with_empty_password | default([]) | join(', ') }}"

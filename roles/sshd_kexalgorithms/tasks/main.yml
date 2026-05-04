@@ -1,0 +1,39 @@
+---
+# Role        : sshd_kexalgorithms
+# Description : Ensure sshd KexAlgorithms is configured (Wazuh ID 35651)
+# Wazuh ID    : 35651
+
+- name: "Ensure SSH KexAlgorithms are configured in sshd_config"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_kexalgorithms_file }}"
+    regexp: '^\s*#?\s*KexAlgorithms\s+'
+    line: "KexAlgorithms {{ sshd_kexalgorithms_line }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+    insertafter: '^\s*#?\s*(Include|Match|KexAlgorithms)'
+  notify: Restart SSH Service
+
+- name: "Ensure weak KexAlgorithms are explicitly blacklisted"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_kexalgorithms_file }}"
+    regexp: '^\s*#?\s*KexAlgorithms\s+-'
+    line: "KexAlgorithms {{ sshd_kexalgorithms_blacklist_line }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+    insertbefore: EOF
+  notify: Restart SSH Service
+  when: sshd_kexalgorithms_blacklist | length > 0
+
+- name: "Verify SSH service is running and enabled"
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: started
+    enabled: true
+  register: sshd_service_status
+  failed_when: sshd_service_status is failed and '"Failed to start ssh.service" in sshd_service_status.msg'

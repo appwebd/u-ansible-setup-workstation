@@ -6,19 +6,23 @@
 - name: "Ensure DisableForwarding is set to yes in sshd_config"
   ansible.builtin.lineinfile:
     path: "{{ sshd_config_file }}"
-    regexp: '^(\s*)?disableforwarding\s+.*'
+    regexp: '^\s*#?\s*[Dd]isable[Ff]orwarding.*$'
     line: "{{ sshd_disable_forwarding_line }}"
     state: present
     owner: root
     group: root
     mode: "0644"
     insertafter: EOF
-    backrefs: true
   notify: Restart sshd
 
-- name: "Verify DisableForwarding is correctly configured"
-  ansible.builtin.command: sshd -T
-  register: sshd_test_output
+- name: "Check if 'disableforwarding yes' exists in sshd_config"
+  ansible.builtin.command: >
+    grep -Ei '^\s*disableforwarding\s' /etc/ssh/sshd_config
+  register: disableforwarding_check
   changed_when: false
-#  failed_when: "'disableforwarding yes' not in sshd_test_output.stdout.lower()"
-  check_mode: false
+  failed_when: false
+
+- name: "Display a red warning if 'disableforwarding no' has not been"
+  ansible.builtin.debug:
+    msg: "\u001b[31m[WARNING] 'disableforwarding no' is still present. Continuing with the role execution.\u001b[0m"
+  when: disableforwarding_check.rc != 0

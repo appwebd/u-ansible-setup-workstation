@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default variables for shadow_password_fields role
+# Safeguards against empty password fields in /etc/shadow
+
+shadow_exclude_users:
+  - root
+  - pro
