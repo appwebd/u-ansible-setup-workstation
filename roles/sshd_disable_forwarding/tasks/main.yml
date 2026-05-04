@@ -26,4 +26,3 @@
   ansible.builtin.debug:
     msg: "\u001b[31m[WARNING] 'disableforwarding no' is still present. Continuing with the role execution.\u001b[0m"
   when: disableforwarding_check.rc != 0
-
