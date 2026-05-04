@@ -1,0 +1,69 @@
+---
+# Role        : shadow_password_fields
+# Description : Ensure /etc/shadow password fields are not empty
+# Wazuh ID    : 35772
+# IMPORTANT   : This role is not idempotent.
+#               It will lock accounts with empty passwords and EXPIRED PASSWORDS.
+
+- name: Check for empty password entries in /etc/shadow
+  ansible.builtin.shell: |
+    set -eu pipefail
+    awk -F: '{if($2 == "") { print $1 }}' {{ shadow_file_path }}
+  register: users_empty_password
+  changed_when: false
+
+- name: Filter excluded users from empty password list
+  ansible.builtin.set_fact:
+    filtered_empty_passwords: "{{ users_empty_password.stdout_lines | difference(shadow_exclude_users) }}"
+
+- name: "Debug variable filtered empty passwords"
+  ansible.builtin.debug:
+    msg: "debug variable filtered empty passwords : {{ filtered_empty_passwords }}"
+  changed_when: false
+
+- name: Lock accounts with empty passwords
+  ansible.builtin.user:
+    name: "{{ item }}"
+    password_lock: yes
+  loop: "{{ filtered_empty_passwords }}"
+  when: filtered_empty_passwords | length > 0
+
+- name: "Notify about locked accounts (empty passwords)"
+  ansible.builtin.debug:
+    msg: "Locked account(s): {{ filtered_empty_passwords }}"
+  when: filtered_empty_passwords | length > 0
+
+- name: Get current timestamp
+  ansible.builtin.shell: |
+    set -eu pipefail
+    date +%s
+  register: current_timestamp
+  changed_when: false
+
+- name: Check for expired password entries in /etc/shadow
+  ansible.builtin.shell: |
+    set -eu pipefail
+    awk -F: '{if($8 <= "{{ current_timestamp.stdout }}") { print $1 }}' {{ shadow_file_path }}
+  register: users_expired_account
+  changed_when: false
+
+- name: Filter excluded users from empty password list
+  ansible.builtin.set_fact:
+    filtered_expired_passwords: "{{ users_expired_account.stdout_lines | difference(shadow_exclude_users) }}"
+
+- name: "Debug variable filtered expired passwords"
+  ansible.builtin.debug:
+    msg: "debug variable filtered expired passwords : {{ filtered_expired_passwords }}"
+  changed_when: false
+  
+- name: Lock accounts with expired passwords
+  ansible.builtin.user:
+    name: "{{ item }}"
+    password_lock: yes
+  loop: "{{ filtered_expired_passwords }}"
+  when: filtered_expired_passwords | length > 0
+
+- name: "Notify about locked accounts (expired passwords)"
+  ansible.builtin.debug:
+    msg: "Locked account(s): {{ filtered_expired_passwords }}"
+  when: filtered_expired_passwords | length > 0

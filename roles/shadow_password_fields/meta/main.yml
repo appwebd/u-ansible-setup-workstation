@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: shadow_password_fields
+  author: Patricio Rojas Ortiz
+  description: Ensure /etc/shadow password fields are not empty (Wazuh ID 35772)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - authentication
+    - compliance
+    - sysadmin
+    - shadow
+
+dependencies: []

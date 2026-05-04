@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for shadow_password_fields role
+
+shadow_file_path: /etc/shadow
