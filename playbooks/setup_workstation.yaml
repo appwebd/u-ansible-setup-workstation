@@ -197,7 +197,7 @@
     - sshd_gssapi_authentication                # 35648 Ensure sshd GSSAPIAuthentication is disabled.
     - sshd_hostbasedauthentication_disabled     # 35649 Ensure sshd HostbasedAuthentication is disabled.
     - sshd_ignore_rhosts                        # 35650 Ensure sshd IgnoreRhosts is enabled.
-#    - sshd_kexalgorithms                        # 35651 Ensure sshd KexAlgorithms is configured.
+    - sshd_kexalgorithms                        # 35651 Ensure sshd KexAlgorithms is configured.
 #    - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
 #    - sshd_loglevel                             # 35653 Ensure sshd LogLevel is configured.
 #    - sshd_macs                                 # 35654 Ensure sshd MACs are configured.
@@ -207,7 +207,7 @@
 #    - sshd_permitemptypasswords_disabled        # 35658 Ensure sshd PermitEmptyPasswords is disabled.
 #    - sshd_permitrootlogin_disabled             # 35659 Ensure sshd PermitRootLogin is disabled.
 #    - sshd_permituserenvironment                # 35660 Ensure sshd PermitUserEnvironment is disabled.
-#    - sshd_usepam                               # 35661 Ensure sshd UsePAM is enabled.
+    - sshd_usepam                               # 35661 Ensure sshd UsePAM is enabled.
 
 # 13. Privilege Escalation and sudo
                                                 # 35662 Ensure sudo is installed.
@@ -349,9 +349,9 @@
 # 20. Account Consistency and Basic Security Checks
     - ensure_shadowed_passwords                # 35771 Ensure accounts in /etc/passwd use shadowed passwords.
     - shadow_password_fields                   # 35772 Ensure /etc/shadow password fields are not empty.
-                                               # 35773 Ensure all groups in /etc/passwd exist in /etc/group.
-                                               # 35774 Ensure shadow group is empty.
-                                               # 35775 Ensure no duplicate UIDs exist.
-                                               # 35776 Ensure no duplicate GIDs exist.
-                                               # 35777 Ensure no duplicate user names exist.
-                                               # 35778 Ensure no duplicate group names exist.
+    - ensure_groups_in_passwd_exist_in_group   # 35773  Ensure all groups in /etc/passwd exist in /etc/group.
+#    - ensure_shadow_group_empty                # 35774  Ensure shadow group is empty.
+#    - ensure_unique_uids                       # 35775  Ensure no duplicate UIDs exist.
+#    - ensure_unique_gids                       # 35776  Ensure no duplicate GIDs exist.
+#    - ensure_unique_usernames                  # 35777  Ensure no duplicate user names exist.
+#    - ensure_unique_group_names                # 35778  Ensure no duplicate group names exist.
