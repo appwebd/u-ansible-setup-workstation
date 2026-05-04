@@ -348,7 +348,7 @@
 
 # 20. Account Consistency and Basic Security Checks
     - ensure_shadowed_passwords                # 35771 Ensure accounts in /etc/passwd use shadowed passwords.
-#    - shadow_password_fields                   # 35772 Ensure /etc/shadow password fields are not empty.
+    - shadow_password_fields                   # 35772 Ensure /etc/shadow password fields are not empty.
                                                # 35773 Ensure all groups in /etc/passwd exist in /etc/group.
                                                # 35774 Ensure shadow group is empty.
                                                # 35775 Ensure no duplicate UIDs exist.
