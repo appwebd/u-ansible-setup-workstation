@@ -93,7 +93,7 @@
 #    - gdm_disable_automount            # 35557 Ensure GDM disabling automatic mounting of removable media is not overridden.
 #    - gdm_autorun                      # 35558 Ensure GDM autorun-never is enabled.
 #    - gdm_lockdown_media_autorun       # 35559 Ensure GDM autorun-never is not overridden.
-#    - disable_xdmcp                    # 35560 Ensure XDMCP is not enabled.
+    - disable_xdmcp                    # 35560 Ensure XDMCP is not enabled.
 
 # 6. Unnecessary Services (Service Hardening)
 # Unneeded network services
