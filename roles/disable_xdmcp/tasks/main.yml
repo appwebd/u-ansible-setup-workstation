@@ -1,0 +1,82 @@
+---
+# Role        : disable_xdmcp
+# Description : Ensure XDMCP is not enabled in GDM3
+# Wazuh ID    : 35560
+
+- name: "Ensure XDMCP is not enabled in GDM3"
+  when: ansible_facts.os_family == "Debian"
+  block:
+    - name: "Check if GDM3 configuration directory exists"
+      ansible.builtin.stat:
+        path: "{{ xdmcp_gdm3_config_dir }}"
+      register: gdm3_config_dir_stat
+
+    - name: "Fail if GDM3 configuration directory does not exist"
+      ansible.builtin.fail:
+        msg: "GDM3 configuration directory {{ xdmcp_gdm3_config_dir }} does not exist. XDMCP cannot be configured."
+      when: not gdm3_config_dir_stat.stat.exists
+
+    - name: "Ensure custom.conf file exists (create if missing)"
+      ansible.builtin.copy:
+        dest: "{{ xdmcp_gdm3_custom_conf }}"
+        content: |
+          # GDM configuration storage
+          # See /usr/share/gdm/gdm.schemas for a list of available options.
+          [daemon]
+          # Uncomment the line below to force the login screen to use Xorg
+          #WaylandEnable=false
+          # Enabling automatic login
+          # AutomaticLoginEnable = true
+          # AutomaticLogin = user1
+          # Enabling timed login
+          # TimedLoginEnable = true
+          # TimedLogin = user1
+          # TimedLoginDelay = 10
+          [security]
+          # Ensure XDMCP is NOT enabled in GDM3 Wazuh ID : 35560
+          [xdmcp]
+          # Enable=false  # <-- This line should be removed or commented out
+          [chooser]
+          [debug]
+          # Uncomment the line below to turn on debugging
+          # More verbose logs
+          # Additionally lets the X server dump core if it crashes
+          #Enable=true
+        owner: root
+        group: root
+        mode: '0644'
+        backup: true
+        force: true
+      register: custom_conf_result
+
+    - name: "Ensure [xdmcp] section exists in custom.conf"
+      ansible.builtin.lineinfile:
+        path: "{{ xdmcp_gdm3_custom_conf }}"
+        regexp: '^\[xdmcp\]$'
+        line: '[xdmcp]'
+        insertafter: 'EOF'
+        create: true
+        owner: root
+        group: root
+        mode: '0644'
+      register: xdmcp_section_result
+
+    - name: "Ensure Enable=true is commented out or removed in [xdmcp] section"
+      ansible.builtin.lineinfile:
+        path: "{{ xdmcp_gdm3_custom_conf }}"
+        regexp: '^\s*Enable\s*=\s*true\s*$'
+        line: '# Enable=true'
+        state: present
+        owner: root
+        group: root
+        mode: '0644'
+        backrefs: true
+      register: enable_line_result
+
+    - name: "Verify XDMCP is disabled"
+      ansible.builtin.shell: |
+        grep -E '^\s*Enable\s*=\s*true\s*$' "{{ xdmcp_gdm3_custom_conf }}" || true
+      register: xdmcp_enabled_check
+      changed_when: false
+      failed_when: xdmcp_enabled_check.stdout | length > 0
+

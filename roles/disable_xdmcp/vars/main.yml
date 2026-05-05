@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for the disable_xdmcp role
+# These are not intended to be overridden by users
+
+xdmcp_section_name: "[xdmcp]"
+xdmcp_enable_line_pattern: "^\\s*Enable\\s*=\\s*true\\s*$"
