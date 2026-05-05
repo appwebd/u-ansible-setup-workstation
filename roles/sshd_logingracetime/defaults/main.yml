@@ -1,0 +1,7 @@
+---
+# defaults/main.yml
+# Default variables for sshd_logingracetime role
+# These values can be overridden by inventory or playbook variables
+
+sshd_logingracetime_value: 60
+sshd_config_file: /etc/ssh/sshd_config
