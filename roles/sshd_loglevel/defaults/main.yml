@@ -1,0 +1,7 @@
+---
+# defaults/main.yml
+# Default variables for sshd_loglevel role
+# Safe defaults for sshd LogLevel configuration
+
+sshd_loglevel: "INFO"
+sshd_config_file: "/etc/ssh/sshd_config"

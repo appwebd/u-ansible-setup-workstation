@@ -1,0 +1,29 @@
+---
+# Role        : sshd_loglevel
+# Description : Ensure sshd LogLevel is configured
+# Wazuh ID    : 35653
+
+- name: "Ensure sshd LogLevel is set to VERBOSE or INFO"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^\s*#?\s*[Ll]og[Ll]evel\s+.*$'
+    line: "LogLevel {{ sshd_loglevel }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    insertafter: EOF
+    create: true
+  notify: Restart sshd
+
+- name: "Verify LogLevel is correctly configured"
+  ansible.builtin.shell: |
+    set -eu pipefail
+    sshd -T 2>/dev/null | grep -i "^loglevel" | grep -E "^(loglevel (VERBOSE|INFO))"
+  changed_when: false
+  failed_when: |
+    (result.rc != 0) and
+    (result.stdout | length == 0 or
+     not (result.stdout | lower | regex_search('^loglevel (verbose|info)$')))
+  register: result
+  check_mode: false

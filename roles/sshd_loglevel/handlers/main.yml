@@ -1,0 +1,9 @@
+---
+# Role: sshd_loglevel
+# Description: Handlers for sshd_loglevel role
+
+- name: Restart sshd
+  ansible.builtin.systemd:
+    name: "{{ sshd_service_name }}"
+    state: restarted
+    daemon_reload: true
