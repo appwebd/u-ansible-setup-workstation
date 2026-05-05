@@ -1,0 +1,10 @@
+---
+# Role: disable_xdmcp
+# Description: Handlers for the disable_xdmcp role
+
+- name: Restart GDM3 service
+  ansible.builtin.systemd:
+    name: gdm
+    state: restarted
+    daemon_reload: true
+  become: true

@@ -1,0 +1,27 @@
+---
+# Role        : sshd_logingracetime
+# Description : Ensure sshd LoginGraceTime is configured
+# Wazuh ID    : 35652
+
+- name: "Ensure LoginGraceTime is configured in sshd_config"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^\s*#?\s*[Ll]ogin[Gg]race[Tt]ime\s.*'
+    line: "LoginGraceTime {{ sshd_logingracetime_value }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    backrefs: true
+    insertafter: EOF
+  notify: Restart sshd
+
+- name: "Ensure LoginGraceTime value is within acceptable range (1-60 seconds)"
+  ansible.builtin.assert:
+    that:
+      - sshd_logingracetime_value | int >= 1
+      - sshd_logingracetime_value | int <= 60
+    fail_msg: "LoginGraceTime must be between 1 and 60 seconds"
+    success_msg: "LoginGraceTime value is within acceptable range"
+  run_once: true
+  delegate_to: localhost

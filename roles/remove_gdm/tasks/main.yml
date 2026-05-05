@@ -1,0 +1,36 @@
+---
+# Role        : remove_gdm
+# Description : Ensure GDM is removed
+# Wazuh ID    : 35552
+
+- name: "Ensure GDM3 is removed (Debian/Ubuntu)"
+  ansible.builtin.apt:
+    name: "{{ gdm3_package_name }}"
+    state: absent
+    purge: true
+  register: gdm3_purge_result
+  failed_when:
+    - gdm3_purge_result is failed
+      and '"Unable to locate package" not in gdm3_purge_result.stderr'
+      and '"Package gdm3 is not installed" not in gdm3_purge_result.stderr'
+
+- name: "Remove unused dependencies after GDM3 removal"
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
+  failed_when:
+    - cleanup_result is failed
+      and '"Unable to locate package" not in cleanup_result.stderr'
+  when: gdm3_purge_result is changed or gdm3_purge_result is skipped
+
+- name: "Verify GDM3 is not installed"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    dpkg-query -W -f='${Status}' {{ gdm3_package_name }} 2>/dev/null | grep -c "install ok installed"
+  register: gdm3_check
+  changed_when: false
+  failed_when: gdm3_check.rc != 0 and gdm3_check.stdout | int > 0
+  when:
+    - gdm3_purge_result is changed or gdm3_purge_result is skipped
+    - ansible_facts.os_family == "Debian"

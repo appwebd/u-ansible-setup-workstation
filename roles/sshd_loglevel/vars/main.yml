@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for sshd_loglevel role
+
+sshd_service_name: "ssh"
