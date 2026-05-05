@@ -85,15 +85,15 @@
     - configure_etc_issue_net_access           # 35551 Ensure access to /etc/issue.net is configured.
 
 # 5. Graphical Environment Security (GDM/X11)
-#    - remove_gdm                              # 35552 Ensure GDM is removed.
-#    - gdm_login_banner                        # 35553 Ensure GDM login banner is configured.
-#    - disable_gdm_user_list                   # 35554 Ensure GDM disable-user-list option is enabled.
-#    - lock_gdm_screensaver                    # 35555 Ensure GDM screen locks cannot be overridden.
-#    - disable_gdm_automount                   # 35556 Ensure GDM automatic mounting of removable media is disabled.
-#    - disable_gdm_media_automount             # 35557 Ensure GDM disabling automatic mounting of removable media is not overridden.
-#    - enable_gdm_autorun_never                # 35558 Ensure GDM autorun-never is enabled.
-#    - lock_dconf_autorun                      # 35559 Ensure GDM autorun-never is not overridden.
-#    - disable_xdmcp                           # 35560 Ensure XDMCP is not enabled.
+    - remove_gdm                       # 35552 Ensure GDM is removed.
+#    - configure_gdm_login_banner       # 35553 Ensure GDM login banner is configured.
+#    - gdm_disable_user_list            # 35554 Ensure GDM disable-user-list option is enabled.
+#    - lock_gdm_screensaver             # 35555 Ensure GDM screen locks cannot be overridden.
+#    - disable_gdm_automount            # 35556 Ensure GDM automatic mounting of removable media is disabled.
+#    - gdm_disable_automount            # 35557 Ensure GDM disabling automatic mounting of removable media is not overridden.
+#    - gdm_autorun                      # 35558 Ensure GDM autorun-never is enabled.
+#    - gdm_lockdown_media_autorun       # 35559 Ensure GDM autorun-never is not overridden.
+#    - disable_xdmcp                    # 35560 Ensure XDMCP is not enabled.
 
 # 6. Unnecessary Services (Service Hardening)
 # Unneeded network services
