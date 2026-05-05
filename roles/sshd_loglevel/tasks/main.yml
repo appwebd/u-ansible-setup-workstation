@@ -18,7 +18,7 @@
 
 - name: "Verify LogLevel is correctly configured"
   ansible.builtin.shell: |
-    set -eu pipefail
+    set -euo pipefail
     sshd -T 2>/dev/null | grep -i "^loglevel" | grep -E "^(loglevel (VERBOSE|INFO))"
   changed_when: false
   failed_when: |

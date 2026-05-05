@@ -1,0 +1,7 @@
+---
+# Role: remove_gdm
+# Description: Handlers for the remove_gdm role
+
+- name: Restart System
+  ansible.builtin.debug:
+    msg: "A system restart may be required to fully remove GDM components"

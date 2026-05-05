@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the remove_gdm role
+# These are not intended to be overridden by users
+
+gdm3_service_name: gdm3
