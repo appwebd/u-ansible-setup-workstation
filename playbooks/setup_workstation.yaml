@@ -198,7 +198,7 @@
     - sshd_hostbasedauthentication_disabled     # 35649 Ensure sshd HostbasedAuthentication is disabled.
     - sshd_ignore_rhosts                        # 35650 Ensure sshd IgnoreRhosts is enabled.
     - sshd_kexalgorithms                        # 35651 Ensure sshd KexAlgorithms is configured.
-#    - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
+    - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
 #    - sshd_loglevel                             # 35653 Ensure sshd LogLevel is configured.
 #    - sshd_macs                                 # 35654 Ensure sshd MACs are configured.
 #    - sshd_maxauthtries                         # 35655 Ensure sshd MaxAuthTries is configured.
