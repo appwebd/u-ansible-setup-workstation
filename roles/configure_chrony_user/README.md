@@ -30,13 +30,13 @@
 
 | Variable              | Default                    | Description                                                     | File              |
 |-----------------------|----------------------------|-----------------------------------------------------------------|-------------------|
+| `chrony_conf_d_dir`   | `/etc/chrony/conf.d`       | Directory for additional .conf fragments                        | vars/main.yml     |
 | `chrony_conf_dir`     | `/etc/chrony`              | Base directory for chrony configuration                         | vars/main.yml     |
 | `chrony_conf_file`    | `/etc/chrony/chrony.conf`  | Main chrony configuration file path                             | defaults/main.yml |
-| `chrony_user`         | `_chrony`                  | System user under which chronyd should run                      | defaults/main.yml |
-| `chrony_user_line`    | `user { { chrony_user } }` | Template line to ensure in config (not used directly; rendered) | defaults/main.yml |
-| `chrony_service_name` | `chrony`                   | Name of the chrony service                                      | vars/main.yml     |
 | `chrony_package_name` | `chrony`                   | Name of the chrony package                                      | vars/main.yml     |
-| `chrony_conf_d_dir`   | `/etc/chrony/conf.d`       | Directory for additional .conf fragments                        | vars/main.yml     |
+| `chrony_service_name` | `chrony`                   | Name of the chrony service                                      | vars/main.yml     |
+| `chrony_user_line`    | `user { { chrony_user } }` | Template line to ensure in config (not used directly; rendered) | defaults/main.yml |
+| `chrony_user`         | `_chrony`                  | System user under which chronyd should run                      | defaults/main.yml |
 
 #### Dependencies
     None

@@ -1,0 +1,30 @@
+---
+# Role        : update_pam
+# Description : Ensure latest version of pam is installed
+# Wazuh ID    : 35669
+
+- name: "Update apt cache"
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure latest version of libpam-runtime is installed
+  ansible.builtin.apt:
+    name: "{{ pam_package_name }}"
+    state: latest
+    update_cache: true
+    cache_valid_time: 3600
+    autoremove: false
+    purge: false
+  tags:
+    - patching
+  # Compliance requirement: ensure most recent version of the package
+  # noqa: package-latest
+
+- name: "Verify libpam-runtime is installed and configured correctly"
+  ansible.builtin.command: dpkg-query -s libpam-runtime
+  register: dpkg_query_result
+  changed_when: false
+  failed_when: >
+    dpkg_query_result.rc != 0 or
+    'Status: install ok installed' not in dpkg_query_result.stdout

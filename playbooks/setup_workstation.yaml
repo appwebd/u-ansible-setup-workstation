@@ -220,7 +220,7 @@
 
 # 14. PAM and Authentication Policies
 # PAM modules and setup
-#    - update_pam                                # 35669 Ensure latest version of pam is installed.
+    - update_pam                                # 35669 Ensure latest version of pam is installed.
 #    - ensure_libpam_modules_installed           # 35670 Ensure libpam-modules is installed.
 #    - install_libpam_pwquality                  # 35671 Ensure libpam-pwquality is installed.
 #    - enable_pam_unix                           # 35672 Ensure pam_unix module is enabled.

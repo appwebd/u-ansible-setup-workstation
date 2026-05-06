@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: update_pam
+  author: Patricio Rojas Ortiz
+  description: Ensure latest version of pam is installed (Wazuh ID 35669)
+  license: Apache 2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - pam
+    - authentication
+    - ubuntu2404
+
+dependencies: []

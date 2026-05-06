@@ -41,12 +41,17 @@
     mode: "0644"
   notify: Restart chronyd service
 
-- name: "Gather service facts"
+- name: Gather service facts
   ansible.builtin.service_facts:
 
-- name: "Ensure no conflicting time synchronization service is active"
-  ansible.builtin.service:
-    name: systemd-timesyncd
+- name: Ensure no conflicting time synchronization service is active
+  ansible.builtin.systemd:
+    name: systemd-timesyncd.service
     state: stopped
     enabled: false
-  when: "'systemd-timesyncd.service' in (ansible_facts.services | default({}))"
+  when: "'systemd-timesyncd.service' in ansible_facts.services"
+
+- name: Inform when systemd-timesyncd is not installed (expected on this system)
+  ansible.builtin.debug:
+    msg: "OK: systemd-timesyncd is not installed on this system, its disabling is omitted."
+  when: "'systemd-timesyncd.service' not in ansible_facts.services"
