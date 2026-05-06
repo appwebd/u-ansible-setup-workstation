@@ -1,6 +1,6 @@
 ---
 # Role        : configure_etc_shells_permissions
-# Description : Ensure permissions on /etc/shells are configured (Wazuh ID 35769)
+# Description : Ensure permissions on /etc/shells are configured
 # Wazuh ID    : 35769
 
 - name: "Check if /etc/shells exists"
@@ -24,7 +24,7 @@
     owner: "{{ etc_shells_owner }}"
     group: "{{ etc_shells_group }}"
     mode: "{{ etc_shells_mode }}"
-    force: false
+    force: true
     backup: true
   register: shells_file_result
   changed_when: shells_file_result is changed and shells_file_result is not skipped
