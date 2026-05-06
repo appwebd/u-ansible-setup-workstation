@@ -44,20 +44,14 @@
 - name: Gather service facts
   ansible.builtin.service_facts:
 
-- name: Check if systemd-timesyncd unit file exists
-  ansible.builtin.command: systemctl list-unit-files systemd-timesyncd.service --no-legend
-  register: timesyncd_unit_check
-  changed_when: false
-  failed_when: false
-
 - name: Ensure no conflicting time synchronization service is active
   ansible.builtin.systemd:
     name: systemd-timesyncd.service
     state: stopped
     enabled: false
-  when: timesyncd_unit_check.rc == 0 and timesyncd_unit_check.stdout | trim != ""
+  when: "'systemd-timesyncd.service' in ansible_facts.services"
 
 - name: Inform when systemd-timesyncd is not installed (expected on this system)
   ansible.builtin.debug:
     msg: "OK: systemd-timesyncd is not installed on this system, its disabling is omitted."
-  when: timesyncd_unit_check.rc != 0 or timesyncd_unit_check.stdout | trim == ""
+  when: "'systemd-timesyncd.service' not in ansible_facts.services"
