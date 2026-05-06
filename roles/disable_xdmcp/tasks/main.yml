@@ -21,6 +21,8 @@
         dest: "{{ xdmcp_gdm3_custom_conf }}"
         content: |
           # GDM configuration storage
+          # Managed by Ansible (Wazuh ID 35560)
+          # Generated: {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
           # See /usr/share/gdm/gdm.schemas for a list of available options.
           [daemon]
           # Uncomment the line below to force the login screen to use Xorg
@@ -79,4 +81,3 @@
       register: xdmcp_enabled_check
       changed_when: false
       failed_when: xdmcp_enabled_check.stdout | length > 0
-
