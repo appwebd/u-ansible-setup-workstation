@@ -221,7 +221,7 @@
 # 14. PAM and Authentication Policies
 # PAM modules and setup
     - update_pam                                # 35669 Ensure latest version of pam is installed.
-#    - ensure_libpam_modules_installed           # 35670 Ensure libpam-modules is installed.
+    - ensure_libpam_modules_installed           # 35670 Ensure libpam-modules is installed.
 #    - install_libpam_pwquality                  # 35671 Ensure libpam-pwquality is installed.
 #    - enable_pam_unix                           # 35672 Ensure pam_unix module is enabled.
 #    - enable_pam_faillock                       # 35673 Ensure pam_faillock module is enabled.
@@ -289,34 +289,34 @@
 
 # 17. Auditing (auditd)
 # Audit service configuration
-                                                # 35723 Ensure auditd packages are installed.
-                                                # 35724 Ensure auditd service is enabled and active.
-                                                # 35725 Ensure auditing for processes that start prior to auditd is enabled.
-                                                # 35726 Ensure audit_backlog_limit is sufficient.
-                                                # 35727 Ensure audit log storage size is configured.
-                                                # 35728 Ensure audit logs are not automatically deleted.
-                                                # 35729 Ensure system is disabled when audit logs are full.
-                                                # 35730 Ensure system warns when audit logs are low on space.
+#    - install_auditd                            # 35723 Ensure auditd packages are installed.
+#    - enable_auditd                             # 35724 Ensure auditd service is enabled and active.
+#    - audit_backlog_limit                       # 35726 Ensure audit_backlog_limit is sufficient.
+#    - audit_log_size                            # 35727 Ensure audit log storage size is configured.
+#    - auditd_keep_logs                          # 35728 Ensure audit logs are not automatically deleted.
+#    - auditd_security_actions                   # 35729 Ensure system is disabled when audit logs are full.
+#    - audit_space_left_action                   # 35730 Ensure system warns when audit logs are low on space.
+
 
 # Audit rules (tracked events)
-                                                # 35731 Ensure changes to system administration scope (sudoers) is collected.
-                                                # 35732 Ensure actions as another user are always logged.
-                                                # 35733 Ensure events that modify the sudo log file are collected.
-                                                # 35734 Ensure events that modify date and time information are collected.
-                                                # 35735 Ensure events that modify the system's network environment are collected.
-                                                # 35736 Ensure unsuccessful file access attempts are collected.
-                                                # 35737 Ensure events that modify user/group information are collected.
-                                                # 35738 Ensure discretionary access control permission modification events are collected.
-                                                # 35739 Ensure successful file system mounts are collected.
-                                                # 35740 Ensure session initiation information is collected.
-                                                # 35741 Ensure login and logout events are collected.
-                                                # 35742 Ensure file deletion events by users are collected.
-                                                # 35743 Ensure events that modify the system's Mandatory Access Controls are collected.
-                                                # 35744 Ensure successful and unsuccessful attempts to use the chcon command are collected.
-                                                # 35745 Ensure successful and unsuccessful attempts to use the setfacl command are collected.
-                                                # 35746 Ensure successful and unsuccessful attempts to use the chacl command are collected.
-                                                # 35747 Ensure successful and unsuccessful attempts to use the usermod command are collected.
-                                                # 35748 Ensure kernel module loading unloading and modification is collected.
+#    - collect_sudoers_changes                   # 35731 Ensure changes to system administration scope (sudoers) is collected.
+#    - audit_user_emulation                      # 35732 Ensure actions as another user are always logged.
+#    - collect_sudo_log_events                   # 35733 Ensure events that modify the sudo log file are collected.
+#    - collect_time_change_events                # 35734 Ensure events that modify date and time information are collected.
+#    - collect_network_environment_changes       # 35735 Ensure events that modify the system's network environment are collected.
+#    - collect_unsuccessful_file_access          # 35736 Ensure unsuccessful file access attempts are collected.
+#    - collect_identity_changes                  # 35737 Ensure events that modify user/group information are collected.
+#    - audit_perm_mod                            # 35738 Ensure discretionary access control permission modification events are collected.
+#    - collect_successful_mounts                 # 35739 Ensure successful file system mounts are collected.
+#    - audit_session_collection                  # 35740 Ensure session initiation information is collected.
+#    - collect_login_events                      # 35741 Ensure login and logout events are collected.
+#    - collect_file_deletion_events              # 35742 Ensure file deletion events by users are collected.
+#    - collect_mac_events                        # 35743 Ensure events that modify the system's Mandatory Access Controls are collected.
+#    - audit_chcon                               # 35744 Ensure successful and unsuccessful attempts to use the chcon command are collected.
+#    - audit_setfacl                             # 35745 Ensure successful and unsuccessful attempts to use the setfacl command are collected.
+#    - collect_chacl_audit                       # 35746 Ensure successful and unsuccessful attempts to use the chacl command are collected.
+#    - audit_usermod                             # 35747 Ensure successful and unsuccessful attempts to use the usermod command are collected.
+#    - audit_kernel_modules                      # 35748 Ensure kernel module loading unloading and modification is collected.
 
 # Audit configuration integrity
                                                 # 35749 Ensure the audit configuration is immutable.
