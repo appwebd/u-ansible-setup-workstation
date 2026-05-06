@@ -1,0 +1,5 @@
+---
+# Role: ensure_libpam_modules_installed
+# Description: Handlers for the ensure_libpam_modules_installed role
+
+# No handlers required for this role

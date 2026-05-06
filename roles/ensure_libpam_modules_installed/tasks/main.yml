@@ -1,0 +1,11 @@
+---
+# Role        : ensure_libpam_modules_installed
+# Description : Ensure libpam-modules is installed
+# Wazuh ID    : 35670
+
+- name: Ensure libpam-modules is installed
+  ansible.builtin.apt:
+    name: "{{ libpam_modules_package_name }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400

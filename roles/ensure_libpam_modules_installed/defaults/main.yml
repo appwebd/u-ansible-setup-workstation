@@ -1,0 +1,6 @@
+---
+# defaults/main.yml
+# Default variables for ensure_libpam_modules_installed role
+# These are safe defaults and can be overridden by inventory or play variables
+
+libpam_modules_package_name: libpam-modules
