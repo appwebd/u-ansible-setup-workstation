@@ -2,4 +2,3 @@
 # vars/main.yml
 # Internal constants for the ensure_libpam_modules_installed role
 # These are not intended to be overridden by users
-
