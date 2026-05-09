@@ -21,6 +21,14 @@
   # Compliance requirement: ensure most recent version of the package
   # noqa: package-latest
 
+- name: "Update PAM packages"
+  ansible.builtin.apt:
+    name: "{{ pam_package_name }}"
+    state: present
+  when: pam_update_enabled | default(true)
+  tags: [patching, pam]
+  # noqa: package-latest
+
 - name: "Verify libpam-runtime is installed and configured correctly"
   ansible.builtin.command: dpkg-query -s libpam-runtime
   register: dpkg_query_result

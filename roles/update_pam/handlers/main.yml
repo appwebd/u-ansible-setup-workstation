@@ -1,3 +1,7 @@
 ---
 # Role: update_pam
 # Description: Handlers for the update_pam role
+
+- name: Restart pam
+  ansible.builtin.debug:
+    msg: "PAM has been updated. A reboot may be required for all changes to take effect."

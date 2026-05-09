@@ -23,13 +23,18 @@
     - Required Ansible collections/modules: `ansible.builtin.apt`, `ansible.builtin.command`  
 
 #### Variables
-| Variable           | Default          | Description                                                                                                                       | Source          |
-|--------------------|------------------|-----------------------------------------------------------------------------------------------------------------------------------|-----------------|
-| `pam_package_name` | `libpam-runtime` | Internal constant specifying the PAM runtime package name used for installation and verification. Not intended for user override. | `vars/main.yml` |
+| Variable             | Default          | Description                                                                                                                       | Source              |
+|----------------------|------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------|
+| `pam_package_name`   | `libpam-runtime` | Internal constant specifying the PAM runtime package name used for installation and verification. Not intended for user override. | `vars/main.yml`     |
+| `pam_update_enabled` | `true`           | Update PAM package if the installed version is less than the minimum required version.                                            | 'defaults/main.yml` |
+| `pam_min_version`    | `1.5.3`          | 1.5.3 is the minimum version of PAM that is supported by the role.                                                                | 'defaults/main.yml` |
 
 #### Dependencies
     Handlers: *not present*  
     Dependencies on other roles: *none*  
+
+#### Known Limitations
+    this role only works on Debian/Ubuntu systems 
 
 #### Compliance mapping
     - CMMC: CM.L2-3.4.1, CA.L2-3.12.4  

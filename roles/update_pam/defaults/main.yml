@@ -2,3 +2,6 @@
 # defaults/main.yml
 # Default variables for the update_pam role
 # These are safe defaults and can be overridden by inventory or play variables
+pam_package_name: libpam-runtime
+pam_update_enabled: true
+pam_min_version: "1.5.3"
