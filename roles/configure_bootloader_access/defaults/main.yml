@@ -1,2 +1,12 @@
 ---
+# Path to the GRUB binary
+grub_binary_path: "/usr/sbin/grub-mkconfig"
+
+# Path to the GRUB configuration file (BIOS systems)
 boot_grub_cfg_path: "/boot/grub/grub.cfg"
+
+# Path to the GRUB configuration file (UEFI systems)
+boot_grub_efi_cfg_path: "/boot/efi/grub.cfg"
+
+# Path to the /boot/grub directory
+boot_grub_dir_path: "/boot/grub"
