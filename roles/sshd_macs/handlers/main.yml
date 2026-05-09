@@ -1,0 +1,8 @@
+---
+# Role: sshd_macs
+# Description: Handlers for the sshd_macs role
+
+- name: Restart SSH Service
+  ansible.builtin.service:
+    name: "{{ sshd_service_name_effective | default('ssh') }}"
+    state: restarted

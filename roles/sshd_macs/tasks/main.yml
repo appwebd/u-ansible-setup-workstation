@@ -1,0 +1,114 @@
+---
+# Role        : sshd_macs
+# Description : Ensure sshd MACs are configured
+# Wazuh ID    : 35654
+
+- name: "Collect installed package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check whether sshd package is installed"
+  ansible.builtin.set_fact:
+    sshd_is_installed: "{{ sshd_package_name in ansible_facts.packages }}"
+
+- name: "Show message when sshd is not installed"
+  ansible.builtin.debug:
+    msg: "OpenSSH server package not found ({{ sshd_package_name }}). Skipping rule 35654."
+  when: not sshd_is_installed
+
+- name: "Apply Wazuh rule 35654 - Ensure sshd MACs are configured"
+  when: sshd_is_installed
+  block:
+    - name: "Collect service facts"
+      ansible.builtin.service_facts:
+
+    - name: "Select effective SSH service name"
+      ansible.builtin.set_fact:
+        sshd_service_name_effective: >-
+          {{
+            (
+              sshd_service_name_candidates
+              | select('in', ansible_facts.services.keys() | list)
+              | list
+              | first
+            ) | default('ssh')
+          }}
+
+    - name: "Ensure SSH service is running and enabled"
+      ansible.builtin.service:
+        name: "{{ sshd_service_name_effective }}"
+        state: started
+        enabled: true
+      when: sshd_macs_manage_service | bool
+
+    - name: "Build effective MAC blacklist"
+      ansible.builtin.set_fact:
+        sshd_macs_blacklist_effective: >-
+          {{
+            (
+              sshd_macs_blacklist_base
+              +
+              (
+                sshd_macs_blacklist_cve202348795_extra
+                if (sshd_macs_include_cve202348795_etm_blacklist | bool)
+                else []
+              )
+            )
+            | map('trim')
+            | reject('equalto', '')
+            | unique
+            | list
+          }}
+
+    - name: "Build MACs exclusion directive"
+      ansible.builtin.set_fact:
+        sshd_macs_exclusion_line: "MACs -{{ sshd_macs_blacklist_effective | join(',') }}"
+
+    - name: "Remove any existing MACs directives from main sshd_config"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_macs_config_file }}"
+        regexp: '^\s*[Mm][Aa][Cc][Ss]\s+.*$'
+        state: absent
+        backup: true
+        validate: "sshd -t -f %s"
+      notify: Restart SSH Service
+
+    - name: "Insert MACs exclusion directive before Include (first occurrence precedence)"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_macs_config_file }}"
+        line: "{{ sshd_macs_exclusion_line }}"
+        insertafter: EOF
+        state: present
+        owner: root
+        group: root
+        mode: "0644"
+        backup: true
+        validate: "sshd -t -f %s"
+      notify: Restart SSH Service
+
+    - name: "Read effective sshd configuration (sshd -T)"
+      ansible.builtin.command: sshd -T
+      register: sshd_macs_effective_config
+      changed_when: false
+
+    - name: "Assert weak MACs are not present in effective config"
+      vars:
+        sshd_macs_weak_regex: >-
+          hmac-md5|hmac-md5-96|hmac-ripemd160|hmac-sha1-96|
+          umac-64@openssh\.com|hmac-md5-etm@openssh\.com|
+          hmac-md5-96-etm@openssh\.com|hmac-ripemd160-etm@openssh\.com|
+          hmac-sha1-96-etm@openssh\.com|umac-64-etm@openssh\.com|
+          umac-128-etm@openssh\.com
+      ansible.builtin.assert:
+        that:
+          - >-
+            sshd_macs_effective_config.stdout is search('(?m)^macs\\s+')
+          - >-
+            sshd_macs_effective_config.stdout is not search(
+            sshd_macs_weak_regex)
+        fail_msg: >-
+          Rule 35654 failed: weak MACs are still present in
+          'sshd -T' output.
+        success_msg: >-
+          Rule 35654 passed: weak MACs are not present in
+          effective SSHD MAC list.
