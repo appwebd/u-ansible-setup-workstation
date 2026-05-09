@@ -1,0 +1,7 @@
+---
+# Handler to regenerate GRUB configuration after changes
+- name: Regenerate GRUB configuration
+  ansible.builtin.debug:
+    msg: >-
+      GRUB configuration changed. Manually regenerate the configuration by running:
+      grub-mkconfig -o {{ effective_grub_cfg_path | default(boot_grub_cfg_path) }}

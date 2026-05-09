@@ -1,0 +1,3 @@
+---
+# Internal variables - do not override
+_grub_check_result: "{{ grub_stat.stat.exists | default(false) }}"
