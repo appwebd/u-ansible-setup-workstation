@@ -200,7 +200,7 @@
     - sshd_kexalgorithms                        # 35651 Ensure sshd KexAlgorithms is configured.
     - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
     - sshd_loglevel                             # 35653 Ensure sshd LogLevel is configured.
-#    - sshd_macs                                 # 35654 Ensure sshd MACs are configured.
+    - sshd_macs                                 # 35654 Ensure sshd MACs are configured.
 #    - sshd_maxauthtries                         # 35655 Ensure sshd MaxAuthTries is configured.
 #    - sshd_maxsessions                          # 35656 Ensure sshd MaxSessions is configured.
 #    - sshd_maxstartups                          # 35657 Ensure sshd MaxStartups is configured.
@@ -319,15 +319,16 @@
 #    - audit_kernel_modules                      # 35748 Ensure kernel module loading unloading and modification is collected.
 
 # Audit configuration integrity
-                                                # 35749 Ensure the audit configuration is immutable.
-                                                # 35750 Ensure the running and on disk configuration is the same.
-                                                # 35751 Ensure audit log files group owner is configured.
-                                                # 35752 Ensure audit configuration files mode is configured.
-                                                # 35753 Ensure audit configuration files owner is configured.
-                                                # 35754 Ensure audit configuration files group owner is configured.
-                                                # 35755 Ensure audit tools mode is configured.
-                                                # 35756 Ensure audit tools owner is configured.
-                                                # 35757 Ensure audit tools group owner is configured.
+#    - audit_immutable                           # 35749 Ensure the audit configuration is immutable.
+#    - auditd_sync                               # 35750 Ensure the running and on disk configuration is the same.
+#    - audit_log_group_owner                     # 35751 Ensure audit log files group owner is configured.
+#    - audit_config_permissions                  # 35752 Ensure audit configuration files mode is configured.
+#    - audit_config_owner                        # 35753 Ensure audit configuration files owner is configured.
+#    - audit_group_owner                         # 35754 Ensure audit configuration files group owner is configured.
+#    - configure_audit_tools_mode                # 35755 Ensure audit tools mode is configured.
+#    - audit_tools_owner                         # 35756 Ensure audit tools owner is configured.
+#    - audit_tools_group_owner                   # 35757 Ensure audit tools group owner is configured.
+
 
 # 18. File Integrity Monitoring (AIDE)
                                                 # 35758 Ensure AIDE is installed.
