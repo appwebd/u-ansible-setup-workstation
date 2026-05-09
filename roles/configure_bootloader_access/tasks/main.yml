@@ -2,24 +2,177 @@
 # Role: configure_bootloader_access
 # Description: Ensure access to bootloader config is configured
 # Wazuh ID: 35541
+# CIS: 1.4.2
 #
 # Why It's Not Applicable to Containers
-#  Containers typically do not have a traditional bootloader (like GRUB) or a persistent /boot partition.
+# Containers typically do not have a traditional bootloader (like GRUB) or a persistent /boot partition.
 # The /boot directory in containers is often ephemeral or absent.
 # The rule relies on stat checks on /boot/grub/grub.cfg, which usually does not exist in containerized environments.
 #
 
+# --------------------------------------------------
+# Step 1: Verify the environment supports bootloader hardening
+# --------------------------------------------------
 
-- name: "Check if /boot/grub/grub.cfg exists"
+- name: "Check if GRUB binary is available"
+  ansible.builtin.stat:
+    path: "{{ grub_binary_path }}"
+  register: grub_binary_stat
+
+- name: "Check if GRUB EFI config exists (UEFI systems)"
+  ansible.builtin.stat:
+    path: "{{ boot_grub_efi_cfg_path }}"
+  register: efi_grub_cfg_stat
+  when: ansible_facts.virtualization_type is not defined or ansible_facts.virtualization_type != 'docker'
+
+- name: "Check if standard GRUB config exists (BIOS systems)"
   ansible.builtin.stat:
     path: "{{ boot_grub_cfg_path }}"
-  register: grub_stat
+  register: bios_grub_cfg_stat
+  when:
+    - efi_grub_cfg_stat is not defined
+    - not efi_grub_cfg_stat.stat.exists | default(false)
 
-- name: "Set secure permissions for /boot/grub/grub.cfg if it exists"
+- name: "Determine the GRUB config file path"
+  ansible.builtin.set_fact:
+    effective_grub_cfg_path: "{{ boot_grub_efi_cfg_path }}"
+  when:
+    - efi_grub_cfg_stat is defined
+    - efi_grub_cfg_stat.stat.exists | default(false)
+
+- name: "Set GRUB config path to BIOS default"
+  ansible.builtin.set_fact:
+    effective_grub_cfg_path: "{{ boot_grub_cfg_path }}"
+  when:
+    - effective_grub_cfg_path is not defined
+
+- name: "Verify effective GRUB config exists"
+  ansible.builtin.stat:
+    path: "{{ effective_grub_cfg_path }}"
+  register: grub_cfg_stat
+
+- name: "Check if GRUB directory exists"
+  ansible.builtin.stat:
+    path: "{{ boot_grub_dir_path }}"
+  register: grub_dir_stat
+
+# --------------------------------------------------
+# Step 2: Set secure permissions on the GRUB config file
+# --------------------------------------------------
+
+- name: "Verify permissions on GRUB config file"
+  ansible.builtin.stat:
+    path: "{{ effective_grub_cfg_path }}"
+  register: grub_cfg_current_perms
+  when: grub_cfg_stat.stat.exists | default(false)
+
+- name: "Set secure permissions on GRUB config file (0600)"
   ansible.builtin.file:
-    path: "{{ boot_grub_cfg_path }}"
-    mode: "0600"                                       # chmod u-x,go-rwx /boot/grub/grub.cfg
-    owner: root                                        # chmod root:root /boot/grub/grub.cfg
+    path: "{{ effective_grub_cfg_path }}"
+    mode: "0600"
+    state: file
+  when:
+    - grub_cfg_stat.stat.exists | default(false)
+    - (grub_cfg_current_perms.stat.mode | default('0644')) != '0600'
+  notify: "Regenerate GRUB configuration"
+
+# --------------------------------------------------
+# Step 3: Set secure permissions on the GRUB directory
+# --------------------------------------------------
+
+- name: "Verify permissions on GRUB directory"
+  ansible.builtin.stat:
+    path: "{{ boot_grub_dir_path }}"
+  register: grub_dir_current_perms
+  when: grub_dir_stat.stat.exists | default(false)
+
+- name: "Set secure permissions on GRUB directory (0700)"
+  ansible.builtin.file:
+    path: "{{ boot_grub_dir_path }}"
+    mode: "0700"
+    owner: root
+    group: root
+    state: directory
+  when:
+    - grub_dir_stat.stat.exists | default(false)
+    - (grub_dir_current_perms.stat.mode | default('0755')) != '0700'
+
+# --------------------------------------------------
+# Step 4: Set secure ownership on the GRUB config file
+# --------------------------------------------------
+
+- name: "Verify ownership on GRUB config file"
+  ansible.builtin.stat:
+    path: "{{ effective_grub_cfg_path }}"
+  register: grub_cfg_current_owner
+  when: grub_cfg_stat.stat.exists | default(false)
+
+- name: "Set secure ownership on GRUB config file (root:root)"
+  ansible.builtin.file:
+    path: "{{ effective_grub_cfg_path }}"
+    owner: root
     group: root
     state: file
-  when: grub_stat.stat.exists
+  when:
+    - grub_cfg_stat.stat.exists | default(false)
+    - (grub_cfg_current_owner.stat.pw_name | default('nobody')) != 'root'
+    - (grub_cfg_current_owner.stat.gr_name | default('nogroup')) != 'root'
+
+# --------------------------------------------------
+# Step 5: Set secure ownership on the GRUB directory
+# --------------------------------------------------
+
+- name: "Verify ownership on GRUB directory"
+  ansible.builtin.stat:
+    path: "{{ boot_grub_dir_path }}"
+  register: grub_dir_current_owner
+  when: grub_dir_stat.stat.exists | default(false)
+
+- name: "Set secure ownership on GRUB directory (root:root)"
+  ansible.builtin.file:
+    path: "{{ boot_grub_dir_path }}"
+    owner: root
+    group: root
+    mode: "0700"
+    state: directory
+  when:
+    - grub_dir_stat.stat.exists | default(false)
+    - (grub_dir_current_owner.stat.pw_name | default('nobody')) != 'root'
+    - (grub_dir_current_owner.stat.gr_name | default('nogroup')) != 'root'
+
+# --------------------------------------------------
+# Step 6: Verify GRUB_DISABLE_RECOVERY is set (security hardening)
+# --------------------------------------------------
+
+- name: "Check if GRUB_DISABLE_RECOVERY is set in grub.cfg"
+  ansible.builtin.command:
+    cmd: "grep -q 'GRUB_DISABLE_RECOVERY' '{{ effective_grub_cfg_path }}' 2>/dev/null && echo 'found' || echo 'not_found'"
+  register: grub_recovery_setting
+  changed_when: false
+  failed_when: false
+  when: grub_cfg_stat.stat.exists | default(false)
+
+- name: "Set GRUB_DISABLE_RECOVERY to 'true' in grub.cfg"
+  ansible.builtin.lineinfile:
+    path: "{{ effective_grub_cfg_path }}"
+    regexp: '^GRUB_DISABLE_RECOVERY='
+    line: "GRUB_DISABLE_RECOVERY=true"
+    insertafter: '^#GRUB_DISABLE_RECOVERY='
+  when:
+    - grub_cfg_stat.stat.exists | default(false)
+    - "'not_found' in (grub_recovery_setting.stdout | default('not_found'))"
+  notify: "Regenerate GRUB configuration"
+
+# --------------------------------------------------
+# Step 7: Handle systems without GRUB (UEFI, containers, WSL)
+# --------------------------------------------------
+
+- name: "Skip when bootloader is not available"
+  ansible.builtin.debug:
+    msg: >-
+      Bootloader (GRUB) is not configured on this system.
+      Skipping bootloader access hardening.
+      This is expected on containers, WSL, or virtualized environments.
+  when:
+    - not (grub_binary_stat.stat.exists | default(false))
+    - not (grub_cfg_stat.stat.exists | default(false))
