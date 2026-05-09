@@ -1,0 +1,27 @@
+---
+# defaults/main.yml
+# Default variables for sshd_macs role
+
+sshd_macs_config_file: /etc/ssh/sshd_config
+sshd_macs_manage_service: true
+
+# MACs explícitamente no aprobados por el control 35654
+sshd_macs_blacklist_base:
+  - hmac-md5
+  - hmac-md5-96
+  - hmac-ripemd160
+  - hmac-sha1-96
+  - umac-64@openssh.com
+  - hmac-md5-etm@openssh.com
+  - hmac-md5-96-etm@openssh.com
+  - hmac-ripemd160-etm@openssh.com
+  - hmac-sha1-96-etm@openssh.com
+  - umac-64-etm@openssh.com
+  - umac-128-etm@openssh.com
+
+# ETM adicionales recomendados cuando CVE-2023-48795 no ha sido revisado/remediado
+sshd_macs_include_cve202348795_etm_blacklist: true
+sshd_macs_blacklist_cve202348795_extra:
+  - hmac-sha1-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - hmac-sha2-512-etm@openssh.com
