@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: sshd_maxauthtries
+  author: Patricio Rojas Ortiz
+  description: Ensure sshd MaxAuthTries is configured (Wazuh ID 35655)
+  license: Apache 2.0
+  namespace: ubuntu-server
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - ssh
+    - sshd
+    - authentication
+
+dependencies: []

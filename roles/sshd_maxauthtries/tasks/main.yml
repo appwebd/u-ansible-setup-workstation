@@ -1,0 +1,32 @@
+---
+# Role        : sshd_maxauthtries
+# Description : Ensure sshd MaxAuthTries is configured (Wazuh ID 35655)
+# Remediation : Set MaxAuthTries <= 4 before any Include/Match entries in sshd_config.
+#               First occurrence takes precedence, so we remove all existing entries
+#               first, then insert a single correct entry at the right position.
+
+- name: "Remove any existing MaxAuthTries (commented or uncommented)"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^\s*#?\s*MaxAuthTries\s+'
+    state: absent
+    owner: root
+    group: root
+  when:
+    - sshd_maxauthtries_value is defined
+    - sshd_config_file is defined
+
+- name: "Ensure MaxAuthTries is configured before Include/Match entries"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^\s*MaxAuthTries\s+'
+    line: "MaxAuthTries {{ sshd_maxauthtries_value }}"
+    state: present
+    owner: root
+    group: root
+    insertbefore: '^\s*(#?Include\s+.*|Match\s+)'
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: Restart sshd
+  when:
+    - sshd_maxauthtries_value is defined
+    - sshd_config_file is defined
