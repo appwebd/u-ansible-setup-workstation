@@ -201,7 +201,7 @@
     - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
     - sshd_loglevel                             # 35653 Ensure sshd LogLevel is configured.
     - sshd_macs                                 # 35654 Ensure sshd MACs are configured.
-#    - sshd_maxauthtries                         # 35655 Ensure sshd MaxAuthTries is configured.
+    - sshd_maxauthtries                         # 35655 Ensure sshd MaxAuthTries is configured.
 #    - sshd_maxsessions                          # 35656 Ensure sshd MaxSessions is configured.
 #    - sshd_maxstartups                          # 35657 Ensure sshd MaxStartups is configured.
 #    - sshd_permitemptypasswords_disabled        # 35658 Ensure sshd PermitEmptyPasswords is disabled.
