@@ -1,6 +1,6 @@
 ---
-# Role: sshd_usepam
-# Description: Handlers for sshd_usepam role
+# Role: sshd_permituserenvironment
+# Description: Handlers for sshd_permituserenvironment role
 
 - name: Restart sshd
   ansible.builtin.systemd:

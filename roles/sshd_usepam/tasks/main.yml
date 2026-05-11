@@ -3,21 +3,52 @@
 # Description : Ensure sshd UsePAM is enabled (Wazuh ID 35661)
 # Wazuh ID    : 35661
 
-- name: "Ensure UsePAM is set to yes in sshd_config"
+- name: "Check for Include directives in sshd_config"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    grep -n '^Include' "{{ sshd_config_file }}" 2>/dev/null || exit 0
+  args:
+    executable: /bin/bash
+  register: sshd_include_lines
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Set insertbefore variable for UsePAM directive placement"
+  ansible.builtin.set_fact:
+    sshd_usepam_insert_before: "{{ sshd_include_pattern | default('EOF') }}"
+  vars:
+    sshd_include_pattern: >-
+      {{ '^Include' if sshd_include_lines.stdout | length > 0 else 'EOF' }}
+
+- name: "Ensure UsePAM is set to yes in sshd_config before Include entries"
   ansible.builtin.lineinfile:
     path: "{{ sshd_config_file }}"
-    regexp: '^\s*#?\s*UsePAM\s+'
-    line: "{{ sshd_usepam_line }}"
+    regexp: '^\s*UsePAM\s+'
+    line: "UsePAM {{ sshd_usepam_value }}"
     state: present
     owner: root
     group: root
     mode: "0644"
-    backrefs: true
+    insertbefore: "{{ sshd_usepam_insert_before }}"
+    backup: true
+  notify: Restart sshd
+
+- name: "Ensure UsePAM is not set to no in sshd_config"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^\s*UsePAM\s+no\s*'
+    state: absent
+    backup: true
   notify: Restart sshd
 
 - name: "Verify UsePAM setting is enabled"
-  ansible.builtin.command: sshd -T
-  register: sshd_test_output
+  ansible.builtin.shell: |
+    set -euo pipefail
+    sshd -T 2>/dev/null | awk '/^usepam/ {print $2}'
+  args:
+    executable: /bin/bash
+  register: sshd_usepam_verify
   changed_when: false
-  failed_when: "'usepam yes' not in sshd_test_output.stdout.lower()"
+  failed_when: sshd_usepam_verify.stdout != 'yes'
   check_mode: false

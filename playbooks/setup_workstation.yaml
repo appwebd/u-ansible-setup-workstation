@@ -32,32 +32,32 @@
 
 # Partitioning and mount options (nodev, nosuid, noexec)
 
-                                               #    35510 Ensure /tmp is a separate partition.
-                                               #    35511 Ensure nodev option set on /tmp partition.
-                                               #    35512 Ensure nosuid option set on /tmp partition.
-                                               #    35513 Ensure noexec option set on /tmp partition.
-                                               #    35514 Ensure /dev/shm is a separate partition.
-                                               #    35515 Ensure nodev option set on /dev/shm partition.
-                                               #    35516 Ensure nosuid option set on /dev/shm partition.
-                                               #    35517 Ensure noexec option set on /dev/shm partition.
-                                               #    35518 Ensure separate partition exists for /home.
-                                               #    35519 Ensure nodev option set on /home partition.
-                                               #    35520 Ensure nosuid option set on /home partition.
-                                               #    35521 Ensure separate partition exists for /var.
-                                               #    35522 Ensure nodev option set on /var partition.
-                                               #    35523 Ensure nosuid option set on /var partition.
-                                               #    35524 Ensure separate partition exists for /var/tmp.
-                                               #    35525 Ensure nodev option set on /var/tmp partition.
-                                               #    35526 Ensure nosuid option set on /var/tmp partition.
-                                               #    35527 Ensure noexec option set on /var/tmp partition.
-                                               #    35528 Ensure separate partition exists for /var/log.
-                                               #    35529 Ensure nodev option set on /var/log partition.
-                                               #    35530 Ensure nosuid option set on /var/log partition.
-                                               #    35531 Ensure noexec option set on /var/log partition.
-                                               #    35532 Ensure separate partition exists for /var/log/audit.
-                                               #    35533 Ensure nodev option set on /var/log/audit partition.
-                                               #    35534 Ensure nosuid option set on /var/log/audit partition.
-                                               #    35535 Ensure noexec option set on /var/log/audit partition.
+                                               # 35510 Ensure /tmp is a separate partition.
+                                               # 35511 Ensure nodev option set on /tmp partition.
+                                               # 35512 Ensure nosuid option set on /tmp partition.
+                                               # 35513 Ensure noexec option set on /tmp partition.
+                                               # 35514 Ensure /dev/shm is a separate partition.
+                                               # 35515 Ensure nodev option set on /dev/shm partition.
+                                               # 35516 Ensure nosuid option set on /dev/shm partition.
+                                               # 35517 Ensure noexec option set on /dev/shm partition.
+                                               # 35518 Ensure separate partition exists for /home.
+                                               # 35519 Ensure nodev option set on /home partition.
+                                               # 35520 Ensure nosuid option set on /home partition.
+                                               # 35521 Ensure separate partition exists for /var.
+                                               # 35522 Ensure nodev option set on /var partition.
+                                               # 35523 Ensure nosuid option set on /var partition.
+                                               # 35524 Ensure separate partition exists for /var/tmp.
+                                               # 35525 Ensure nodev option set on /var/tmp partition.
+                                               # 35526 Ensure nosuid option set on /var/tmp partition.
+                                               # 35527 Ensure noexec option set on /var/tmp partition.
+                                               # 35528 Ensure separate partition exists for /var/log.
+                                               # 35529 Ensure nodev option set on /var/log partition.
+                                               # 35530 Ensure nosuid option set on /var/log partition.
+                                               # 35531 Ensure noexec option set on /var/log partition.
+                                               # 35532 Ensure separate partition exists for /var/log/audit.
+                                               # 35533 Ensure nodev option set on /var/log/audit partition.
+                                               # 35534 Ensure nosuid option set on /var/log/audit partition.
+                                               # 35535 Ensure noexec option set on /var/log/audit partition.
 
 # 2. Mandatory Access Control (MAC) / AppArmor
     - install_apparmor                         # 35536 Ensure AppArmor is installed.
@@ -85,47 +85,47 @@
     - configure_etc_issue_net_access           # 35551 Ensure access to /etc/issue.net is configured.
 
 # 5. Graphical Environment Security (GDM/X11)
-    - remove_gdm                       # 35552 Ensure GDM is removed.
-#    - configure_gdm_login_banner       # 35553 Ensure GDM login banner is configured.
-#    - gdm_disable_user_list            # 35554 Ensure GDM disable-user-list option is enabled.
-#    - lock_gdm_screensaver             # 35555 Ensure GDM screen locks cannot be overridden.
-#    - disable_gdm_automount            # 35556 Ensure GDM automatic mounting of removable media is disabled.
-#    - gdm_disable_automount            # 35557 Ensure GDM disabling automatic mounting of removable media is not overridden.
-#    - gdm_autorun                      # 35558 Ensure GDM autorun-never is enabled.
-#    - gdm_lockdown_media_autorun       # 35559 Ensure GDM autorun-never is not overridden.
-    - disable_xdmcp                    # 35560 Ensure XDMCP is not enabled.
+    - remove_gdm                               # 35552 Ensure GDM is removed.
+#    - configure_gdm_login_banner               # 35553 Ensure GDM login banner is configured.
+#    - gdm_disable_user_list                    # 35554 Ensure GDM disable-user-list option is enabled.
+#    - lock_gdm_screensaver                     # 35555 Ensure GDM screen locks cannot be overridden.
+#    - disable_gdm_automount                    # 35556 Ensure GDM automatic mounting of removable media is disabled.
+#    - gdm_disable_automount                    # 35557 Ensure GDM disabling automatic mounting of removable media is not overridden.
+#    - gdm_autorun                              # 35558 Ensure GDM autorun-never is enabled.
+#    - gdm_lockdown_media_autorun               # 35559 Ensure GDM autorun-never is not overridden.
+    - disable_xdmcp                            # 35560 Ensure XDMCP is not enabled.
 
 # 6. Unnecessary Services (Service Hardening)
 # Unneeded network services
-                                                # 35561 Ensure autofs services are not in use.
-                                                # 35562 Ensure avahi daemon services are not in use.
-                                                # 35563 Ensure dhcp server services are not in use.
-                                                # 35564 Ensure dns server services are not in use.
-                                                # 35565 Ensure dnsmasq services are not in use.
-                                                # 35566 Ensure ftp server services are not in use.
-                                                # 35567 Ensure ldap server services are not in use.
-                                                # 35568 Ensure message access server services are not in use.
-                                                # 35569 Ensure network file system services are not in use.
-                                                # 35570 Ensure nis server services are not in use.
-                                                # 35571 Ensure print server services are not in use.
-                                                # 35572 Ensure rpcbind services are not in use.
-                                                # 35573 Ensure rsync services are not in use.
-                                                # 35574 Ensure samba file server services are not in use.
-                                                # 35575 Ensure snmp services are not in use.
-                                                # 35576 Ensure tftp server services are not in use.
-                                                # 35577 Ensure web proxy server services are not in use.
-                                                # 35578 Ensure web server services are not in use.
-                                                # 35579 Ensure xinetd services are not in use.
-                                                # 35580 Ensure X window server services are not in use.
+                                               # 35561 Ensure autofs services are not in use.
+                                               # 35562 Ensure avahi daemon services are not in use.
+                                               # 35563 Ensure dhcp server services are not in use.
+                                               # 35564 Ensure dns server services are not in use.
+                                               # 35565 Ensure dnsmasq services are not in use.
+                                               # 35566 Ensure ftp server services are not in use.
+                                               # 35567 Ensure ldap server services are not in use.
+                                               # 35568 Ensure message access server services are not in use.
+                                               # 35569 Ensure network file system services are not in use.
+                                               # 35570 Ensure nis server services are not in use.
+                                               # 35571 Ensure print server services are not in use.
+                                               # 35572 Ensure rpcbind services are not in use.
+                                               # 35573 Ensure rsync services are not in use.
+                                               # 35574 Ensure samba file server services are not in use.
+                                               # 35575 Ensure snmp services are not in use.
+                                               # 35576 Ensure tftp server services are not in use.
+                                               # 35577 Ensure web proxy server services are not in use.
+                                               # 35578 Ensure web server services are not in use.
+                                               # 35579 Ensure xinetd services are not in use.
+                                               # 35580 Ensure X window server services are not in use.
 
 # Unneeded client packages
-                                                # 35581 Ensure mail transfer agent is configured for local-only mode.
-                                                # 35582 Ensure NIS Client is not installed.
-                                                # 35583 Ensure rsh client is not installed.
-                                                # 35584 Ensure talk client is not installed.
-                                                # 35585 Ensure telnet client is not installed.
-                                                # 35586 Ensure ldap client is not installed.
-                                                # 35587 Ensure ftp client is not installed.
+                                               # 35581 Ensure mail transfer agent is configured for local-only mode.
+                                               # 35582 Ensure NIS Client is not installed.
+                                               # 35583 Ensure rsh client is not installed.
+                                               # 35584 Ensure talk client is not installed.
+                                               # 35585 Ensure telnet client is not installed.
+                                               # 35586 Ensure ldap client is not installed.
+                                               # 35587 Ensure ftp client is not installed.
 
 ## 7. Time Synchronization
     - configure_timesyncd_authorized_servers   # 35588 Ensure systemd-timesyncd configured with authorized timeserver.
@@ -186,7 +186,7 @@
                                                 # 35639 Ensure ip6tables loopback traffic is configured.
 
 # 12. SSH Configuration
-    - sshd_config_permissions                   # 35640 Ensure permissions on /etc/ssh/sshd_config are configured.
+    - sshd_config_permissions                   # 35640 - Ensure permissions on /etc/ssh/sshd_config are configured.
     - ssh_host_keys_permissions                 # 35641 Ensure permissions on SSH private host key files are configured.
     - ssh_host_keys_permissions                 # 35642 Ensure permissions on SSH public host key files are configured.
     - ssh_access_control                        # 35643 Ensure sshd access is configured.
@@ -201,13 +201,13 @@
     - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
     - sshd_loglevel                             # 35653 Ensure sshd LogLevel is configured.
     - sshd_macs                                 # 35654 Ensure sshd MACs are configured.
-#    - sshd_maxauthtries                         # 35655 Ensure sshd MaxAuthTries is configured.
-#    - sshd_maxsessions                          # 35656 Ensure sshd MaxSessions is configured.
-#    - sshd_maxstartups                          # 35657 Ensure sshd MaxStartups is configured.
-#    - sshd_permitemptypasswords_disabled        # 35658 Ensure sshd PermitEmptyPasswords is disabled.
-#    - sshd_permitrootlogin_disabled             # 35659 Ensure sshd PermitRootLogin is disabled.
-#    - sshd_permituserenvironment                # 35660 Ensure sshd PermitUserEnvironment is disabled.
-    - sshd_usepam                               # 35661 Ensure sshd UsePAM is enabled.
+    - sshd_maxauthtries                         # 35655 - Ensure sshd MaxAuthTries is configured.
+    - sshd_maxsessions                          # 35656 - Ensure sshd MaxSessions is configured.
+    - sshd_maxstartups                          # 35657 - Ensure sshd MaxStartups is configured.
+    - sshd_permitemptypasswords_disabled        # 35658 - Ensure sshd PermitEmptyPasswords is disabled.
+    - sshd_permitrootlogin_disabled             # 35659 - Ensure sshd PermitRootLogin is disabled.
+    - sshd_permituserenvironment                # 35660 - Ensure sshd PermitUserEnvironment is disabled.
+    - sshd_usepam                               # 35661 - Ensure sshd UsePAM is enabled.
 
 # 13. Privilege Escalation and sudo
                                                 # 35662 Ensure sudo is installed.

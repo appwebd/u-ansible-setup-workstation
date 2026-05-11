@@ -1,11 +1,11 @@
 ---
 galaxy_info:
-  role_name: sshd_usepam
+  role_name: sshd_permitemptypasswords_disabled
   author: Patricio Rojas Ortiz
-  description: Ensure sshd UsePAM is enabled (Wazuh ID 35661)
+  description: Ensure sshd PermitEmptyPasswords is disabled (Wazuh ID 35658)
   license: Apache 2.0
   namespace: ubuntu-server
-  min_ansible_version: "2.16"
+  min_ansible_version: "2.14"
   platforms:
     - name: Ubuntu
       versions:
@@ -14,7 +14,7 @@ galaxy_info:
     - security
     - compliance
     - ssh
-    - pam
     - authentication
+    - hardening
 
 dependencies: []

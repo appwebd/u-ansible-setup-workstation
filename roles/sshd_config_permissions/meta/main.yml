@@ -4,6 +4,7 @@ galaxy_info:
   author: Patricio Rojas Ortiz
   description: Ensure permissions on /etc/ssh/sshd_config and .conf files in /etc/ssh/sshd_config.d are configured (Wazuh ID 35640)
   license: Apache 2.0
+  namespace: ubuntu-server
   min_ansible_version: "2.16"
   platforms:
     - name: Ubuntu

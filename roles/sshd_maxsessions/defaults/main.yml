@@ -1,0 +1,7 @@
+---
+# defaults/main.yml
+# Default configuration for sshd_maxsessions role
+
+sshd_maxsessions_value: 10
+sshd_config_file: /etc/ssh/sshd_config
+sshd_service_name: sshd

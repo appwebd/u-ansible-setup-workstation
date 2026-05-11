@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: sshd_usepam
+  role_name: sshd_maxauthtries
   author: Patricio Rojas Ortiz
-  description: Ensure sshd UsePAM is enabled (Wazuh ID 35661)
+  description: Ensure sshd MaxAuthTries is configured (Wazuh ID 35655)
   license: Apache 2.0
   namespace: ubuntu-server
   min_ansible_version: "2.16"
@@ -14,7 +14,7 @@ galaxy_info:
     - security
     - compliance
     - ssh
-    - pam
+    - sshd
     - authentication
 
 dependencies: []

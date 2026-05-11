@@ -24,19 +24,25 @@
   register: sshd_config_dir_result
   changed_when: sshd_config_dir_result is changed
 
+- name: "Find all .conf files in /etc/ssh/sshd_config.d"
+  ansible.builtin.find:
+    paths: "{{ sshd_config_dir }}"
+    patterns: "*.conf"
+  register: sshd_config_d_conf_files
+  when: ansible_facts.os_family == "Debian"
+
 - name: "Ensure all .conf files in /etc/ssh/sshd_config.d have correct ownership and permissions"
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     owner: "{{ sshd_config_owner }}"
     group: "{{ sshd_config_group }}"
     mode: "{{ sshd_config_mode }}"
-  loop: "{{ ansible_facts.files | default([]) }}"
+  loop: "{{ sshd_config_d_conf_files.files | default([]) }}"
   loop_control:
-    loop_var: item
-    label: "{{ item }}"
+    label: "{{ item.path }}"
   when:
     - ansible_facts.os_family == "Debian"
-    - item is file
-    - item | regex_search('\\.conf$')
+    - sshd_config_d_conf_files is defined
+    - sshd_config_d_conf_files.files | default([]) | length > 0
   register: sshd_config_d_files_result
-  changed_when: sshd_config_d_files_result.results | selectattr('changed', 'equalto', true) | list | length > 0
+  changed_when: sshd_config_d_files_result is changed

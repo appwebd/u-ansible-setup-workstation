@@ -1,0 +1,45 @@
+---
+# Role        : sshd_maxsessions
+# Description : Ensure sshd MaxSessions is configured
+# Wazuh ID    : 35656
+
+- name: "Validate MaxSessions value is within compliance limit"
+  ansible.builtin.assert:
+    that:
+      - sshd_maxsessions_value | int <= 10
+      - sshd_maxsessions_value | int > 0
+    fail_msg: "MaxSessions must be between 1 and 10"
+    success_msg: "MaxSessions value {{ sshd_maxsessions_value }} is within compliance range"
+
+- name: "Check if MaxSessions exists in sshd_config"
+  ansible.builtin.command: grep -n '^\\s*MaxSessions\\s' "{{ sshd_config_file }}"
+  register: maxsessions_check
+  changed_when: false
+  failed_when: false
+
+- name: "Set MaxSessions before Include/Match entries"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^\\s*MaxSessions\\s+'
+    line: "MaxSessions {{ sshd_maxsessions_value }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0644'
+  when: maxsessions_check.stdout | length > 0
+  notify: Restart sshd
+
+- name: "Insert MaxSessions before first Include or Match"
+  ansible.builtin.blockinfile:
+    path: "{{ sshd_config_file }}"
+    block: "MaxSessions {{ sshd_maxsessions_value }}"
+    insertbefore: "^\\s*(Match|Include)\\b"
+    marker: ""
+  when: maxsessions_check.stdout | length == 0
+  notify: Restart sshd
+
+- name: "Verify sshd configuration is valid"
+  ansible.builtin.command: sshd -t
+  register: sshd_test
+  changed_when: false
+  failed_when: sshd_test.rc != 0

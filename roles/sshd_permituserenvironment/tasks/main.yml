@@ -1,0 +1,30 @@
+---
+# Role        : sshd_permituserenvironment
+# Description : Ensure sshd PermitUserEnvironment is disabled (Wazuh ID 35660)
+# Wazuh ID    : 35660
+# Remediation : Set PermitUserEnvironment no above any Include and Match entries.
+#               First occurrence of an option takes precedence.
+
+- name: "Remove any existing PermitUserEnvironment entries (commented or uncommented)"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^\s*#?\s*[Pp]ermitUserEnvironment\s+'
+    state: absent
+  when:
+    - sshd_config_file is defined
+
+- name: "Ensure PermitUserEnvironment is set to no in sshd_config (before any Include/Match entries)"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: '^PermitUserEnvironment\s+'
+    line: "PermitUserEnvironment {{ sshd_permituserenvironment_value }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0644'
+    insertbefore: '^\s*(#?Include\s+.*|Match\s+)'
+    validate: 'sshd -t -f %s'
+  notify: Restart sshd
+  when:
+    - sshd_config_file is defined
+    - sshd_permituserenvironment_value | lower == 'no'

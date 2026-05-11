@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: sshd_usepam
+  role_name: sshd_permitrootlogin_disabled
   author: Patricio Rojas Ortiz
-  description: Ensure sshd UsePAM is enabled (Wazuh ID 35661)
+  description: Ensure sshd PermitRootLogin is disabled (Wazuh ID 35659)
   license: Apache 2.0
   namespace: ubuntu-server
   min_ansible_version: "2.16"
@@ -10,11 +10,14 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - all
+    - name: Debian
+      versions:
+        - all
   galaxy_tags:
     - security
     - compliance
     - ssh
-    - pam
     - authentication
+    - hardening
 
 dependencies: []
