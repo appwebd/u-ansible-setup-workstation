@@ -205,7 +205,7 @@
     - sshd_maxsessions                          # 35656 - Ensure sshd MaxSessions is configured.
     - sshd_maxstartups                          # 35657 - Ensure sshd MaxStartups is configured.
     - sshd_permitemptypasswords_disabled        # 35658 - Ensure sshd PermitEmptyPasswords is disabled.
-#    - sshd_permitrootlogin_disabled             # 35659 Ensure sshd PermitRootLogin is disabled.
+    - sshd_permitrootlogin_disabled             # 35659 - Ensure sshd PermitRootLogin is disabled.
 #    - sshd_permituserenvironment                # 35660 Ensure sshd PermitUserEnvironment is disabled.
     - sshd_usepam                               # 35661 Ensure sshd UsePAM is enabled.
 
