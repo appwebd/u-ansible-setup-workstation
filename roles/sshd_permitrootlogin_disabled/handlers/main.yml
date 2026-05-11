@@ -1,0 +1,8 @@
+---
+# Role: sshd_permitrootlogin_disabled
+# Description: Handlers for sshd_permitrootlogin_disabled role
+
+- name: Restart sshd
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: restarted
