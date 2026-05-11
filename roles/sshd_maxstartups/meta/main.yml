@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: sshd_maxstartups
+  author: Patricio Rojas Ortiz
+  description: Ensure sshd MaxStartups is configured (Wazuh ID 35657)
+  license: Apache 2.0
+  namespace: ubuntu-server
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - ssh
+    - hardening
+    - ubuntu
+
+dependencies: []

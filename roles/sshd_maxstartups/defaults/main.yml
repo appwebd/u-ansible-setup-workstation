@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default variables for sshd_maxstartups role
+# These values can be overridden by inventory or extra vars
+
+sshd_maxstartups_value: "10:30:60"
+sshd_config_file: /etc/ssh/sshd_config
+sshd_service_name: sshd

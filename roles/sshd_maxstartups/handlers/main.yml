@@ -1,0 +1,8 @@
+---
+# Role: sshd_maxstartups
+# Description: Handlers for the sshd_maxstartups role
+
+- name: Restart {{ sshd_service_name }}
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: restarted
