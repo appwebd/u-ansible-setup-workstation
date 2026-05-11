@@ -1,0 +1,8 @@
+---
+# Role: sshd_permituserenvironment
+# Description: Handlers for sshd_permituserenvironment role
+
+- name: Restart sshd
+  ansible.builtin.systemd:
+    name: "{{ sshd_service_name }}"
+    state: restarted
