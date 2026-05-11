@@ -186,7 +186,7 @@
                                                 # 35639 Ensure ip6tables loopback traffic is configured.
 
 # 12. SSH Configuration
-    - sshd_config_permissions                   # 35640 Ensure permissions on /etc/ssh/sshd_config are configured.
+    - sshd_config_permissions                   # 35640 - Ensure permissions on /etc/ssh/sshd_config are configured.
     - ssh_host_keys_permissions                 # 35641 Ensure permissions on SSH private host key files are configured.
     - ssh_host_keys_permissions                 # 35642 Ensure permissions on SSH public host key files are configured.
     - ssh_access_control                        # 35643 Ensure sshd access is configured.
@@ -201,7 +201,7 @@
     - sshd_logingracetime                       # 35652 Ensure sshd LoginGraceTime is configured.
     - sshd_loglevel                             # 35653 Ensure sshd LogLevel is configured.
     - sshd_macs                                 # 35654 Ensure sshd MACs are configured.
-    - sshd_maxauthtries                         # 35655 Ensure sshd MaxAuthTries is configured.
+    - sshd_maxauthtries                         # 35655 - Ensure sshd MaxAuthTries is configured.
 #    - sshd_maxsessions                          # 35656 Ensure sshd MaxSessions is configured.
 #    - sshd_maxstartups                          # 35657 Ensure sshd MaxStartups is configured.
 #    - sshd_permitemptypasswords_disabled        # 35658 Ensure sshd PermitEmptyPasswords is disabled.
