@@ -1,0 +1,9 @@
+---
+# Role: enable_cron
+# Description: Handlers for the enable_cron role
+
+- name: Restart cron service
+  ansible.builtin.systemd:
+    name: "{{ cron_service_name }}"
+    state: restarted
+    daemon_reload: true
