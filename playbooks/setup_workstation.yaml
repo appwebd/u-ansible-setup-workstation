@@ -135,15 +135,15 @@
     - enable_chrony                            # 35592 Ensure chrony is enabled and running.
 
 # 8. Job Scheduling (cron / at)
-                                                # 35593 Ensure cron daemon is enabled and active.
-                                                # 35594 Ensure permissions on /etc/crontab are configured.
-                                                # 35595 Ensure permissions on /etc/cron.hourly are configured.
-                                                # 35596 Ensure permissions on /etc/cron.daily are configured.
-                                                # 35597 Ensure permissions on /etc/cron.weekly are configured.
-                                                # 35598 Ensure permissions on /etc/cron.monthly are configured.
-                                                # 35599 Ensure permissions on /etc/cron.d are configured.
-                                                # 35600 Ensure crontab is restricted to authorized users.
-                                                # 35601 Ensure at is restricted to authorized users.
+    - enable_cron                              # 35593 Ensure cron daemon is enabled and active.
+#    - configure_crontab_permissions            # 35594 Ensure permissions on /etc/crontab are configured.gured.
+#    - cron_hourly_permissions                  # 35595 Ensure permissions on /etc/cron.hourly are configured.onfigured.
+#    - cron_permissions                         # 35596 Ensure permissions on /etc/cron.daily are configured.nfigured.
+#    - cron_weekly_permissions                  # 35597 Ensure permissions on /etc/cron.weekly are configured.onfigured.
+#    - cron_monthly_permissions                 # 35598 Ensure permissions on /etc/cron.monthly are configured.configured.
+#    - configure_cron_d_permissions             # 35599 Ensure permissions on /etc/cron.d are configured.ured.
+#    - restrict_crontab                         # 35600 Ensure crontab is restricted to authorized users.sers.
+#    - restrict_at                              # 35601 Ensure at is restricted to authorized users.
 
 # 9. Network Interfaces and Devices
                                                 # 35602 Ensure wireless interfaces are disabled.
