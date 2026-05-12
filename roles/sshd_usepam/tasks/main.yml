@@ -24,7 +24,7 @@
 - name: "Ensure UsePAM is set to yes in sshd_config before Include entries"
   ansible.builtin.lineinfile:
     path: "{{ sshd_config_file }}"
-    regexp: '^\s*UsePAM\s+'
+    regexp: '^#?\s*[Uu]se[Pp][Aa][Mm]\s+'
     line: "UsePAM {{ sshd_usepam_value }}"
     state: present
     owner: root
@@ -37,7 +37,7 @@
 - name: "Ensure UsePAM is not set to no in sshd_config"
   ansible.builtin.lineinfile:
     path: "{{ sshd_config_file }}"
-    regexp: '^\s*UsePAM\s+no\s*'
+    regexp: '^#?\s*[Uu]se[Pp][Aa][Mm]\s+no\s*'
     state: absent
     backup: true
   notify: Restart sshd
