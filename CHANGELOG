@@ -1,3 +1,114 @@
+0662224 Tue May 12 11:57:57 2026 -0400 Fix UsePAM regex to match commented and case variations
+9706d3f Mon May 11 17:45:57 2026 -0400 Remove daemon_reload and harden UsePAM configuration
+312b18f Mon May 11 17:45:41 2026 -0400 Add namespace to sshd_usepam role metadata
+5d62f04 Mon May 11 17:45:28 2026 -0400 Fix missing dash in Playbook comment
+1c5dd90 Mon May 11 16:53:35 2026 -0400 fea: Add sshd_permituserenvironment Ansible role
+bcccc8f Mon May 11 16:50:58 2026 -0400 fea: Enable sshd_permituserenvironment check
+6621736 Mon May 11 16:17:10 2026 -0400 fea: Add sshd sshd_permitrootlogin_disabled disabled role
+0a46567 Mon May 11 16:16:08 2026 -0400 fea: Enable sshd sshd_permitrootlogin_disabled
+e8e69c1 Mon May 11 15:44:29 2026 -0400 fea: Add sshd PermitEmptyPasswords disabled role
+200a5dc Mon May 11 15:44:10 2026 -0400 fea: Enable sshd PermitEmptyPasswords disabled check
+2623e63 Mon May 11 15:17:18 2026 -0400 fea: Add sshd_maxstartups security role
+dfef2ff Mon May 11 15:15:46 2026 -0400 Fix inconsistent comment alignment in setup_workstation.yaml
+f8cf6e9 Mon May 11 14:39:51 2026 -0400 fea: Add sshd_maxsessions Ansible role
+be64cd6 Mon May 11 14:34:50 2026 -0400 docs: Add namespace to sshd_config_permissions role
+3de7aa8 Mon May 11 14:34:34 2026 -0400 fea: Add sshd MaxSessions configuration role
+7670207 Mon May 11 14:18:01 2026 -0400 fix: Set permissions on SSH config files using find task
+51665d7 Mon May 11 14:17:45 2026 -0400 Fix comment formatting in setup_workstation.yaml
+5b51d0a Mon May 11 14:17:06 2026 -0400 docs: Format remediation script in SSH config docs
+2d48cb5 Sun May 10 18:31:26 2026 -0400 fea: Add sshd_maxauthtries Ansible role
+bc68149 Sun May 10 18:29:10 2026 -0400 fea: Enable sshd MaxAuthTries configuration
+7d93385 Sat May 9 19:59:26 2026 -0400 chore: Add `sshd_macs` role to configure SSH MACs and ensure compliance with Wazuh rule 35654
+4621838 Sat May 9 19:10:42 2026 -0400 fea: chmod +x bin/run_activate_venv.sh
+2a73920 Sat May 9 19:08:05 2026 -0400 chore: Update `update_pam` role with PAM package update task, handler, and improved documentation
+ced73ca Sat May 9 18:49:09 2026 -0400 chore: Add script to activate Python virtual environment
+533c014 Sat May 9 17:41:02 2026 -0400 chore: Unhide `sshd_macs` and several audit-related roles in `setup_workstation.yaml` for improved compliance configuration
+43d0faf Sat May 9 17:34:52 2026 -0400 chore: Add handler to regenerate GRUB config and internal variable for `_grub_check_result` in `configure_bootloader_access` role
+23cd400 Sat May 9 17:25:09 2026 -0400 chore: Enhance `configure_bootloader_access` role with GRUB hardening tasks and improved documentation
+42c070a Sat May 9 17:19:59 2026 -0400 chore: Update `configure_bootloader_access` role metadata with namespace and tags adjustments
+24c0e14 Sat May 9 17:19:47 2026 -0400 chore: Add GRUB path variables to `configure_bootloader_access` role defaults
+9c6569e Sat May 9 15:49:13 2026 -0400 chore: Update `run_ansible_lint.sh` to use PEP8 formatting and exclude `scope-latest`
+8587481 Fri May 8 19:13:10 2026 -0400 Remove unnecessary newline in `ensure_libpam_modules_installed` role variables file
+315a0d2 Fri May 8 19:12:50 2026 -0400 chore: Update `install-ansible.sh` to include additional dependencies and Molecule plugins setup
+e6313f5 Fri May 8 19:12:21 2026 -0400 chore: Update `ansible.cfg` to set `remote_tmp` directory and ensure formatting consistency
+aaea978 Wed May 6 15:59:25 2026 -0400 chore: Unhide `ensure_libpam_modules_installed` and several audit-related roles in `setup_workstation.yaml` for clarity and alignment with compliance recommendations
+4bd011b Wed May 6 15:57:19 2026 -0400 fea: Add `ensure_libpam_modules_installed` role to ensure `libpam-modules` is installed for compliance and functionality
+e77de3d Wed May 6 13:13:48 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#17) from Create-Ansible-roles-and-verify-functionality-#1 into main
+c4e4677 Wed May 6 13:11:01 2026 -0400 chore: Unhide `update_pam` role in `setup_workstation.yaml` for clarity and alignment with intended configuration
+db8a34f Wed May 6 13:10:39 2026 -0400 fea: Add `update_pam` role to ensure the latest version of `libpam-runtime` is installed for security and compliance
+aacf9c7 Wed May 6 12:58:43 2026 -0400 chore: Update `/etc/shells` default permissions to `0644` for consistency
+45da6d6 Wed May 6 12:29:01 2026 -0400 chore: Simplify `systemd-timesyncd` unit detection in `configure_chrony_user` role for clarity and maintainability
+f73d4a6 Wed May 6 12:27:53 2026 -0400 chore: Reorder variable table in `configure_chrony_user` README for consistency and clarity
+ca485c6 Wed May 6 12:17:04 2026 -0400 chore: Update `configure_chrony_user` to handle `systemd-timesyncd` unit detection and improve task clarity
+20be82a Wed May 6 11:36:14 2026 -0400 chore: Update `disable_xdmcp` role to include metadata and timestamp in GDM configuration
+1f835fe Wed May 6 11:27:35 2026 -0400 chore: Update `/etc/shells` permissions task to set `force: true` and adjust description
+dde68f9 Wed May 6 11:27:20 2026 -0400 chore: Update `/etc/shells` template to include metadata for permission configuration
+7b7ed57 Tue May 5 19:02:03 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#16) from Create-Ansible-roles-and-verify-functionality-#1 into main
+6103afb Tue May 5 19:01:23 2026 -0400 chore: Unhide `disable_xdmcp` role in `setup_workstation.yaml` for compliance adjustments
+9307e48 Tue May 5 19:01:03 2026 -0400 fea: Add `disable_xdmcp` role to ensure XDMCP is disabled in GDM3 for security and compliance
+631b79e Tue May 5 18:45:28 2026 -0400 chore: Update GDM role names in `setup_workstation.yaml` for consistency and clarity
+62e4fa9 Tue May 5 18:44:13 2026 -0400 fea: Add `remove_gdm` role to ensure GDM is removed for compliance and security
+52964e9 Tue May 5 17:06:36 2026 -0400 chore: Update `setup_workstation.yaml` to unhide `sshd_loglevel` and hide `ensure_groups_in_passwd_exist_in_group` roles for compliance adjustments
+768ad24 Tue May 5 17:05:54 2026 -0400 fea: Add `sshd_loglevel` role to configure SSH LogLevel for compliance and security
+9a51996 Tue May 5 16:51:50 2026 -0400 chore: Unhide `sshd_logingracetime` role in `setup_workstation.yaml` for compliance configuration
+eccfbfd Tue May 5 16:51:40 2026 -0400 fea: Add `sshd_logingracetime` role to configure SSH LoginGraceTime for compliance and security
+267dff4 Mon May 4 19:59:00 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#15) from Create-Ansible-roles-and-verify-functionality-#1 into main
+9d7239a Mon May 4 19:49:29 2026 -0400 chore: Unhide and update roles in `setup_workstation.yaml` for compliance adjustments
+e36462b Mon May 4 19:49:16 2026 -0400 chore: Remove trailing newline in `sshd_disable_forwarding` task file
+ef5d61d Mon May 4 19:48:58 2026 -0400 fea: Add `sshd_kexalgorithms` role to configure SSH Key Exchange Algorithms for compliance and security
+68dcfb1 Mon May 4 19:06:17 2026 -0400 chore: Update `sshd_disable_forwarding` role to improve `DisableForwarding` configuration and warnings
+99a1343 Mon May 4 15:17:18 2026 -0400 chore: Update role reference in README for `disable_kernel_modules`
+49860dd Mon May 4 15:16:59 2026 -0400 chore: Remove unused tasks from `disable_kernel_modules` role
+5526712 Mon May 4 11:16:30 2026 -0400 chore: Remove trailing newline in `shadow_password_fields` defaults
+72ab543 Mon May 4 11:16:21 2026 -0400 chore: Update `shadow_password_fields` task to use boolean `true` for password_lock parameter
+7c380bb Mon May 4 11:16:09 2026 -0400 chore: Unhide `shadow_password_fields` role to enforce `/etc/shadow` password field validation
+8d1df3a Mon May 4 11:14:52 2026 -0400 fea: Add `shadow_password_fields` role to ensure `/etc/shadow` password fields are not empty and lock misconfigured accounts
+ff043e3 Sun May 3 19:18:47 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#14) from Create-Ansible-roles-and-verify-functionality-#1 into main
+1d6798f Sun May 3 19:16:08 2026 -0400 chore: Unhide `sshd_ignore_rhosts` role to enable `IgnoreRhosts` configuration for compliance
+8866323 Sun May 3 19:15:58 2026 -0400 fea: Add `sshd_ignore_rhosts` role to enforce `IgnoreRhosts` configuration for enhanced security and compliance
+f618a04 Sun May 3 19:09:53 2026 -0400 chore: Fix pipefail syntax and specify bash executable in `sshd_hostbasedauthentication_disabled` task
+1441610 Sun May 3 19:09:39 2026 -0400 chore: Update `sshd_banner` task to fix pipefail syntax, refine failure condition, and specify bash executable
+e86cb62 Sun May 3 19:02:31 2026 -0400 chore: Unhide `sshd_hostbasedauthentication_disabled` role and comment out PAM-related roles for better clarity and configuration management
+48f7917 Sun May 3 19:02:21 2026 -0400 fea: Add `sshd_hostbasedauthentication_disabled` role to disable HostbasedAuthentication for enhanced security and compliance
+001d043 Sun May 3 19:02:09 2026 -0400 chore: Fix `sshd_banner` task regex and insertion logic, add pipefail for improved SSH banner configuration enforcement
+c8d7dfd Sun May 3 19:00:47 2026 -0400 chore: Update denied SSH user list in access control defaults for enhanced security
+74215ce Sun May 3 17:12:05 2026 -0400 Merge pull request 'chore: Fix `sshd_gssapi_authentication` task regex to ensure correct GSSAPI configuration enforcement' (#13) from Create-Ansible-roles-and-verify-functionality-#1 into main
+32ebade Sun May 3 17:10:16 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#12) from Create-Ansible-roles-and-verify-functionality-#1 into main
+60590c6 Sun May 3 17:09:47 2026 -0400 chore: Fix `sshd_gssapi_authentication` task regex to ensure correct GSSAPI configuration enforcement
+e2160de Sun May 3 17:07:10 2026 -0400 chore: Unhide `sshd_gssapi_authentication` role in `setup_workstation.yaml` to disable GSSAPI authentication for compliance
+abfa1d4 Sun May 3 17:07:04 2026 -0400 fea: Add `sshd_gssapi_authentication` role to disable GSSAPI authentication for enhanced security and compliance
+3fa7b40 Sun May 3 16:57:11 2026 -0400 chore: Unhide `sshd_disable_forwarding` role in `setup_workstation.yaml` to enforce SSH forwarding restrictions for compliance
+de8fd39 Sun May 3 16:57:02 2026 -0400 fea: Add `sshd_disable_forwarding` role to enforce SSH forwarding restrictions for enhanced security and compliance
+9e1135f Sun May 3 16:49:09 2026 -0400 chore: Update default SSH access control lists to define allowed and denied users for improved security configuration
+91f3cbc Fri May 1 19:31:29 2026 -0400 chore: Unhide `sshd_client_alive` role in `setup_workstation.yaml` to enforce SSH client activity timeouts for compliance
+386b18d Fri May 1 19:31:17 2026 -0400 fea: Add `sshd_client_alive` role to enforce SSH client activity timeouts for compliance and resource management
+60b1420 Fri May 1 19:19:34 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#11) from Create-Ansible-roles-and-verify-functionality-#1 into main
+ccddd3f Fri May 1 19:19:06 2026 -0400 chore: Update `.gitignore` to exclude `bin/run_test.sh` and `playbooks/test.yaml` files
+8f11392 Fri May 1 19:18:02 2026 -0400 chore: Unhide `sshd_banner` and `sshd_ciphers` roles in `setup_workstation.yaml` for compliance and clarity
+fd00e2b Fri May 1 19:17:21 2026 -0400 fea: Add `sshd_ciphers` role to configure and enforce secure SSH ciphers for compliance and security
+dac997b Thu Apr 30 20:22:56 2026 -0400 fea: Add `sshd_banner` role to configure and enforce SSH daemon banner settings for compliance and security
+e313976 Thu Apr 30 19:57:32 2026 -0400 chore: Unhide selected tasks and update SSH configuration roles in `setup_workstation.yaml` for improved clarity and compliance
+5aa0f5c Thu Apr 30 19:47:12 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#10) from Create-Ansible-roles-and-verify-functionality-#1 into main
+a13f5d2 Thu Apr 30 19:42:30 2026 -0400 fea: Add `ssh_access_control` role to ensure SSH access is properly configured
+57e5b65 Thu Apr 30 19:05:04 2026 -0400 fea: Add `ssh_host_keys_permissions` role to ensure secure permissions for SSH public host key files
+7a1941c Thu Apr 30 18:51:54 2026 -0400 fea: Add `sshd_usepam` role to ensure UsePAM is enabled for enhanced authentication and session management
+cdefeab Thu Apr 30 18:48:29 2026 -0400 fea: Add `sshd_config_permissions` role to ensure SSH configuration file permissions are properly set and secured
+6f1aa36 Thu Apr 30 16:27:38 2026 -0400 fea: Add `disable_apport` role to ensure automatic error reporting is disabled and improve system security
+5187cd2 Wed Apr 29 20:41:53 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#9) from Create-Ansible-roles-and-verify-functionality-#1 into main
+f43dca3 Wed Apr 29 20:41:23 2026 -0400 chore: Restructure and categorize tasks in `setup_workstation.yaml` for improved organization and readability
+9d792fd Wed Apr 29 20:25:27 2026 -0400 chore: Update `install-ansible.sh` to use `uv` for Ansible and Python management
+a6c6235 Wed Apr 29 20:20:05 2026 -0400 chore: Prefix task names with `verify` in `disable_kernel_modules` role for consistency
+cd16b86 Wed Apr 29 20:19:57 2026 -0400 chore: Prefix task names with `unload` in `disable_kernel_modules` role for clarity
+cb3a28d Wed Apr 29 20:16:02 2026 -0400 chore: Add note to install `ansible.posix.sysctl` collection in `restrict_core_dumps` role
+6d23425 Wed Apr 29 20:15:43 2026 -0400 fix: Ensure `become` is properly set in `disable_kernel_modules` task
+51163c3 Wed Apr 29 20:15:25 2026 -0400 chore: Simplify `.ansible-lint.yaml` configuration and improve readability
+b3d5c8f Tue Apr 28 19:57:48 2026 -0400 chore: Update `.gitignore` to exclude Python environment and dependency files
+69616c8 Tue Apr 28 19:57:39 2026 -0400 chore: Update `.ansible-lint.yaml` with enhanced configuration options and improved defaults
+19971a7 Tue Apr 28 19:07:04 2026 -0400 fea: Add `ensure_shadowed_passwords` role to enforce use of shadowed passwords in `/etc/passwd` and ensure compliance
+8269be8 Tue Apr 28 18:42:44 2026 -0400 fea: Add `secure_opasswd_permissions` role to enforce secure permissions for `/etc/security/opasswd` and ensure compliance
+52785d2 Mon Apr 27 14:57:40 2026 -0400 Merge pull request 'fea: Updated CHANGELOG' (#8) from Create-Ansible-roles-and-verify-functionality-#1 into main
+1710f4b Mon Apr 27 14:57:27 2026 -0400 fea: Updated CHANGELOG
+91a2c44 Mon Apr 27 14:55:13 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#7) from Create-Ansible-roles-and-verify-functionality-#1 into main
 aba2b42 Mon Apr 27 14:54:32 2026 -0400 fea: Add `configure_etc_shells_permissions` role to enforce secure permissions for `/etc/shells` and ensure compliance
 e52d813 Mon Apr 27 12:17:55 2026 -0400 fea: Add `configure_gshadow_minus_permissions` role to enforce secure permissions for `/etc/gshadow-` and ensure compliance
 c39782a Mon Apr 27 12:17:35 2026 -0400 fea: Add `configure_gshadow_permissions` role to enforce secure permissions for `/etc/gshadow` and ensure compliance
@@ -13,19 +124,23 @@ e6acfb9 Mon Apr 27 11:48:14 2026 -0400 refactor: Rename `configure_shadow_backup
 90e2296 Sat Apr 25 19:13:39 2026 -0400 fea: Add `configure_group_backup_permissions` role to enforce secure permissions for `/etc/group-` and ensure compliance
 a4a208d Sat Apr 25 19:12:45 2026 -0400 refactor: Rename and simplify `ensure_permissions_on_etc_group` role to `configure_group_permissions` for consistency and improved maintainability
 eddef72 Fri Apr 24 13:58:30 2026 -0400 fea: Add role to enforce /etc/group permissions
+0ce39d9 Thu Apr 23 19:28:14 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#6) from Create-Ansible-roles-and-verify-functionality-#1 into main
 777f5a7 Thu Apr 23 19:27:38 2026 -0400 fea: Add `set_passwd_permissions` role to enforce secure permissions for `/etc/passwd-` and ensure compliance
 47b193d Thu Apr 23 19:14:49 2026 -0400 fea: Add `configure_passwd_permissions` role to enforce secure permissions for `/etc/passwd` and ensure compliance
 03885fc Thu Apr 23 17:13:36 2026 -0400 fea: Add `configure_etc_issue_net_access` role to enforce secure permissions for `/etc/issue.net` and ensure compliance
 33de195 Thu Apr 23 17:10:55 2026 -0400 fea: Add `configure_etc_issue_access` role to enforce secure permissions for `/etc/issue` and ensure compliance
 10bde7c Wed Apr 22 18:33:14 2026 -0400 refactor: Standardize README formatting for `set_grub_password` role to improve readability and consistency
+4067810 Wed Apr 22 18:27:56 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#5) from Create-Ansible-roles-and-verify-functionality-#1 into main
 4704dcf Wed Apr 22 16:31:25 2026 -0400 fix: Update remote login banner content format for improved readability
 2abc67f Wed Apr 22 16:29:23 2026 -0400 fea: Add `configure_motd_access` role to enforce secure access permissions for `/etc/motd` and ensure compliance
 eb26889 Wed Apr 22 16:05:37 2026 -0400 fea: Add `configure_remote_login_banner` role to enforce remote login warning banner for security compliance
 7894e84 Wed Apr 22 15:56:46 2026 -0400 fea: Add `configure_local_login_banner` role to enforce local login warning banner for security compliance
 e1cf8e7 Wed Apr 22 14:57:23 2026 -0400 fea: Enhance `enable_chrony` role to verify chrony service is active and enabled
 e30f73e Wed Apr 22 14:49:19 2026 -0400 fea: Add `enable_chrony` role to ensure chrony is enabled and running for compliance and time synchronization
+e3cc565 Tue Apr 21 19:21:17 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#4) from Create-Ansible-roles-and-verify-functionality-#1 into main
 c7e3d98 Tue Apr 21 19:20:53 2026 -0400 fea: Add `configure_motd` role to manage MOTD configuration for security and compliance
 4fe5917 Tue Apr 21 18:35:30 2026 -0400 refactor: Standardize README formatting across roles for improved consistency and readability
+fabd7fd Mon Apr 20 19:03:57 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#3) from Create-Ansible-roles-and-verify-functionality-#1 into main
 3eaca87 Mon Apr 20 18:56:59 2026 -0400 fea: Add `configure_chrony_user` role to enforce chronyd runs as `_chrony` user for improved security and compliance
 04f6213 Mon Apr 20 18:35:45 2026 -0400 fix: Add `-vv` flag to `run_setup_workstation.sh` for increased verbosity during playbook execution
 35fbb2f Mon Apr 20 18:35:28 2026 -0400 refactor: Simplify package installation check in `enable_systemd_timesyncd` role by using a fact-based approach
@@ -35,6 +150,7 @@ e19f4eb Thu Apr 16 18:28:15 2026 -0400 fea: Add `configure_timesyncd_authorized_
 4a9b97b Wed Apr 15 19:36:03 2026 -0400 fix: Correct `backrefs` value and ensure EOF consistency in `enable_systemd_timesyncd` role
 414572f Wed Apr 15 19:35:08 2026 -0400 fea: Add `enable_systemd_timesyncd` role to ensure systemd-timesyncd is installed, enabled, and running for time synchronization and compliance
 00189f2 Mon Apr 13 20:00:36 2026 -0400 fea: Add `enforce_apparmor_profiles` role to ensure AppArmor profiles are enforced for improved security and compliance
+f7527ec Mon Apr 13 19:50:06 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#2) from Create-Ansible-roles-and-verify-functionality-#1 into main
 9f4edad Mon Apr 13 19:48:48 2026 -0400 refactor: Consolidate kernel module and security configuration roles for improved clarity and task management
 ebca492 Mon Apr 13 19:48:19 2026 -0400 docs: Add documentation for `set_grub_password` role to configure GRUB bootloader password
 9b4efa8 Mon Apr 13 19:38:14 2026 -0400 fix: Remove redundant `-v` flag in `run_setup_workstation.sh` script
