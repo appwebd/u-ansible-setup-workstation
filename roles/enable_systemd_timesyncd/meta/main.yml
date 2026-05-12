@@ -3,7 +3,8 @@ galaxy_info:
   role_name: enable_sustemd_timesync
   author: Patricio Rojas Ortiz
   description: Ensure systemd-timesyncd is enabled and running.
-  license: MIT
+  license: Apache 2.0
+  namespace: ubuntu-server
   min_ansible_version: "2.16"
   platforms:
     - name: Ubuntu

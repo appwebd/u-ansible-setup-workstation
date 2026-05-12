@@ -4,6 +4,7 @@ galaxy_info:
   author: Patricio Rojas Ortiz
   description: Ensure GDM is removed (Wazuh ID 35552)
   license: Apache 2.0
+  namespace: ubuntu-server
   min_ansible_version: "2.16"
   platforms:
     - name: Ubuntu
