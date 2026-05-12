@@ -5,7 +5,7 @@
 sshd_macs_config_file: /etc/ssh/sshd_config
 sshd_macs_manage_service: true
 
-# MACs explícitamente no aprobados por el control 35654
+# MACs explicitly blacklisted by control 35654
 sshd_macs_blacklist_base:
   - hmac-md5
   - hmac-md5-96
@@ -19,7 +19,7 @@ sshd_macs_blacklist_base:
   - umac-64-etm@openssh.com
   - umac-128-etm@openssh.com
 
-# ETM adicionales recomendados cuando CVE-2023-48795 no ha sido revisado/remediado
+# Additional ETM MACs recommended when CVE-2023-48795 has not been reviewed/remediated
 sshd_macs_include_cve202348795_etm_blacklist: true
 sshd_macs_blacklist_cve202348795_extra:
   - hmac-sha1-etm@openssh.com

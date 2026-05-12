@@ -77,7 +77,7 @@
       ansible.builtin.lineinfile:
         path: "{{ sshd_macs_config_file }}"
         line: "{{ sshd_macs_exclusion_line }}"
-        insertafter: EOF
+        insertbefore: '^\s*Include'
         state: present
         owner: root
         group: root
