@@ -1,0 +1,14 @@
+---
+# defaults/main.yml
+# Default variables for the configure_crontab_permissions role
+# These values can be overridden by inventory or playbook variables
+
+# Path to the /etc/crontab file
+crontab_file_path: /etc/crontab
+
+# Owner and group for the crontab file
+crontab_owner: root
+crontab_group: root
+
+# Permissions for the crontab file (owner read/write only)
+crontab_mode: '0600'
