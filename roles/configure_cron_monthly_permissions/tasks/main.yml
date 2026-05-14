@@ -1,0 +1,38 @@
+---
+# Role        : configure_cron_monthly_permissions
+# Description : Ensure permissions on /etc/cron.monthly are configured (Wazuh ID 35598)
+# Wazuh ID    : 35598
+
+- name: "Ensure /etc/cron.monthly directory ownership is set to root:root"
+  ansible.builtin.file:
+    path: "{{ cron_monthly_path }}"
+    owner: "{{ cron_monthly_owner }}"
+    group: "{{ cron_monthly_group }}"
+    recurse: false
+  register: cron_monthly_owner_result
+  changed_when: cron_monthly_owner_result.changed
+  failed_when: false
+
+- name: "Ensure /etc/cron.monthly directory permissions are set to 0700"
+  ansible.builtin.file:
+    path: "{{ cron_monthly_path }}"
+    mode: "{{ cron_monthly_mode }}"
+    recurse: false
+  register: cron_monthly_mode_result
+  changed_when: cron_monthly_mode_result.changed
+  failed_when: false
+
+- name: "Verify /etc/cron.monthly permissions match requirements"
+  ansible.builtin.stat:
+    path: "{{ cron_monthly_path }}"
+  register: cron_monthly_stat
+
+- name: "Ensure /etc/cron.monthly permissions are correct"
+  ansible.builtin.assert:
+    that:
+      - "cron_monthly_stat.stat.mode == '0700' or cron_monthly_stat.stat.mode == 'drwx------'"
+      - "cron_monthly_stat.stat.pw_name == 'root'"
+      - "cron_monthly_stat.stat.gr_name == 'root'"
+    fail_msg: "Permissions on {{ cron_monthly_path }} do not meet security requirements"
+    success_msg: "Permissions on {{ cron_monthly_path }} are correctly configured"
+  run_once: true
