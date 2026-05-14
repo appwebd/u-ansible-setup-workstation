@@ -1,0 +1,18 @@
+---
+# Role        : configure_crontab_permissions
+# Description : Ensure permissions on /etc/crontab are configured (Wazuh ID 35594)
+# Wazuh ID    : 35594
+
+- name: "Check if /etc/crontab exists"
+  ansible.builtin.stat:
+    path: "{{ crontab_file_path }}"
+  register: crontab_file_check
+  changed_when: false
+
+- name: "Ensure /etc/crontab ownership and permissions are configured"
+  ansible.builtin.file:
+    path: "{{ crontab_file_path }}"
+    owner: "{{ crontab_owner }}"
+    group: "{{ crontab_group }}"
+    mode: "{{ crontab_mode }}"
+  when: crontab_file_check.stat.exists

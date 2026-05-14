@@ -1,0 +1,8 @@
+---
+# vars/main.yml
+# Internal constants for the configure_cron_hourly_permissions role
+# These are not intended to be overridden by users
+
+cron_hourly_owner: root
+cron_hourly_group: root
+cron_hourly_mode: "0700"

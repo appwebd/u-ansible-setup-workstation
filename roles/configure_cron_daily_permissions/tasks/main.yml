@@ -1,0 +1,35 @@
+---
+# Role        : cron_permissions
+# Description : Ensure permissions on /etc/cron.daily are configured (Wazuh ID 35596)
+# Wazuh ID    : 35596
+
+- name: "Ensure /etc/cron.daily directory ownership is set to root:root"
+  ansible.builtin.file:
+    path: "{{ cron_daily_path }}"
+    owner: "{{ cron_daily_owner }}"
+    group: "{{ cron_daily_group }}"
+    recurse: false
+  register: cron_daily_owner_result
+  changed_when: cron_daily_owner_result is changed
+
+- name: "Ensure /etc/cron.daily directory permissions are restricted to root only"
+  ansible.builtin.file:
+    path: "{{ cron_daily_path }}"
+    mode: "{{ cron_daily_mode }}"
+  register: cron_daily_mode_result
+  changed_when: cron_daily_mode_result is changed
+
+- name: "Verify /etc/cron.daily permissions match requirements"
+  ansible.builtin.stat:
+    path: "{{ cron_daily_path }}"
+  register: cron_daily_stat
+
+- name: "Ensure /etc/cron.daily permissions are correctly configured"
+  ansible.builtin.assert:
+    that:
+      - "cron_daily_stat.stat.mode == '0700'"
+      - "cron_daily_stat.stat.uid == 0"
+      - "cron_daily_stat.stat.gid == 0"
+    fail_msg: "Permissions on /etc/cron.daily do not meet security requirements"
+    success_msg: "/etc/cron.daily permissions are correctly configured"
+  run_once: true

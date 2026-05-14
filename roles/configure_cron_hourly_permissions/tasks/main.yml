@@ -1,0 +1,26 @@
+---
+# Role        : configure_cron_hourly_permissions
+# Description : Ensure permissions on /etc/cron.hourly are configured
+# Wazuh ID    : 35595
+
+- name: "Ensure /etc/cron.hourly directory exists"
+  ansible.builtin.file:
+    path: "{{ cron_hourly_dir }}"
+    state: directory
+    owner: "{{ cron_hourly_owner }}"
+    group: "{{ cron_hourly_group }}"
+    mode: "{{ cron_hourly_mode }}"
+    follow: false
+
+- name: "Verify /etc/cron.hourly permissions match requirements"
+  ansible.builtin.stat:
+    path: "{{ cron_hourly_dir }}"
+  register: cron_hourly_stat
+
+- name: "Fail if /etc/cron.hourly permissions are incorrect"
+  ansible.builtin.fail:
+    msg: "Permissions on {{ cron_hourly_dir }} do not match required values ({{ cron_hourly_mode }}, {{ cron_hourly_owner }}:{{ cron_hourly_group }})"
+  when: >
+    (cron_hourly_stat.stat.mode != cron_hourly_mode) or
+    (cron_hourly_stat.stat.pw_name != cron_hourly_owner) or
+    (cron_hourly_stat.stat.gr_name != cron_hourly_group)

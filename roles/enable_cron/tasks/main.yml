@@ -1,0 +1,63 @@
+---
+# Role        : enable_cron
+# Description : Ensure cron daemon is enabled and active.
+# Wazuh ID    : 35593
+# Platform    : Ubuntu (Debian-based systems)
+
+- name: "Detect available cron service (cron or crond)"
+  ansible.builtin.shell: |
+    set -o pipefail
+    systemctl list-unit-files 2>/dev/null | awk '$1 ~ /^crond?\.service$/ {print $1}'
+  # ansible-lint: command-instead-of-module (requires pipe for service detection)
+  changed_when: false
+  failed_when: false
+  register: cron_service_detection
+  args:
+    executable: /bin/bash
+
+- name: "Set cron service name from detection"
+  ansible.builtin.set_fact:
+    cron_service_name: "{{ cron_service_detection.stdout_lines[0] | default('cron.service') }}"
+
+- name: "Default cron_service_name to cron.service if not set"
+  ansible.builtin.set_fact:
+    cron_service_name: "cron.service"
+  when: cron_service_name is not defined
+
+- name: "Install cron package"
+  ansible.builtin.apt:
+    name: "cron"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  register: cron_install_result
+  failed_when: false
+
+- name: "Unmask cron service"
+  ansible.builtin.systemd:
+    name: "{{ cron_service_name }}"
+    masked: false
+  register: cron_unmask_result
+  failed_when: false
+
+- name: "Enable and start cron service"
+  ansible.builtin.systemd:
+    name: "{{ cron_service_name }}"
+    enabled: true
+    state: started
+    daemon_reload: true
+  register: cron_systemd_result
+  when: cron_unmask_result is not failed or cron_unmask_result is failed
+
+- name: "Verify cron service is enabled and active"
+  ansible.builtin.assert:
+    that:
+      - cron_systemd_result is succeeded
+      - cron_systemd_result.status is defined
+      - cron_systemd_result.status.ActiveState == "active"
+      - cron_systemd_result.status.UnitFileState in ["enabled", "enabled-runtime"]
+    fail_msg: >-
+      cron has not been enabled and active.
+      ActiveState={{ cron_systemd_result.status.ActiveState | default('undefined') }},
+      UnitFileState={{ cron_systemd_result.status.UnitFileState | default('undefined') }}
+    success_msg: "cron has been enabled and active."
