@@ -137,7 +137,7 @@
 # 8. Job Scheduling (cron / at)
     - enable_cron                              # 35593 - Ensure cron daemon is enabled and active.
     - configure_crontab_permissions            # 35594 - Ensure permissions on /etc/crontab are configured.gured.
-    - cron_hourly_permissions                  # 35595 - Ensure permissions on /etc/cron.hourly are configured.onfigured.
+    - configure_cron_hourly_permissions        # 35595 - Ensure permissions on /etc/cron.hourly are configured.onfigured.
     - configure_cron_daily_permissions         # 35596 Ensure permissions on /etc/cron.daily are configured.nfigured.
 #    - cron_weekly_permissions                  # 35597 Ensure permissions on /etc/cron.weekly are configured.onfigured.
 #    - cron_monthly_permissions                 # 35598 Ensure permissions on /etc/cron.monthly are configured.configured.
