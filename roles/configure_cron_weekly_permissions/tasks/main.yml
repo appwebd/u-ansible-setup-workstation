@@ -1,0 +1,12 @@
+---
+# Role        : configure_cron_weekly_permissions
+# Description : Ensure permissions on /etc/cron.weekly are configured (Wazuh ID 35597)
+# Wazuh ID    : 35597
+
+- name: "Ensure /etc/cron.weekly directory exists"
+  ansible.builtin.file:
+    path: "{{ cron_weekly_dir }}"
+    state: directory
+    owner: "{{ cron_weekly_permissions.owner }}"
+    group: "{{ cron_weekly_permissions.group }}"
+    mode: "{{ cron_weekly_permissions.mode }}"
