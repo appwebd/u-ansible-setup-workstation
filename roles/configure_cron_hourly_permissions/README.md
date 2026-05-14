@@ -1,5 +1,5 @@
 #### Role name:
-    cron_hourly_permissions
+    configure_cron_hourly_permissions
 
 #### Wazuh ID: 
     35595

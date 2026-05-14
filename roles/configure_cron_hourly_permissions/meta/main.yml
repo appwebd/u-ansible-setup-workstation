@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: cron_hourly_permissions
+  role_name: configure_cron_hourly_permissions
   author: Patricio Rojas Ortiz
   description: Ensure permissions on /etc/cron.hourly are configured (Wazuh ID 35595)
   license: Apache 2.0

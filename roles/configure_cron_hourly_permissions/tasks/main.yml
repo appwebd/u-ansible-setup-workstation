@@ -1,5 +1,5 @@
 ---
-# Role        : cron_hourly_permissions
+# Role        : configure_cron_hourly_permissions
 # Description : Ensure permissions on /etc/cron.hourly are configured
 # Wazuh ID    : 35595
 
