@@ -1,0 +1,6 @@
+---
+# defaults/main.yml
+# Default variables for the cron_hourly_permissions role
+# These values can be overridden by inventory or playbook variables
+
+cron_hourly_dir: /etc/cron.hourly
