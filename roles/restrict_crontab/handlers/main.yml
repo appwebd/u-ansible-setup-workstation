@@ -1,0 +1,12 @@
+---
+# Role: restrict_crontab
+# Description: Handlers for the restrict_crontab role
+
+- name: Restart cron daemon
+  ansible.builtin.service:
+    name: "{{ cron_daemon_name }}"
+    state: restarted
+  when:
+    - cron_daemon_name is defined
+    - ansible_facts.services is defined
+    - cron_daemon_name in ansible_facts.services

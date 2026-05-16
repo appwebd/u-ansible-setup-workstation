@@ -1,0 +1,10 @@
+---
+# vars/main.yml
+# Internal constants for restrict_crontab role
+
+cron_allow_file: /etc/cron.allow
+cron_deny_file: /etc/cron.deny
+cron_group_name: root
+
+# Permissions for cron.allow and cron.deny
+cron_file_mode: "0640"

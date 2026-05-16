@@ -1,0 +1,72 @@
+---
+# Role        : restrict_crontab
+# Description : Ensure crontab is restricted to authorized users
+# Wazuh ID    : 35600
+
+- name: "Check if cron.allow file exists"
+  ansible.builtin.stat:
+    path: "{{ cron_allow_file }}"
+  register: cron_allow_stat
+  changed_when: false
+
+- name: Add users to the file /etc/cron.allow
+  ansible.builtin.lineinfile:
+    path: /etc/cron.allow
+    line: "{{ item }}"
+    create: yes
+    mode: '0644'
+    owner: root
+    group: root
+  loop:
+    - root
+
+- name: "Ensure /etc/cron.allow exists with correct ownership and permissions"
+  ansible.builtin.file:
+    path: "{{ cron_allow_file }}"
+    state: touch
+    owner: root
+    group: "{{ cron_group_name }}"
+    mode: "{{ cron_file_mode }}"
+  when: restrict_crontab_enabled | bool
+  notify: Restart cron daemon
+
+- name: "Ensure /etc/cron.deny does not exist"
+  ansible.builtin.file:
+    path: "{{ cron_deny_file }}"
+    state: absent
+  when: restrict_crontab_enabled | bool
+  notify: Restart cron daemon
+
+- name: "Ensure crontab group exists (if required for ownership)"
+  ansible.builtin.group:
+    name: "{{ cron_group_name }}"
+    state: present
+  when: restrict_crontab_enabled | bool
+
+- name: "Verify /etc/cron.allow ownership and permissions"
+  ansible.builtin.stat:
+    path: "{{ cron_allow_file }}"
+  register: cron_allow_verify
+  changed_when: false
+  failed_when: false
+  check_mode: true
+
+- name: "Warn if /etc/cron.allow ownership is incorrect"
+  ansible.builtin.debug:
+    msg: "\u001b[31mOwnership of {{ cron_allow_file }} is not root:{{ cron_group_name }}. Current ownership is {{ cron_allow_verify.stat.pw_name | default('unknown') }}:{{ cron_allow_verify.stat.gr_name | default('unknown') }}\u001b[0m"
+  when:
+    - restrict_crontab_enabled | bool
+    - cron_allow_verify.stat is defined
+    - cron_allow_verify.stat.exists | default(false)
+    - >
+      cron_allow_verify.stat.pw_name | default('') != 'root'
+      or cron_allow_verify.stat.gr_name | default('') != cron_group_name
+
+- name: "Warn if /etc/cron.allow permissions are incorrect"
+  ansible.builtin.debug:
+    msg: "\u001b[31mPermissions of {{ cron_allow_file }} are not 0640, 0600, or 0400. Current permissions are {{ cron_allow_verify.stat.mode | default('unknown') }}\u001b[0m"
+  when:
+    - restrict_crontab_enabled | bool
+    - cron_allow_verify.stat is defined
+    - cron_allow_verify.stat.exists | default(false)
+    - cron_allow_verify.stat.mode | default('') not in ['0640', '0600', '0400']
