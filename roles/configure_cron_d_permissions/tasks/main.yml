@@ -1,0 +1,36 @@
+---
+# Role        : configure_cron_d_permissions
+# Description : Ensure permissions on /etc/cron.d are configured (Wazuh ID 35599)
+# Wazuh ID    : 35599
+
+- name: "Ensure /etc/cron.d directory exists"
+  ansible.builtin.file:
+    path: "{{ cron_d_directory }}"
+    owner: "{{ cron_d_owner }}"
+    group: "{{ cron_d_group }}"
+    mode: "{{ cron_d_mode }}"
+    recurse: false
+  register: cron_d_dir_result
+  changed_when: cron_d_dir_result is changed
+
+- name: "Ensure /etc/cron.d directory permissions are restricted to root only"
+  ansible.builtin.file:
+    path: "{{ cron_d_directory }}"
+    mode: "{{ cron_d_mode }}"
+  register: cron_d_dir_result
+  changed_when: cron_d_dir_result is changed
+
+- name: "Verify /etc/cron.d permissions match requirements"
+  ansible.builtin.stat:
+    path: "{{ cron_d_directory }}"
+  register: cron_d_stat_result
+
+- name: "Ensure /etc/cron.d permissions are correctly configured"
+  ansible.builtin.assert:
+    that:
+      - "cron_d_stat_result.stat.mode == '0700'"
+      - "cron_d_stat_result.stat.uid == 0"
+      - "cron_d_stat_result.stat.gid == 0"
+    fail_msg: "Permissions on /etc/cron.d do not meet security requirements"
+    success_msg: "/etc/cron.d permissions are correctly configured"
+  run_once: true

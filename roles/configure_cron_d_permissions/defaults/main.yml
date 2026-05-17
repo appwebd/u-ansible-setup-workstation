@@ -1,0 +1,6 @@
+---
+# defaults/main.yml
+# Default variables for the configure_cron_d_permissions role
+# These values are safe defaults and can be overridden by inventory or playbooks
+
+cron_d_directory: /etc/cron.d
