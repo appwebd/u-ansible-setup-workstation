@@ -11,7 +11,7 @@
     group: root
     mode: "0644"
     force: true
-  notify: Reload sysctl
+  notify: Reload sysctl settings
 
 - name: "Apply ASLR setting immediately (if reload requested)"
   ansible.builtin.command: sysctl -p "{{ aslr_sysctl_file }}"
