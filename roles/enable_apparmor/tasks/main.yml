@@ -27,7 +27,7 @@
 - name: "Configure grub (only if file exists)"
   become: true
   when: grub_cfg_exists.stat.exists | bool
-  notify: Update grub
+  notify: Update GRUB configuration
   block:
 
     - name: "Read the current information of /etc/default/grub"
