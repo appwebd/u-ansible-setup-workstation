@@ -22,7 +22,6 @@ galaxy_info:
     - security
     - compliance
     - cron
-    - access_control
     - system
 
 dependencies: []
