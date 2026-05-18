@@ -13,7 +13,7 @@
   ansible.builtin.lineinfile:
     path: /etc/cron.allow
     line: "{{ item }}"
-    create: yes
+    create: true
     mode: '0644'
     owner: root
     group: root
@@ -53,7 +53,10 @@
 
 - name: "Warn if /etc/cron.allow ownership is incorrect"
   ansible.builtin.debug:
-    msg: "\u001b[31mOwnership of {{ cron_allow_file }} is not root:{{ cron_group_name }}. Current ownership is {{ cron_allow_verify.stat.pw_name | default('unknown') }}:{{ cron_allow_verify.stat.gr_name | default('unknown') }}\u001b[0m"
+    msg: >-
+      \u001b[31mOwnership of {{ cron_allow_file }} is not root:{{ cron_group_name }}.
+      Current ownership is {{ cron_allow_verify.stat.pw_name | default('unknown') }}:
+      {{ cron_allow_verify.stat.gr_name | default('unknown') }}\u001b[0m
   when:
     - restrict_crontab_enabled | bool
     - cron_allow_verify.stat is defined
@@ -64,7 +67,9 @@
 
 - name: "Warn if /etc/cron.allow permissions are incorrect"
   ansible.builtin.debug:
-    msg: "\u001b[31mPermissions of {{ cron_allow_file }} are not 0640, 0600, or 0400. Current permissions are {{ cron_allow_verify.stat.mode | default('unknown') }}\u001b[0m"
+    msg: >-
+      \u001b[31mPermissions of {{ cron_allow_file }} are not 0640, 0600, or 0400.
+      Current permissions are {{ cron_allow_verify.stat.mode | default('unknown') }}\u001b[0m
   when:
     - restrict_crontab_enabled | bool
     - cron_allow_verify.stat is defined
