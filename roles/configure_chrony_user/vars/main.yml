@@ -1,7 +1,8 @@
 ---
 # vars/main.yml
-# Internal constants for chrony_user role
+# Internal constants for configure_chrony_user role
 
-chrony_service_name: chronyd
-chrony_package_name: chrony
-chrony_conf_d_dir: "{{ chrony_conf_dir }}/conf.d"
+chrony_user_group: _chrony
+chrony_user_home: /var/lib/chrony
+chrony_user_shell: /usr/sbin/nologin
+chrony_user_system: true

@@ -12,9 +12,9 @@ galaxy_info:
         - all
   galaxy_tags:
     - security
-    - compliance
     - time
-    - chrony
     - ntp
+    - compliance
+    - sysadmin
 
 dependencies: []
