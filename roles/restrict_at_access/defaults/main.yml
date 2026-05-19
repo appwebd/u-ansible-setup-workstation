@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+# Default variables for restrict_at_access role
+# These values can be overridden by inventory or playbook variables
+
+at_allow_file: /etc/at.allow
+at_deny_file: /etc/at.deny
+at_allow_owner: root
+at_allow_group: daemon
+at_allow_mode: "0640"
+at_deny_mode: "0640"

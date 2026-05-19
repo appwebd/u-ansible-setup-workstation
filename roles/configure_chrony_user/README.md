@@ -1,20 +1,20 @@
-#### Role name: 
+#### Role name:
     configure_chrony_user
 
-#### Wazuh ID: 
+#### Wazuh ID:
     35591
 
-#### Title: 
+#### Title:
     Ensure chrony is running as user _chrony.
 
 #### Description:
-    This Ansible role ensures that the chronyd service runs under the dedicated system user `_chrony` as defined by the chrony package installation. It validates and enforces the `user _chrony` directive in the chrony configuration to prevent the service from running with excessive privileges.
+    The chrony package is installed with a dedicated user account _chrony. This account is granted the access required by the chronyd service.
 
 #### Rationale:
-    The chronyd service should run with only the required privileges to minimize the impact of potential security compromises.
+    The chronyd service should run with only the required privlidges.
 
 #### Remediation:
-    Add or edit the user line to `/etc/chrony/chrony.conf` or a file ending in `.conf` in `/etc/chrony/conf.d/`: `user _chrony`  
+    Add or edit the user line to /etc/chrony/chrony.conf or a file ending in .conf in /etc/chrony/conf.d/: user _chrony  
     - OR -  
     If another time synchronization service is in use on the system, run the following command to remove chrony from the system:  
     `# apt purge chrony`  
@@ -22,54 +22,66 @@
 
 #### Requirements
     - Ansible 2.9 or higher  
-    - Root/sudo privileges (`become: true`)  
-    - Linux distributions supporting chrony (e.g., Ubuntu, Debian, RHEL, CentOS)  
-    - `chrony` package installed (role handles configuration only; installation is out of scope)  
+    - `become: yes` required (to install packages, modify system users/groups, and manage services)  
+    - OS: Debian/Ubuntu (inferred from use of `ansible.builtin.apt` and package name `chrony`)  
+    - Required Ansible modules: `ansible.builtin.package_facts`, `ansible.builtin.apt`, `ansible.builtin.user`, `ansible.builtin.group`, `ansible.builtin.file`, `ansible.builtin.lineinfile`, `ansible.builtin.systemd`, `ansible.builtin.stat`, `ansible.builtin.shell`, `ansible.builtin.debug`, `ansible.builtin.fail`  
+    - No external collections required (all modules are `ansible.builtin`)  
+    - `restrict_timesyncd` variable may be set to `true` to enforce disabling of `systemd-timesyncd`, but defaults to `false`
 
 #### Variables
 
-| Variable              | Default                    | Description                                                     | File              |
-|-----------------------|----------------------------|-----------------------------------------------------------------|-------------------|
-| `chrony_conf_d_dir`   | `/etc/chrony/conf.d`       | Directory for additional .conf fragments                        | vars/main.yml     |
-| `chrony_conf_dir`     | `/etc/chrony`              | Base directory for chrony configuration                         | vars/main.yml     |
-| `chrony_conf_file`    | `/etc/chrony/chrony.conf`  | Main chrony configuration file path                             | defaults/main.yml |
-| `chrony_package_name` | `chrony`                   | Name of the chrony package                                      | vars/main.yml     |
-| `chrony_service_name` | `chrony`                   | Name of the chrony service                                      | vars/main.yml     |
-| `chrony_user_line`    | `user { { chrony_user } }` | Template line to ensure in config (not used directly; rendered) | defaults/main.yml |
-| `chrony_user`         | `_chrony`                  | System user under which chronyd should run                      | defaults/main.yml |
+### defaults/main.yml
+
+| Variable               | Default                   | Description                                               |
+|------------------------|---------------------------|-----------------------------------------------------------|
+| `chrony_conf_d_dir`    | `/etc/chrony/conf.d`      | Directory for additional chrony configuration snippets.   |
+| `chrony_conf_file`     | `/etc/chrony/chrony.conf` | Main chrony configuration file path.                      |
+| `chrony_config_dir`    | `/etc/chrony`             | Main configuration directory for chrony.                  |
+| `chrony_package_name`  | `chrony`                  | Package name to install via APT.                          |
+| `chrony_service_name`  | `chrony`                  | Systemd service name for chrony.                          |
+| `chrony_user`          | `_chrony`                 | System user account under which the chronyd service runs. |
+
+### vars/main.yml
+
+| Variable                  | Default             | Description                                                    |
+|---------------------------|---------------------|----------------------------------------------------------------|
+| `chrony_user_home`        | `/var/lib/chrony`   | Home directory for the chrony user.                            |
+| `chrony_user_shell`       | `/usr/sbin/nologin` | Login shell for the chrony user (disabled shell for security). |
+
 
 #### Dependencies
-    None
+    Handlers: `handlers/main.yml` — *not present* (no handlers defined in input; role relies on `changed_when` and `notify` in tasks, but no handler task is declared — this may cause a runtime warning if `notify` is triggered).  
+    Dependencies on other roles: *none*
 
 #### Compliance mapping
-    - 'cmmc': ['AU.L2-3.3.7']  
-    - 'fedramp': ['AU-7']  
-    - 'gdpr': ['32', '33']  
-    - 'hipaa': ['164.312(b)', '164.308(a)(6)']  
-    - 'iso_27001': ['A.12.4.1', 'A.12.4.2', 'A.12.4.3', 'A.16.1.2']  
-    - 'nis2': ['21.2.a', '23', '21.2.b']  
-    - 'nist_800_171': ['3.3.7']  
-    - 'nist_800_53': ['AU-7']  
-    - 'pci_dss': ['10.4', '10.6']  
-    - 'tsc': ['CC4.1', 'CC5.2', 'CC7.1', 'CC7.2', 'CC7.3', 'CC7.4', 'CC7.5', 'CC4.2']  
+    - CMMC: AU.L2-3.3.7  
+    - FedRAMP: AU-7  
+    - GDPR: Articles 32, 33  
+    - HIPAA: 164.312(b), 164.308(a)(6)  
+    - ISO 27001: A.12.4.1, A.12.4.2, A.12.4.3, A.16.1.2  
+    - NIS2: 21.2.a, 23, 21.2.b  
+    - NIST 800-171: 3.3.7  
+    - NIST 800-53: AU-7  
+    - PCI DSS: 10.4, 10.6  
+    - TSC: CC4.1, CC5.2, CC7.1, CC7.2, CC7.3, CC7.4, CC7.5, CC4.2
 
 #### Mitre
-    - 'tactic': ['TA0005', 'TA0006', 'TA0007']  
-    - 'technique': ['T1562', 'T1070', 'T1059', 'T1040']  
-    - 'subtechnique': ['T1562.002', 'T1070.001']  
+    - Tactics: TA0005 (Defense Evasion), TA0006 (Credential Access), TA0007 (Discovery)  
+    - Techniques: T1562 (Impair Defenses), T1070 (Indicator Removal), T1059 (Command and Scripting Interpreter), T1040 (Network Sniffing)  
+    - Sub-techniques: T1562.002 (Disable or Modify Tools), T1070.001 (Clear Linux or Mac System Logs), T1059.001 (Shell), T1040.001 (Network Traffic Capture)
 
 #### Conditions
     all
 
 #### Rules
-    - `"c:ps -ef -> r:_chrony.+chronyd"`  
-    - `"not c:systemctl show systemd-timesyncd.service -> r:^LoadState=loaded|^ActiveState=active"`  
+    - `c:ps -ef -> r:_chrony.+chronyd`  
+    - `not c:systemctl show systemd-timesyncd.service -> r:^LoadState=loaded\|^ActiveState=active`
 
 #### Usage
 
 Include this role in your playbook:
 
-```code
+```yaml
 - hosts: servers
   become: true
   roles:

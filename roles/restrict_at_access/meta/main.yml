@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: configure_chrony_user
+  role_name: restrict_at_access
   author: Patricio Rojas Ortiz
-  description: Ensure chrony is running as user _chrony (Wazuh ID 35591)
+  description: Ensure at is restricted to authorized users (Wazuh ID 35601)
   license: Apache 2.0
   namespace: ubuntu-server
   min_ansible_version: "2.16"
@@ -10,10 +10,11 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - all
+    - name: Debian
+      versions:
+        - all
   galaxy_tags:
     - security
-    - time
-    - ntp
     - compliance
     - sysadmin
 

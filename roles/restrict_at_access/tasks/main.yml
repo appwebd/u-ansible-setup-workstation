@@ -1,0 +1,62 @@
+---
+# Role        : restrict_at_access
+# Description : Ensure at is restricted to authorized users
+# Wazuh ID    : 35601
+
+- name: "Ensure at package is installed"
+  ansible.builtin.apt:
+    name: "{{ at_package_name }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  register: at_install_result
+  changed_when: at_install_result.changed
+  # noinspection YAMLIncompatibleTypes
+  failed_when: >
+      at_install_result.failed
+      and "Unable to locate package" not in at_install_result.stderr
+
+- name: "Check if daemon group exists"
+  ansible.builtin.getent:
+    database: group
+    key: daemon
+    fail_key: false
+  register: daemon_group_check
+  changed_when: false  | bool
+  check_mode: false
+
+- name: "Set at_allow_group to daemon if group exists, otherwise root"
+  ansible.builtin.set_fact:
+    at_allow_group: "{{ 'daemon' if ansible_facts.getent_group.daemon is defined else 'root' }}"
+  when: at_allow_group == 'daemon'
+
+- name: "Ensure /etc/at.allow exists with correct ownership and permissions"
+  ansible.builtin.file:
+    path: "{{ at_allow_file }}"
+    state: touch
+    owner: "{{ at_allow_owner }}"
+    group: "{{ at_allow_group }}"
+    mode: "{{ at_allow_mode }}"
+  register: at_allow_result
+  changed_when: at_allow_result.changed
+
+- name: "Ensure /etc/at.deny has correct ownership and permissions if it exists"
+  ansible.builtin.file:
+    path: "{{ at_deny_file }}"
+    state: touch
+    owner: "{{ at_allow_owner }}"
+    group: "{{ at_allow_group }}"
+    mode: "{{ at_deny_mode }}"
+  when: at_deny_file is file
+  register: at_deny_result
+  changed_when: at_deny_result.changed
+  failed_when: false
+
+- name: "Ensure /etc/at.deny is removed if it exists (to enforce allow-only policy)"
+  ansible.builtin.file:
+    path: "{{ at_deny_file }}"
+    state: absent
+  when: at_deny_file is file
+  register: at_deny_absent_result
+  changed_when: at_deny_absent_result.changed
+  failed_when: false
