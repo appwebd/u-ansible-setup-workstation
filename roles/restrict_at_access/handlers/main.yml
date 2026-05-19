@@ -1,0 +1,10 @@
+---
+# Role: restrict_at_access
+# Description: Handlers for the restrict_at_access role
+
+- name: Restart atd service
+  ansible.builtin.systemd:
+    name: atd
+    state: restarted
+  when: ansible_facts.services['atd'] is defined
+  failed_when: false

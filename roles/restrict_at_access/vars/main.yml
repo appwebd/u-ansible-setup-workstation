@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the restrict_at_access role
+# These are not intended to be overridden by users
+
+at_package_name: at
