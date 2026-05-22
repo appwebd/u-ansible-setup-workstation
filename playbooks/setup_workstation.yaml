@@ -143,7 +143,7 @@
     - configure_cron_monthly_permissions       # 35598 - Ensure permissions on /etc/cron.monthly are configured.configured.
     - configure_cron_d_permissions             # 35599 - Ensure permissions on /etc/cron.d are configured.ured.
     - restrict_crontab                         # 35600 - Ensure crontab is restricted to authorized users.sers.
-    - restrict_at                              # 35601 - Ensure at is restricted to authorized users.
+    - restrict_at_access                       # 35601 - Ensure at is restricted to authorized users.
 
 # 9. Network Interfaces and Devices
                                                 # 35602 Ensure wireless interfaces are disabled.
