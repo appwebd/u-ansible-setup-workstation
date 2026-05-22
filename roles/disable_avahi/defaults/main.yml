@@ -1,0 +1,16 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_avahi role
+# These values can be overridden by the user if needed
+
+avahi_service_names:
+  - avahi-daemon.service
+  - avahi-daemon.socket
+
+avahi_package_name: avahi-daemon
+
+avahi_modprobe_conf_file: /etc/modprobe.d/avahi.conf
+
+avahi_modprobe_blacklist_content: |
+  install avahi /bin/false
+  blacklist avahi
