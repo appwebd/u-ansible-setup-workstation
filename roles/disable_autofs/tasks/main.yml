@@ -51,12 +51,13 @@
     backup: true
 
 - name: "Verify autofs is not active"
-  ansible.builtin.command: systemctl show autofs.service --property=LoadState,ActiveState
+  ansible.builtin.systemd:
+    name: autofs.service
   register: autofs_status_check
   changed_when: false
   failed_when:
-    - autofs_status_check.rc != 0
-    - '"LoadState=not-found" not in autofs_status_check.stdout'
-    - '"ActiveState=inactive" not in autofs_status_check.stdout'
-    - '"ActiveState=not-found" not in autofs_status_check.stdout'
+    - autofs_status_check.status is defined
+    - autofs_status_check.status.LoadState | default('not-found') != 'not-found'
+    - autofs_status_check.status.ActiveState | default('inactive') not in ['inactive', 'not-found']
+  check_mode: true
   when: autofs_dpkg_status.exists | default(false)
