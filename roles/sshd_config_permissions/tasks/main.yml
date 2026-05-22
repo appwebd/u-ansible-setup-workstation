@@ -3,46 +3,59 @@
 # Description : Ensure permissions on /etc/ssh/sshd_config and .conf files in /etc/ssh/sshd_config.d are configured
 # Wazuh ID    : 35640
 
-- name: "Ensure /etc/ssh/sshd_config ownership and permissions are correctly set"
-  ansible.builtin.file:
-    path: "{{ sshd_config_permissions.file }}"
-    owner: "{{ sshd_config_owner }}"
-    group: "{{ sshd_config_group }}"
-    mode: "{{ sshd_config_mode }}"
-  when: ansible_facts.os_family == "Debian"
-  register: sshd_config_file_result
-  changed_when: sshd_config_file_result is changed
+- name: "Gather information about installed packages"
+  ansible.builtin.package_facts:
+    manager: auto
 
-- name: "Ensure /etc/ssh/sshd_config.d directory ownership and permissions are correctly set"
-  ansible.builtin.file:
-    path: "{{ sshd_config_permissions.dir }}"
-    owner: "{{ sshd_config_owner }}"
-    group: "{{ sshd_config_group }}"
-    mode: "{{ sshd_config_dir_mode }}"
-    state: directory
-  when: ansible_facts.os_family == "Debian"
-  register: sshd_config_dir_result
-  changed_when: sshd_config_dir_result is changed
+- name: "Task block when openssh-server is installed"
+  when: "'openssh-server' in ansible_facts.packages"
+  block:
 
-- name: "Find all .conf files in /etc/ssh/sshd_config.d"
-  ansible.builtin.find:
-    paths: "{{ sshd_config_dir }}"
-    patterns: "*.conf"
-  register: sshd_config_d_conf_files
-  when: ansible_facts.os_family == "Debian"
+    - name: "Ensure /etc/ssh/sshd_config ownership and permissions are correctly set"
+      ansible.builtin.file:
+        path: "{{ sshd_config_permissions.file }}"
+        owner: "{{ sshd_config_owner }}"
+        group: "{{ sshd_config_group }}"
+        mode: "{{ sshd_config_mode }}"
+      when: ansible_facts.os_family == "Debian"
+      register: sshd_config_file_result
+      changed_when: sshd_config_file_result is changed
 
-- name: "Ensure all .conf files in /etc/ssh/sshd_config.d have correct ownership and permissions"
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    owner: "{{ sshd_config_owner }}"
-    group: "{{ sshd_config_group }}"
-    mode: "{{ sshd_config_mode }}"
-  loop: "{{ sshd_config_d_conf_files.files | default([]) }}"
-  loop_control:
-    label: "{{ item.path }}"
-  when:
-    - ansible_facts.os_family == "Debian"
-    - sshd_config_d_conf_files is defined
-    - sshd_config_d_conf_files.files | default([]) | length > 0
-  register: sshd_config_d_files_result
-  changed_when: sshd_config_d_files_result is changed
+    - name: "Ensure /etc/ssh/sshd_config.d directory ownership and permissions are correctly set"
+      ansible.builtin.file:
+        path: "{{ sshd_config_permissions.dir }}"
+        owner: "{{ sshd_config_owner }}"
+        group: "{{ sshd_config_group }}"
+        mode: "{{ sshd_config_dir_mode }}"
+        state: directory
+      when: ansible_facts.os_family == "Debian"
+      register: sshd_config_dir_result
+      changed_when: sshd_config_dir_result is changed
+
+    - name: "Find all .conf files in /etc/ssh/sshd_config.d"
+      ansible.builtin.find:
+        paths: "{{ sshd_config_dir }}"
+        patterns: "*.conf"
+      register: sshd_config_d_conf_files
+      when: ansible_facts.os_family == "Debian"
+
+    - name: "Ensure all .conf files in /etc/ssh/sshd_config.d have correct ownership and permissions"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        owner: "{{ sshd_config_owner }}"
+        group: "{{ sshd_config_group }}"
+        mode: "{{ sshd_config_mode }}"
+      loop: "{{ sshd_config_d_conf_files.files | default([]) }}"
+      loop_control:
+        label: "{{ item.path }}"
+      when:
+        - ansible_facts.os_family == "Debian"
+        - sshd_config_d_conf_files is defined
+        - sshd_config_d_conf_files.files | default([]) | length > 0
+      register: sshd_config_d_files_result
+      changed_when: sshd_config_d_files_result is changed
+
+- name: Verify if openssh-server is installed
+  ansible.builtin.debug:
+    msg: "openssh-server IS NOT installed on this host. SSH configuration tasks are skipped."
+  when: "'openssh-server' not in ansible_facts.packages"
