@@ -97,26 +97,27 @@
 
 # 6. Unnecessary Services (Service Hardening)
 # Unneeded network services
-                                               # 35561 Ensure autofs services are not in use.
-                                               # 35562 Ensure avahi daemon services are not in use.
-                                               # 35563 Ensure dhcp server services are not in use.
-                                               # 35564 Ensure dns server services are not in use.
-                                               # 35565 Ensure dnsmasq services are not in use.
-                                               # 35566 Ensure ftp server services are not in use.
-                                               # 35567 Ensure ldap server services are not in use.
-                                               # 35568 Ensure message access server services are not in use.
-                                               # 35569 Ensure network file system services are not in use.
-                                               # 35570 Ensure nis server services are not in use.
-                                               # 35571 Ensure print server services are not in use.
-                                               # 35572 Ensure rpcbind services are not in use.
-                                               # 35573 Ensure rsync services are not in use.
-                                               # 35574 Ensure samba file server services are not in use.
-                                               # 35575 Ensure snmp services are not in use.
-                                               # 35576 Ensure tftp server services are not in use.
-                                               # 35577 Ensure web proxy server services are not in use.
-                                               # 35578 Ensure web server services are not in use.
-                                               # 35579 Ensure xinetd services are not in use.
-                                               # 35580 Ensure X window server services are not in use.
+    - disable_autofs                            # 35561 Ensure autofs services are not in use.
+    - disable_avahi                             # 35562 Ensure avahi daemon services are not in use.
+#    - disable_dhcp_server                       # 35563 Ensure dhcp server services are not in use.
+#    - disable_dns_server                        # 35564 Ensure dns server services are not in use.
+#    - disable_dnsmasq                           # 35565 Ensure dnsmasq services are not in use.
+#    - disable_ftp                               # 35566 Ensure ftp server services are not in use.
+#    - disable_ldap_server                       # 35567 Ensure ldap server services are not in use.
+#    - disable_dovecot                           # 35568 Ensure message access server services are not in use.
+#    - disable_nfs                               # 35569 Ensure network file system services are not in use.
+#    - disable_nis_server                        # 35570 Ensure nis server services are not in use.
+#    - disable_cups                              # 35571 Ensure print server services are not in use.
+#    - disable_rpcbind                           # 35572 Ensure rpcbind services are not in use.
+#    - disable_rsync                             # 35573 Ensure rsync services are not in use.
+#    - disable_samba                             # 35574 Ensure samba file server services are not in use.
+#    - disable_snmp                              # 35575 Ensure snmp services are not in use.
+#    - disable_tftp                              # 35576 Ensure tftp server services are not in use.
+#    - disable_squid                             # 35577 Ensure web proxy server services are not in use.
+#    - disable_web_server_services               # 35578 Ensure web server services are not in use.
+#    - disable_xinetd                            # 35579 Ensure xinetd services are not in use.
+#    - disable_x_window_server                   # 35580 Ensure X window server services are not in use.
+
 
 # Unneeded client packages
                                                # 35581 Ensure mail transfer agent is configured for local-only mode.
