@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: disable_autofs
+  author: Patricio Rojas Ortiz
+  description: Ensure autofs services are not in use (Wazuh ID 35561)
+  license: Apache 2.0
+  namespace: ubuntu-server
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - system
+    - automation
+    - ubuntu2404
+
+dependencies: []

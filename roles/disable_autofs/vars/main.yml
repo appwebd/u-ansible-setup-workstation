@@ -1,0 +1,9 @@
+---
+# vars/main.yml
+# Internal constants for the disable_autofs role
+# These are not intended to be overridden by users
+
+autofs_systemd_services:
+  - autofs.service
+
+autofs_modprobe_dir: /etc/modprobe.d

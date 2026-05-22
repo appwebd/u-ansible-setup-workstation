@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+# Default variables for the disable_autofs role
+# These values can be overridden by inventory or playbook variables
+
+autofs_service_name: autofs
+autofs_package_name: autofs
+autofs_modprobe_conf_file: /etc/modprobe.d/autofs.conf
+modprobe_blacklist_content: |
+  install autofs /bin/false
+  blacklist autofs
