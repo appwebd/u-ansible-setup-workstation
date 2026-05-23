@@ -24,10 +24,10 @@
     `# systemctl mask autofs.service`
 
 #### Requirements
-    - Ansible 2.9 or higher  
+    - Ansible 2.16 or higher  
     - `become: yes` required (to modify system packages, services, or configuration files)  
     - OS: Debian/Ubuntu (inferred from use of `dpkg_status`, `apt`, and `/etc/modprobe.d/` path in tasks)  
-    - Required Ansible collections/modules: `ansible.builtin.dpkg_status`, `ansible.builtin.systemd`, `ansible.builtin.apt`, `ansible.builtin.file`, `ansible.builtin.copy`, `ansible.builtin.command`
+    - Required Ansible collections/modules: `ansible.builtin.systemd`, `ansible.builtin.apt`, `ansible.builtin.file`, `ansible.builtin.copy`, `ansible.builtin.command`
 
 #### Variables
 | Variable                     | Default                                       | Description                                                                                                                                          | Source              |
