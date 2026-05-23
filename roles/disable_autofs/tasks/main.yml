@@ -33,6 +33,7 @@
     autoremove: true
   when: autofs_dpkg_status.exists | default(false)
 
+# https://www.kernel.org/doc/html/latest/filesystems/autofs.html
 - name: "Ensure autofs kernel module is blacklisted"
   ansible.builtin.file:
     path: "{{ autofs_modprobe_dir }}"
