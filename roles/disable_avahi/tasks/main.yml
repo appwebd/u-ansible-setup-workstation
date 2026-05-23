@@ -38,16 +38,6 @@
         - avahi_package_status
       notify: "Purge unused dependencies"
 
-    - name: "Ensure avahi kernel module is blacklisted"
-      ansible.builtin.copy:
-        dest: "{{ avahi_modprobe_conf_file }}"
-        content: "{{ avahi_modprobe_blacklist_content }}"
-        owner: root
-        group: root
-        mode: '0644'
-        force: true
-      notify: "Update initramfs"
-
     - name: "Verify avahi services are not active"
       ansible.builtin.systemd:
         name: "{{ item }}"

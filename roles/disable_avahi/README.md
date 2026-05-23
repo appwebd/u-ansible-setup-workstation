@@ -35,8 +35,6 @@
 #### Variables
 | Variable                           | Default                                           | Description                                                                                | Source              |
 |------------------------------------|---------------------------------------------------|--------------------------------------------------------------------------------------------|---------------------|
-| `avahi_modprobe_blacklist_content` | `install avahi /bin/false\nblacklist avahi`       | Content to write to the modprobe blacklist file to prevent avahi kernel module loading.    | `defaults/main.yml` |
-| `avahi_modprobe_conf_file`         | `/etc/modprobe.d/avahi.conf`                      | Path to the modprobe configuration file where the avahi kernel module will be blacklisted. | `defaults/main.yml` |
 | `avahi_package_name`               | `avahi-daemon`                                    | Name of the APT package to purge if installed.                                             | `defaults/main.yml` |
 | `avahi_service_names`              | `['avahi-daemon.service', 'avahi-daemon.socket']` | List of systemd service/socket unit names to stop and mask.                                | `defaults/main.yml` |
 | `avahi_services_to_mask`           | `{{ avahi_service_names }}`                       | Internal variable used to iterate over services to stop and mask.                          | `vars/main.yml`     |
