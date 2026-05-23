@@ -1,0 +1,39 @@
+---
+# Role        : disable_vsftpd
+# Description : Ensure ftp server services are not in use.
+# Wazuh ID    : 35566
+
+- name: "Gather installed packages"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if vsftpd is installed"
+  ansible.builtin.set_fact:
+    vsftpd_installed: "{{ vsftpd_package_name in ansible_facts.packages }}"
+
+- name: "Stop and disable vsftpd is installed"
+  when: vsftpd_installed | bool
+  become: true
+  block:
+    - name: "Stop and disable vsftpd server services if installed"
+      ansible.builtin.systemd:
+        name: "{{ vsftpd_service_name }}"
+        state: stopped
+        masked: true
+        daemon_reload: true
+      when: vsftpd_installed | bool
+      notify: "Purge unused dependencies"
+
+    - name: "Remove vsftpd package if not required as a dependency"
+      ansible.builtin.package:
+        name: "{{ vsftpd_package_name }}"
+        state: absent
+      when: vsftpd_installed | bool
+
+    - name: "Purge unused dependencies after removing vsftpd"
+      ansible.builtin.apt:
+        autoremove: true
+        purge: true
+      register: cleanup_result
+      changed_when: cleanup_result.changed
+      when: vsftpd_installed | bool
