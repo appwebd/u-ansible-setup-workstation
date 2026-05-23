@@ -100,7 +100,7 @@
     - disable_autofs                            # 35561 Ensure autofs services are not in use.
     - disable_avahi                             # 35562 Ensure avahi daemon services are not in use.
     - disable_dhcp_server                       # 35563 Ensure dhcp server services are not in use.
-#    - disable_dns_server                        # 35564 Ensure dns server services are not in use.
+    - disable_dns_server                        # 35564 Ensure dns server services are not in use.
 #    - disable_dnsmasq                           # 35565 Ensure dnsmasq services are not in use.
 #    - disable_ftp                               # 35566 Ensure ftp server services are not in use.
 #    - disable_ldap_server                       # 35567 Ensure ldap server services are not in use.
