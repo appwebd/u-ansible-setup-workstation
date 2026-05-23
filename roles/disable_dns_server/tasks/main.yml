@@ -43,11 +43,17 @@
       - dns_server_package not in ansible_facts.packages
     fail_msg: "The package {{ dns_server_package }} remains installed after the purge."
 
+- name: "Gather service facts"
+  ansible.builtin.service_facts:
+  when: bind9_installed | bool
+
 - name: "Verify DNS server services are not active"
-  ansible.builtin.command: systemctl show {{ item }} --property=LoadState,ActiveState
-  register: service_status
-  changed_when: false
+  ansible.builtin.assert:
+    that:
+      - (ansible_facts.services[item ~ '.service'] is not defined)
+        or
+        (ansible_facts.services[item ~ '.service'].state != 'running'
+        and ansible_facts.services[item ~ '.service'].status != 'enabled')
+    fail_msg: "The service {{ item }} is still loaded or active after the purge."
   loop: "{{ dns_server_service_names }}"
-  failed_when:
-    - service_status.stdout | regex_search('^LoadState=loaded|^ActiveState=active', multiline=true) is not none
   when: bind9_installed | bool

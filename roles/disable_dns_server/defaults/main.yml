@@ -5,4 +5,3 @@
 
 dns_server_package: bind9
 dns_server_service: named.service
-
