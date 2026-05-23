@@ -1,0 +1,9 @@
+---
+# Role name   : disable_dnsmasq
+# Description : Handlers for the disable_dnsmasq role
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
