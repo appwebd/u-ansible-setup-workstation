@@ -1,0 +1,53 @@
+---
+# Role        : disable_dhcp_server
+# Description : Ensure DHCP server services are not in use (Wazuh ID 35563)
+# Wazuh ID    : 35563
+
+- name: "Gather package facts to detect isc-dhcp-server"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if isc-dhcp-server package is installed"
+  ansible.builtin.set_fact:
+    dhcp_server_package_installed: "{{ 'isc-dhcp-server' in ansible_facts.packages }}"
+
+- name: Gather service facts
+  ansible.builtin.service_facts:
+
+- name: "Set fact for active DHCP services"
+  ansible.builtin.set_fact:
+    active_dhcp_services: >-
+      {{ dhcp_server_services
+         | select('in', ansible_facts.services)
+         | map('extract', ansible_facts.services)
+         | selectattr('state', 'defined')
+         | selectattr('state', 'equalto', 'running')
+         | list | length > 0 }}
+
+- name: "Stop and mask DHCP server services if installed and active"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+  loop: "{{ dhcp_server_services }}"
+  when:
+    - dhcp_server_package_installed | bool
+    - active_dhcp_services | bool
+  notify: "Purge unused dependencies"
+
+- name: "Purge isc-dhcp-server package if installed"
+  ansible.builtin.apt:
+    name: "{{ dhcp_server_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when: dhcp_server_package_installed | bool
+
+- name: "Ensure DHCP kernel modules are blacklisted"
+  ansible.builtin.copy:
+    dest: "{{ dhcp_server_modprobe_conf_path }}"
+    content: "{{ dhcp_server_modprobe_content }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: "Update initramfs"

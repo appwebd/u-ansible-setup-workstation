@@ -1,0 +1,19 @@
+---
+# Role: disable_dns_server
+# Description: Handlers for the disable_dns_server role
+
+- name: Purge bind9 package
+  ansible.builtin.apt:
+    name: "{{ dns_server_package }}"
+    state: absent
+    purge: true
+    autoremove: true
+  register: purge_result
+  failed_when:
+    - purge_result is failed
+    - purge_result.stderr | regex_search('Unable to locate package|(C|c)ouldn.t find any package') is none
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true

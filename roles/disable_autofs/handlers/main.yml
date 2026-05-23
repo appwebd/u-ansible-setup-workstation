@@ -1,0 +1,7 @@
+---
+# Role: disable_autofs
+# Description: Handlers for the disable_autofs role
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: true

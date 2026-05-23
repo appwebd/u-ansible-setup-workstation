@@ -1,0 +1,59 @@
+---
+# Role        : disable_avahi
+# Description : Ensure avahi daemon services are not in use.
+# Wazuh ID    : 35562
+
+- name: Check if avahi package is installed
+  ansible.builtin.command:
+    cmd: dpkg-query -W -f='${db:Status-Abbrev}' {{ avahi_package_name }}
+  register: register_avahi
+  changed_when: false
+  failed_when: false
+
+- name: Set fact indicating whether avahi-daemon is installed
+  ansible.builtin.set_fact:
+    avahi_package_status: "{{ register_avahi.stdout == 'ii ' }}"
+
+- name: "Disable avahi services"
+  when: avahi_package_status
+  become: true
+  block:
+    - name: "Stop and mask avahi services if installed"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: stopped
+        masked: true
+      loop: "{{ avahi_services_to_mask }}"
+      when:
+        - avahi_package_status
+      notify: "Purge unused dependencies"
+
+    - name: "Remove avahi-daemon package if installed"
+      ansible.builtin.apt:
+        name: "{{ avahi_package_name }}"
+        state: absent
+        purge: true
+        autoremove: true
+      when:
+        - avahi_package_status
+      notify: "Purge unused dependencies"
+
+    - name: "Verify avahi services are not active"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+      register: avahi_service_status
+      loop: "{{ avahi_services_to_stop }}"
+      changed_when: false
+      failed_when: false
+      check_mode: true
+
+    - name: "Fail if avahi services are still active"
+      ansible.builtin.fail:
+        msg: "Avahi service {{ item.item }} is still active or loaded"
+      loop: "{{ avahi_service_status.results | default([]) }}"
+      when:
+        - item is defined
+        - item.load_state is defined
+        - item.load_state | lower == 'loaded'
+        - item.active_state is defined
+        - item.active_state | lower == 'active'

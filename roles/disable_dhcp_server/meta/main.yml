@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: disable_dhcp_server
+  author: Patricio Rojas Ortiz
+  description: Ensure DHCP server services are not in use (Wazuh ID 35563)
+  license: Apache 2.0
+  namespace: ubuntu-server
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - network
+    - dhcp
+    - ubuntu2404
+
+dependencies: []

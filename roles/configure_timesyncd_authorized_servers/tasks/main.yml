@@ -12,15 +12,16 @@
     mode: "0755"
   when: timesyncd_enabled
 
-- name: Check if systemd-timesyncd package is installed on Ubuntu
-  ansible.builtin.command: dpkg-query -W -f='${Status}' systemd-timesyncd
+- name: Check if systemd-timesyncd package is installed
+  ansible.builtin.command:
+    cmd: dpkg-query -W -f='${db:Status-Abbrev}' systemd-timesyncd
   register: systemd_timesyncd_check
   changed_when: false
   failed_when: false
 
 - name: Set fact indicating whether systemd-timesyncd is installed
   ansible.builtin.set_fact:
-    systemd_timesyncd_installed: "{{ 'install ok installed' in systemd_timesyncd_check.stdout }}"
+    systemd_timesyncd_installed: "{{ systemd_timesyncd_check.stdout == 'ii ' }}"
 
 - name: "Configure systemd-timesyncd package (only if file exists)"
   become: true

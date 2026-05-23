@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for the disable_avahi role
+# These are not intended to be overridden by users
+
+avahi_services_to_stop: "{{ avahi_service_names }}"
+avahi_services_to_mask: "{{ avahi_service_names }}"

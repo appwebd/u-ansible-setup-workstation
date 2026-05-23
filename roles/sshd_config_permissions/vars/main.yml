@@ -5,3 +5,4 @@
 sshd_config_permissions:
   file: "{{ sshd_config_file }}"
   dir: "{{ sshd_config_dir }}"
+sshd_package_name: openssh-server

@@ -1,0 +1,10 @@
+---
+# vars/main.yml
+# Internal constants for the disable_dhcp_server role
+# These are not intended to be overridden by users
+
+dhcp_server_modprobe_conf_path: "/etc/modprobe.d/dhcp-server-blacklist.conf"
+dhcp_server_modprobe_content: |
+  # Blacklist DHCP server kernel modules to prevent accidental loading
+  blacklist dhclient
+  install dhclient /bin/false

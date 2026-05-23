@@ -1,0 +1,64 @@
+---
+# Role        : disable_autofs
+# Description : Ensure autofs services are not in use.
+# Wazuh ID    : 35561
+
+- name: Check if autofs package is installed
+  ansible.builtin.command:
+    cmd: dpkg-query -W -f='${db:Status-Abbrev}' {{ autofs_package_name }}
+  register: register_autofs_dpkg_status
+  changed_when: false
+  failed_when: false
+
+- name: Set fact indicating whether autofs is installed
+  ansible.builtin.set_fact:
+    autofs_dpkg_status: "{{ register_autofs_dpkg_status.stdout == 'ii ' }}"
+
+- name: "Stop and mask autofs.service if loaded"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+  loop: "{{ autofs_systemd_services }}"
+  when:
+    - autofs_dpkg_status.exists | default(false)
+    - autofs_dpkg_status.status.LoadState | default('not-found') != 'not-found'
+  notify: "Reload systemd daemon"
+
+- name: "Ensure autofs package is removed (if not required as dependency)"
+  ansible.builtin.apt:
+    name: "{{ autofs_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when: autofs_dpkg_status.exists | default(false)
+
+# https://www.kernel.org/doc/html/latest/filesystems/autofs.html
+- name: "Ensure autofs kernel module is blacklisted"
+  ansible.builtin.file:
+    path: "{{ autofs_modprobe_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Ensure autofs kernel module is blacklisted in modprobe.d"
+  ansible.builtin.copy:
+    dest: "{{ autofs_modprobe_conf_file }}"
+    content: "{{ modprobe_blacklist_content }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+
+- name: "Verify autofs is not active"
+  ansible.builtin.systemd:
+    name: autofs.service
+  register: autofs_status_check
+  changed_when: false
+  failed_when:
+    - autofs_status_check.status is defined
+    - autofs_status_check.status.LoadState | default('not-found') != 'not-found'
+    - autofs_status_check.status.ActiveState | default('inactive') not in ['inactive', 'not-found']
+  check_mode: true
+  when: autofs_dpkg_status.exists | default(false)

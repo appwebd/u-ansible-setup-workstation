@@ -1,0 +1,27 @@
+---
+# Role        : disable_dhcp_server
+# Description : Handlers for the disable_dhcp_server role
+
+- name: "Purge unused dependencies"
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+
+- name: "Check if update-initramfs is available"
+  ansible.builtin.stat:
+    path: /usr/sbin/update-initramfs
+  register: update_initramfs_bin
+
+- name: "Gather package facts to detect isc-dhcp-server"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Update initramfs"
+  ansible.builtin.command: update-initramfs -u
+  register: initramfs_update
+  changed_when: initramfs_update.rc == 0
+  failed_when: initramfs_update.rc not in [0, 1]
+  when:
+    - update_initramfs_bin is defined
+    - update_initramfs_bin.stat is defined
+    - update_initramfs_bin.stat.exists | default(false)

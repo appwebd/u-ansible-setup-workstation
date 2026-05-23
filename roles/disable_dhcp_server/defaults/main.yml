@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for the disable_dhcp_server role
+# These are safe defaults and can be overridden by inventory or playbook vars
+
+dhcp_server_package_name: "isc-dhcp-server"
+dhcp_server_services:
+  - "isc-dhcp-server.service"
+  - "isc-dhcp-server6.service"

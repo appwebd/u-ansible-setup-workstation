@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_avahi role
+# These values can be overridden by the user if needed
+
+avahi_service_names:
+  - avahi-daemon.service
+  - avahi-daemon.socket
+
+avahi_package_name: avahi-daemon

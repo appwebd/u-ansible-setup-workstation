@@ -1,0 +1,15 @@
+---
+# Role        : disable_avahi
+# Description : Handlers for the disable_avahi role
+
+- name: "Purge unused dependencies"
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+
+- name: "Update initramfs"
+  ansible.builtin.command: update-initramfs -u
+  args:
+    creates: /boot/initrd.img-$(uname -r)
+  changed_when: true
+  failed_when: false
