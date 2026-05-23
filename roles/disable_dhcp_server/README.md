@@ -1,8 +1,8 @@
 #### Role name:
-    `disable_dhcp_server`
+    disable_dhcp_server
 
 #### Wazuh ID:
-    `35563`
+    35563
 
 #### Title:
     Ensure dhcp server services are not in use.

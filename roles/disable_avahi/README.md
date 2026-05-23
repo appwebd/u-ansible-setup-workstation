@@ -1,8 +1,8 @@
 #### Role name:
-    `disable_avahi`
+    disable_avahi
 
 #### Wazuh ID:
-    `35562`
+    35562
 
 #### Title:
     Ensure avahi daemon services are not in use.
