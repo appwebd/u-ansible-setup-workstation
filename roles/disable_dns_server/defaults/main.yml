@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default variables for disable_dns_server role
+# These are safe defaults and can be overridden by inventory or playbook vars
+
+dns_server_package: bind9
+dns_server_service: named.service
+

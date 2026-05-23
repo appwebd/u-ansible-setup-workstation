@@ -1,0 +1,53 @@
+---
+# Role        : disable_dns_server
+# Description : Ensure DNS server services are not in use.
+# Wazuh ID    : 35564
+
+- name: "Gather installed packages"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if bind9 is installed"
+  ansible.builtin.set_fact:
+    bind9_installed: "{{ dns_server_package in ansible_facts.packages }}"
+
+- name: "Stop and disable DNS server services if installed"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+    daemon_reload: true
+  loop: "{{ dns_server_service_names }}"
+  when: bind9_installed | bool
+  notify: "Purge bind9 package"
+
+- name: "Purge bind9 package if installed"
+  ansible.builtin.apt:
+    name: "{{ dns_server_package }}"
+    state: absent
+    purge: true
+    autoremove: true
+  register: purge_result
+  failed_when:
+    - purge_result is failed
+    - purge_result.stderr | regex_search('Unable to locate package|(C|c)ouldn.t find any package') is none
+  notify: "Purge unused dependencies"
+
+- name: "Re-gather installed packages after purge"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Verify bind9 package is not installed"
+  ansible.builtin.assert:
+    that:
+      - dns_server_package not in ansible_facts.packages
+    fail_msg: "The package {{ dns_server_package }} remains installed after the purge."
+
+- name: "Verify DNS server services are not active"
+  ansible.builtin.command: systemctl show {{ item }} --property=LoadState,ActiveState
+  register: service_status
+  changed_when: false
+  loop: "{{ dns_server_service_names }}"
+  failed_when:
+    - service_status.stdout | regex_search('^LoadState=loaded|^ActiveState=active', multiline=true) is not none
+  when: bind9_installed | bool
