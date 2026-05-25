@@ -1,0 +1,13 @@
+[project]
+name = "u-ansible-setup-workstation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ansible-core>=2.21.0",
+    "ansible-dev-tools>=26.4.6",
+    "ansible-lint>=26.4.0",
+    "pytest-testinfra>=10.2.2",
+    "yamllint>=1.38.0",
+]
