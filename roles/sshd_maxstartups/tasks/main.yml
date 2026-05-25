@@ -4,39 +4,57 @@
 # Remediation : Set MaxStartups to 10:30:60 or more restrictive before any Include/Match entries.
 #               First occurrence of an option takes precedence.
 
-# Validate that the MaxStartups value is within acceptable bounds
-- name: "Validate MaxStartups value is within compliance limits"
-  ansible.builtin.assert:
-    that:
-      - "sshd_maxstartups_value.split(':')[0] | int >= 1"
-      - "sshd_maxstartups_value.split(':')[0] | int <= 10"
-      - "sshd_maxstartups_value.split(':')[1] | int >= 1"
-      - "sshd_maxstartups_value.split(':')[1] | int <= 30"
-      - "sshd_maxstartups_value.split(':')[2] | int >= 1"
-      - "sshd_maxstartups_value.split(':')[2] | int <= 60"
-    fail_msg: "MaxStartups value {{ sshd_maxstartups_value }} does not meet compliance requirements. First value must be 1-10, second 1-30, third 1-60."
-    success_msg: "MaxStartups value {{ sshd_maxstartups_value }} is within compliance range."
+- name: "Gather package facts to detect sshd"
+  ansible.builtin.package_facts:
+    manager: auto
 
-# Remove any existing MaxStartups entries (commented or uncommented)
-- name: "Remove any existing MaxStartups entries"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^\s*#?\s*MaxStartups\s+'
-    state: absent
-  when:
-    - sshd_config_file is defined
+- name: "Check if openssh-server package is installed"
+  ansible.builtin.set_fact:
+    openssh_server_package_installed: "{{ 'openssh-server' in ansible_facts.packages }}"
 
-# Insert MaxStartups before any Include or Match entries
-- name: "Insert MaxStartups before Include/Match entries in sshd_config"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^\s*MaxStartups\s+'
-    line: "MaxStartups {{ sshd_maxstartups_value }}"
-    state: present
-    owner: root
-    group: root
-    insertbefore: '^\s*(#?Include\s+.*|Match\s+)'
-    validate: 'sshd -t -f %s'
-  notify: Restart {{ sshd_service_name }}
-  when:
-    - sshd_config_file is defined
+- name: "Task block when openssh-server is installed"
+  when: openssh_server_package_installed | bool
+  become: true
+  block:
+
+    # Validate that the MaxStartups value is within acceptable bounds
+    - name: "Validate MaxStartups value is within compliance limits"
+      ansible.builtin.assert:
+        that:
+          - "sshd_maxstartups_value.split(':')[0] | int >= 1"
+          - "sshd_maxstartups_value.split(':')[0] | int <= 10"
+          - "sshd_maxstartups_value.split(':')[1] | int >= 1"
+          - "sshd_maxstartups_value.split(':')[1] | int <= 30"
+          - "sshd_maxstartups_value.split(':')[2] | int >= 1"
+          - "sshd_maxstartups_value.split(':')[2] | int <= 60"
+        fail_msg: "MaxStartups value {{ sshd_maxstartups_value }} does not meet compliance requirements. First value must be 1-10, second 1-30, third 1-60."
+        success_msg: "MaxStartups value {{ sshd_maxstartups_value }} is within compliance range."
+
+    # Remove any existing MaxStartups entries (commented or uncommented)
+    - name: "Remove any existing MaxStartups entries"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^\s*#?\s*MaxStartups\s+'
+        state: absent
+      when:
+        - sshd_config_file is defined
+
+    # Insert MaxStartups before any Include or Match entries
+    - name: "Insert MaxStartups before Include/Match entries in sshd_config"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^\s*MaxStartups\s+'
+        line: "MaxStartups {{ sshd_maxstartups_value }}"
+        state: present
+        owner: root
+        group: root
+        insertbefore: '^\s*(#?Include\s+.*|Match\s+)'
+        validate: 'sshd -t -f %s'
+      notify: Restart {{ sshd_service_name }}
+      when:
+        - sshd_config_file is defined
+
+- name: Verify if openssh-server is installed
+  ansible.builtin.debug:
+    msg: "openssh-server IS NOT installed on this host. SSH configuration tasks are skipped."
+  when: "'openssh-server' not in ansible_facts.packages"
