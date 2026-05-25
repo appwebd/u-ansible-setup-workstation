@@ -52,7 +52,7 @@ remove_bloatware_packages_:
   - tftpd-hpa
   - tnftp
   - tnftp                    # This removes ubuntu-standard (ubuntu-standard is a metapackage)
-  - tracker
+  - tracker                  # Dependency with GNOME Files (default file manager)
   - vim
   - vim-common
   - vsftpd
