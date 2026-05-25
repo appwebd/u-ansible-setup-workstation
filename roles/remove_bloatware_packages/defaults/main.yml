@@ -6,12 +6,21 @@ remove_bloatware_packages_:
   - avahi-daemon
   - avahi-utils
   - bind9
+  - bluetooth
   - bluez
   - bluez-cups
   - bluez-obexd
+  - cups
+  - cups-browsed
+  - cups-bsd
+  - cups-daemon
+  - cups-filters-core-drivers
+  - deja-dup
   - dovecot-imapd
   - dovecot-pop3d
+  - duplicity
   - evolution
+  - evolution-data-server
   - ftp
   - gnome-bluetooth-sendto
   - gnome-characters
@@ -29,17 +38,23 @@ remove_bloatware_packages_:
   - nginx
   - nis
   - open-iscsi
+  - openvpn
+  - remmina
   - rsh-client
   - rsh-server
   - samba
   - slapd
   - snmpd
+  - systemd-resolved
   - talk
   - telnet*
   - tftp-hpa
   - tftpd-hpa
   - tnftp
   - tnftp                    # This removes ubuntu-standard (ubuntu-standard is a metapackage)
+  - tracker
+  - vim
+  - vim-common
   - vsftpd
   - xinetd
 #  - yelp                    # Dependencias with gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp
