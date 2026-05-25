@@ -63,6 +63,7 @@
         executable: /bin/bash
       register: sshd_usepam_verify
       changed_when: false
+      # noinspection YAMLIncompatibleTypes
       failed_when: sshd_usepam_verify.stdout != 'yes'
       check_mode: false
 
