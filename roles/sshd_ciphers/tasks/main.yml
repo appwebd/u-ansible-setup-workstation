@@ -1,52 +1,60 @@
 ---
 # Role        : sshd_ciphers
-# Description : Ensure sshd Ciphers are configured (Wazuh ID 35645)
+# Description : Ensure sshd Ciphers are configured.
 # Wazuh ID    : 35645
 
-- name: "Ensure sshd package is installed"
-  ansible.builtin.apt:
-    name: "{{ sshd_package_name }}"
-    state: present
-    update_cache: true
-    cache_valid_time: 86400
-  register: sshd_install_result
-  changed_when: sshd_install_result.changed
-  failed_when: sshd_install_result.failed and '"already the newest version" not in sshd_install_result.stdout'
+- name: "Gather package facts to detect sshd"
+  ansible.builtin.package_facts:
+    manager: auto
 
-- name: "Ensure sshd configuration directory exists"
-  ansible.builtin.file:
-    path: "{{ sshd_include_dir }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
-  when: sshd_config_include_enabled | bool
+- name: "Check if openssh-server package is installed"
+  ansible.builtin.set_fact:
+    openssh_server_package_installed: "{{ 'openssh-server' in ansible_facts.packages }}"
 
-- name: "Ensure sshd Ciphers directive is configured"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^\s*Ciphers\s+'
-    line: "Ciphers {{ sshd_ciphers_whitelist | join(',') }}"
-    state: present
-    owner: root
-    group: root
-    mode: "0644"
-    backup: true
-  when: not sshd_config_include_enabled | bool
+- name: "Task block when openssh-server is installed"
+  when: openssh_server_package_installed
+  become: true
+  block:
 
-- name: "Ensure sshd Ciphers directive is configured via include file"
-  ansible.builtin.copy:
-    dest: "{{ sshd_config_include_file }}"
-    content: "Ciphers {{ sshd_ciphers_whitelist | join(',') }}"
-    owner: root
-    group: root
-    mode: "0644"
-    backup: true
-  when: sshd_config_include_enabled | bool
-  notify: Restart sshd
+    - name: "Ensure sshd configuration directory exists"
+      ansible.builtin.file:
+        path: "{{ sshd_include_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when: sshd_config_include_enabled | bool
 
-- name: "Ensure sshd service is running and enabled"
-  ansible.builtin.service:
-    name: "{{ sshd_service_name }}"
-    state: started
-    enabled: true
+    - name: "Ensure sshd Ciphers directive is configured"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^\s*Ciphers\s+'
+        line: "Ciphers {{ sshd_ciphers_whitelist | join(',') }}"
+        state: present
+        owner: root
+        group: root
+        mode: "0644"
+        backup: true
+      when: not sshd_config_include_enabled | bool
+
+    - name: "Ensure sshd Ciphers directive is configured via include file"
+      ansible.builtin.copy:
+        dest: "{{ sshd_config_include_file }}"
+        content: "Ciphers {{ sshd_ciphers_whitelist | join(',') }}"
+        owner: root
+        group: root
+        mode: "0644"
+        backup: true
+      when: sshd_config_include_enabled | bool
+      notify: Restart sshd
+
+    - name: "Ensure sshd service is running and enabled"
+      ansible.builtin.service:
+        name: "{{ sshd_service_name }}"
+        state: started
+        enabled: true
+
+- name: Verify if openssh-server is installed
+  ansible.builtin.debug:
+    msg: "openssh-server IS NOT installed on this host. SSH configuration tasks are skipped."
+  when: "'openssh-server' not in ansible_facts.packages"
