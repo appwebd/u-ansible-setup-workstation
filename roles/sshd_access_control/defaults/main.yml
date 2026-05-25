@@ -1,6 +1,6 @@
 ---
 # defaults/main.yml
-# Default variables for ssh_access_control role
+# Default variables for sshd_access_control role
 # These values can be overridden by inventory or extra vars
 
 # SSH access control configuration
@@ -42,12 +42,10 @@ ssh_access_deny_users: [
 ssh_access_deny_groups: []
 
 # SSH configuration file paths
-ssh_config_dir: /etc/ssh
-ssh_config_file: /etc/ssh/sshd_config
-ssh_config_include_dir: /etc/ssh/sshd_config.d
+sshd_config_include_dir: /etc/ssh/sshd_config.d
 
 # Configuration file name for SSH access control
 ssh_access_config_file: "{{ ssh_config_include_dir }}/99-ssh-access-control.conf"
 
 # Service management
-ssh_service_name: sshd
+ssh_service_name: ssh
