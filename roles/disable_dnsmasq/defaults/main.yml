@@ -1,0 +1,5 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_dnsmasq role
+dnsmasq_package_name: dnsmasq
+dnsmasq_service_name: dnsmasq.service

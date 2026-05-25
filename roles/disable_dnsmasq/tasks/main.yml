@@ -1,0 +1,34 @@
+---
+# Role        : disable_dnsmasq
+# Description : Ensure dnsmasq services are not in use.
+# Wazuh ID    : 35565
+
+- name: "Check if dnsmasq package is installed"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Stop dnsmasq service if running"
+  ansible.builtin.systemd:
+    name: "{{ dnsmasq_service_name }}"
+    state: stopped
+    enabled: false
+  when: dnsmasq_package_name in ansible_facts.packages.keys()
+
+- name: "Mask dnsmasq service to prevent it from starting on boot"
+  ansible.builtin.systemd:
+    name: "{{ dnsmasq_service_name }}"
+    masked: true
+  when: dnsmasq_package_name in ansible_facts.packages.keys()
+
+- name: "Remove dnsmasq package if no dependencies require it"
+  ansible.builtin.package:
+    name: "{{ dnsmasq_package_name }}"
+    state: absent
+    autoremove: true
+  register: remove_result
+  when: dnsmasq_package_name in ansible_facts.packages.keys()
+
+- name: "Warn if dnsmasq package is required by other packages"
+  ansible.builtin.debug:
+    msg: "\u001b[31mWARNING: dnsmasq package is required by other packages. Service has been stopped and masked.\u001b[0m"
+  when: remove_result | bool

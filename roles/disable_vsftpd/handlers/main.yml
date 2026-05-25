@@ -1,0 +1,10 @@
+---
+# Role name   : disable_vsftpd
+# Description : Handlers for the disable_vsftpd role
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
+  changed_when: cleanup_result.changed

@@ -1,0 +1,5 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_vsftpd role
+vsftpd_package_name: vsftpd
+vsftpd_service_name: vsftpd.service

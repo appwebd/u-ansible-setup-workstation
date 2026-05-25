@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: disable_dnsmasq
+  author: Patricio Rojas Ortiz
+  description: Ensure dnsmasq services are not in use. (Wazuh ID 35565)
+  license: Apache 2.0
+  namespace: ubuntu-server
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - sysadmin
+
+dependencies: []
