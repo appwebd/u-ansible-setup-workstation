@@ -1,42 +1,60 @@
 ---
 # Role        : sshd_hostbasedauthentication_disabled
-# Description : Ensure sshd HostbasedAuthentication is disabled
+# Description : Ensure sshd HostbasedAuthentication is disabled.
 # Wazuh ID    : 35649
 
-- name: "Ensure HostbasedAuthentication is set to no in sshd_config"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^\s*#*\s*(HostbasedAuthentication\s+)(yes|no)\s*$'
-    line: 'HostbasedAuthentication no'
-    state: present
-    owner: root
-    group: root
-    mode: '0644'
-    backrefs: true
-  notify: Restart SSH Service
+- name: "Gather package facts to detect sshd"
+  ansible.builtin.package_facts:
+    manager: auto
 
-- name: "Ensure HostbasedAuthentication is set to no (non-commented line)"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^\s*#*\s*(hostbasedAuthentication\s+)(yes|no)\s*$'
-    line: 'HostbasedAuthentication no'
-    state: present
-    owner: root
-    group: root
-    mode: '0644'
-  notify: Restart SSH Service
+- name: "Check if openssh-server package is installed"
+  ansible.builtin.set_fact:
+    openssh_server_package_installed: "{{ 'openssh-server' in ansible_facts.packages }}"
 
-- name: "Verify HostbasedAuthentication is set to no"
-  ansible.builtin.shell: |
-    set -euo pipefail
-    sshd -T 2>/dev/null | grep -i '^hostbasedauthentication no$'
-  args:
-    executable: /bin/bash
-  changed_when: false
-  register: sshd_check_result
-  failed_when: >-
-    sshd_check_result.rc != 0 and
-    not (
-      sshd_check_result.stderr | regex_search('sshd: (unknown|illegal|invalid) option')
-    )
-  check_mode: false
+- name: "Task block when openssh-server is installed"
+  when: openssh_server_package_installed | bool
+  become: true
+  block:
+
+    - name: "Ensure HostbasedAuthentication is set to no in sshd_config"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^\s*#*\s*(HostbasedAuthentication\s+)(yes|no)\s*$'
+        line: 'HostbasedAuthentication no'
+        state: present
+        owner: root
+        group: root
+        mode: '0644'
+        backrefs: true
+      notify: Restart SSH Service
+
+    - name: "Ensure HostbasedAuthentication is set to no (non-commented line)"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^\s*#*\s*(hostbasedAuthentication\s+)(yes|no)\s*$'
+        line: 'HostbasedAuthentication no'
+        state: present
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart SSH Service
+
+    - name: "Verify HostbasedAuthentication is set to no"
+      ansible.builtin.shell: |
+        set -euo pipefail
+        sshd -T 2>/dev/null | grep -i '^hostbasedauthentication no$'
+      args:
+        executable: /bin/bash
+      changed_when: false
+      register: sshd_check_result
+      failed_when: >-
+        sshd_check_result.rc != 0 and
+        not (
+          sshd_check_result.stderr | regex_search('sshd: (unknown|illegal|invalid) option')
+        )
+      check_mode: false
+
+- name: Verify if openssh-server is installed
+  ansible.builtin.debug:
+    msg: "openssh-server IS NOT installed on this host. SSH configuration tasks are skipped."
+  when: "'openssh-server' not in ansible_facts.packages"
