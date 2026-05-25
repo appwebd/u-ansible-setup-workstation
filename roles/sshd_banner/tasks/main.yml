@@ -3,66 +3,86 @@
 # Description : Ensure sshd Banner is configured
 # Wazuh ID    : 35644
 
-- name: "Ensure sshd banner file directory exists"
-  ansible.builtin.file:
-    path: "{{ sshd_config_dir }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
+- name: "Gather package facts to detect sshd"
+  ansible.builtin.package_facts:
+    manager: auto
 
-- name: "Ensure sshd banner file exists with correct content"
-  ansible.builtin.copy:
-    dest: "{{ sshd_banner_file }}"
-    content: "{{ sshd_banner_content }}"
-    owner: root
-    group: root
-    mode: "0644"
-    backup: true
-  when: sshd_banner_enabled
+- name: "Check if openssh-server package is installed"
+  ansible.builtin.set_fact:
+    openssh_server_package_installed: "{{ 'openssh-server' in ansible_facts.packages }}"
 
-- name: "Ensure Banner directive is set in sshd_config"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_path }}"
-    regexp: "^#*Banner.*$"
-    line: "Banner {{ sshd_banner_file }}"
-    state: present
-    owner: root
-    group: root
-    mode: "0644"
-    insertafter: EOF
-    backup: true
-  notify: Restart sshd
-  when: sshd_banner_enabled
-
-- name: "Ensure Banner directive is absent when disabled"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_path }}"
-    regexp: "^#Banner.*$"
-    state: absent
-    owner: root
-    group: root
-    mode: "0644"
-    backup: true
-  notify: Restart sshd
-  when: not sshd_banner_enabled
-
-- name: "Verify Banner directive is correctly set"
-  ansible.builtin.shell: |
-    set -euo pipefail
-    sshd -T 2>/dev/null | awk '$1 == "banner" {print $2}'
-  args:
-    executable: /bin/bash
-  register: sshd_banner_check
-  changed_when: false
-  failed_when: sshd_banner_check.rc not in [0, 255]
-  when: sshd_banner_enabled
-  notify: Restart sshd
-
-- name: "Ensure Banner directive points to correct file"
+- name: "Ensure openssh-server package is installed"
   ansible.builtin.assert:
     that:
-      - sshd_banner_check.stdout == sshd_banner_file
-    fail_msg: "sshd Banner directive does not point to {{ sshd_banner_file }}"
-    success_msg: "sshd Banner directive correctly configured"
-  when: sshd_banner_enabled
+      - openssh_server_package_installed
+    fail_msg: "openssh-server does not exists on host"
+    success_msg: "OK openssh-server is installed on host"
+  when: openssh_server_package_installed
+
+- name: "Ensure sshd Banner is configured"
+  when: openssh_server_package_installed
+  become: true
+  block:
+    - name: "Ensure sshd banner file directory exists"
+      ansible.builtin.file:
+        path: "{{ sshd_config_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0700"
+
+    - name: "Ensure sshd banner file exists with correct content"
+      ansible.builtin.copy:
+        dest: "{{ sshd_banner_file }}"
+        content: "{{ sshd_banner_content }}"
+        owner: root
+        group: root
+        mode: "0600"
+        backup: true
+      when: sshd_banner_enabled
+
+    - name: "Ensure Banner directive is set in sshd_config"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_path }}"
+        regexp: "^#*Banner.*$"
+        line: "Banner {{ sshd_banner_file }}"
+        state: present
+        owner: root
+        group: root
+        mode: "0600"
+        insertafter: EOF
+        backup: true
+      notify: Restart sshd
+      when: sshd_banner_enabled
+
+    - name: "Ensure Banner directive is absent when disabled"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_path }}"
+        regexp: "^#Banner.*$"
+        state: absent
+        owner: root
+        group: root
+        mode: "0600"
+        backup: true
+      notify: Restart sshd
+      when: not sshd_banner_enabled
+
+    - name: "Verify Banner directive is correctly set"
+      ansible.builtin.shell: |
+        set -euo pipefail
+        sshd -T 2>/dev/null | awk '$1 == "banner" {print $2}'
+      args:
+        executable: /bin/bash
+      register: sshd_banner_check
+      changed_when: false
+      failed_when: sshd_banner_check.rc not in [0, 255]
+      when: sshd_banner_enabled
+      notify: Restart sshd
+
+    - name: "Ensure Banner directive points to correct file"
+      ansible.builtin.assert:
+        that:
+          - sshd_banner_check.stdout == sshd_banner_file
+        fail_msg: "sshd Banner directive does not point to {{ sshd_banner_file }}"
+        success_msg: "sshd Banner directive correctly configured"
+      when: sshd_banner_enabled
