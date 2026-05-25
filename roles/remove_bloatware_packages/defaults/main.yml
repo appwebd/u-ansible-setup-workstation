@@ -13,8 +13,12 @@ remove_bloatware_packages_:
   - cups
   - cups-browsed
   - cups-bsd
+  - cups-client
+  - cups-common
   - cups-daemon
   - cups-filters-core-drivers
+  - cups-pk-helper
+  - cups-ppdc
   - deja-dup
   - dovecot-imapd
   - dovecot-pop3d
