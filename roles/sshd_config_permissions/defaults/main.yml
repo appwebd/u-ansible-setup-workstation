@@ -8,4 +8,4 @@ sshd_config_dir: /etc/ssh/sshd_config.d
 sshd_config_owner: root
 sshd_config_group: root
 sshd_config_mode: "0600"
-sshd_config_dir_mode: "0700"
+sshd_config_dir_mode: "0750"
