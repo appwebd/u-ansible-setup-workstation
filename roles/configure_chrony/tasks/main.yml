@@ -42,7 +42,7 @@
   ansible.builtin.copy:
     dest: "{{ chrony_config_dir }}{{ sources_filename }}"
     content: |
-      # 
+      #
       # Chrony drop-in configuration for Wazuh compliance
       # Author: Security team
       # Wazuh ID: 35590
