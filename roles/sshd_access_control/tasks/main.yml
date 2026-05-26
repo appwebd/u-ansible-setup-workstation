@@ -1,5 +1,5 @@
 ---
-# Role        : ssh_access_control
+# Role        : sshd_access_control
 # Description : Ensure sshd access is configured (Wazuh ID 35643)
 # Wazuh ID    : 35643
 

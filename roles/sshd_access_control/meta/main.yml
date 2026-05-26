@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: ssh_access_control
+  role_name: sshd_access_control
   author: Patricio Rojas Ortiz
   description: Ensure sshd access is configured (Wazuh ID 35643)
   license: Apache 2.0

@@ -1,5 +1,5 @@
 #### Role name:
-    ssh_access_control
+    sshd_access_control
 
 #### Wazuh ID: 
     35643
