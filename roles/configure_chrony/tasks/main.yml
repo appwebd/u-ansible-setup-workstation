@@ -25,8 +25,14 @@
   ansible.builtin.copy:
     dest: "{{ chrony_config_dir }}{{ sources_filename }}"
     content: |
-      # The maxsources option is unique to the pool directive
-      {{ '\n'.join(chrony_pool_directives) }}
+      #
+      # Chrony drop-in configuration for Wazuh compliance
+      # Author: Security team
+      # Wazuh ID: 35590
+      #
+      {% for server in chrony_pool_directives %}
+      {{ server }}
+      {% endfor %}
     owner: root
     group: root
     mode: '0644'
@@ -36,7 +42,14 @@
   ansible.builtin.copy:
     dest: "{{ chrony_config_dir }}{{ sources_filename }}"
     content: |
-      {{ '\n'.join(chrony_server_directives) }}
+      #
+      # Chrony drop-in configuration for Wazuh compliance
+      # Author: Security team
+      # Wazuh ID: 35590
+      #
+      {% for server in chrony_server_directives %}
+      {{ server }}
+      {% endfor %}
     owner: root
     group: root
     mode: '0644'

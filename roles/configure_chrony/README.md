@@ -53,26 +53,25 @@ Run the following command to reload the chronyd config:
 | `sources_filename`         | `"60-sources.sources"`                                                                                 | Name of the sources file in sources.d directory | defaults/main.yml  |
 | `chrony_service_name`      | `chronyd`                                                                                              | Name of the chrony service                      | vars/main.yml      |
 | `chrony_package_name`      | `chrony`                                                                                               | Name of the chrony package                      | vars/main.yml      |
-| `chrony_reload_command`    | `systemctl reload-or-restart chronyd`                                                                  | Command to reload chrony configuration          | vars/main.yml      |
 
 #### Dependencies
     No dependencies
 
 #### Compliance mapping
-    - 'cmmc': ['AU.L2-3.3.7'], 
-    - 'fedramp': ['AU-7'], 
-    - 'gdpr': ['32', '33'], 
-    - 'hipaa': ['164.312(b)', '164.308(a)(6)'], 
-    - 'iso_27001': ['A.12.4.1', 'A.12.4.2', 'A.12.4.3', 'A.16.1.2'], 
-    - 'nis2': ['21.2.a', '23', '21.2.b'], 
-    - 'nist_800_171': ['3.3.7'], 
-    - 'nist_800_53': ['AU-7'], 
-    - 'pci_dss': ['10.4', '10.6'], 
-    - 'tsc': ['CC4.1', 'CC5.2', 'CC7.1', 'CC7.2', 'CC7.3', 'CC7.4', 'CC7.5', 'CC7.6']
+    - cmmc: ['AU.L2-3.3.7'], 
+    - fedramp: ['AU-7'], 
+    - gdpr: ['32', '33'], 
+    - hipaa: ['164.312(b)', '164.308(a)(6)'], 
+    - iso_27001: ['A.12.4.1', 'A.12.4.2', 'A.12.4.3', 'A.16.1.2'], 
+    - nis2: ['21.2.a', '23', '21.2.b'], 
+    - nist_800_171: [3.3.7], 
+    - nist_800_53: ['AU-7'], 
+    - pci_dss: ['10.4', '10.6'], 
+    - tsc: ['CC4.1', 'CC5.2', 'CC7.1', 'CC7.2', 'CC7.3', 'CC7.4', 'CC7.5', 'CC7.6']
 
 #### Mitre
-    - 'tactic': ['TA0005'], 
-    - 'technique': ['T1036', 'T1564']
+    - tactic: ['TA0005'], 
+    - technique: ['T1036', 'T1564']
 
 #### Conditions
      all
@@ -92,7 +91,7 @@ Include this role in your playbook:
 ```
 
 #### License
-  Apache 2.0
+    Apache 2.0
 
 #### Author
-Patricio Rojas Ortiz
+    Patricio Rojas Ortiz
