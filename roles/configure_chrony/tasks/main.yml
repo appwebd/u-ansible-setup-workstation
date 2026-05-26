@@ -37,7 +37,7 @@
 - name: "Create chrony server configuration file"
   ansible.builtin.copy:
     dest: "{{ chrony_config_dir }}{{ sources_filename }}"
-    content: |      
+    content: |
       {% for server in chrony_server_directives %}
       {{ server }}
       {% endfor %}
