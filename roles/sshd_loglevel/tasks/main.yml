@@ -3,27 +3,47 @@
 # Description : Ensure sshd LogLevel is configured
 # Wazuh ID    : 35653
 
-- name: "Ensure sshd LogLevel is set to VERBOSE or INFO"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^\s*#?\s*[Ll]og[Ll]evel\s+.*$'
-    line: "LogLevel {{ sshd_loglevel }}"
-    state: present
-    owner: root
-    group: root
-    mode: "0644"
-    insertafter: EOF
-    create: true
-  notify: Restart sshd
+- name: "Gather package facts to detect sshd"
+  ansible.builtin.package_facts:
+    manager: auto
 
-- name: "Verify LogLevel is correctly configured"
-  ansible.builtin.shell: |
-    set -euo pipefail
-    sshd -T 2>/dev/null | grep -i "^loglevel" | grep -E "^(loglevel (VERBOSE|INFO))"
-  changed_when: false
-  failed_when: |
-    (result.rc != 0) and
-    (result.stdout | length == 0 or
-     not (result.stdout | lower | regex_search('^loglevel (verbose|info)$')))
-  register: result
-  check_mode: false
+- name: "Check if openssh-server package is installed"
+  ansible.builtin.set_fact:
+    openssh_server_package_installed: "{{ 'openssh-server' in ansible_facts.packages }}"
+
+- name: "Task block when openssh-server is installed"
+  when: openssh_server_package_installed | bool
+  become: true
+  block:
+
+    - name: "Ensure sshd LogLevel is set to VERBOSE or INFO"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^\s*#?\s*[Ll]og[Ll]evel\s+.*$'
+        line: "LogLevel {{ sshd_loglevel }}"
+        state: present
+        owner: root
+        group: root
+        mode: "0644"
+        insertafter: EOF
+        create: true
+      notify: Restart sshd
+
+    - name: "Verify LogLevel is correctly configured"
+      ansible.builtin.shell: |
+        set -euo pipefail
+        sshd -T 2>/dev/null | grep -i "^loglevel" | grep -E "^(loglevel (VERBOSE|INFO))"
+      changed_when: false
+      failed_when: |
+        (result.rc != 0) and
+        (result.stdout | length == 0 or
+         not (result.stdout | lower | regex_search('^loglevel (verbose|info)$')))
+      register: result
+      check_mode: false
+      args:
+        executable: /bin/bash
+
+- name: Verify if openssh-server is installed
+  ansible.builtin.debug:
+    msg: "openssh-server IS NOT installed on this host. SSH configuration tasks are skipped."
+  when: "'openssh-server' not in ansible_facts.packages"

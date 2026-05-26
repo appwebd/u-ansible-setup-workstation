@@ -3,52 +3,71 @@
 # Description : Ensure sshd UsePAM is enabled (Wazuh ID 35661)
 # Wazuh ID    : 35661
 
-- name: "Check for Include directives in sshd_config"
-  ansible.builtin.shell: |
-    set -euo pipefail
-    grep -n '^Include' "{{ sshd_config_file }}" 2>/dev/null || exit 0
-  args:
-    executable: /bin/bash
-  register: sshd_include_lines
-  changed_when: false
-  failed_when: false
-  check_mode: false
+- name: "Gather package facts to detect sshd"
+  ansible.builtin.package_facts:
+    manager: auto
 
-- name: "Set insertbefore variable for UsePAM directive placement"
+- name: "Check if openssh-server package is installed"
   ansible.builtin.set_fact:
-    sshd_usepam_insert_before: "{{ sshd_include_pattern | default('EOF') }}"
-  vars:
-    sshd_include_pattern: >-
-      {{ '^Include' if sshd_include_lines.stdout | length > 0 else 'EOF' }}
+    openssh_server_package_installed: "{{ 'openssh-server' in ansible_facts.packages }}"
 
-- name: "Ensure UsePAM is set to yes in sshd_config before Include entries"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^#?\s*[Uu]se[Pp][Aa][Mm]\s+'
-    line: "UsePAM {{ sshd_usepam_value }}"
-    state: present
-    owner: root
-    group: root
-    mode: "0644"
-    insertbefore: "{{ sshd_usepam_insert_before }}"
-    backup: true
-  notify: Restart sshd
+- name: "Task block when openssh-server is installed"
+  when: openssh_server_package_installed | bool
+  become: true
+  block:
 
-- name: "Ensure UsePAM is not set to no in sshd_config"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^#?\s*[Uu]se[Pp][Aa][Mm]\s+no\s*'
-    state: absent
-    backup: true
-  notify: Restart sshd
+    - name: "Check for Include directives in sshd_config"
+      ansible.builtin.shell: |
+        set -euo pipefail
+        grep -n '^Include' "{{ sshd_config_file }}" 2>/dev/null || exit 0
+      args:
+        executable: /bin/bash
+      register: sshd_include_lines
+      changed_when: false
+      failed_when: false
+      check_mode: false
 
-- name: "Verify UsePAM setting is enabled"
-  ansible.builtin.shell: |
-    set -euo pipefail
-    sshd -T 2>/dev/null | awk '/^usepam/ {print $2}'
-  args:
-    executable: /bin/bash
-  register: sshd_usepam_verify
-  changed_when: false
-  failed_when: sshd_usepam_verify.stdout != 'yes'
-  check_mode: false
+    - name: "Set insertbefore variable for UsePAM directive placement"
+      ansible.builtin.set_fact:
+        sshd_usepam_insert_before: "{{ sshd_include_pattern | default('EOF') }}"
+      vars:
+        sshd_include_pattern: >-
+          {{ '^Include' if sshd_include_lines.stdout | length > 0 else 'EOF' }}
+
+    - name: "Ensure UsePAM is set to yes in sshd_config before Include entries"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^#?\s*[Uu]se[Pp][Aa][Mm]\s+'
+        line: "UsePAM {{ sshd_usepam_value }}"
+        state: present
+        owner: root
+        group: root
+        mode: "0644"
+        insertbefore: "{{ sshd_usepam_insert_before }}"
+        backup: true
+      notify: Restart sshd
+
+    - name: "Ensure UsePAM is not set to no in sshd_config"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^#?\s*[Uu]se[Pp][Aa][Mm]\s+no\s*'
+        state: absent
+        backup: true
+      notify: Restart sshd
+
+    - name: "Verify UsePAM setting is enabled"
+      ansible.builtin.shell: |
+        set -euo pipefail
+        sshd -T 2>/dev/null | awk '/^usepam/ {print $2}'
+      args:
+        executable: /bin/bash
+      register: sshd_usepam_verify
+      changed_when: false
+      # noinspection YAMLIncompatibleTypes
+      failed_when: sshd_usepam_verify.stdout != 'yes'
+      check_mode: false
+
+- name: Verify if openssh-server is installed
+  ansible.builtin.debug:
+    msg: "openssh-server IS NOT installed on this host. SSH configuration tasks are skipped."
+  when: "'openssh-server' not in ansible_facts.packages"

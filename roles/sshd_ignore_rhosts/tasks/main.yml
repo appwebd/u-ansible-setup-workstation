@@ -3,21 +3,39 @@
 # Description : Ensure sshd IgnoreRhosts is enabled
 # Wazuh ID    : 35650
 
-- name: "Ensure sshd IgnoreRhosts is enabled in sshd_config"
-  ansible.builtin.lineinfile:
-    path: "{{ sshd_config_file }}"
-    regexp: '^#*\s*IgnoreRhosts\s+'
-    line: "IgnoreRhosts {{ sshd_ignore_rhosts_value }}"
-    state: present
-    owner: root
-    group: root
-    mode: "0644"
-    insertbefore: '^(Include|Match)\s'
-    backrefs: true
-  notify: Restart sshd
+- name: "Gather package facts to detect sshd"
+  ansible.builtin.package_facts:
+    manager: auto
 
-- name: "Ensure sshd service is running and enabled"
-  ansible.builtin.service:
-    name: "{{ sshd_service_name }}"
-    state: started
-    enabled: true
+- name: "Check if openssh-server package is installed"
+  ansible.builtin.set_fact:
+    openssh_server_package_installed: "{{ 'openssh-server' in ansible_facts.packages }}"
+
+- name: "Task block when openssh-server is installed"
+  when: openssh_server_package_installed | bool
+  become: true
+  block:
+
+    - name: "Ensure sshd IgnoreRhosts is enabled in sshd_config"
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_file }}"
+        regexp: '^#*\s*IgnoreRhosts\s+'
+        line: "IgnoreRhosts {{ sshd_ignore_rhosts_value }}"
+        state: present
+        owner: root
+        group: root
+        mode: "0600"
+        insertbefore: '^(Include|Match)\s'
+        backrefs: true
+      notify: Restart sshd
+
+    - name: "Ensure sshd service is running and enabled"
+      ansible.builtin.service:
+        name: "{{ sshd_service_name }}"
+        state: started
+        enabled: true
+
+- name: Verify if openssh-server is installed
+  ansible.builtin.debug:
+    msg: "openssh-server IS NOT installed on this host. SSH configuration tasks are skipped."
+  when: "'openssh-server' not in ansible_facts.packages"

@@ -1,14 +1,19 @@
 ---
 # Role        : sshd_access_control
-# Description : Ensure sshd access is configured (Wazuh ID 35643)
+# Description : Ensure sshd access is configured.
 # Wazuh ID    : 35643
 
-- name: "Gather information about installed packages"
+- name: "Gather package facts to detect sshd"
   ansible.builtin.package_facts:
     manager: auto
 
+- name: "Check if openssh-server package is installed"
+  ansible.builtin.set_fact:
+    openssh_server_package_installed: "{{ 'openssh-server' in ansible_facts.packages }}"
+
 - name: "Task block when openssh-server is installed"
-  when: "'openssh-server' in ansible_facts.packages"
+  when: openssh_server_package_installed | bool
+  become: true
   block:
 
     - name: "Ensure SSH access control configuration directory exists"
@@ -21,12 +26,13 @@
 
     # was installed in ubuntu 24.04 the module: uv add ansible[jinja2]
     - name: "Ensure SSH access control configuration file is properly configured"
+      become: true
       ansible.builtin.template:
         src: ssh_access_control.conf.j2
         dest: "{{ ssh_access_config_file }}"
         owner: root
         group: root
-        mode: "0644"
+        mode: "0600"
         validate: "/usr/sbin/sshd -t -f %s"
       notify: Restart SSH Service
 

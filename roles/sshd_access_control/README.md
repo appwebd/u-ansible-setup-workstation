@@ -24,17 +24,15 @@
 
 #### Variables
 
-| Variable                  | Default                                                   | Description                                                                | file              |
-|---------------------------|-----------------------------------------------------------|----------------------------------------------------------------------------|-------------------|
-| `ssh_access_allow_groups` | `[]`                                                      | List of groups whose members are explicitly allowed to SSH into the system | defaults/main.yml |
-| `ssh_access_allow_users`  | `[]`                                                      | List of users explicitly allowed to SSH into the system                    | defaults/main.yml |
-| `ssh_access_config_file`  | `{{ ssh_config_include_dir }}/99-ssh-access-control.conf` | Path to the generated SSH access control configuration file                | vars/main.yml     |
-| `ssh_access_deny_groups`  | `[]`                                                      | List of groups whose members are explicitly denied SSH access              | defaults/main.yml |
-| `ssh_access_deny_users`   | `[]`                                                      | List of users explicitly denied SSH access                                 | defaults/main.yml |
-| `ssh_config_dir`          | `/etc/ssh`                                                | Base directory for SSH configuration                                       | defaults/main.yml |
-| `ssh_config_file`         | `/etc/ssh/sshd_config`                                    | Main SSH daemon configuration file path                                    | defaults/main.yml |
-| `ssh_config_include_dir`  | `/etc/ssh/sshd_config.d`                                  | Directory for additional SSH configuration files                           | defaults/main.yml |
-| `ssh_service_name`        | `sshd`                                                    | Name of the SSH service to restart when configuration changes              | defaults/main.yml |
+| Variable                  | Default                                                         | Description                                                                | file              |
+|---------------------------|-----------------------------------------------------------------|----------------------------------------------------------------------------|-------------------|
+| `ssh_access_allow_groups` | `[]`                                                            | List of groups whose members are explicitly allowed to SSH into the system | defaults/main.yml |
+| `ssh_access_allow_users`  | `['pro']` (IMPORTANT review/update this user account)           | List of users explicitly allowed to SSH into the system                    | defaults/main.yml |
+| `ssh_access_config_file`  | `{{ ssh_config_include_dir }}/99-ssh-access-control.conf`       | Path to the generated SSH access control configuration file                | vars/main.yml     |
+| `ssh_access_deny_groups`  | `[]`                                                            | List of groups whose members are explicitly denied SSH access              | defaults/main.yml |
+| `ssh_access_deny_users`   | `[]`        (IMPORTANT review/update the list of user accounts) | List of users explicitly denied SSH access                                 | defaults/main.yml |
+| `ssh_config_include_dir`  | `/etc/ssh/sshd_config.d`                                        | Directory for additional SSH configuration files                           | defaults/main.yml |
+| `ssh_service_name`        | `ssh`                                                           | Name of the SSH service to restart when configuration changes              | defaults/main.yml |
 
 #### Dependencies
     None

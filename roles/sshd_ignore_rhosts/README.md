@@ -24,11 +24,11 @@
 
 #### Variables
 
-| Variable                   | Default                                        | Description                                                  | file              |
-|----------------------------|------------------------------------------------|--------------------------------------------------------------|-------------------|
-| `sshd_config_file`         | `/etc/ssh/sshd_config`                         | Path to the SSH daemon configuration file                    | defaults/main.yml |
-| `sshd_ignore_rhosts_value` | `"yes"`                                        | Value to set for the `IgnoreRhosts` directive                | defaults/main.yml |
-| `sshd_service_name`        | `sshd`                                         | Name of the SSH service to restart if configuration changes  | defaults/main.yml |
+| Variable                   | Default                | Description                                                  | file              |
+|----------------------------|------------------------|--------------------------------------------------------------|-------------------|
+| `sshd_config_file`         | `/etc/ssh/sshd_config` | Path to the SSH daemon configuration file                    | defaults/main.yml |
+| `sshd_ignore_rhosts_value` | `"yes"`                | Value to set for the `IgnoreRhosts` directive                | defaults/main.yml |
+| `sshd_service_name`        | `ssh`                  | Name of the SSH service to restart if configuration changes  | defaults/main.yml |
 
 #### Dependencies
     None

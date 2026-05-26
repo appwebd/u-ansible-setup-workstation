@@ -4,5 +4,5 @@
 # These values can be overridden by inventory or playbook variables
 
 sshd_config_file: /etc/ssh/sshd_config
-sshd_service_name: sshd
+sshd_service_name: ssh
 sshd_ignore_rhosts_value: "yes"

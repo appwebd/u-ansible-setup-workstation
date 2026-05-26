@@ -1,6 +1,6 @@
 ---
 # Role        : ssh_host_keys_permissions
-# Description : Ensure permissions on SSH public host key files are configured (Wazuh ID 35642)
+# Description : Ensure permissions on SSH public host key files are configured.
 # Wazuh ID    : 35642
 
 - name: "Ensure SSH public host key files exist and have correct permissions, owner, and group"
