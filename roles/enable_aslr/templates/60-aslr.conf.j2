@@ -1,0 +1,7 @@
+# Ensure address space layout randomization is enabled
+# Managed by Ansible (Wazuh ID 35542)
+# Generated: {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+# {{ aslr_sysctl_file }}
+#
+# ASLR mode: 0 = off, 1 = conservative, 2 = aggressive
+{{ aslr_sysctl_name }} = {{ aslr_sysctl_value }}
