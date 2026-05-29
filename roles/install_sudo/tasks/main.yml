@@ -1,0 +1,37 @@
+---
+# Role        : install_sudo
+# Description : Ensure sudo is installed.
+# Wazuh ID    : 35662
+
+- name: "Ensure sudo is installed (Debian/Ubuntu)"
+  ansible.builtin.apt:
+    name: "{{ sudo_package_name }}"
+    state: "{{ sudo_package_state }}"
+    update_cache: true
+    cache_valid_time: 86400
+  when: ansible_facts.os_family == "Debian"
+
+- name: "Verify sudo installation status"
+  ansible.builtin.shell: |
+      set -o pipefail
+      dpkg -s {{ sudo_package_name }} | grep -q '^Status: install ok installed$'
+  args:
+    executable: /bin/bash
+  changed_when: false
+  failed_when: false
+  register: sudo_status_check
+  when: ansible_facts.os_family == "Debian"
+
+- name: "Show warning if sudo is not properly installed"
+  ansible.builtin.debug:
+    msg: "\u001b[31mSudo package is not installed or not in 'install ok installed' state\u001b[0m"
+  when:
+    - ansible_facts.os_family == "Debian"
+    - sudo_status_check.rc != 0
+
+- name: "Show success message if sudo is properly installed"
+  ansible.builtin.debug:
+    msg: "\u001b[32mSudo package is installed and in 'install ok installed' state\u001b[0m"
+  when:
+    - ansible_facts.os_family == "Debian"
+    - sudo_status_check.rc == 0
