@@ -1,0 +1,7 @@
+---
+# Role: sudo_log_file
+# Description: Handlers for sudo_log_file role
+
+- name: Reload sudo configuration
+  ansible.builtin.debug:
+    msg: "Sudo configuration reloaded via validation (visudo -cf) on last task"
