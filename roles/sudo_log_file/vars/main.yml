@@ -1,0 +1,8 @@
+---
+# vars/main.yml
+# Internal constants for sudo_log_file role
+# Not intended to be overridden
+
+sudoers_d_file_mode: "0440"
+sudoers_d_file_owner: root
+sudoers_d_file_group: root

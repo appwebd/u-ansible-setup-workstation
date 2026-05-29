@@ -37,7 +37,13 @@
 - name: "Ensure use_pty is enabled in sudoers.d file"
   ansible.builtin.copy:
     dest: "{{ sudoers_d_file }}"
-    content: "Defaults use_pty\n"
+    content: |
+      # Ensure sudo commands use pty
+      # Managed by Ansible (Wazuh ID 35663)
+      # Generated: {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+      # {{ sudoers_d_file }}
+      #
+      Defaults use_pty
     owner: root
     group: root
     mode: "0440"

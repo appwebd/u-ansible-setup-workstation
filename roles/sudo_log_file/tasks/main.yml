@@ -1,0 +1,24 @@
+---
+# Role        : sudo_log_file
+# Description : Ensure sudo log file exists and is configured.
+# Wazuh ID    : 35664
+
+- name: Ensure sudo logfile directive exists in /etc/sudoers
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: '^Defaults\s+logfile='
+    line: 'Defaults logfile="{{ sudo_log_file_path }}"'
+    state: present
+    owner: "{{ sudoers_d_file_owner }}"
+    group: "{{ sudoers_d_file_group }}"
+    mode: "{{ sudoers_d_file_mode }}"
+    validate: 'visudo -cf %s'
+  become: true
+
+- name: "Ensure sudo log file exists with correct permissions"
+  ansible.builtin.file:
+    path: "{{ sudo_log_file_path }}"
+    state: touch
+    owner: root
+    group: adm
+    mode: "0640"

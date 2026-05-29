@@ -1,0 +1,6 @@
+---
+# defaults/main.yml
+# Default variables for sudo_log_file role
+# Safest defaults for Ubuntu 24.04 server deployment
+
+sudo_log_file_path: /var/log/sudo.log
