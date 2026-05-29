@@ -1,0 +1,83 @@
+---
+# Role        : sudo_pty
+# Description : Ensure sudo commands use pty.
+# Wazuh ID    : 35663
+
+- name: "Ensure sudoers directory exists"
+  ansible.builtin.file:
+    path: "{{ sudoers_d_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Ensure use_pty is enabled in main sudoers file"
+  ansible.builtin.lineinfile:
+    path: "{{ sudoers_main_file }}"
+    regexp: '^\s*#?\s*Defaults\s+use_pty'
+    line: 'Defaults use_pty'
+    state: present
+    owner: root
+    group: root
+    mode: "0440"
+    backup: true
+  notify: Validate sudoers configuration
+
+- name: "Ensure use_pty is not disabled in main sudoers file"
+  ansible.builtin.lineinfile:
+    path: "{{ sudoers_main_file }}"
+    regexp: '^\s*#?\s*Defaults\s+!use_pty'
+    state: absent
+    owner: root
+    group: root
+    mode: "0440"
+    backup: true
+  notify: Validate sudoers configuration
+
+- name: "Ensure use_pty is enabled in sudoers.d file"
+  ansible.builtin.copy:
+    dest: "{{ sudoers_d_file }}"
+    content: "Defaults use_pty\n"
+    owner: root
+    group: root
+    mode: "0440"
+    backup: true
+  when: sudo_pty_enabled | bool
+  notify: Validate sudoers configuration
+
+- name: "Remove any !use_pty entries from sudoers.d files"
+  ansible.builtin.find:
+    paths: "{{ sudoers_d_dir }}"
+    patterns: "*"
+    contains: 'Defaults\\s+!use_pty'
+  register: sudoers_d_files_with_negation
+
+- name: "Remove lines with !use_pty from sudoers.d files"
+  ansible.builtin.lineinfile:
+    path: "{{ item.path }}"
+    regexp: '^\s*#?\s*Defaults\s+!use_pty'
+    state: absent
+    owner: root
+    group: root
+    mode: "0440"
+    backup: true
+  loop: "{{ sudoers_d_files_with_negation.files }}"
+  when: sudoers_d_files_with_negation.matched > 0
+  notify: Validate sudoers configuration
+
+- name: "Validate sudoers configuration"
+  ansible.builtin.command: visudo -c
+  changed_when: false
+  failed_when: false
+  register: sudoers_check
+  notify: Rollback sudoers on failure
+
+- name: "Show message if sudoers configuration is invalid"
+  ansible.builtin.debug:
+    msg: "\u001b[31mSudoers configuration is invalid. Please review /etc/sudoers and /etc/sudoers.d/ manually.\u001b[0m"
+  when: sudoers_check.rc != 0
+
+- name: "Show message if sudoers configuration is OK"
+  ansible.builtin.debug:
+    msg: "\u001b[32mSudoers configuration /etc/sudoers and /etc/sudoers.d/ is valid.\u001b[0m"
+  when: sudoers_check.rc == 0
