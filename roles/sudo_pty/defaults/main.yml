@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default variables for the sudo_pty role
+# These are safe defaults and can be overridden by inventory or playbook vars
+
+sudo_pty_enabled: true
+sudoers_d_dir: /etc/sudoers.d
+sudoers_d_file: /etc/sudoers.d/99-pty-enforcement

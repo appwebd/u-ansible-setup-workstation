@@ -1,0 +1,14 @@
+---
+# Role: sudo_pty
+# Description: Handlers for the sudo_pty role
+
+- name: Validate sudoers configuration
+  ansible.builtin.command: visudo -c
+  changed_when: false
+  register: sudoers_check
+
+- name: Rollback sudoers on failure
+  ansible.builtin.debug:
+    msg: "Sudoers validation failed. Manual intervention required. Backup files are available in /etc/sudoers.d/ and /etc/sudoers."
+  changed_when: false
+  failed_when: false

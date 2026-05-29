@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the sudo_pty role
+# These are not intended to be overridden by users
+
+sudoers_main_file: /etc/sudoers

@@ -190,7 +190,7 @@
     - sshd_config_permissions                   # 35640 - Ensure permissions on /etc/ssh/sshd_config are configured.
     - ssh_host_keys_permissions                 # 35641 Ensure permissions on SSH private host key files are configured.
     - ssh_host_keys_permissions                 # 35642 Ensure permissions on SSH public host key files are configured.
-    - ssh_access_control                        # 35643 Ensure sshd access is configured.
+    - sshd_access_control                        # 35643 Ensure sshd access is configured.
     - sshd_banner                               # 35644 Ensure sshd Banner is configured.
     - sshd_ciphers                              # 35645 Ensure sshd Ciphers are configured.
     - sshd_client_alive                         # 35646 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
@@ -211,13 +211,13 @@
     - sshd_usepam                               # 35661 - Ensure sshd UsePAM is enabled.
 
 # 13. Privilege Escalation and sudo
-                                                # 35662 Ensure sudo is installed.
-                                                # 35663 Ensure sudo commands use pty.
-                                                # 35664 Ensure sudo log file exists.
-                                                # 35665 Ensure users must provide password for privilege escalation.
-                                                # 35666 Ensure re-authentication for privilege escalation is not disabled globally.
-                                                # 35667 Ensure sudo authentication timeout is configured correctly.
-                                                # 35668 Ensure access to the su command is restricted.
+    - install_sudo                              # 35662 Ensure sudo is installed.
+    - sudo_pty                                  # 35663 Ensure sudo commands use pty.
+#    - sudo_log_file                             # 35664 Ensure sudo log file exists.
+#    - enforce_sudo_password                     # 35665 Ensure users must provide password for privilege escalation.
+#    - sudo_reauth                               # 35666 Ensure re-authentication for privilege escalation is not disabled globally.
+#    - sudo_timestamp_timeout                    # 35667 Ensure sudo authentication timeout is configured correctly.
+#    - restrict_su_access                        # 35668 Ensure access to the su command is restricted.
 
 # 14. PAM and Authentication Policies
 # PAM modules and setup
