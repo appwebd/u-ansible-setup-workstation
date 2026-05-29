@@ -26,6 +26,8 @@ remove_bloatware_packages_:
   - evolution
   - evolution-data-server
   - ftp
+  - gamemode
+  - gamemode-daemon
   - gnome-bluetooth-sendto
   - gnome-characters
   - gnome-maps
@@ -43,6 +45,7 @@ remove_bloatware_packages_:
   - nis
   - open-iscsi
   - openvpn
+  - pptp-linux
   - remmina
   - rsh-client
   - rsh-server
