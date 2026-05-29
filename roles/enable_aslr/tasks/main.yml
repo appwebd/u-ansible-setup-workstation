@@ -1,16 +1,17 @@
 ---
 # Role        : enable_aslr
-# Description : Ensure address space layout randomization is enabled
+# Description : Ensure address space layout randomization is enabled.
 # Wazuh ID    : 35542
 
 - name: "Set ASLR kernel parameter in sysctl.d configuration file"
-  ansible.builtin.copy:
+  ansible.builtin.template:
+    src: 60-aslr.conf.j2
     dest: "{{ aslr_sysctl_file }}"
-    content: "{{ aslr_sysctl_name }} = {{ aslr_sysctl_value }}"
     owner: root
     group: root
     mode: "0644"
     force: true
+    backup: true
   notify: Reload sysctl settings
 
 - name: "Apply ASLR setting immediately (if reload requested)"
@@ -29,6 +30,7 @@
     cmd: |
       set -euo pipefail
       sysctl {{ aslr_sysctl_name }} | awk '{print $3}'
+    executable: /bin/bash
   register: current_aslr_value
   changed_when: false
   failed_when: false

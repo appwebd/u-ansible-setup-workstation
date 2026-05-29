@@ -1,4 +1,102 @@
+890f1a7 Thu May 28 19:53:21 2026 -0400 Switch ASLR configuration task to use Jinja2 template with backup support
+cb47f05 Tue May 26 16:26:40 2026 -0400 Merge branch 'Create-Ansible-roles-and-verify-functionality-#1'
+3f548d5 Tue May 26 16:25:22 2026 -0400 Merge branch 'main' into Create-Ansible-roles-and-verify-functionality-#1
+bf8d486 Tue May 26 15:02:56 2026 -0400 Ensure SSH access control tasks are conditional based on openssh-server installation.
+b888fcd Tue May 26 14:55:26 2026 -0400 Refactor role name from `ssh_access_control` to `sshd_access_control`
+7b538c5 Tue May 26 14:45:31 2026 -0400 Fix indentation in Chrony configuration file content
+f3a4be2 Tue May 26 14:45:08 2026 -0400 Remove unused variable chrony_reload_command from vars/main.yml
+a6f5d0a Tue May 26 12:09:16 2026 -0400 Enhance Chrony Configuration with Wazuh Compliance Comments
+b95214c Tue May 26 11:56:28 2026 -0400 Refactor role name from `ssh_access_control` to `sshd_access_control`
+b5d6394 Tue May 26 11:56:16 2026 -0400 Fix indentation in chrony server configuration file content
+e93fc63 Tue May 26 11:55:22 2026 -0400 Refactor role name from `ssh_access_control` to `sshd_access_control`
+06a7d69 Tue May 26 11:52:02 2026 -0400 feat: Use Jinja2 loop to format chrony pool and server directives
+088ea81 Tue May 26 11:51:31 2026 -0400 chore: Remove unused variables from `vars/main.yml`
+3145a8a Mon May 25 19:24:45 2026 -0400 Update package removal list in `defaults/main.yml`
+dcd8c8a Mon May 25 19:08:10 2026 -0400 chore: Update package removal list in defaults/main.yml
+58f0a97 Mon May 25 18:54:25 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#29) from Create-Ansible-roles-and-verify-functionality-#1 into main
+3b45113 Mon May 25 15:44:35 2026 -0400 Add additional bloatware packages for removal in defaults/main.yml
+78c40de Mon May 25 11:19:16 2026 -0400 feat: Add Python version and dependencies configuration files
+f4174ce Mon May 25 11:15:30 2026 -0400 feat: Update .gitignore
+98f30a9 Sun May 24 21:03:24 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#28) from Create-Ansible-roles-and-verify-functionality-#1 into main
+bca5cff Sun May 24 20:58:14 2026 -0400 feat: Add package detection and conditional task execution to sshd_permituserenvironment role
+89124cd Sun May 24 20:57:59 2026 -0400 feat: Add package detection and conditional task execution to sshd_permitrootlogin_disabled role
+2e51793 Sun May 24 20:57:49 2026 -0400 feat: Add package detection and conditional task execution to sshd_permitemptypasswords_disabled role
+9e26119 Sun May 24 20:57:39 2026 -0400 feat: Add package detection and conditional task execution to sshd_maxstartups role
+cfdbfcd Sun May 24 20:57:27 2026 -0400 fix: Ensure no missing newline at end of file in sshd_ciphers role
+5acc4dd Sun May 24 20:56:38 2026 -0400 feat: Add package detection and conditional task execution to sshd_maxsessions role
+8befc56 Sun May 24 20:55:28 2026 -0400 feat: Add package detection and conditional task execution to sshd_maxauthtries role
+259cb29 Sun May 24 20:55:15 2026 -0400 feat: Add package detection and conditional task execution to sshd_loglevel role
+ccaf622 Sun May 24 20:55:04 2026 -0400 feat: Add package detection and conditional task execution to sshd_kexalgorithms role
+7b1bced Sun May 24 20:54:57 2026 -0400 feat: Add package detection and conditional task execution to sshd_ignore_rhosts role
+2496585 Sun May 24 20:54:50 2026 -0400 fix: Update default SSH service name in sshd_ignore_rhosts role
+b57f803 Sun May 24 20:54:43 2026 -0400 feat: Add package detection and conditional task execution to sshd_hostbasedauthentication_disabled role
+56283a2 Sun May 24 20:54:31 2026 -0400 fix: Update default directory permissions for sshd_config_dir_mode to 0750
+20c5e63 Sun May 24 20:54:19 2026 -0400 feat: Add package detection and conditional task execution to sshd_client_alive role
+bd44f6e Sun May 24 20:54:03 2026 -0400 feat: Add package detection and conditional task execution to sshd_ciphers role
+9f23e1d Sun May 24 20:52:11 2026 -0400 feat: Add package detection and conditional task execution to sshd_banner role
+7e1d572 Sun May 24 20:51:38 2026 -0400 fix: Remove redundant Wazuh ID comment from ssh_host_keys_permissions role description
+fcb3604 Sun May 24 20:51:16 2026 -0400 fix: Add missing YAML inspection comment to sshd_usepam role
+4d517e0 Sun May 24 20:48:43 2026 -0400 feat: Add package detection and conditional task execution to sshd_usepam role
+4772ed1 Sun May 24 20:47:15 2026 -0400 fix: Update variable formatting and default SSH service name in sshd_ignore_rhosts role
+dc39802 Sun May 24 20:46:57 2026 -0400 feat: Refactor ssh_access_control role to support conditional sshd tasks and improve configurability
+6399c7f Sun May 24 20:46:42 2026 -0400 feat: Refactor ssh_access_control role to support conditional sshd tasks and improve configurability
+7c55722 Sun May 24 20:45:57 2026 -0400 feat: Refactor ssh_access_control role to support conditional sshd tasks and improve configurability
+b999d10 Sat May 23 18:42:42 2026 -0400 feat: Enable disable_dnsmasq and disable_vsftpd roles in setup_workstation playbook to ensure services are disabled
+d97d3c2 Sat May 23 18:42:06 2026 -0400 feat: Add disable_vsftpd role to manage and disable FTP server services and package
+5eece6d Sat May 23 18:15:49 2026 -0400 feat: Add disable_dnsmasq role to manage and disable dnsmasq service and package
+521e6fe Sat May 23 18:10:44 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#27) from Create-Ansible-roles-and-verify-functionality-#1 into main
+b40657d Sat May 23 13:37:41 2026 -0400 feat: Enable disable_dns_server role in setup_workstation playbook to ensure DNS server services are disabled
+15220ee Sat May 23 13:33:53 2026 -0400 feat: Enhance disable_dns_server role to validate service states using ansible service facts
+e29ddb7 Sat May 23 13:29:16 2026 -0400 feat: Add disable_dns_server role to manage and disable DNS server services and packages
+20c57d4 Sat May 23 12:16:29 2026 -0400 chore: Remove backticks in disable_avahi and disable_dhcp_server README for consistency
+a368f68 Sat May 23 12:00:49 2026 -0400 chore: Remove "avahi kernel module blacklisting" from disable_avahi role for simplification
+ac328be Sat May 23 11:53:58 2026 -0400 chore: Update disable_autofs role README to reflect Ansible 2.16+ requirement and revise module dependencies
+40d6b2a Sat May 23 11:53:45 2026 -0400 feat: Ensure autofs kernel module is blacklisted in disable_autofs role
+760053e Sat May 23 11:01:05 2026 -0400 feat: Enable disable_dhcp_server role in setup_workstation playbook to ensure DHCP server services are disabled
+d9d240b Sat May 23 11:00:21 2026 -0400 feat: Add disable_dhcp_server role to manage and disable DHCP server services and kernel modules
+64d6a0e Fri May 22 18:40:35 2026 -0400 feat: Add roles to manage unnecessary services and update setup for service hardening
+84d3d64 Fri May 22 18:39:12 2026 -0400 chore: Refactor autofs status verification using ansible.builtin.systemd for improved clarity and reliability
+f87448c Fri May 22 18:38:08 2026 -0400 feat: Add disable_avahi role to manage and disable avahi service and kernel module
+7207610 Fri May 22 16:46:40 2026 -0400 feat: Add disable_autofs role to manage and disable autofs service and kernel module
+2bf968c Fri May 22 16:19:06 2026 -0400 chore: Rename task `restrict_at` to `restrict_at_access` for consistency
+baf5c55 Fri May 22 16:17:39 2026 -0400 chore: Ensure SSH configuration tasks are conditional on openssh-server installation, refactor tasks for clarity
+0aeeea9 Fri May 22 14:59:15 2026 -0400 chore: Comment out disabling of 'fat' module due to default Debian /boot/efi usage
+e1f81de Fri May 22 14:38:03 2026 -0400 chore: Refine systemd-timesyncd package check logic in configure_timesyncd_authorized_servers role
+4a9c7c5 Tue May 19 18:58:56 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#26) from Create-Ansible-roles-and-verify-functionality-#1 into main
+ae14e95 Tue May 19 16:46:23 2026 -0400 feat: Add restrict_at_access role to enforce at command restrictions on authorized users
+99b07f3 Tue May 19 16:32:09 2026 -0400 chore: Revise tasks, variables, and handlers for configure_chrony_user role to improve clarity and ensure proper configuration of chrony service
+e71618b Mon May 18 18:04:47 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#25) from Create-Ansible-roles-and-verify-functionality-#1 into main
+467bd0d Mon May 18 11:25:04 2026 -0400 chore: Update variable type and debug messages formatting in restrict_crontab role
+9bde175 Mon May 18 11:24:54 2026 -0400 chore: Remove redundant access_control tag from restrict_crontab role metadata
+168515e Mon May 18 11:24:28 2026 -0400 chore: Update sysctl notification wording in enable_aslr role
+4a80742 Mon May 18 11:23:58 2026 -0400 chore: Update GRUB notification wording in enable_apparmor role
+bd8863e Sun May 17 12:36:06 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#24) from Create-Ansible-roles-and-verify-functionality-#1 into main
+1cb43f6 Sat May 16 18:41:57 2026 -0400 feat: Enabling restrict crontab role
+e1812e1 Sat May 16 18:39:50 2026 -0400 feat: Enabling restrict crontab and restrict at role
+1c896f7 Fri May 15 11:56:55 2026 -0400 feat: Enable cron.d permissions configuration role
+57b8c62 Fri May 15 11:37:30 2026 -0400 feat: Enable cron.d permissions configuration role
+e904453 Thu May 14 17:09:24 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#23) from Create-Ansible-roles-and-verify-functionality-#1 into main
+2af91a0 Thu May 14 17:03:56 2026 -0400 feat: Add configure_cron_monthly_permissions Ansible role
+d699397 Thu May 14 17:03:38 2026 -0400 feat: enable cron monthly permissions role
+a2001fd Thu May 14 16:57:49 2026 -0400 feat: Add configure_cron_weekly_permissions role
+6deb3a3 Thu May 14 16:57:29 2026 -0400 docs: Fix typo in cron daily and weekly comment tags
+7edf3b5 Thu May 14 16:57:03 2026 -0400 feat: Enable cron weekly permissions check
+5051864 Thu May 14 16:50:06 2026 -0400 feat: Add Ansible role for configuring cron daily permissions
+bc8ea63 Thu May 14 16:49:29 2026 -0400 fix: Rename cron_hourly_permissions to configure_cron_hourly_permissions
+205f343 Thu May 14 16:46:42 2026 -0400 fix: Rename cron_hourly_permissions role to configure_cron_hourly_permissions
+9245a00 Thu May 14 16:40:34 2026 -0400 feat: Add cron_hourly_permissions Ansible role
+9d880fc Thu May 14 16:39:25 2026 -0400 feat: Enable cron hourly permissions check
+f820d7d Tue May 12 20:24:26 2026 -0400 feat: Add configure_crontab_permissions Ansible role
+dff5673 Tue May 12 20:24:04 2026 -0400 feat: Enable configure_crontab_permissions rule in setup_workstation
+8bd3324 Tue May 12 19:29:02 2026 -0400 feat: Update setup_workstation playbook cron section
+1d34227 Tue May 12 19:28:09 2026 -0400 fea: Add enable_cron Ansible role
+671dc83 Tue May 12 16:48:47 2026 -0400 fix: Add namespace and fix comment to Galaxy metadata
+e7241c5 Tue May 12 14:47:37 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#22) from Create-Ansible-roles-and-verify-functionality-#1 into main
+1110765 Tue May 12 14:12:58 2026 -0400 docs: Adding hyphen in sshd_macs comment
+14ebce6 Tue May 12 13:04:36 2026 -0400 fea: Add ubuntu-server namespace to sshd_macs role
+fd512ec Tue May 12 11:59:09 2026 -0400 docs: UPdate CHANGELOG
 0662224 Tue May 12 11:57:57 2026 -0400 Fix UsePAM regex to match commented and case variations
+8876d6b Mon May 11 17:47:08 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#21) from Create-Ansible-roles-and-verify-functionality-#1 into main
 9706d3f Mon May 11 17:45:57 2026 -0400 Remove daemon_reload and harden UsePAM configuration
 312b18f Mon May 11 17:45:41 2026 -0400 Add namespace to sshd_usepam role metadata
 5d62f04 Mon May 11 17:45:28 2026 -0400 Fix missing dash in Playbook comment
@@ -18,9 +116,12 @@ be64cd6 Mon May 11 14:34:50 2026 -0400 docs: Add namespace to sshd_config_permis
 5b51d0a Mon May 11 14:17:06 2026 -0400 docs: Format remediation script in SSH config docs
 2d48cb5 Sun May 10 18:31:26 2026 -0400 fea: Add sshd_maxauthtries Ansible role
 bc68149 Sun May 10 18:29:10 2026 -0400 fea: Enable sshd MaxAuthTries configuration
+e560faa Sat May 9 19:59:47 2026 -0400 Merge pull request 'chore: Add `sshd_macs` role to configure SSH MACs and ensure compliance with Wazuh rule 35654' (#20) from Create-Ansible-roles-and-verify-functionality-#1 into main
 7d93385 Sat May 9 19:59:26 2026 -0400 chore: Add `sshd_macs` role to configure SSH MACs and ensure compliance with Wazuh rule 35654
+d136dde Sat May 9 19:11:11 2026 -0400 Merge pull request 'Create-Ansible-roles-and-verify-functionality-#1' (#19) from Create-Ansible-roles-and-verify-functionality-#1 into main
 4621838 Sat May 9 19:10:42 2026 -0400 fea: chmod +x bin/run_activate_venv.sh
 2a73920 Sat May 9 19:08:05 2026 -0400 chore: Update `update_pam` role with PAM package update task, handler, and improved documentation
+15be650 Sat May 9 19:06:03 2026 -0400 Merge pull request 'chore: Add script to activate Python virtual environment' (#18) from Create-Ansible-roles-and-verify-functionality-#1 into main
 ced73ca Sat May 9 18:49:09 2026 -0400 chore: Add script to activate Python virtual environment
 533c014 Sat May 9 17:41:02 2026 -0400 chore: Unhide `sshd_macs` and several audit-related roles in `setup_workstation.yaml` for improved compliance configuration
 43d0faf Sat May 9 17:34:52 2026 -0400 chore: Add handler to regenerate GRUB config and internal variable for `_grub_check_result` in `configure_bootloader_access` role

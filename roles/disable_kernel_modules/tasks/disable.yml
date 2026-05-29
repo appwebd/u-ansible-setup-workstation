@@ -4,9 +4,25 @@
   ansible.builtin.copy:
     dest: "/etc/modprobe.d/{{ item }}.conf"
     content: |
+      # Ensure kernel module is not available role/task: disable_kernel_modules
+      # Managed by Ansible (Wazuh ID 35500 - 35607)
+      # Generated: {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+      # /etc/modprobe.d/{{ item }}.conf
+      #
       install {{ item }} /bin/false
       blacklist {{ item }}
     owner: root
     group: root
     mode: '0644'
   loop: "{{ filtered_filesystem_modules }}"
+
+
+- name: "disable | Rebuild the cache of kernel modules using depmod -a"
+  become: true
+  ansible.builtin.command: depmod -a
+  register: register_rebuild_cache
+  changed_when: false
+
+- name: "disable | Show information of variable register_rebuild_cache"
+  ansible.builtin.debug:
+    msg: "rebuild module cache depmod -a: ({{ register_rebuild_cache }})."

@@ -10,7 +10,7 @@ disable_kernel_modules_list:
   - cramfs
   - exfat
   - ext
-#  - fat                    # IMPORTANT Debian has a fat boot partition /boot/efi by default
+  - fat                    # IMPORTANT Debian has a fat boot partition /boot/efi by default
   - freevxfs
   - fuse
   - gfs2
