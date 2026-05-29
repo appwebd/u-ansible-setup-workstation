@@ -24,13 +24,11 @@
 
 #### Variables
 
-| Variable | Default | Description | file |
-|---------|---------|-------------|------|
-| `sshd_config_file` | `/etc/ssh/sshd_config` | Path to the main SSH daemon configuration file | defaults/main.yml |
-| `sshd_permitrootlogin_value` | `"no"` | Value to set for `PermitRootLogin` directive | defaults/main.yml |
-| `sshd_service_name` | `ssh` | Name of the SSH daemon service to restart if changed (Ubuntu uses `ssh`, not `sshd`) | defaults/main.yml |
-| `sshd_config_backup_dir` | `/etc/ssh/.backup` | Directory to store backup of sshd_config before modification | vars/main.yml |
-| `sshd_config_backup_file` | `/etc/ssh/.backup/sshd_config.<timestamp>` | Full path to backup file (auto-generated) | vars/main.yml |
+| Variable                     | Default                 | Description                                                                          | file             |
+|------------------------------|-------------------------|--------------------------------------------------------------------------------------|-------------------|
+| `sshd_config_file`           | `/etc/ssh/sshd_config`  | Path to the main SSH daemon configuration file                                       | defaults/main.yml |
+| `sshd_permitrootlogin_value` | `"no"`                  | Value to set for `PermitRootLogin` directive                                         | defaults/main.yml |
+| `sshd_service_name`          | `ssh`                   | Name of the SSH daemon service to restart if changed (Ubuntu uses `ssh`, not `sshd`) | defaults/main.yml |
 
 #### Dependencies
     None

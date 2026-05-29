@@ -1,7 +1,0 @@
----
-# vars/main.yml
-# Internal constants for sshd_permitrootlogin_disabled role
-# These are not intended to be overridden by users
-
-sshd_config_backup_dir: /etc/ssh/.backup
-sshd_config_backup_file: "{{ sshd_config_backup_dir }}/sshd_config.{{ ansible_date_time.iso8601 | regex_replace('\\.', '_') }}"
