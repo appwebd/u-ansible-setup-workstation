@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  role_name: enforce_sudo_password
+  author: Patricio Rojas Ortiz
+  description: Ensure users must provide password for privilege escalation (Wazuh ID 35665)
+  license: Apache 2.0
+  namespace: ubuntu-server
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - sudo
+    - authentication
+    - sysadmin
+
+dependencies: []

@@ -1,0 +1,16 @@
+---
+# Role: enforce_sudo_password
+# Description: Handlers for the enforce_sudo_password role
+
+- name: Validate sudoers syntax
+  ansible.builtin.command: visudo -c
+  changed_when: false
+  failed_when: false
+  register: sudoers_syntax_check
+  listen: "Validate sudoers syntax"
+
+- name: "Report sudoers syntax error"
+  ansible.builtin.debug:
+    msg: "Sudoers syntax validation failed. Check /etc/sudoers and /etc/sudoers.d for errors."
+  when: sudoers_syntax_check.rc != 0
+  listen: "Validate sudoers syntax"

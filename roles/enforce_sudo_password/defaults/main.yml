@@ -1,0 +1,12 @@
+---
+# defaults/main.yml
+# Default variables for the enforce_sudo_password role
+# These values can be overridden by inventory or playbook variables
+
+sudoers_files:
+  - /etc/sudoers
+  - /etc/sudoers.d
+
+sudoers_backup_enabled: true
+sudoers_backup_dir: /etc/sudoers.d.bak
+sudoers_backup_timestamp: false

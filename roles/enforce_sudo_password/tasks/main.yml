@@ -1,0 +1,85 @@
+---
+# Role        : enforce_sudo_password
+# Description : Ensure users must provide password for privilege escalation.
+# Wazuh ID    : 35665
+
+- name: "Gather installed packages"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if sudo is installed"
+  ansible.builtin.debug:
+    msg: "sudo is installed: version {{ ansible_facts.packages['sudo'][0].version }}"
+  when: "'sudo' in ansible_facts.packages"
+
+- name: "Ensure sudoers backup directory exists"
+  ansible.builtin.file:
+    path: "{{ sudoers_backup_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+  when: sudoers_backup_enabled | bool
+
+- name: "Backup existing sudoers files"
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: >-
+      {{ sudoers_backup_dir }}/{{ item | basename }}.{{
+        ansible_date_time.iso8601
+        | regex_replace('T', '_')
+        | regex_replace(':', '-')
+        if sudoers_backup_timestamp | bool
+        else ''
+      }}
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0600"
+  loop: "{{ sudoers_files }}"
+  when:
+    - sudoers_backup_enabled | bool
+    - item is file
+  check_mode: false
+  changed_when: false
+
+- name: "Find all sudoers files in /etc/sudoers.d"
+  ansible.builtin.find:
+    paths: /etc/sudoers.d
+    patterns: "*"
+    file_type: file
+  register: sudoers_d_files
+  changed_when: false
+
+- name: "Process /etc/sudoers file"
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: '^\s*\t*\s*NOPASSWD'
+    state: absent
+    validate: 'visudo -cf %s'
+  notify: "Validate sudoers syntax"
+
+- name: "Process /etc/sudoers.d files"
+  ansible.builtin.lineinfile:
+    path: "{{ item.path }}"
+    regexp: '^\s*\t*\s*NOPASSWD'
+    state: absent
+    validate: 'visudo -cf %s'
+  loop: "{{ sudoers_d_files.files }}"
+  loop_control:
+    label: "{{ item.path }}"
+  when: sudoers_d_files.matched > 0
+  notify: "Validate sudoers syntax"
+
+- name: "Ensure no NOPASSWD entries exist in sudoers files"
+  ansible.builtin.find:
+    paths: "{{ sudoers_files }}"
+    patterns: "*"
+    contains: 'NOPASSWD'
+  register: nopasswd_files
+  changed_when: false
+
+- name: "Fail if NOPASSWD entries still exist"
+  ansible.builtin.fail:
+    msg: "NOPASSWD entries still exist in sudoers files: {{ nopasswd_files.files | map(attribute='path') | list }}"
+  when: nopasswd_files.matched > 0
