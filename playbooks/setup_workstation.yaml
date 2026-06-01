@@ -214,7 +214,7 @@
     - install_sudo                              # 35662 Ensure sudo is installed.
     - sudo_pty                                  # 35663 Ensure sudo commands use pty.
     - sudo_log_file                             # 35664 Ensure sudo log file exists.
-#    - enforce_sudo_password                     # 35665 Ensure users must provide password for privilege escalation.
+    - enforce_sudo_password                     # 35665 Ensure users must provide password for privilege escalation.
 #    - sudo_reauth                               # 35666 Ensure re-authentication for privilege escalation is not disabled globally.
 #    - sudo_timestamp_timeout                    # 35667 Ensure sudo authentication timeout is configured correctly.
 #    - restrict_su_access                        # 35668 Ensure access to the su command is restricted.
