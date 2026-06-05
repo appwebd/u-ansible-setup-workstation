@@ -1,0 +1,6 @@
+---
+# defaults/main.yml
+# Safe defaults for the ensure_reauth_privilege role
+sudoers_file: /etc/sudoers
+tags_to_remove: ['!authenticate']
+

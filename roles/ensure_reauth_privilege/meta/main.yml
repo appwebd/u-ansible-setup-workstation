@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: ensure_reauth_privilege
+  author: Patricio Rojas Ortiz
+  description: Ensure re-authentication for privilege escalation is not disabled globally (Wazuh ID 35666)
+  license: Apache 2.0
+  namespace: ubuntu-server
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - sudo
+dependencies: []

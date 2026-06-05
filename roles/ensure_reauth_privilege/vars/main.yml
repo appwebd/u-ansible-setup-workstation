@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the ensure_reauth_privilege role
+sudoers_files:
+  - /etc/sudoers
+  - /etc/sudoers.d/*
