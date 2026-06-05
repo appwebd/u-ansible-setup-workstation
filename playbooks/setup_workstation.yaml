@@ -15,20 +15,20 @@
 
 # 1. Filesystems and Partitioning
 # Disable filesystem modules
-    - disable_kernel_modules                   # 35500 Ensure mounting of cramfs filesystems is disabled.
-                                               # 35501 Ensure freevxfs kernel module is not available.
-                                               # 35502 Ensure hfs kernel module is not available
-                                               # 35503 Ensure hfsplus kernel module is not available
-                                               # 35504 Ensure jffs2 kernel module is not available
-                                               # 35505 Ensure overlayfs kernel module is not available
-                                               # 35506 Ensure squashfs kernel module is not available
-                                               # 35507 Ensure udf kernel module is not available
-                                               # 35508 Ensure usb-storage kernel module is not available
-                                               # 35509 Ensure unused filesystems kernel modules are not available
-                                               # 35604 Ensure dccp kernel module is not available
-                                               # 35605 Ensure tipc kernel module is not available
-                                               # 35606 Ensure rds kernel module is not available
-                                               # 35607 Ensure sctp kernel module is not available
+#    - disable_cramfs                           # 35500 - Ensure mounting of cramfs filesystems is disabled.
+#    - disable_freevxfs_kernel_module           # 35501 - Ensure freevxfs kernel module is not available.
+#    - disable_hfs_kernel_module                # 35502 - Ensure hfs kernel module is not available.
+#    - disable_hfsplus                          # 35503 - Ensure hfsplus kernel module is not available.
+#    - disable_jffs2                            # 35504 - Ensure jffs2 kernel module is not available.
+#    - disable_overlayfs                        # 35505 - Ensure overlayfs kernel module is not available.
+#    - disable_squashfs                         # 35506 - Ensure squashfs kernel module is not available.
+#    - disable_udf                              # 35507 - Ensure udf kernel module is not available.
+#    - disable_usb_storage                      # 35508 - Ensure usb-storage kernel module is not available.
+#    - security_hardening                       # 35509 - Ensure unused filesystems kernel modules are not available.
+#    - disable_dccp                             # 35604 - Ensure dccp kernel module is not available.
+#    - tipc_blacklist                           # 35605 - Ensure tipc kernel module is not available.
+#    - disable_rds_kernel_module                # 35606 - Ensure rds kernel module is not available.
+#    - disable_sctp                             # 35607 - Ensure sctp kernel module is not available.
 
 # Partitioning and mount options (nodev, nosuid, noexec)
 
@@ -215,7 +215,7 @@
     - sudo_pty                                  # 35663 Ensure sudo commands use pty.
     - sudo_log_file                             # 35664 Ensure sudo log file exists.
     - enforce_sudo_password                     # 35665 Ensure users must provide password for privilege escalation.
-#    - sudo_reauth                               # 35666 Ensure re-authentication for privilege escalation is not disabled globally.
+    - ensure_reauth_privilege                   # 35666 Ensure re-authentication for privilege escalation is not disabled globally.
 #    - sudo_timestamp_timeout                    # 35667 Ensure sudo authentication timeout is configured correctly.
 #    - restrict_su_access                        # 35668 Ensure access to the su command is restricted.
 
