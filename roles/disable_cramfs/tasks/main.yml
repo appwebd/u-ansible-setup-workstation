@@ -1,0 +1,55 @@
+---
+# Role        : disable_cramfs
+# Description : Disable the cramfs kernel module to prevent mounting of cramfs filesystems
+# Wazuh ID    : 35500
+
+- name: "Check if cramfs module is currently loaded"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    lsmod | grep -q "^cramfs"
+  register: cramfs_loaded_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Ensure modprobe.d directory exists"
+  ansible.builtin.file:
+    path: "{{ modprobe_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: disable_cramfs_enabled | bool
+
+- name: "Ensure cramfs is blacklisted in modprobe.d"
+  ansible.builtin.copy:
+    dest: "{{ cramfs_modprobe_conf_file }}"
+    content: "{{ modprobe_blacklist_content }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  register: modprobe_conf_result
+  when: disable_cramfs_enabled | bool
+
+- name: "Remove cramfs module if currently loaded"
+  community.general.modprobe:
+    name: "{{ cramfs_module_name }}"
+    state: absent
+  when:
+    - disable_cramfs_enabled | bool
+    - cramfs_loaded_check.rc == 0
+
+- name: "Ensure cramfs is blacklisted in initramfs (Debian/Ubuntu)"
+  ansible.builtin.lineinfile:
+    path: /etc/initramfs-tools/conf.d/cramfs
+    line: "blacklist cramfs"
+    create: true
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  notify: Update initramfs
+  when:
+    - disable_cramfs_enabled | bool
+    - ansible_facts.os_family == "Debian"
