@@ -17,7 +17,7 @@
 # Disable filesystem modules
     - disable_cramfs                           # 35500 - Ensure mounting of cramfs filesystems is disabled.
     - disable_freevxfs_kernel_module           # 35501 - Ensure freevxfs kernel module is not available.
-#    - disable_hfs_kernel_module                # 35502 - Ensure hfs kernel module is not available.
+    - disable_hfs_kernel_module                # 35502 - Ensure hfs kernel module is not available.
 #    - disable_hfsplus                          # 35503 - Ensure hfsplus kernel module is not available.
 #    - disable_jffs2                            # 35504 - Ensure jffs2 kernel module is not available.
 #    - disable_overlayfs                        # 35505 - Ensure overlayfs kernel module is not available.
