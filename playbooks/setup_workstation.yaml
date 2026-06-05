@@ -190,7 +190,7 @@
     - sshd_config_permissions                   # 35640 - Ensure permissions on /etc/ssh/sshd_config are configured.
     - ssh_host_keys_permissions                 # 35641 Ensure permissions on SSH private host key files are configured.
     - ssh_host_keys_permissions                 # 35642 Ensure permissions on SSH public host key files are configured.
-    - sshd_access_control                        # 35643 Ensure sshd access is configured.
+    - sshd_access_control                       # 35643 Ensure sshd access is configured.
     - sshd_banner                               # 35644 Ensure sshd Banner is configured.
     - sshd_ciphers                              # 35645 Ensure sshd Ciphers are configured.
     - sshd_client_alive                         # 35646 Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured.
