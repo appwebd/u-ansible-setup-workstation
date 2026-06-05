@@ -1,0 +1,8 @@
+---
+# vars/main.yml
+# Internal constants for sudo_timestamp_timeout role
+# These are not intended to be overridden by users
+
+sudoers_d_file_mode: "0440"
+sudoers_d_file_owner: root
+sudoers_d_file_group: root

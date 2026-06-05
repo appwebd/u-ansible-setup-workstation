@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Default variables for sudo_timestamp_timeout role
+# These values can be overridden by inventory or play variables
+
+sudo_timestamp_timeout_value: 15
+sudoers_file: /etc/sudoers
+sudoers_d_dir: /etc/sudoers.d
+sudoers_d_file: /etc/sudoers.d/wazuh_timestamp_timeout

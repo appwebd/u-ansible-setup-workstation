@@ -1,0 +1,15 @@
+---
+# Role: sudo_timestamp_timeout
+# Description: Handlers for sudo_timestamp_timeout role
+
+- name: Validate sudoers configuration
+  ansible.builtin.command: visudo -c
+  changed_when: false
+  failed_when: false
+  register: _sudoers_validation
+  check_mode: false
+
+- name: "Fail if sudoers validation fails"
+  ansible.builtin.fail:
+    msg: "sudoers validation failed. Check syntax."
+  when: _sudoers_validation.rc != 0

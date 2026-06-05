@@ -1,0 +1,48 @@
+---
+# Role        : sudo_timestamp_timeout
+# Description : Ensure sudo authentication timeout is configured correctly
+# Wazuh ID    : 35667
+
+- name: "Ensure sudoers.d directory exists"
+  ansible.builtin.file:
+    path: "{{ sudoers_d_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Ensure sudo timestamp timeout is configured in sudoers.d"
+  ansible.builtin.copy:
+    dest: "{{ sudoers_d_file }}"
+    content: "Defaults timestamp_timeout={{ sudo_timestamp_timeout_value }}"
+    owner: "{{ sudoers_d_file_owner }}"
+    group: "{{ sudoers_d_file_group }}"
+    mode: "{{ sudoers_d_file_mode }}"
+    validate: "visudo -cf %s"
+  notify: "Validate sudoers configuration"
+
+- name: "Ensure no conflicting timestamp_timeout entries exist in /etc/sudoers"
+  ansible.builtin.lineinfile:
+    path: "{{ sudoers_file }}"
+    regexp: '^\s*Defaults\s+.*timestamp_timeout=\d+.*$'
+    state: absent
+    backup: true
+  check_mode: true
+  register: _sudoers_conflict_check
+
+- name: "Fail if conflicting timestamp_timeout entry exists in /etc/sudoers"
+  ansible.builtin.fail:
+    msg: "Conflicting timestamp_timeout entry found in {{ sudoers_file }}. Please remove manually or adjust."
+  when: _sudoers_conflict_check.found is defined and _sudoers_conflict_check.found > 0
+
+- name: "Ensure no conflicting timestamp_timeout entries exist in sudoers.d"
+  ansible.builtin.find:
+    paths: "{{ sudoers_d_dir }}"
+    patterns: "*"
+    contains: 'timestamp_timeout='
+  register: _sudoers_d_conflicts
+
+- name: "Fail if conflicting timestamp_timeout entry exists in sudoers.d"
+  ansible.builtin.fail:
+    msg: "Conflicting timestamp_timeout entry found in {{ sudoers_d_dir }}. Please remove manually or adjust."
+  when: _sudoers_d_conflicts.matched > 0

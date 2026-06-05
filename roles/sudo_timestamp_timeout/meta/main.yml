@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: sudo_timestamp_timeout
+  author: Patricio Rojas Ortiz
+  description: Ensure sudo authentication timeout is configured correctly (Wazuh ID 35667)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - sudo
+    - authentication
+    - timeout
+
+dependencies: []
