@@ -1,10 +1,13 @@
 ---
 # User account list to remove in Ubuntu
 remove_unused_accounts_groups_users_to_remove:
+  - cups-pk-helper
+  - cups-browsed
   - games
-  - irc
   - geoclue
   - gnome-remote-desktop
+  - hplip
+  - irc
   - nobody
   - www-data
 
