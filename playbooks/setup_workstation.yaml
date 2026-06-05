@@ -217,7 +217,7 @@
     - enforce_sudo_password                     # 35665 Ensure users must provide password for privilege escalation.
     - ensure_reauth_privilege                   # 35666 Ensure re-authentication for privilege escalation is not disabled globally.
     - sudo_timestamp_timeout                    # 35667 Ensure sudo authentication timeout is configured correctly.
-#    - restrict_su_access                        # 35668 Ensure access to the su command is restricted.
+    - restrict_su_access                        # 35668 Ensure access to the su command is restricted.
 
 # 14. PAM and Authentication Policies
 # PAM modules and setup
