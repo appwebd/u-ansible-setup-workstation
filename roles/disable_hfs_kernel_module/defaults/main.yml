@@ -1,0 +1,18 @@
+---
+# defaults/main.yml
+# Default variables for the disable_hfs_kernel_module role
+# Ensure hfs kernel module is not available
+
+# Path to modprobe configuration directory
+hfs_modprobe_conf_dir: /etc/modprobe.d
+
+# Name of the modprobe configuration file for hfs
+hfs_modprobe_conf_file: "{{ hfs_modprobe_conf_dir }}/hfs.conf"
+
+# Content to disable hfs module
+hfs_modprobe_content: |
+  install hfs /bin/false
+  blacklist hfs
+
+# Whether to attempt removal of the module if currently loaded
+hfs_remove_if_loaded: true

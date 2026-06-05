@@ -1,0 +1,37 @@
+---
+# Role        : disable_hfs_kernel_module
+# Description : Ensure hfs kernel module is not available.
+# Wazuh ID    :35502
+
+- name: "Ensure modprobe.d directory exists"
+  ansible.builtin.file:
+    path: "{{ hfs_modprobe_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Create modprobe configuration to blacklist hfs module"
+  ansible.builtin.copy:
+    dest: "{{ hfs_modprobe_conf_file }}"
+    content: "{{ hfs_modprobe_content }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  notify: Update initramfs
+
+- name: "Check if hfs module is currently loaded"
+  ansible.builtin.command: lsmod | grep -q "^{{ hfs_module_name }}"
+  register: hfs_loaded_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Remove hfs module if currently loaded"
+  community.general.modprobe:
+    name: "{{ hfs_module_name }}"
+    state: absent
+  when:
+    - hfs_remove_if_loaded | bool
+    - hfs_loaded_check.rc == 0

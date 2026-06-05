@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for the disable_hfs_kernel_module role
+
+hfs_module_name: hfs
