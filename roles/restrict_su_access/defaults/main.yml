@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default variables for restrict_su_access role
+# These values can be overridden by inventory or playbook variables
+
+su_group_name: "sugroup"
+pam_su_file: "/etc/pam.d/su"
+pam_wheel_line: "auth required pam_wheel.so use_uid group={{ su_group_name }}"

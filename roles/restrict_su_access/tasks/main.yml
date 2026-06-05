@@ -1,0 +1,53 @@
+---
+# Role        : restrict_su_access
+# Description : Ensure access to the su command is restricted
+# Wazuh ID    : 35668
+
+- name: "Ensure su group exists (empty)"
+  ansible.builtin.group:
+    name: "{{ su_group_name }}"
+    state: present
+    system: true
+
+- name: "Ensure /etc/pam.d/su exists"
+  ansible.builtin.copy:
+    src: /etc/pam.d/su
+    dest: /etc/pam.d/su
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: true
+  register: su_pam_file_check
+  changed_when: false
+
+- name: "Ensure no uncommented pam_wheel.so line exists in /etc/pam.d/su"
+  ansible.builtin.lineinfile:
+    path: "{{ pam_su_file }}"
+    regexp: "{{ pam_wheel_active_regex }}"
+    state: absent
+    backrefs: true
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: "Ensure commented pam_wheel.so line is removed from /etc/pam.d/su"
+  ansible.builtin.lineinfile:
+    path: "{{ pam_su_file }}"
+    regexp: "{{ pam_wheel_commented_regex }}"
+    state: absent
+    backrefs: true
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: "Ensure correct pam_wheel.so line is present in /etc/pam.d/su"
+  ansible.builtin.lineinfile:
+    path: "{{ pam_su_file }}"
+    regexp: "^auth.*required.*pam_wheel\\.so.*use_uid.*group="
+    line: "{{ pam_wheel_line }}"
+    state: present
+    insertafter: "^#%PAM-1.0"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Systemd PAM

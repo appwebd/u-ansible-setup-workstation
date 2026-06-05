@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for restrict_su_access role
+# These are not intended to be overridden by users
+
+pam_wheel_commented_regex: "^#.*auth.*required.*pam_wheel\\.so.*use_uid.*group="
+pam_wheel_active_regex: "^auth.*required.*pam_wheel\\.so.*use_uid.*group="

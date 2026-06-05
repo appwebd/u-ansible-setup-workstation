@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: restrict_su_access
+  author: Patricio Rojas Ortiz
+  description: Ensure access to the su command is restricted by configuring PAM to require membership in a specific group (Wazuh ID 35668)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - authentication
+    - pam
+    - compliance
+    - sysadmin
+
+dependencies: []
