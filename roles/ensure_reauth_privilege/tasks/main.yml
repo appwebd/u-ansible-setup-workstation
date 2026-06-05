@@ -4,7 +4,7 @@
 # Wazuh ID    : 35666
 
 - name: "Ensure re-authentication for privilege escalation is not disabled globally"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ item }}"
     regexp: '^\\s*\\t*!authenticate'
     line: '!authenticate'

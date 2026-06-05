@@ -3,7 +3,7 @@
 # Description : Handlers for the ensure_reauth_privilege role
 
 - name: Update sudoers to enforce re-authentication
-  file:
+  ansible.builtin.copy:
     path: "{{ item }}"
     content: |
       {% for tag in tags_to_remove %}
