@@ -1,0 +1,17 @@
+---
+# defaults/main.yml
+# Role: disable_freevxfs_kernel_module
+
+# Configuration file path for modprobe blacklist
+freevxfs_modprobe_conf_file: /etc/modprobe.d/freevxfs.conf
+
+# Content to disable the freevxfs kernel module
+freevxfs_modprobe_content: |
+  install freevxfs /bin/false
+  blacklist freevxfs
+
+# Whether to enforce the module blacklist (default: true)
+freevxfs_enforce_blacklist: true
+
+# Whether to unload the module if currently loaded (default: true)
+freevxfs_unload_if_loaded: true

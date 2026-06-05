@@ -1,0 +1,14 @@
+---
+# defaults/main.yml
+# Default variables for disable_cramfs role
+
+# Path to modprobe configuration file for cramfs
+cramfs_modprobe_conf_file: /etc/modprobe.d/cramfs.conf
+
+# Content to blacklist cramfs module
+modprobe_blacklist_content: |
+  install cramfs /bin/false
+  blacklist cramfs
+
+# Enable/disable the role (can be overridden via group_vars or host_vars)
+disable_cramfs_enabled: true

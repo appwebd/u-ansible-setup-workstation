@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Role: disable_freevxfs_kernel_module
+# Description: Internal constants for the disable_freevxfs_kernel_module role
+# Author: Patricio Rojas Ortiz
+
+freevxfs_module_name: freevxfs

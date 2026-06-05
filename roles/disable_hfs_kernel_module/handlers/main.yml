@@ -1,0 +1,10 @@
+---
+# Role: disable_hfs_kernel_module
+# Description: Handlers for the disable_hfs_kernel_module role
+
+- name: Update initramfs
+  ansible.builtin.command: update-initramfs -u
+  when: ansible_facts.os_family == "Debian"
+  register: initramfs_result
+  changed_when: true
+  failed_when: false

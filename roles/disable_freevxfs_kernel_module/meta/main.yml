@@ -1,0 +1,25 @@
+---
+galaxy_info:
+  role_name: disable_freevxfs_kernel_module
+  author: Patricio Rojas Ortiz
+  description: Ensure freevxfs kernel module is not available (Wazuh ID 35501)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+
+  galaxy_tags:
+    - security
+    - kernel
+    - modules
+    - compliance
+    - sysadmin
+    - hardening
+
+dependencies: []

@@ -1,0 +1,9 @@
+---
+# vars/main.yml
+# Internal constants for disable_cramfs role
+
+# Kernel module name
+cramfs_module_name: cramfs
+
+# Modprobe configuration directory
+modprobe_conf_dir: /etc/modprobe.d
