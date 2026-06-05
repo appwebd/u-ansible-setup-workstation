@@ -1,0 +1,12 @@
+---
+# Role        : disable_freevxfs_kernel_module
+# Description : Handlers for the disable_freevxfs_kernel_module role
+# Wazuh ID    : 35501
+
+- name: "Update initramfs"
+  ansible.builtin.command: update-initramfs -u
+  args:
+    creates: /boot/initrd.img-$(uname -r)
+  when: ansible_os_family == 'Debian'
+  changed_when: true
+  failed_when: false

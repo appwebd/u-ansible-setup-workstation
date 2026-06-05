@@ -1,0 +1,54 @@
+---
+# Role        : disable_freevxfs_kernel_module
+# Description : Ensure freevxfs kernel module is not available (Wazuh ID 35501)
+# Wazuh ID    : 35501
+
+- name: "Ensure /etc/modprobe.d directory exists"
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Ensure freevxfs module is blacklisted in modprobe.d"
+  ansible.builtin.copy:
+    dest: "{{ freevxfs_modprobe_conf_file }}"
+    content: "{{ freevxfs_modprobe_content }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  when: freevxfs_enforce_blacklist | bool
+  notify: Update initramfs
+
+- name: "Check if freevxfs module is currently loaded"
+  ansible.builtin.command: lsmod | grep -q "^freevxfs"
+  register: freevxfs_loaded_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  ignore_errors: true
+
+- name: "Unload freevxfs module if currently loaded"
+  community.general.modprobe:
+    name: "{{ freevxfs_module_name }}"
+    state: absent
+  when:
+    - freevxfs_unload_if_loaded | bool
+    - freevxfs_loaded_check.rc == 0
+
+- name: "Verify freevxfs module is not loaded after unloading attempt"
+  ansible.builtin.command: lsmod | grep -q "^freevxfs"
+  register: freevxfs_verify_unloaded
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  ignore_errors: true
+
+- name: "Fail if freevxfs module is still loaded after unloading attempt"
+  ansible.builtin.fail:
+    msg: "Failed to unload freevxfs kernel module. Manual intervention required."
+  when:
+    - freevxfs_unload_if_loaded | bool
+    - freevxfs_verify_unloaded.rc == 0
