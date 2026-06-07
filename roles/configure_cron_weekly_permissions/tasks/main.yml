@@ -1,6 +1,6 @@
 ---
 # Role        : configure_cron_weekly_permissions
-# Description : Ensure permissions on /etc/cron.weekly are configured (Wazuh ID 35597)
+# Description : Ensure permissions on /etc/cron.weekly are configured.
 # Wazuh ID    : 35597
 
 - name: "Ensure /etc/cron.weekly directory exists"
