@@ -1,6 +1,6 @@
 ---
-# Role        : ensure_issue_net_permissions
-# Description : Ensure access to /etc/issue.net is configured (Wazuh ID 35551)
+# Role        : configure_etc_issue_net_access
+# Description : Ensure access to /etc/issue.net is configured.
 # Wazuh ID    : 35551
 
 - name: "Check if /etc/issue.net exists"

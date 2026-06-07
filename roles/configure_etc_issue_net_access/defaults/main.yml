@@ -1,9 +1,6 @@
 ---
 # defaults/main.yml
-# Default variables for ensure_issue_net_permissions role
+# Default variables for configure_etc_issue_net_access role
 # These are safe defaults and can be overridden by inventory or playbook variables
 
 issue_net_path: /etc/issue.net
-issue_net_mode: "0644"
-issue_net_owner: root
-issue_net_group: root
