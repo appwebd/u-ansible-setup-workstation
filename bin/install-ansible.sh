@@ -19,3 +19,6 @@ python3 -m pip install --user molecule ansible-lint
 # Other plugins are:
 # containers gce docker vagrant podman openstack default ec2 azure
 python3 -m pip install --user "molecule-plugins[docker]"
+
+ansible-galaxy collection install ansible.posix
+ansible-galaxy collection install community.general
