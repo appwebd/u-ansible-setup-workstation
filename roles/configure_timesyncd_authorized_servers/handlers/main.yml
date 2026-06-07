@@ -1,6 +1,6 @@
 ---
-# Role        : timesyncd_configuration
-# Description : Handlers for timesyncd_configuration role
+# Role        : configure_timesyncd_authorized_servers
+# Description : Handlers for configure_timesyncd_authorized_servers role
 
 - name: Reload systemd-timesyncd
   become: true

@@ -1,5 +1,5 @@
 ---
-# Role        : timesyncd_configuration
+# Role        : configure_timesyncd_authorized_servers
 # Description : Configure systemd-timesyncd with authorized timeserver
 # Wazuh ID    : 35588
 
