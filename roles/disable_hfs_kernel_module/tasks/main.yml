@@ -28,6 +28,7 @@
   failed_when: false
   check_mode: false
 
+# Install module community.general.modprobe using: ansible-galaxy collection install community.general
 - name: "Remove hfs module if currently loaded"
   community.general.modprobe:
     name: "{{ hfs_module_name }}"
