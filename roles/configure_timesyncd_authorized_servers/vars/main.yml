@@ -1,5 +1,5 @@
 ---
 # vars/main.yml
-# Internal constants for timesyncd_configuration role
+# Internal constants for configure_timesyncd_authorized_servers role
 
 timesyncd_service_name: systemd-timesyncd

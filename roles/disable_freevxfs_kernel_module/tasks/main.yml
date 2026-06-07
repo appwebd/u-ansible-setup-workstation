@@ -30,6 +30,7 @@
   check_mode: false
   ignore_errors: true
 
+# Install module community.general.modprobe using: ansible-galaxy collection install community.general
 - name: "Unload freevxfs module if currently loaded"
   community.general.modprobe:
     name: "{{ freevxfs_module_name }}"

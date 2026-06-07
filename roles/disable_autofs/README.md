@@ -30,14 +30,13 @@
     - Required Ansible collections/modules: `ansible.builtin.systemd`, `ansible.builtin.apt`, `ansible.builtin.file`, `ansible.builtin.copy`, `ansible.builtin.command`
 
 #### Variables
-| Variable                     | Default                                       | Description                                                                                                                                          | Source              |
-|------------------------------|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------|
-| `autofs_modprobe_conf_file`  | `/etc/modprobe.d/autofs.conf`                 | Path to the modprobe configuration file where the autofs kernel module will be blacklisted.                                                          | `defaults/main.yml` |
-| `autofs_modprobe_dir`        | `/etc/modprobe.d`                             | Directory path where modprobe configuration files reside.                                                                                            | `vars/main.yml`     |
-| `autofs_package_name`        | `autofs`                                      | Name of the autofs package to check, stop, and remove via APT.                                                                                       | `defaults/main.yml` |
-| `autofs_service_name`        | `autofs`                                      | Name of the autofs systemd service (used for consistency; not directly used in tasks but likely intended for future extensibility or documentation). | `defaults/main.yml` |
-| `autofs_systemd_services`    | `[autofs.service]`                            | List of systemd service names to stop and mask.                                                                                                      | `vars/main.yml`     |
-| `modprobe_blacklist_content` | `install autofs /bin/false\nblacklist autofs` | Content to write to the modprobe configuration file to prevent loading of the autofs kernel module.                                                  | `defaults/main.yml` |
+| Variable                     | Default                                       | Description                                                                                          | Source              |
+|------------------------------|-----------------------------------------------|------------------------------------------------------------------------------------------------------|---------------------|
+| `autofs_modprobe_conf_file`  | `/etc/modprobe.d/autofs.conf`                 | Path to the modprobe configuration file where the autofs kernel module will be blacklisted.          | `defaults/main.yml` |
+| `autofs_modprobe_dir`        | `/etc/modprobe.d`                             | Directory path where modprobe configuration files reside.                                            | `vars/main.yml`     |
+| `autofs_package_name`        | `autofs`                                      | Name of the autofs package to check, stop, and remove via APT.                                       | `defaults/main.yml` |
+| `autofs_systemd_services`    | `[autofs.service]`                            | List of systemd service names to stop and mask.                                                      | `vars/main.yml`     |
+| `modprobe_blacklist_content` | `install autofs /bin/false\nblacklist autofs` | Content to write to the modprobe configuration file to prevent loading of the autofs kernel module.  | `defaults/main.yml` |
 
 #### Dependencies
     Handlers: `handlers/main.yml` *(not provided in input; not declared in tasks, so assumed absent)*  

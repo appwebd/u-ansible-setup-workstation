@@ -1,5 +1,5 @@
 #### Role name: 
-    ensure_issue_net_permissions
+    configure_etc_issue_net_access
 
 #### Wazuh ID : 
     35551
@@ -62,7 +62,7 @@ Include this role in your playbook:
 - hosts: servers
   become: true
   roles:
-    - ensure_issue_net_permissions
+    - configure_etc_issue_net_access
 ```
 
 #### License

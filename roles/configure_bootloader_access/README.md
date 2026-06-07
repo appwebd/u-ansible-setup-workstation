@@ -36,20 +36,20 @@
 
 #### Compliance Mapping
 
-| Framework                  | Mapping                                                    |
-|----------------------------|------------------------------------------------------------|
-| CIS Ubuntu 24.04           | 1.4.2                                                      |
-| CIS CSC v7                 | 14.6                                                       |
-| CIS CSC v8                 | 3.3                                                        |
-| CMMC v2.0                  | AC.L1-3.1.1, AC.L1-3.1.2, AC.L2-3.1.3, AC.L2-3.1.5, MP.L2-3.8.2 |
-| HIPAA                      | 164.308(a)(3)(i), 164.308(a)(3)(ii)(A), 164.312(a)(1)     |
-| ISO 27001-2013             | A.9.1.1                                                    |
-| MITRE (Tactics)            | TA0005 (Defense Evasion), TA0007 (Discovery)              |
-| MITRE (Techniques)         | T1542 (Bootloader)                                         |
-| NIST SP 800-53             | AC-5 (Deny All), AC-6 (Least Privilege)                   |
-| PCI DSS v3.2.1             | 7.1, 7.1.1, 7.1.2, 7.1.3                                  |
-| PCI DSS v4.0               | 1.3.1, 7.1                                                 |
-| SOC 2                      | CC5.2, CC6.1                                               |
+| Framework               | Mapping                                                         |
+|-------------------------|-----------------------------------------------------------------|
+| CIS Ubuntu 24.04        | 1.4.2                                                           |
+| CIS CSC v7              | 14.6                                                            |
+| CIS CSC v8              | 3.3                                                             |
+| CMMC v2.0               | AC.L1-3.1.1, AC.L1-3.1.2, AC.L2-3.1.3, AC.L2-3.1.5, MP.L2-3.8.2 |
+| HIPAA                   | 164.308(a)(3)(i), 164.308(a)(3)(ii)(A), 164.312(a)(1)           |
+| ISO 27001-2013          | A.9.1.1                                                         |
+| MITRE (Tactics)         | TA0005 (Defense Evasion), TA0007 (Discovery)                    |
+| MITRE (Techniques)      | T1542 (Bootloader)                                              |
+| NIST SP 800-53          | AC-5 (Deny All), AC-6 (Least Privilege)                         |
+| PCI DSS v3.2.1          | 7.1, 7.1.1, 7.1.2, 7.1.3                                        |
+| PCI DSS v4.0            | 1.3.1, 7.1                                                      |
+| SOC 2                   | CC5.2, CC6.1                                                    |
 
 #### Remediation
 

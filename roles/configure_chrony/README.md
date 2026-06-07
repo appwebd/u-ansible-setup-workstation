@@ -49,7 +49,6 @@ Run the following command to reload the chronyd config:
 | `chrony_config_dir`        | `/etc/chrony/sources.d/`                                                                               | Directory for chrony configuration files        | defaults/main.yml  |
 | `chrony_pool_directives`   | `["pool time.nist.gov iburst maxsources 4"]`                                                           | List of pool directives to configure            | defaults/main.yml  |
 | `chrony_server_directives` | `["server time-a-g.nist.gov iburst", "server 132.163.97.3 iburst", "server time-d-b.nist.gov iburst"]` | List of server directives to configure          | defaults/main.yml  |
-| `chrony_conf_file`         | `/etc/chrony/chrony.conf`                                                                              | Main chrony configuration file                  | defaults/main.yml  |
 | `sources_filename`         | `"60-sources.sources"`                                                                                 | Name of the sources file in sources.d directory | defaults/main.yml  |
 | `chrony_service_name`      | `chronyd`                                                                                              | Name of the chrony service                      | vars/main.yml      |
 | `chrony_package_name`      | `chrony`                                                                                               | Name of the chrony package                      | vars/main.yml      |

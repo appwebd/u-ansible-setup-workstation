@@ -24,7 +24,7 @@
 #### Requirements
     - Ansible 2.9 or higher  
     - `become: yes` required (to modify system configuration files and manage kernel modules)  
-    - OS families: Debian/Ubuntu and RedHat/CentOS/Fedora (inferred from conditional tasks using `ansible_facts.os_family`)  
+    - OS families: Debian/Ubuntu (inferred from conditional tasks using `ansible_facts.os_family`)  
     - Required Ansible modules: `ansible.builtin.shell`, `ansible.builtin.file`, `ansible.builtin.copy`, `community.general.modprobe`, `ansible.builtin.lineinfile`  
     - Handler `Update initramfs` must be defined (in `handlers/main.yml`) for initramfs update on Debian/Ubuntu and RHEL-family systems.
 

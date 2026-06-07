@@ -34,14 +34,14 @@
 
 #### Variables
 
-| Variable                 | Default                                                                                            | Description                                                         | file              |
-|--------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|-------------------|
-| `motd_file_path`         | `/etc/motd`                                                                                        | Path to the MOTD file to check and configure                        | defaults/main.yml |
-| `motd_owner`             | `root`                                                                                             | Desired owner of the MOTD file                                      | defaults/main.yml |
-| `motd_group`             | `root`                                                                                             | Desired group of the MOTD file                                      | defaults/main.yml |
-| `motd_mode`              | `0644`                                                                                             | Desired permission mode for the MOTD file (octal)                   | defaults/main.yml |
-| `motd_remove_file`       | `false`                                                                                            | When `true`, the role removes `/etc/motd` instead of configuring it | defaults/main.yml |
-| `motd_file_stat_pattern` | `Access:\\s*\\(0644/-rw-r--r--\\)\\s*Uid:\\s*\\(\\s*0/\\s*root\\)\\s*Gid:\\s*\\(\\s*0/\\s*root\\)` | Regex pattern used by Wazuh for compliance checks (internal)        | vars/main.yml     |
+| Variable           | Default     | Description                                                         | file              |
+|--------------------|-------------|---------------------------------------------------------------------|-------------------|
+| `motd_file_path`   | `/etc/motd` | Path to the MOTD file to check and configure                        | defaults/main.yml |
+| `motd_owner`       | `root`      | Desired owner of the MOTD file                                      | defaults/main.yml |
+| `motd_group`       | `root`      | Desired group of the MOTD file                                      | defaults/main.yml |
+| `motd_mode`        | `0644`      | Desired permission mode for the MOTD file (octal)                   | defaults/main.yml |
+| `motd_remove_file` | `false`     | When `true`, the role removes `/etc/motd` instead of configuring it | defaults/main.yml |
+
 
 #### Dependencies
     None

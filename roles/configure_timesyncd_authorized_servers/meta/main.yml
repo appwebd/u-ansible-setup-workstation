@@ -1,10 +1,10 @@
 ---
 galaxy_info:
-  role_name: timesyncd_configuration
+  role_name: configure_timesyncd_authorized_servers
   author: Patricio Rojas Ortiz
   description: Configure systemd-timesyncd with authorized timeserver (Wazuh ID 35588)
   license: Apache 2.0
-  namespace: ubuntu-server
+  namespace: security
   min_ansible_version: "2.16"
   platforms:
     - name: Ubuntu

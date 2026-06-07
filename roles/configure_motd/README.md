@@ -30,7 +30,7 @@
 | `motd_state`               | `absent`    | Whether to ensure the file is `present` or `absent`                                                      | defaults/main.yml |
 | `motd_template_source`     | `motd.j2`   | Jinja2 template file to render for `present` state                                                       | defaults/main.yml |
 | `motd_ensure_content_safe` | `true`      | When `true`, automatically sanitize content to remove `\m`, `\r`, `\s`, `\v`, and OS platform references | defaults/main.yml |   
-| `motd_org_name `           | ""          | Organization name to display in the MOTD file                                                            | defaults/main.yml |
+| `motd_org_name`            | ""          | Organization name to display in the MOTD file                                                            | defaults/main.yml |
 | `motd_monitoring_policy`   | ""          | Monitoring policy to display in the MOTD file                                                            | defaults/main.yml | 
 
 #### Dependencies

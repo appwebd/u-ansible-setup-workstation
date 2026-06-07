@@ -1,5 +1,5 @@
 #### Role name: 
-    timesyncd_configuration
+    configure_timesyncd_authorized_servers
 
 #### Wazuh ID : 
     35588
