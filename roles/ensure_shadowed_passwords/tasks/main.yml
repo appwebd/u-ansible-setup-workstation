@@ -1,6 +1,6 @@
 ---
 # Role        : ensure_shadowed_passwords
-# Description : Ensure accounts in /etc/passwd use shadowed passwords
+# Description : Ensure accounts in /etc/passwd use shadowed passwords.
 # Wazuh ID    : 35771
 
 - name: "Verify /etc/passwd exists"
@@ -16,6 +16,7 @@
 
 - name: "Check if passwords are already shadowed"
   ansible.builtin.shell: |
+    set -euo pipefail
     grep -E '^[^:]+::' /etc/passwd || true
   register: non_shadowed_accounts
   changed_when: false
