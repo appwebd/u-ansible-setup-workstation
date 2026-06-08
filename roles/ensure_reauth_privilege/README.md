@@ -24,9 +24,7 @@
 ### defaults/main.yml
 | Variable        | Default                            | Description                                    | Source              |
 |-----------------|------------------------------------|------------------------------------------------|---------------------|
-| sudoers_file    | `/etc/sudoers`                     | Path to the sudoers file.                      | `defaults/main.yml` |
 | sudoers_files   | `/etc/sudoers`, `/etc/sudoers.d/*` | List of paths to check for !authenticate tags. | `vars/main.yml`     |
-| tags_to_remove  | `['!authenticate']`                | Tags to remove from sudoers files.             | `defaults/main.yml` |
 
 #### Dependencies
     Handlers: `handlers/main.yml` *(if exists)*

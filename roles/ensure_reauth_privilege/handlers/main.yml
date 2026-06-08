@@ -1,15 +1,4 @@
 ---
 # Role        : ensure_reauth_privilege
 # Description : Handlers for the ensure_reauth_privilege role
-
-- name: Update sudoers to enforce re-authentication
-  ansible.builtin.copy:
-    path: "{{ item }}"
-    content: |
-      {% for tag in tags_to_remove %}
-      {{ tag }}
-      {% endfor %}
-    owner: root
-    group: root
-    mode: '0440'
-  loop: "{{ sudoers_files }}"
+# NO handlers are defined in this role
