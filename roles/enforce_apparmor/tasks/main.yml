@@ -1,6 +1,6 @@
 ---
 # Role        : apparmor_enforce
-# Description : Enforce or complain AppArmor profiles system-wide
+# Description : Enforce or complain AppArmor profiles system-wide.
 # Wazuh ID    : 35760
 
 - name: "Ensure AppArmor package is installed (Debian/Ubuntu)"

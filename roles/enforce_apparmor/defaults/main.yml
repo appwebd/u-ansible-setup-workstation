@@ -14,4 +14,3 @@ apparmor_reload_profiles: true
 
 apparmor_enforce_profiles: []
 apparmor_complain_profiles: []
-apparmor_ignore_profiles: []
