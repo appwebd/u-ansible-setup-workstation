@@ -1,8 +1,8 @@
 #### Role name:
-    `disable_xdmcp`
+    disable_xdmcp
 
 #### Wazuh ID:
-    `35560`
+    35560
 
 #### Title:
     Ensure XDMCP is not enabled.
@@ -42,7 +42,7 @@
     ```
 
 #### Requirements
-    - Ansible 2.9 or higher  
+    - Ansible 2.16 or higher  
     - `become: yes` required (to modify system configuration files)  
     - OS: Debian/Ubuntu (inferred from `when: ansible_facts.os_family == "Debian" and ansible_facts.pkg_mgr == "apt"` in `tasks/main.yml`)  
     - Required Ansible modules: `ansible.builtin.stat`, `ansible.builtin.fail`, `ansible.builtin.copy`, `ansible.builtin.lineinfile`, `ansible.builtin.shell` (all from `ansible.builtin` collection)
@@ -53,7 +53,6 @@
 | `xdmcp_enable_line_pattern` | `^\s*Enable\s*=\s*true\s*$`  | Regular expression to match the `Enable=true` line (used for detection/remediation) | `vars/main.yml`     |
 | `xdmcp_gdm3_config_dir`     | `/etc/gdm3`                  | Path to the GDM3 configuration directory                                            | `defaults/main.yml` |
 | `xdmcp_gdm3_custom_conf`    | `/etc/gdm3/custom.conf`      | Path to the GDM3 custom configuration file (derived from `xdmcp_gdm3_config_dir`)   | `vars/main.yml`     |
-| `xdmcp_gdm3_schemas_path`   | `/usr/share/gdm/gdm.schemas` | Path to GDM schema documentation (declared but not used in tasks)                   | `defaults/main.yml` |
 | `xdmcp_section_name`        | `[xdmcp]`                    | The INI section header for XDMCP settings (used in pattern matching logic)          | `vars/main.yml`     |
 
 #### Dependencies
