@@ -33,11 +33,10 @@
     - Required Ansible modules: `ansible.builtin.package_facts`, `ansible.builtin.systemd`, `ansible.builtin.apt`, `ansible.builtin.command`  
 
 #### Variables
-| Variable                     | Default                                     | Description                                                                                            | Source              |
-|------------------------------|---------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------|
-| `dns_server_package`         | `bind9`                                     | Name of the DNS server package to be removed (used in package management tasks)                        | `defaults/main.yml` |
-| `dns_server_service_names`   | `["named.service", "bind9.service"]`        | List of service names to stop and mask (used in systemd tasks)                                         | `vars/main.yml`     |
-| `dns_server_service`         | `named.service`                             | Primary service name for the DNS server (used for documentation/reference; not used directly in tasks) | `defaults/main.yml` |
+| Variable                   | Default                              | Description                                                                     | Source              |
+|----------------------------|--------------------------------------|---------------------------------------------------------------------------------|---------------------|
+| `dns_server_package`       | `bind9`                              | Name of the DNS server package to be removed (used in package management tasks) | `defaults/main.yml` |
+| `dns_server_service_names` | `["named.service", "bind9.service"]` | List of service names to stop and mask (used in systemd tasks)                  | `vars/main.yml`     |
 
 
 #### Dependencies
