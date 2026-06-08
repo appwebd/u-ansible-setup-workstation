@@ -17,17 +17,16 @@
     Run the following command to set accounts to use shadowed passwords and migrate passwords in /etc/passwd to /etc/shadow: # pwconv Investigate to determine if the account is logged in and what it is being used for, to determine if it needs to be forced off.
 
 #### Requirements
-    - Ansible 2.9 or higher
+    - Ansible 2.16 or higher
     - Root/sudo privileges (become: true)
     - Linux systems with /etc/passwd and /etc/shadow files (e.g., RHEL, CentOS, Ubuntu, Debian)
     - `passwd` package installed (provides `pwconv` command)
 
 #### Variables
 
-| Variable                       | Default          | Description                                               | file          |
-|--------------------------------|------------------|-----------------------------------------------------------|---------------|
-| `shadowed_password_check_file` | `/etc/passwd`    | Path to the password file to check                        | vars/main.yml |
-| `shadowed_password_pattern`    | `'^[\\w@-]+:x:'` | Regular expression pattern to validate shadowed passwords | vars/main.yml |
+| Variable                       | Default        | Description                         | file          |
+|--------------------------------|----------------|-------------------------------------|---------------|
+| `shadowed_password_check_file` | `/etc/passwd`  | Path to the password file to check  | vars/main.yml |
 
 #### Dependencies
     None

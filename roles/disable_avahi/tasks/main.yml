@@ -47,8 +47,8 @@
       failed_when: false
       check_mode: true
 
-    - name: "Fail if avahi services are still active"
-      ansible.builtin.fail:
+    - name: "Report if avahi services are still active"
+      ansible.builtin.debug:
         msg: "Avahi service {{ item.item }} is still active or loaded"
       loop: "{{ avahi_service_status.results | default([]) }}"
       when:

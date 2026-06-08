@@ -1,4 +1,3 @@
 ---
 # defaults/main.yml
 chrony_package_name: "chrony"
-systemd_timesyncd_service: "systemd-timesyncd.service"

@@ -1,6 +1,6 @@
 ---
 # defaults/main.yml
-# Safe defaults for enforce_apparmor_profiles role
+# Safe defaults for enforce_apparmor_profilesenforce_apparmor_profiles role
 # These are user-overridable variables
 
 apparmor_profiles_enforce_enabled: true

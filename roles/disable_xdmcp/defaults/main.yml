@@ -5,4 +5,3 @@
 
 xdmcp_gdm3_config_dir: /etc/gdm3
 xdmcp_gdm3_custom_conf: "{{ xdmcp_gdm3_config_dir }}/custom.conf"
-xdmcp_gdm3_schemas_path: /usr/share/gdm/gdm.schemas

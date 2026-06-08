@@ -34,12 +34,9 @@ timedatectl show-timesync
 
 #### Variables
 
-| Variable                            | Default                                     | Description                                                        |
-|-------------------------------------|---------------------------------------------|--------------------------------------------------------------------|
-| `enable_systemd_timesyncd_enabled`  | `true`                                      | Controls whether the role enforces enablement of systemd-timesyncd |
-| `systemd_timesyncd_service_name`    | `systemd-timesyncd.service`                 | The name of the systemd service (usually unchanged)                |
-| `systemd_timesyncd_conf_file`       | `/etc/systemd/timesyncd.conf`               | Path to main timesyncd config file                                 |
-| `systemd_timesyncd_pool`            | `['0.pool.ntp.org', '1.pool.ntp.org', ...]` | List of NTP servers for time synchronization                       |
+| Variable     | Default           | Description  |
+|--------------|-------------------|--------------|
+| package_name | systemd-timesyncd | Package name |
 
 #### Dependencies
     None
@@ -78,14 +75,6 @@ Include this role in your playbook:
   become: true
   roles:
     - enable_systemd_timesyncd
-```
-
-Optionally override default NTP pool in your inventory:
-
-```yaml
-systemd_timesyncd_pool:
-  - time.google.com
-  - time.cloudflare.com
 ```
 
 #### License

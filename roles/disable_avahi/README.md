@@ -27,18 +27,18 @@
     ```
 
 #### Requirements
-    - Ansible 2.9 or higher  
+    - Ansible 2.16 or higher  
     - `become: yes` required (to manage systemd services, modify `/etc/modprobe.d/`, and purge packages)  
     - OS: Debian/Ubuntu (inferred from use of `dpkg_status` and `apt` modules in `tasks/main.yml`)  
     - Required Ansible collections/modules: `ansible.builtin.dpkg_status`, `ansible.builtin.systemd`, `ansible.builtin.apt`, `ansible.builtin.copy`  
 
 #### Variables
-| Variable                           | Default                                           | Description                                                                                | Source              |
-|------------------------------------|---------------------------------------------------|--------------------------------------------------------------------------------------------|---------------------|
-| `avahi_package_name`               | `avahi-daemon`                                    | Name of the APT package to purge if installed.                                             | `defaults/main.yml` |
-| `avahi_service_names`              | `['avahi-daemon.service', 'avahi-daemon.socket']` | List of systemd service/socket unit names to stop and mask.                                | `defaults/main.yml` |
-| `avahi_services_to_mask`           | `{{ avahi_service_names }}`                       | Internal variable used to iterate over services to stop and mask.                          | `vars/main.yml`     |
-| `avahi_services_to_stop`           | `{{ avahi_service_names }}`                       | Internal variable used to iterate over services to verify status (check mode).             | `vars/main.yml`     |
+| Variable                  | Default                                           | Description                                                                     | Source              |
+|---------------------------|---------------------------------------------------|---------------------------------------------------------------------------------|---------------------|
+| `avahi_package_name`      | `avahi-daemon`                                    | Name of the APT package to purge if installed.                                  | `defaults/main.yml` |
+| `avahi_service_names`     | `['avahi-daemon.service', 'avahi-daemon.socket']` | List of systemd service/socket unit names to stop and mask.                     | `defaults/main.yml` |
+| `avahi_services_to_mask`  | `{{ avahi_service_names }}`                       | Internal variable used to iterate over services to stop and mask.               | `vars/main.yml`     |
+| `avahi_services_to_stop`  | `{{ avahi_service_names }}`                       | Internal variable used to iterate over services to verify status (check mode).  | `vars/main.yml`     |
 
 #### Dependencies
     Handlers: `handlers/main.yml` is referenced in `tasks/main.yml` via `notify: "Purge unused dependencies"` and `notify: "Update initramfs"`, but its content is not provided — assumed to exist and contain handlers for `apt` cleanup and `update-initramfs`.  

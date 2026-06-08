@@ -26,11 +26,11 @@
 
 #### Variables
 
-| Variable                            | Default                | Description                                 |
-|-------------------------------------|------------------------|---------------------------------------------|
-| `apparmor_profiles_enforce_enabled` | `true`                 | Enable enforcement of all AppArmor profiles |
-| `apparmor_enforce_bin_path`         | `/usr/sbin/aa-enforce` | Path to the `aa-enforce` binary             |
-| `apparmor_profiles_dir`             | `/etc/apparmor.d`      | Directory containing AppArmor profile files |
+| Variable                            | Default                | Description                                 | source             |
+|-------------------------------------|------------------------|---------------------------------------------|--------------------|
+| `apparmor_profiles_enforce_enabled` | `true`                 | Enable enforcement of all AppArmor profiles | defaults/main.yml  |
+| `apparmor_enforce_bin_path`         | `/usr/sbin/aa-enforce` | Path to the `aa-enforce` binary             | defaults/main.yml  |
+| `apparmor_profiles_dir`             | `/etc/apparmor.d`      | Directory containing AppArmor profile files | defaults/main.yml  |
 
 #### Dependencies
     None — but requires `apparmor` package installed.
