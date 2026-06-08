@@ -5,7 +5,8 @@
 
 - name: "Check if systemd-timesyncd is active"
   ansible.builtin.shell: |
-    "{{ systemd_timesyncd_check_command }}"
+    set -euo pipefail
+      "{{ systemd_timesyncd_check_command }}"
     executable: /bin/bash
     warn: false
   register: timesyncd_active

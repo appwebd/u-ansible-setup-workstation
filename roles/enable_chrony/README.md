@@ -30,14 +30,13 @@
 
 #### Variables
 
-| Variable                          | Default                                      | Description                                                       | file                                                                   |
-|-----------------------------------|----------------------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------|
-| `chrony_package_name`             | `"chrony"`                                   | Name of the chrony package to install                             | defaults/main.yml                                                      |
-| `systemd_timesyncd_service`       | `"systemd-timesyncd.service"`                | Systemd service name for alternative time synchronization service | defaults/main.yml                                                      |
-| `chrony_service_name`             | `"chrony.service"`                           | Systemd service name for chrony                                   | vars/main.yml                                                          |
-| `chrony_service_state`            | `"active"`                                   | Desired state of chrony service                                   | vars/main.yml                                                          |
-| `systemd_timesyncd_check_command` | `"systemctl show systemd-timesyncd.service   | grep 'ActiveState=active'"`                                       | Command to check if alternative time synchronization service is active | vars/main.yml |
-| `chrony_install_state`            | `"present"`                                  | Desired installation state of chrony package                      | vars/main.yml                                                          |
+| Variable                          | Default                                      | Description                                                                                        | file              |
+|-----------------------------------|----------------------------------------------|----------------------------------------------------------------------------------------------------|-------------------|
+| `chrony_package_name`             | `"chrony"`                                   | Name of the chrony package to install                                                              | defaults/main.yml |
+| `chrony_service_name`             | `"chrony.service"`                           | Systemd service name for chrony                                                                    | vars/main.yml     |
+| `chrony_service_state`            | `"active"`                                   | Desired state of chrony service                                                                    | vars/main.yml     |
+| `systemd_timesyncd_check_command` | `"systemctl show systemd-timesyncd.service   | grep 'ActiveState=active'"` Command to check if alternative time synchronization service is active | vars/main.yml     | 
+| `chrony_install_state`            | `"present"`                                  | Desired installation state of chrony package                                                       | vars/main.yml     |
 
 #### Dependencies
     No dependencies
