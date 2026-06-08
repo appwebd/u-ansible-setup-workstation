@@ -1,6 +1,6 @@
 ---
 # Role        : disable_freevxfs_kernel_module
-# Description : Ensure freevxfs kernel module is not available (Wazuh ID 35501)
+# Description : Ensure freevxfs kernel module is not available.
 # Wazuh ID    : 35501
 
 - name: "Ensure /etc/modprobe.d directory exists"
