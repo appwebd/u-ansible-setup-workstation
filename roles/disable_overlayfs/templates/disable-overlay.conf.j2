@@ -1,0 +1,5 @@
+---
+# Blacklist overlay and overlayfs modules to prevent loading
+{% for module in disable_overlayfs_modules %}
+blacklist {{ module }}
+{% endfor %}

@@ -1,0 +1,53 @@
+---
+# Role        : disable_overlayfs
+# Description : Disable overlay and overlayfs kernel modules to enhance security posture.
+# Wazuh ID    : 35723
+
+- name: "Check if overlay module is currently loaded"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    lsmod | grep -q "^overlay" || lsmod | grep -q "^overlayfs"
+  register: overlay_loaded_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Ensure overlay modules are blacklisted in modprobe configuration"
+  ansible.builtin.template:
+    src: disable-overlay.conf.j2
+    dest: "{{ disable_overlayfs_blacklist_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  when: disable_overlayfs_enabled | bool
+
+# Install module community.general.modprobe using: ansible-galaxy collection install community.general
+- name: "Remove overlay module if currently loaded"
+  community.general.modprobe:
+    name: "{{ overlay_module_name }}"
+    state: absent
+  when:
+    - overlay_unload_if_loaded | bool
+    - overlay_loaded_check.stdout == "loaded"
+
+- name: "Ensure overlay modules are not loaded on next boot"
+  ansible.builtin.lineinfile:
+    path: /etc/modules-load.d/disable-overlay.conf
+    line: "{{ item }}"
+    state: absent
+    backup: true
+  loop:
+    - disable_overlayfs_modules
+  when: disable_overlayfs_enabled | bool
+
+- name: "Ensure overlay modules are blacklisted in modprobe configuration (idempotent)"
+  ansible.builtin.lineinfile:
+    path: "{{ disable_overlayfs_blacklist_file }}"
+    line: "blacklist {{ item }}"
+    state: present
+    create: true
+    mode: "0644"
+  loop: "{{ disable_overlayfs_modules }}"
+  when: disable_overlayfs_enabled | bool
+  notify: Update initramfs

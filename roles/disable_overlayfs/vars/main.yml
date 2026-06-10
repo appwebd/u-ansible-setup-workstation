@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for the disable_overlayfs role
+
+overlay_module_name: overlay

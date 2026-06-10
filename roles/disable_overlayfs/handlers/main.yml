@@ -1,0 +1,12 @@
+---
+# Role        : disable_overlayfs
+# Description : Handlers for the disable_overlayfs role
+
+- name: Update initramfs
+  ansible.builtin.command: update-initramfs -u
+  register: initramfs_update_result
+  changed_when: false
+  failed_when: false
+  when:
+    - ansible_distribution in ["Ubuntu", "Debian"]
+    - disable_overlayfs_enabled | bool

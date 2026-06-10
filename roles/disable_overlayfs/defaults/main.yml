@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Default variables for the disable_overlayfs role
+disable_overlayfs_enabled: true
+disable_overlayfs_modules:
+  - overlay
+  - overlayfs
+disable_overlayfs_blacklist_file: /etc/modprobe.d/disable-overlay.conf
+
+overlay_unload_if_loaded: true
