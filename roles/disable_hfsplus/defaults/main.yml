@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Default configuration for disabling hfsplus kernel module
+hfsplus_modprobe_conf_dir: /etc/modprobe.d
+hfsplus_modprobe_conf_file: /etc/modprobe.d/hfsplus.conf
+hfsplus_modprobe_content: |
+  install hfsplus /bin/false
+  blacklist hfsplus
+
+hfsplus_unload_if_loaded: true
