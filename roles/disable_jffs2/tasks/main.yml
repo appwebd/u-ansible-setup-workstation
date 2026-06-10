@@ -1,0 +1,43 @@
+---
+# Role        : disable_jffs2
+# Description : Disable the jffs2 kernel module to prevent mounting of JFFS2 filesystems.
+# Wazuh ID    : 35760
+
+- name: "Ensure modprobe configuration directory exists"
+  ansible.builtin.file:
+    path: "{{ jffs2_modprobe_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  register: modprobe_dir_result
+  changed_when: modprobe_dir_result.changed
+
+- name: "Check if jffs2 module is currently loaded"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    lsmod | grep -q '^jffs2' && echo "loaded" || echo "not_loaded"
+  register: jffs2_loaded_check
+  changed_when: false | bool
+  failed_when: false
+  check_mode: false
+
+# Install module community.general.modprobe using: ansible-galaxy collection install community.general
+- name: "Unload jffs2 module if currently loaded"
+  community.general.modprobe:
+    name: "{{ jffs2_module_name }}"
+    state: absent
+  when:
+    - jffs2_unload_if_loaded | bool
+    - jffs2_loaded_check.stdout == "loaded"
+
+- name: "Create modprobe configuration to blacklist jffs2"
+  ansible.builtin.copy:
+    dest: "{{ jffs2_modprobe_conf_file }}"
+    content: "{{ jffs2_modprobe_content }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  register: modprobe_conf_result
+  notify: Restart System
