@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the disable_jffs2 role
+
+
+jffs2_module_name: jffs2

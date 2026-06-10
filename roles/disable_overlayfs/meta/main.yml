@@ -1,0 +1,26 @@
+---
+# Role metadata for disable_overlayfs
+
+galaxy_info:
+  role_name: disable_overlayfs
+  author: Patricio Rojas Ortiz
+  description: Disable overlay and overlayfs kernel modules to prevent potential container escape or privilege escalation attacks (Wazuh ID 35723)
+  company: None
+  license: Apache-2.0
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+        - noble
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - hardening
+    - kernel
+
+dependencies: []

@@ -1,0 +1,41 @@
+---
+# Role        : disable_hfsplus
+# Description : Ensure hfsplus kernel module is not available.
+# Wazuh ID    : 35503
+
+- name: "Ensure modprobe.d directory exists"
+  ansible.builtin.file:
+    path: "{{ hfsplus_modprobe_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Check if hfsplus module is currently loaded"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    lsmod | grep -q '^hfsplus' && echo "loaded" || echo "not_loaded"
+  register: hfsplus_loaded_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+# Install module community.general.modprobe using: ansible-galaxy collection install community.general
+- name: "Unload hfsplus module if currently loaded"
+  community.general.modprobe:
+    name: "{{ hfsplus_module_name }}"
+    state: absent
+  when:
+    - hfsplus_unload_if_loaded | bool
+    - hfsplus_loaded_check.stdout == "loaded"
+
+- name: "Create modprobe configuration to blacklist hfsplus"
+  ansible.builtin.copy:
+    dest: "{{ hfsplus_modprobe_conf_file }}"
+    content: "{{ hfsplus_modprobe_content }}"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+  register: hfsplus_modprobe_result
+  notify: Update initramfs

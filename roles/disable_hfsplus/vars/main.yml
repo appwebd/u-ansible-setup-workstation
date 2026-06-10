@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for hfsplus module disabling
+# Author: Patricio Rojas Ortiz
+# Wazuh ID: 35503
+
+hfsplus_module_name: hfsplus

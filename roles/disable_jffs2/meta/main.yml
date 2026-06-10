@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  role_name: disable_jffs2
+  author: Patricio Rojas Ortiz
+  description: Disable the jffs2 kernel module to prevent mounting of JFFS2 filesystems (Wazuh ID 35760)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - kernel
+    - compliance
+    - sysadmin
+    - filesystem
+
+dependencies: []

@@ -1,0 +1,18 @@
+---
+# defaults/main.yml
+# Default configuration for the disable_jffs2 role
+# Ensure jffs2 kernel module is not available
+
+# Path to modprobe configuration directory
+jffs2_modprobe_conf_dir: /etc/modprobe.d
+
+# Name of the modprobe configuration file
+jffs2_modprobe_conf_file: "{{ jffs2_modprobe_conf_dir }}/jffs2.conf"
+
+# Content to disable jffs2 module
+jffs2_modprobe_content: |
+  install jffs2 /bin/false
+  blacklist jffs2
+
+# Whether to attempt to remove the module if currently loaded
+jffs2_unload_if_loaded: true
