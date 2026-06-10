@@ -29,14 +29,6 @@
     - hfsplus_unload_if_loaded | bool
     - hfsplus_loaded_check.stdout == "loaded"
 
-- name: "Ensure modprobe.d directory exists"
-  ansible.builtin.file:
-    path: /etc/modprobe.d
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
-
 - name: "Create modprobe configuration to blacklist hfsplus"
   ansible.builtin.copy:
     dest: "{{ hfsplus_modprobe_conf_file }}"
