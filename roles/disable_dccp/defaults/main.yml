@@ -1,0 +1,7 @@
+---
+# defaults/main.yml
+# Default variables for disable_dccp role
+dccp_modprobe_conf_file: /etc/modprobe.d/dccp.conf
+dccp_modprobe_blacklist_content: |
+  install dccp /bin/false
+  blacklist dccp
