@@ -23,7 +23,7 @@
     - disable_overlayfs                        # 35505 - Ensure overlayfs kernel module is not available.
     - disable_squashfs                         # 35506 - Ensure squashfs kernel module is not available.
     - disable_udf                              # 35507 - Ensure udf kernel module is not available.
-#    - disable_usb_storage                      # 35508 - Ensure usb-storage kernel module is not available.
+    - disable_usb_storage                      # 35508 - Ensure usb-storage kernel module is not available.
 #    - security_hardening                       # 35509 - Ensure unused filesystems kernel modules are not available.
 #    - disable_dccp                             # 35604 - Ensure dccp kernel module is not available.
 #    - tipc_blacklist                           # 35605 - Ensure tipc kernel module is not available.
