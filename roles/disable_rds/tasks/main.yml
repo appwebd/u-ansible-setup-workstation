@@ -1,0 +1,52 @@
+---
+# Role        : disable_rds
+# Description : Ensure rds kernel module is not available.
+# Wazuh ID    : 35606
+
+- name: "Check if rds module is currently loaded"
+  ansible.builtin.shell: |
+    set -o pipefail
+    lsmod | grep -q '^rds[[:space:]]'
+  register: rds_loaded_check
+  changed_when: false
+  failed_when: false
+
+- name: "Ensure /etc/modprobe.d directory exists"
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Create rds modprobe configuration to disable module"
+  ansible.builtin.copy:
+    content: "{{ rds_blacklist_content }}"
+    dest: "{{ rds_modprobe_conf_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+
+- name: "Attempt to unload rds module if currently loaded"
+  ansible.builtin.shell: |
+    set -o pipefail
+    modprobe -r {{ rds_module_name }} 2>/dev/null || true
+    rmmod {{ rds_module_name }} 2>/dev/null || true
+  register: rds_unload_result
+  changed_when: false
+  failed_when: false
+  when: rds_loaded_check.rc == 0
+
+- name: "Verify rds module is not loaded after remediation"
+  ansible.builtin.shell: |
+    set -o pipefail
+    lsmod | grep -q '^rds[[:space:]]' && echo 'FAIL' || echo 'OK'
+  register: rds_verify_result
+  changed_when: false
+  failed_when: false
+
+- name: "Fail if rds module is still loaded after remediation"
+  ansible.builtin.debug:
+    msg: "Failed to unload rds kernel module. Manual intervention required."
+  when: rds_verify_result.stdout | trim == 'FAIL'
