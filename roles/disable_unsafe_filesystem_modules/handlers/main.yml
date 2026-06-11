@@ -1,0 +1,11 @@
+---
+# Role        : disable_unsafe_filesystem_modules
+# Description : Handlers for the disable_unsafe_filesystem_modules role
+
+- name: Update initramfs
+  ansible.builtin.command:
+    cmd: "/usr/sbin/update-initramfs -u"
+  register: initramfs_result
+  changed_when: initramfs_result.rc == 0
+  failed_when: false
+  when: ansible_facts.os_family == "Debian"

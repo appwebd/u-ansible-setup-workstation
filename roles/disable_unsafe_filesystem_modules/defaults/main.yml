@@ -1,0 +1,25 @@
+---
+# defaults/main.yml
+# Default configuration for the disable_unsafe_filesystem_modules role
+# Safe defaults — users may override these in inventory or playbooks
+
+disable_unsafe_filesystem_modules_enabled: true
+
+# List of filesystem kernel modules to disable (CVE-motivated)
+# These are known to have active CVEs and should be disabled unless strictly required
+filesystem_modules_to_disable:
+  - afs
+  - ceph
+  - cifs
+  - exfat
+  - ext
+  - fat
+  - fscache
+  - fuse
+  - gfs2
+  - nfs_common
+  - nfsd
+  - smbfs_common
+
+# Directory where modprobe configuration files are placed
+modprobe_conf_dir: /etc/modprobe.d
