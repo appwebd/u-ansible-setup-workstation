@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Default variables for the disable_udf role
+# These values can be overridden by inventory or playbook variables
+
+udf_enabled: false
+udf_modprobe_conf_file: /etc/modprobe.d/udf.conf
+udf_blacklist_content: |
+  install udf /bin/false
+  blacklist udf

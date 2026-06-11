@@ -1,0 +1,70 @@
+---
+# Role        : disable_udf
+# Description : Ensure udf kernel module is not available.
+# Wazuh ID    : 35507
+
+- name: "Check if udf module is currently loaded"
+  ansible.builtin.command: lsmod | grep -q '^{{ udf_module_name }}'
+  register: udf_loaded_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Check if udf module is available in any installed kernel"
+  ansible.builtin.shell:
+    set -o pipefail
+    modprobe -n -v {{ udf_module_name }} || true
+  args:
+    executable: /bin/bash
+  register: udf_modprobe_check
+  changed_when: false
+  check_mode: false
+
+- name: "Ensure /etc/modprobe.d directory exists"
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Create udf modprobe configuration file to disable module"
+  ansible.builtin.copy:
+    content: "{{ udf_blacklist_content }}"
+    dest: "{{ udf_modprobe_conf_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+
+- name: "Unload udf module if currently loaded"
+  ansible.builtin.command: modprobe -r {{ udf_module_name }}
+  register: udf_unload_result
+  changed_when: false
+  failed_when: false
+  when:
+    - udf_loaded_check.rc == 0
+
+- name: "Ensure udf is not loaded after configuration (fallback)"
+  ansible.builtin.command: rmmod {{ udf_module_name }} 2>/dev/null || true
+  register: rmmod_result
+  changed_when: false
+  failed_when: false
+  when:
+    - udf_loaded_check.rc == 0
+
+- name: "Verify udf is not loaded after remediation"
+  ansible.builtin.command: lsmod | grep -q "^{{ udf_module_name }}"
+  register: verify_udf_loaded
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when:
+    - udf_loaded_check.rc == 0
+
+- name: "Report if udf module is still loaded after remediation"
+  ansible.builtin.debug:
+    msg: "Warning: udf kernel module is still loaded despite remediation attempts"
+  when:
+    - udf_loaded_check.rc == 0
+    - verify_udf_loaded.rc == 0

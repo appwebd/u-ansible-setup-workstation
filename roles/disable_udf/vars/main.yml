@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for the disable_udf role
+
+udf_module_name: udf

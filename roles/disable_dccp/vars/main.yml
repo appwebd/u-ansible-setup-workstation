@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for disable_dccp role
+
+dccp_module_name: "dccp"

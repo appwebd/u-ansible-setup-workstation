@@ -1,0 +1,69 @@
+---
+# Role        : disable_squashfs
+# Description : Ensure squashfs kernel module is not available.
+# Wazuh ID    : 35506
+
+- name: "Check if squashfs module is currently loaded"
+  ansible.builtin.command: lsmod | grep -q '^{{ squashfs_module_name }}'
+  register: squashfs_loaded_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Check if squashfs module is available in any installed kernel"
+  ansible.builtin.shell: |
+    set -o pipefail
+    modprobe -n -v {{ squashfs_module_name }} 2>&1 | grep -qE 'install /bin/(false|true)|Module squashfs not found'
+  register: squashfs_availability_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Ensure /etc/modprobe.d directory exists"
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Create squashfs modprobe configuration file to disable module"
+  ansible.builtin.copy:
+    content: "{{ squashfs_blacklist_content }}"
+    dest: "{{ squashfs_modprobe_conf_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+
+- name: "Unload squashfs kernel module if currently loaded"
+  ansible.builtin.command: modprobe -r {{ squashfs_module_name }}
+  register: modprobe_unload_result
+  changed_when: false
+  failed_when: false
+  when:
+    - squashfs_loaded_check.rc == 0
+
+- name: "Ensure squashfs is not loaded after configuration (fallback)"
+  ansible.builtin.command: rmmod {{ squashfs_module_name }} 2>/dev/null || true
+  register: rmmod_result
+  changed_when: false
+  failed_when: false
+  when:
+    - squashfs_loaded_check.rc == 0
+
+- name: "Verify squashfs is not loaded after remediation"
+  ansible.builtin.command: lsmod | grep -q '^{{ squashfs_module_name }}'
+  register: verify_squashfs_loaded
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when:
+    - squashfs_loaded_check.rc == 0
+
+- name: "Report if squashfs is still loaded after remediation"
+  ansible.builtin.debug:
+    msg: "Warning: squashfs module remains loaded despite configuration changes."
+  when:
+    - squashfs_loaded_check.rc == 0
+    - verify_squashfs_loaded.rc == 0

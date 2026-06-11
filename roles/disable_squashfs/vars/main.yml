@@ -1,0 +1,4 @@
+---
+# vars/main.yml
+# Internal constants for disable_squashfs role
+squashfs_module_name: squashfs

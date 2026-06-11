@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the disable_unsafe_filesystem_modules role
+# Not intended to be overridden by users
+
+filesystem_modules_to_disable_list: "{{ filesystem_modules_to_disable | list }}"

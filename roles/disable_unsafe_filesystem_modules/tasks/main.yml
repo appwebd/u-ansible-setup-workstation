@@ -1,0 +1,71 @@
+---
+# Role        : disable_unsafe_filesystem_modules
+# Description : Disable unsafe filesystem kernel modules (CVE-motivated) by preventing loading and unloading active instances.
+# Wazuh ID    : 35724
+
+- name: "Skip if feature is disabled"
+  ansible.builtin.assert:
+    that:
+      - disable_unsafe_filesystem_modules_enabled | bool
+    fail_msg: "Skipping due to disable_unsafe_filesystem_modules_enabled=false"
+    success_msg: "Feature enabled — proceeding"
+  run_once: true
+  delegate_to: localhost
+
+- name: "Ensure modprobe configuration directory exists"
+  ansible.builtin.file:
+    path: "{{ modprobe_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+# Step 1: Unload modules if currently loaded (non-fatal if not in use)
+- name: "Unload filesystem kernel module if currently loaded"
+  ansible.builtin.command:
+    cmd: "/sbin/modprobe -r {{ item }} 2>/dev/null || /bin/true"
+    removes: "/proc/modules"  # always runs; `removes` is a no-op here but satisfies idempotency
+  loop: "{{ filesystem_modules_to_disable_list }}"
+  loop_control:
+    label: "{{ item }}"
+  changed_when: false
+  failed_when: false
+
+- name: "Ensure module is not loaded (via rmmod)"
+  ansible.builtin.command:
+    cmd: "/sbin/rmmod {{ item }} 2>/dev/null || /bin/true"
+  loop: "{{ filesystem_modules_to_disable_list }}"
+  changed_when: false
+  failed_when: false
+
+# Step 2: Create modprobe configuration files to prevent future loading
+- name: "Create modprobe config file for module (denylist/blacklist rule)"
+  ansible.builtin.copy:
+    content: |
+      install {{ item }} /bin/false
+      blacklist {{ item }}
+    dest: "{{ modprobe_conf_dir }}/{{ item }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+  loop: "{{ filesystem_modules_to_disable_list }}"
+  loop_control:
+    label: "{{ item }}"
+  notify: Update initramfs
+
+# Optional: Verify modules are not loaded (non-fatal)
+- name: "Verify module is not loaded (lsmod check)"
+  ansible.builtin.command:
+    cmd: "/bin/lsmod | /usr/bin/grep -q '^{{ item }} ' && echo '{{ item }}' || true"
+  register: lsmod_check
+  loop: "{{ filesystem_modules_to_disable_list }}"
+  changed_when: false
+  failed_when: false
+  when: ansible_facts.kernel is defined
+
+- name: "Report if module is still loaded (non-fatal warning)"
+  ansible.builtin.debug:
+    msg: "WARNING: Module '{{ item.stdout }}' appears to be still loaded — manual intervention required"
+  loop: "{{ lsmod_check.results | selectattr('stdout', 'defined') | selectattr('stdout', 'ne', '') | list }}"
+  when: ansible_facts.kernel is defined

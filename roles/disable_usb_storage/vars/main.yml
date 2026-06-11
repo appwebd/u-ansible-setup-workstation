@@ -1,0 +1,4 @@
+---
+# vars/main.yml
+# Internal constants for disable_usb_storage role
+usb_storage_module_name: usb-storage

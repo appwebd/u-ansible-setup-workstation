@@ -21,14 +21,14 @@
     - disable_hfsplus                          # 35503 - Ensure hfsplus kernel module is not available.
     - disable_jffs2                            # 35504 - Ensure jffs2 kernel module is not available.
     - disable_overlayfs                        # 35505 - Ensure overlayfs kernel module is not available.
-#    - disable_squashfs                         # 35506 - Ensure squashfs kernel module is not available.
-#    - disable_udf                              # 35507 - Ensure udf kernel module is not available.
-#    - disable_usb_storage                      # 35508 - Ensure usb-storage kernel module is not available.
-#    - security_hardening                       # 35509 - Ensure unused filesystems kernel modules are not available.
-#    - disable_dccp                             # 35604 - Ensure dccp kernel module is not available.
-#    - tipc_blacklist                           # 35605 - Ensure tipc kernel module is not available.
-#    - disable_rds_kernel_module                # 35606 - Ensure rds kernel module is not available.
-#    - disable_sctp                             # 35607 - Ensure sctp kernel module is not available.
+    - disable_squashfs                         # 35506 - Ensure squashfs kernel module is not available.
+    - disable_udf                              # 35507 - Ensure udf kernel module is not available.
+    - disable_usb_storage                      # 35508 - Ensure usb-storage kernel module is not available.
+    - disable_unsafe_filesystem_modules        # 35509 - Ensure unused filesystems kernel modules are not available.
+    - disable_dccp                             # 35604 - Ensure dccp kernel module is not available.
+    - disable_tipc                             # 35605 - Ensure tipc kernel module is not available.
+    - disable_rds                              # 35606 - Ensure rds kernel module is not available.
+    - disable_sctp                             # 35607 - Ensure sctp kernel module is not available.
 
 # Partitioning and mount options (nodev, nosuid, noexec)
 

@@ -1,0 +1,62 @@
+---
+# Role        : disable_sctp
+# Description : Ensure sctp kernel module is not available.
+# Wazuh ID    : 35607
+
+- name: "Check if sctp module is currently loaded"
+  ansible.builtin.shell: |
+    set -o pipefail
+    lsmod | grep -q '^{{ sctp_module_name }}' && echo 'loaded' || echo 'not_loaded'
+  register: sctp_load_status
+  changed_when: false
+  failed_when: false
+
+- name: "Check if sctp module is available in kernel"
+  ansible.builtin.shell: |
+    set -o pipefail
+    modprobe -n -v {{ sctp_module_name }} | grep -q 'install /bin/false' && echo 'blocked'
+    || (modprobe -n -v {{ sctp_module_name }} | grep -q '^install' && echo 'configured')
+    || echo 'available'
+  register: sctp_modprobe_status
+  changed_when: false
+  failed_when: false
+
+- name: "Ensure modprobe.d directory exists"
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Create sctp blacklist configuration file"
+  ansible.builtin.copy:
+    content: "{{ sctp_blacklist_content }}"
+    dest: "{{ sctp_modprobe_conf_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+
+- name: "Unload sctp module if currently loaded"
+  ansible.builtin.shell: |
+    set -o pipefail
+    modprobe -r {{ sctp_module_name }} 2>/dev/null || true
+    rmmod {{ sctp_module_name }} 2>/dev/null || true
+  when:
+    - sctp_load_status.stdout == 'loaded'
+  changed_when: true
+
+- name: "Verify sctp module is not loaded after remediation"
+  ansible.builtin.shell: |
+    set -o pipefail
+    lsmod | grep -q '^{{ sctp_module_name }}' && echo 'still_loaded' || echo 'not_loaded'
+  register: sctp_verify_status
+  changed_when: false
+  failed_when: false
+
+- name: "Fail if sctp module remains loaded after remediation"
+  ansible.builtin.debug:
+    msg: "Failed to unload sctp kernel module. Manual intervention required."
+  when:
+    - sctp_verify_status.stdout == 'still_loaded'

@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for disable_rds role
+
+rds_module_name: rds

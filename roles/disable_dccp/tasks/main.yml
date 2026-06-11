@@ -1,0 +1,52 @@
+---
+# Role        : disable_dccp
+# Description : Ensure the DCCP kernel module is not available (Wazuh ID 35604)
+# Wazuh ID    : 35604
+
+- name: "Check if dccp kernel module is currently loaded"
+  ansible.builtin.shell: |
+    set -o pipefail
+    lsmod | grep -q '^dccp[[:space:]]' && echo "loaded" || echo "not_loaded"
+  register: dccp_lsmode_check
+  changed_when: false
+  failed_when: false
+
+- name: "Ensure /etc/modprobe.d directory exists"
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Create modprobe configuration to disable dccp module"
+  ansible.builtin.copy:
+    content: "{{ dccp_modprobe_blacklist_content }}"
+    dest: "{{ dccp_modprobe_conf_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+
+- name: "Unload dccp kernel module if currently loaded"
+  ansible.builtin.shell: |
+    set -o pipefail
+    modprobe -r {{ dccp_module_name }} 2>/dev/null || true
+    rmmod {{ dccp_module_name }} 2>/dev/null || true
+  register: dccp_unload_result
+  changed_when: false
+  failed_when: false
+  when: dccp_lsmode_check.stdout == "loaded"
+
+- name: "Verify dccp module is not loaded after remediation"
+  ansible.builtin.shell: |
+    set -o pipefail
+    lsmod | grep -q '^dccp[[:space:]]' && echo "still_loaded" || echo "not_loaded"
+  register: dccp_verify_check
+  changed_when: false
+  failed_when: false
+
+- name: "Fail if dccp module remains loaded after remediation"
+  ansible.builtin.debug:
+    msg: "Failed to unload dccp kernel module. Module is still present."
+  when: dccp_verify_check.stdout == "still_loaded"

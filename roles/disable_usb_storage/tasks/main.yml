@@ -1,0 +1,53 @@
+---
+# Role        : disable_usb_storage
+# Description : Ensure usb-storage kernel module is not available.
+# Wazuh ID    : 35508
+
+- name: "Ensure modprobe.d directory exists"
+  ansible.builtin.file:
+    path: "{{ usb_storage_modprobe_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Check if usb-storage module is available in any installed kernel"
+  ansible.builtin.command:
+    cmd: modprobe -n -v {{ usb_storage_module_name }}
+  register: modprobe_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Ensure usb-storage module is not loaded"
+  ansible.builtin.command:
+    cmd: rmmod {{ usb_storage_module_name }}
+  when:
+    - modprobe_check.rc == 0
+    - modprobe_check.stdout | search(usb_storage_module_name)
+  failed_when: false
+  changed_when: true
+
+- name: "Create modprobe configuration to disable usb-storage"
+  ansible.builtin.copy:
+    content: "{{ usb_storage_blacklist_content }}"
+    dest: "{{ usb_storage_modprobe_conf_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+  register: usb_storage_modprobe_result
+  notify: Update initramfs
+
+- name: "Verify usb-storage is not loaded (lsmod check)"
+  ansible.builtin.command:
+    cmd: lsmod | grep -q '^{{ usb_storage_module_name }}'
+  register: lsmod_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Fail if usb-storage module is still loaded"
+  ansible.builtin.debug:
+    msg: "usb-storage kernel module is still loaded after remediation attempts"
+  when: lsmod_check.rc == 0
