@@ -1,0 +1,60 @@
+---
+# Role        : disable_tipc
+# Description : Ensure tipc kernel module is not available.
+# Wazuh ID    : 35605
+
+- name: "Ensure /etc/modprobe.d directory exists"
+  ansible.builtin.file:
+    path: /etc/modprobe.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Check if tipc module is currently loaded"
+  ansible.builtin.shell: |
+    set -o pipefail
+    lsmod | grep -q '^{{ tipc_module_name }}' || true
+  register: tipc_loaded_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Check if tipc module is available in modprobe"
+  ansible.builtin.shell: |
+    set -o pipefail
+    modprobe -n -v {{ tipc_module_name }} 2>/dev/null || true
+  register: tipc_modprobe_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Create modprobe configuration to disable tipc module"
+  ansible.builtin.copy:
+    content: "{{ tipc_blacklist_content }}"
+    dest: "{{ tipc_modprobe_conf_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+
+- name: "Unload tipc module if currently loaded"
+  ansible.builtin.shell: |
+    set -o pipefail
+    modprobe -r {{ tipc_module_name }} 2>/dev/null || true; rmmod {{ tipc_module_name }} 2>/dev/null || true
+  register: tipc_unload_result
+  changed_when: false
+  failed_when: false
+  when:
+    - tipc_modprobe_check.rc == 0 or tipc_loaded_check.rc == 0
+    - tipc_loaded_check.stdout | length > 0
+
+- name: "Verify tipc module is not loaded after remediation"
+  ansible.builtin.shell: |
+    set -o pipefail
+    lsmod | grep -q '^tipc' && exit 1 || exit 0
+  register: tipc_verify
+  changed_when: false
+  failed_when: true
+  when:
+    - tipc_modprobe_check.rc == 0 or tipc_loaded_check.rc == 0
