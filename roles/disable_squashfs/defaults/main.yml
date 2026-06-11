@@ -1,0 +1,7 @@
+---
+# defaults/main.yml
+# Default variables for disable_squashfs role
+squashfs_modprobe_conf_file: /etc/modprobe.d/squashfs.conf
+squashfs_blacklist_content: |
+  install squashfs /bin/false
+  blacklist squashfs
