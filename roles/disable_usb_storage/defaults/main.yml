@@ -1,0 +1,8 @@
+---
+# defaults/main.yml
+# Default variables for disable_usb_storage role
+usb_storage_modprobe_conf_dir: /etc/modprobe.d
+usb_storage_modprobe_conf_file: /etc/modprobe.d/usb-storage.conf
+usb_storage_blacklist_content: |
+  install usb-storage /bin/false
+  blacklist usb-storage
