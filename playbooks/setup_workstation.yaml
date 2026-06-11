@@ -28,7 +28,7 @@
     - disable_dccp                             # 35604 - Ensure dccp kernel module is not available.
     - disable_tipc                             # 35605 - Ensure tipc kernel module is not available.
     - disable_rds                              # 35606 - Ensure rds kernel module is not available.
-#    - disable_sctp                             # 35607 - Ensure sctp kernel module is not available.
+    - disable_sctp                             # 35607 - Ensure sctp kernel module is not available.
 
 # Partitioning and mount options (nodev, nosuid, noexec)
 
