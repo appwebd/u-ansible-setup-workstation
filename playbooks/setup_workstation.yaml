@@ -103,7 +103,7 @@
     - disable_dns_server                        # 35564 Ensure dns server services are not in use.
     - disable_dnsmasq                           # 35565 Ensure dnsmasq services are not in use.
     - disable_vsftpd                            # 35566 Ensure ftp server services are not in use.
-#    - disable_ldap_server                       # 35567 Ensure ldap server services are not in use.
+    - disable_ldap_server                       # 35567 Ensure ldap server services are not in use.
 #    - disable_dovecot                           # 35568 Ensure message access server services are not in use.
 #    - disable_nfs                               # 35569 Ensure network file system services are not in use.
 #    - disable_nis_server                        # 35570 Ensure nis server services are not in use.
