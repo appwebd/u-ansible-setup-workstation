@@ -1,0 +1,10 @@
+---
+# Role        : disable_nfs
+# Description : Handlers for the disable_nfs role
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
+  changed_when: false

@@ -1,0 +1,59 @@
+---
+# Role        : disable_nfs
+# Description : Ensure network file system services are not in use.
+# Wazuh ID    : 35569
+
+- name: "Check if nfs-kernel-server package is installed"
+  ansible.builtin.shell: |
+    set -o pipefail
+    dpkg-query -W -f='${Status}' {{ nfs_package_name }} 2>/dev/null | grep -c "install ok installed"
+  register: nfs_package_check
+  changed_when: false
+  failed_when: false
+
+- name: Gather service facts
+  ansible.builtin.service_facts:
+
+- name: "Stop and mask NFS server service if active or present"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+  loop: "{{ nfs_services_to_stop_and_mask }}"
+  when: >
+    (nfs_package_check.rc == 0) or
+    (item in ansible_facts.services)
+
+- name: "Ensure modprobe blacklist directory exists"
+  ansible.builtin.file:
+    path: "{{ nfs_modprobe_conf_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Create NFS module blacklist file"
+  ansible.builtin.copy:
+    content: "{{ nfs_blacklist_content }}"
+    dest: "{{ nfs_modprobe_blacklist_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+
+- name: "Reload systemd daemon to apply modprobe changes"
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: "Remove NFS kernel server package if required"
+  ansible.builtin.apt:
+    name: "{{ nfs_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when: remove_nfs_package | bool and nfs_package_check.rc == 0
+  notify: Purge unused dependencies
+
+- name: "Purge unused dependencies"
+  ansible.builtin.apt:
+    autoremove: true
