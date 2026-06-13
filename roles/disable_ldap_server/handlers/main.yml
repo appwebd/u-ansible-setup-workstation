@@ -1,0 +1,9 @@
+---
+# Role        : disable_ldap_server
+# Description : Handlers for the disable_ldap_server role
+
+- name: Restart slapd if needed (not used by default due to security posture)
+  ansible.builtin.systemd:
+    name: "{{ ldap_service_name }}.service"
+    state: restarted
+  when: false

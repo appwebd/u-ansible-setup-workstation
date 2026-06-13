@@ -1,0 +1,22 @@
+---
+# defaults/main.yml
+# Default variables for disable_nfs role
+# Safely configured to ensure NFS services are disabled or removed
+
+nfs_service_name: nfs-server.service
+nfs_package_name: nfs-kernel-server
+nfs_modprobe_conf_dir: /etc/modprobe.d
+nfs_modprobe_blacklist_file: "{{ nfs_modprobe_conf_dir }}/blacklist-nfs.conf"
+nfs_blacklist_content: |
+  install sunrpc /bin/false
+  blacklist sunrpc
+  install nfsv3 /bin/false
+  blacklist nfsv3
+  install nfsv4 /bin/false
+  blacklist nfsv4
+
+# Control whether to remove package or only mask service
+remove_nfs_package: true
+
+nfs_services_to_stop_and_mask:
+  - nfs-server.service

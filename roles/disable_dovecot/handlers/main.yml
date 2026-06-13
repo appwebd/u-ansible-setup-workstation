@@ -1,0 +1,10 @@
+---
+# Role        : disable_dovecot
+# Description : Handlers for the disable_dovecot role
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
+  when: cleanup_result is changed

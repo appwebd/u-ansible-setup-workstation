@@ -1,0 +1,101 @@
+---
+# Role        : disable_ldap_server
+# Description : Ensure LDAP server services are not in use.
+# Wazuh ID    : 35567
+
+- name: "Gather the package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+
+- name: "Check if ldap-server package is installed"
+  ansible.builtin.set_fact:
+    ldap_server_package_installed: "{{ 'slapd' in ansible_facts.packages }}"
+
+- name: "Stop and disable slapd.service if active"
+  when:
+    - disable_ldap_server_enabled | bool
+    - ldap_server_package_installed
+  block:
+    - name: "Stop slapd.service"
+      ansible.builtin.systemd:
+        name: "{{ ldap_service_name }}.service"
+        state: stopped
+        masked: false
+
+    - name: "Disable slapd.service"
+      ansible.builtin.systemd:
+        name: "{{ ldap_service_name }}.service"
+        enabled: false
+
+- name: "Purge slapd package if installed and not required as dependency"
+  when:
+    - disable_ldap_server_enabled | bool
+    - ldap_server_package_installed
+  block:
+    - name: "Remove slapd package"
+      ansible.builtin.apt:
+        name: "{{ ldap_packages_to_check }}"
+        state: absent
+        purge: true
+        autoremove: true
+
+- name: "Ensure slapd.service is masked if package must remain installed"
+  ansible.builtin.systemd:
+    name: "{{ ldap_service_name }}.service"
+    state: stopped
+    masked: true
+  when:
+    - disable_ldap_server_enabled | bool
+    - ldap_server_package_installed
+
+- name: "Create modprobe blacklist file for slapd kernel module (if any)"
+  ansible.builtin.file:
+    path: "{{ ldap_modprobe_blacklist_file }}"
+    state: touch
+    owner: root
+    group: root
+    mode: "0644"
+  when: disable_ldap_server_enabled | bool
+
+- name: "Ensure no LDAP server modules are loaded at boot"
+  ansible.builtin.lineinfile:
+    path: "{{ ldap_modprobe_blacklist_file }}"
+    regexp: "^install.*slapd"
+    line: "install slapd /bin/true"
+    state: present
+    create: true
+    mode: "0644"
+  when: disable_ldap_server_enabled | bool
+
+- name: "Verify compliance: ensure slapd is not installed and service is inactive/masked"
+  ansible.builtin.systemd:
+    name: "{{ ldap_service_name }}.service"
+    state: stopped
+    masked: true
+  register: systemctl_show_result
+  check_mode: true
+  failed_when: false
+  when: disable_ldap_server_enabled | bool
+
+- name: "Fail if slapd service is still active or loaded"
+  ansible.builtin.debug:
+    msg: "slapd.service is still active or loaded. Manual intervention required."
+  when:
+    - disable_ldap_server_enabled | bool
+    - systemctl_show_result is changed
+
+- name: "Verify compliance: ensure slapd package is not installed"
+  ansible.builtin.command: dpkg-query -s {{ ldap_service_name }} --showformat='${Package} ${Status}'
+  register: dpkg_query_result
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when: disable_ldap_server_enabled | bool
+
+- name: "Fail if slapd package is still installed"
+  ansible.builtin.debug:
+    msg: "slapd package is still installed. Manual intervention required."
+  when:
+    - disable_ldap_server_enabled | bool
+    - dpkg_query_result.rc == 0

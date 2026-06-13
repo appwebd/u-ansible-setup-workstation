@@ -1,0 +1,62 @@
+---
+# Role        : disable_dovecot
+# Description : Ensure message access server services are not in use.
+# Wazuh ID    : 35568
+
+- name: "Check if Dovecot packages are installed"
+  ansible.builtin.shell: |
+    set -o pipefail
+    dpkg-query -W -f='${Status}' {{ dovecot_packages_query }} 2>/dev/null | grep -c "^install ok installed"
+  register: dovecot_installed_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Stop and disable Dovecot services if installed"
+  when:
+    - disable_dovecot_enabled | bool
+    - dovecot_installed_check.stdout | int > 0
+  block:
+    - name: "Stop Dovecot services"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: stopped
+        masked: false
+      loop: "{{ dovecot_services }}"
+      failed_when: false
+
+    - name: "Mask Dovecot services"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: true
+      loop: "{{ dovecot_services }}"
+
+    - name: "Remove Dovecot packages if removal is enabled"
+      ansible.builtin.apt:
+        name: "{{ dovecot_packages }}"
+        state: absent
+        purge: true
+        autoremove: true
+      when: disable_dovecot_remove_packages | bool
+      notify: Purge unused dependencies
+
+- name: "Verify Dovecot services are not active"
+  ansible.builtin.shell: |
+    set -o pipefail
+    systemctl show {{ item }} --property=LoadState,ActiveState 2>/dev/null | grep -E '^(Load|Active)State=(loaded|active)'
+  register: dovecot_service_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  loop: "{{ dovecot_services }}"
+  loop_control:
+    label: "{{ item }}"
+
+- name: "Ensure Dovecot services remain masked"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    masked: true
+  loop: "{{ dovecot_services }}"
+  when:
+    - disable_dovecot_enabled | bool
+    - (dovecot_installed_check.stdout | int == 0) or (disable_dovecot_mask_services | bool)

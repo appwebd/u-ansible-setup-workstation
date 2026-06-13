@@ -1,0 +1,15 @@
+---
+# vars/main.yml
+# Internal constants for disable_nfs role
+# Not intended to be overridden by users
+
+nfs_packages_to_check:
+  - "{{ nfs_package_name }}"
+
+nfs_services_to_stop_and_mask:
+  - "{{ nfs_service_name }}"
+
+nfs_modprobe_modules:
+  - sunrpc
+  - nfsv3
+  - nfsv4
