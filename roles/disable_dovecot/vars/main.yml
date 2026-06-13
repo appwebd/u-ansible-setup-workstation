@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for the disable_dovecot role
+
+dovecot_packages_query: "{{ dovecot_packages | join(' ') }}"

@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: disable_dovecot
+  author: Patricio Rojas Ortiz
+  description: Ensure message access server services (dovecot-imapd and dovecot-pop3d) are not in use to reduce attack surface (Wazuh ID 35568)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - mail
+    - dovecot
+    - network
+
+dependencies: []
