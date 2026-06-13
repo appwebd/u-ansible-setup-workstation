@@ -3,9 +3,8 @@
 # Default variables for configure_chrony_user role
 # Ensure chrony runs as dedicated user _chrony
 
-chrony_user: _chrony
 chrony_config_dir: /etc/chrony
-chrony_conf_file: /etc/chrony/chrony.conf
 chrony_conf_d_dir: /etc/chrony/conf.d
-chrony_service_name: chrony
-chrony_package_name: chrony
+chrony_conf_file: /etc/chrony/chrony.conf
+chronyd_service_name: chronyd
+restrict_timesyncd: true

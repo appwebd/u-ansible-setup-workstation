@@ -3,75 +3,54 @@
 # Description : Ensure chrony is running as user _chrony
 # Wazuh ID    : 35591
 
+
 - name: "Check if chrony package is installed"
   ansible.builtin.package_facts:
     manager: auto
 
-- name: "Ensure chrony package is installed"
-  ansible.builtin.apt:
-    name: "{{ chrony_package_name }}"
+- name: "Ensure chrony group exists (system group)"
+  ansible.builtin.group:
+    name: "_chrony"
+    system: true
     state: present
-    update_cache: true
-    cache_valid_time: 86400
-  when:
-    - chrony_package_name is defined
-    - chrony_package_name | length > 0
-  register: chrony_install_result
-  # noinspection YAMLSchemaValidation
-  # noinspection YAMLIncompatibleTypes
-  changed_when: chrony_install_result.changed | default(true) | bool
 
 - name: "Ensure chrony user exists with correct attributes"
   ansible.builtin.user:
-    name: "{{ chrony_user }}"
-    group: "{{ chrony_user_group }}"
-    home: "{{ chrony_user_home }}"
-    shell: "{{ chrony_user_shell }}"
-    system: "{{ chrony_user_system }}"
-    create_home: false
-    state: present
-  when:
-    - chrony_user is defined
-    - chrony_user | length > 0
-
-- name: "Ensure chrony group exists"
-  ansible.builtin.group:
-    name: "{{ chrony_user_group }}"
+    name: "_chrony"
+    group: "_chrony"
+    home: "/var/lib/chrony"
+    shell: "/usr/sbin/nologin"
     system: true
+    create_home: false
     state: present
 
 - name: "Ensure chrony configuration directory exists"
   ansible.builtin.file:
-    path: "{{ chrony_config_dir }}"
+    path: "{{ chrony_config_dir | default('/etc/chrony') }}"
     state: directory
     owner: root
     group: root
     mode: "0755"
 
-- name: "Ensure chrony conf.d directory exists"
+- name: "Ensure conf.d directory exists"
   ansible.builtin.file:
-    path: "{{ chrony_conf_d_dir }}"
+    path: "{{ chrony_conf_d_dir | default('/etc/chrony/conf.d') }}"
     state: directory
     owner: root
     group: root
     mode: "0755"
 
-- name: "Ensure user directive exists in main chrony.conf"
+- name: "Ensure chrony runs as user _chrony"
   ansible.builtin.lineinfile:
-    path: "{{ chrony_conf_file }}"
-    regexp: '^user\s+'
-    line: "user {{ chrony_user }}"
+    path: "{{ chrony_conf_file | default('/etc/chrony/chrony.conf') }}"
+    regexp: '^user\s+.*$'
+    line: "user _chrony"
     state: present
-    owner: root
-    group: root
-    mode: "0644"
     create: true
-  register: chrony_install_result
-  # noinspection YAMLSchemaValidation
-  # noinspection YAMLIncompatibleTypes
-  changed_when: chrony_install_result.changed | default(true) | bool
+    mode: "0644"
+  notify: Restart chronyd
 
-- name: "Ensure no conflicting time sync service is active"
+- name: "Ensure no conflicting time sync service is active (systemd-timesyncd)"
   ansible.builtin.systemd:
     name: systemd-timesyncd
     state: stopped
@@ -81,91 +60,33 @@
   ignore_errors: false
   failed_when: false
 
-- name: "Verify chrony service configuration"
-  ansible.builtin.stat:
-    path: "{{ chrony_conf_file }}"
-  register: chrony_conf_stat
-  changed_when: false
-  failed_when: false
-
-- name: "Warn if chrony configuration file does not exist"
-  ansible.builtin.debug:
-    msg: "WARNING: {{ chrony_conf_file }} does not exist. Configuration may be incomplete."
-  when:
-    - chrony_conf_stat.stat is defined
-    - not chrony_conf_stat.stat.exists | default(false)
-
-- name: "Ensure chrony service is restarted to apply user change"
-  ansible.builtin.systemd:
-    name: "{{ chrony_service_name }}"
-    state: restarted
-    daemon_reload: true
-  when:
-    - chrony_user_conf_result is defined
-    - chrony_user_conf_result.changed | default(false)
-    - chrony_service_name is defined
-    - chrony_service_name | length > 0
-  notify: "Purge unused dependencies"
-
-- name: "Verify chrony is running as _chrony user"
+- name: "Verify chrony service is running as _chrony"
   ansible.builtin.shell: |
-    ps -ef | grep -E '_chrony.*chronyd' | grep -v grep
+    ps -eo user,comm | grep '_chrony.*chronyd' || true
   register: chrony_user_check
   changed_when: false
   failed_when: false
   ignore_errors: true
-  check_mode: false
 
-- name: "Fail if chrony is not running as _chrony user"
-  ansible.builtin.fail:
-    msg: "Chrony is not running as user '_chrony'. Manual intervention required."
-  when:
-    - chrony_user_check.rc is defined
-    - chrony_user_check.rc != 0
-
-- name: "Ensure systemd-timesyncd is not active (if restricted)"
-  ansible.builtin.systemd:
-    name: systemd-timesyncd
-    state: stopped
-    masked: true
-  when:
-    - restrict_timesyncd | default(false) | bool
-  changed_when: false
-  failed_when: false
-
-- name: "Verify systemd-timesyncd is not active"
-  ansible.builtin.shell: |
-    set -o pipefail
-    systemctl show systemd-timesyncd.service --property=ActiveState --value
-  args:
-    executable: /bin/bash
-  register: timesyncd_status
-  changed_when: false
-  failed_when: false
-  check_mode: false
-
-- name: "Debug: systemd-timesyncd status"
+- name: "Warn if chrony is not running as _chrony"
   ansible.builtin.debug:
-    var: timesyncd_status.stdout
+    msg: "WARNING: chronyd may not be running as '_chrony'. Check /etc/chrony/chrony.conf and restart service."
   when:
-    - timesyncd_status is defined
-    - timesyncd_status.stdout is defined
+    - chrony_user_check.rc != 0 or "_chrony" not in chrony_user_check.stdout
 
-- name: "Ensure systemd-timesyncd is stopped"
+- name: "Ensure chrony package is installed"
+  ansible.builtin.apt:
+    name: "{{ chrony_package_name | default('chrony') }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  register: chrony_install_result
+  when:
+    - "'chrony' in ansible_facts.packages"
+
+- name: "Ensure chrony is restarted to apply configuration"
   ansible.builtin.systemd:
-    name: systemd-timesyncd
-    state: stopped
-    masked: false
-  when:
-    - timesyncd_status is defined
-    - timesyncd_status.stdout is defined
-    - timesyncd_status.stdout | trim == "active"
-
-- name: "Warn if systemd-timesyncd is active"
-  ansible.builtin.debug:
-    msg: "WARNING: systemd-timesyncd is active. This may conflict with chrony."
-  when:
-    - restrict_timesyncd | default(false) | bool
-    - timesyncd_status is defined
-    - timesyncd_status.stdout is defined
-    - timesyncd_status.stdout | trim == "active"
+    name: "{{ chronyd_service_name | default('chronyd') }}"
+    state: restarted
+    daemon_reload: true
+  notify: Restart chronyd

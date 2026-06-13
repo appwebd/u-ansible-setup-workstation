@@ -2,9 +2,8 @@
 # Role: configure_chrony_user
 # Description: Handlers for the configure_chrony_user role
 
-- name: Purge unused dependencies
-  ansible.builtin.apt:
-    autoremove: true
-    purge: true
-  register: cleanup_result
-  changed_when: false
+- name: Restart chronyd
+  ansible.builtin.systemd:
+    name: "{{ chronyd_service_name | default('chronyd') }}"
+    state: restarted
+    daemon_reload: true
