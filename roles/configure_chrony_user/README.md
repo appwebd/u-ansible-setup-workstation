@@ -32,14 +32,15 @@
 
 ### defaults/main.yml
 
-| Variable               | Default                   | Description                                               |
-|------------------------|---------------------------|-----------------------------------------------------------|
-| `chrony_conf_d_dir`    | `/etc/chrony/conf.d`      | Directory for additional chrony configuration snippets.   |
-| `chrony_conf_file`     | `/etc/chrony/chrony.conf` | Main chrony configuration file path.                      |
-| `chrony_config_dir`    | `/etc/chrony`             | Main configuration directory for chrony.                  |
-| `chrony_package_name`  | `chrony`                  | Package name to install via APT.                          |
-| `chrony_service_name`  | `chrony`                  | Systemd service name for chrony.                          |
-| `chrony_user`          | `_chrony`                 | System user account under which the chronyd service runs. |
+| Variable                | Default                   | Description                                               |
+|-------------------------|---------------------------|-----------------------------------------------------------|
+| `chrony_conf_d_dir`     | `/etc/chrony/conf.d`      | Directory for additional chrony configuration snippets.   |
+| `chrony_conf_file`      | `/etc/chrony/chrony.conf` | Main chrony configuration file path.                      |
+| `chrony_config_dir`     | `/etc/chrony`             | Main configuration directory for chrony.                  |
+| `chrony_package_name`   | `chrony`                  | Package name to install via APT.                          |
+| `chronyd_service_name`  | `chronyd`                 | Systemd service name for chrony.                          |
+| `chrony_user`           | `_chrony`                 | System user account under which the chronyd service runs. |
+| `restrict_timesyncd`    | `true`                    | to enforce disabling of `systemd-timesyncd`               |
 
 ### vars/main.yml
 
@@ -47,7 +48,8 @@
 |---------------------------|---------------------|----------------------------------------------------------------|
 | `chrony_user_home`        | `/var/lib/chrony`   | Home directory for the chrony user.                            |
 | `chrony_user_shell`       | `/usr/sbin/nologin` | Login shell for the chrony user (disabled shell for security). |
-
+| `chrony_user_group`       | `_chrony`           | System group for the chrony user.                              |
+| `chrony_user_system`      | `yes`               | System user account for chrony.                                |
 
 #### Dependencies
     Handlers: `handlers/main.yml` — *not present* (no handlers defined in input; role relies on `changed_when` and `notify` in tasks, but no handler task is declared — this may cause a runtime warning if `notify` is triggered).  
