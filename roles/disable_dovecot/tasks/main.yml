@@ -38,6 +38,7 @@
         purge: true
         autoremove: true
       when: disable_dovecot_remove_packages | bool
+      notify: Purge unused dependencies
 
 - name: "Verify Dovecot services are not active"
   ansible.builtin.shell: |
