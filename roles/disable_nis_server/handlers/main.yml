@@ -1,0 +1,9 @@
+---
+# Role        : disable_nis_server
+# Description : Handlers for the disable_nis_server role
+
+- name: "Purge unused dependencies"
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result

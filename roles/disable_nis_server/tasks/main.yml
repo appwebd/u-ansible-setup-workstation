@@ -1,0 +1,57 @@
+---
+# Role        : disable_nis_server
+# Description : Ensure NIS server services are not in use (Wazuh ID 35570)
+# Wazuh ID    : 35570
+
+- name: "Check if ypserv package is installed"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Stop and mask ypserv.service if running or enabled"
+  ansible.builtin.systemd:
+    name: "{{ nis_service_name }}"
+    state: stopped
+    masked: true
+  register: systemd_result
+  changed_when: systemd_result.changed
+  failed_when: false
+  when: >
+    (ansible_facts.packages.get(nis_package_name, []) | length > 0) or
+    (nis_stop_and_mask_only | bool)
+
+- name: "Purge ypserv package if installed"
+  ansible.builtin.apt:
+    name: "{{ nis_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
+  register: apt_result
+  changed_when: apt_result.changed
+  when: >
+    (ansible_facts.packages.get(nis_package_name, []) | length > 0) and
+    not (nis_stop_and_mask_only | bool)
+  notify: "Purge unused dependencies"
+
+- name: "Verify ypserv.service status"
+  ansible.builtin.systemd:
+    name: "{{ nis_service_name }}"
+  register: service_check
+  changed_when: false | bool
+  failed_when: false
+  check_mode: false
+
+- name: "Show ypserv.service compliance status"
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        nis_service_name ~ ' is compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+        if
+          (service_check.status.LoadState | default('not-found')) != 'loaded' and
+          (service_check.status.ActiveState | default('inactive')) != 'active'
+        else
+        nis_service_name ~ ' is not compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+      }}

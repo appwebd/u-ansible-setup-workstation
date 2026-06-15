@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+# Internal constants for the disable_nis_server role
+nis_service_name: ypserv.service
+nis_package_name: ypserv
