@@ -1,0 +1,5 @@
+---
+# Role        : disable_rpcbind
+# Description : Handlers for the disable_rpcbind role (no handlers required)
+
+# No handlers needed — systemd masking and package removal are immediate actions.

@@ -1,0 +1,12 @@
+---
+# vars/main.yml
+# Internal constants for the disable_rpcbind role
+
+rpcbind_packages:
+  - rpcbind
+
+rpcbind_services:
+  - rpcbind.socket
+  - rpcbind.service
+
+rpcbind_service_name: rpcbind

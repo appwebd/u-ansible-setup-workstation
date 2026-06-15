@@ -1,0 +1,6 @@
+---
+# defaults/main.yml
+# Default variables for disable_rpcbind role
+# These can be overridden by inventory or extra vars
+
+rpcbind_enabled: false  # If true, only stop and mask; if false, remove package

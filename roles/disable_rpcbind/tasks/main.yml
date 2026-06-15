@@ -1,0 +1,71 @@
+---
+# Role        : disable_rpcbind
+# Description : Ensure rpcbind services are not in use.
+# Wazuh ID    : 35572
+
+- name: "Gather package facts to detect rpcbind installation"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Check if rpcbind package is installed
+  ansible.builtin.set_fact:
+    ldap_server_package_installed: >-
+      {{
+        (rpcbind_packages | map('lower') | list) | intersect(
+          ansible_facts.packages.keys() | map('lower') | list
+        ) | length > 0
+      }}
+
+- name: "Stop and mask rpcbind services if installed or enabled"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+  loop: "{{ rpcbind_services }}"
+  when:
+    - ansible_facts.packages is defined
+    - (rpcbind_packages | map('lower') | list) | intersect(ansible_facts.packages.keys() | map('lower') | list) | length > 0
+    - not rpcbind_enabled|default(false)
+
+- name: "Remove rpcbind package if not required"
+  ansible.builtin.apt:
+    name: "{{ rpcbind_packages }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when:
+    - ansible_facts.packages is defined
+    - (rpcbind_packages | map('lower') | list) | intersect(ansible_facts.packages.keys() | map('lower') | list) | length > 0
+    - not rpcbind_enabled|default(false)
+
+- name: "Ensure rpcbind services are masked (even if package removed)"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    masked: true
+  loop: "{{ rpcbind_services }}"
+  when: rpcbind_enabled | bool
+  # When enabled, we mask to prevent accidental activation but leave package installed
+
+- name: "Verify rpcbind.service status"
+  ansible.builtin.systemd:
+    name: "{{ rpcbind_service_name }}"
+  register: service_check
+  changed_when: false | bool
+  failed_when: false
+  check_mode: false
+
+- name: "Show rpcbind.service compliance status"
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        rpcbind_service_name ~ ' is compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+        if
+          (service_check.status.LoadState | default('not-found')) != 'loaded' and
+          (service_check.status.ActiveState | default('inactive')) != 'active'
+        else
+        rpcbind_service_name ~ ' is not compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+      }}
