@@ -1,0 +1,4 @@
+---
+# defaults/main.yml
+# Default configuration for the disable_nis_server role
+nis_stop_and_mask_only: false

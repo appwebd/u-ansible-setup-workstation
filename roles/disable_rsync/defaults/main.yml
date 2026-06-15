@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_rsync role
+
+rsync_service_name: "rsync"
+rsync_package_name: "rsync"
+
+# Determine if rsync is required as a dependency (not for direct use)
+rsync_required_as_dependency: false

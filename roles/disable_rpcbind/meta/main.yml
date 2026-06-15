@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: disable_rpcbind
+  author: Patricio Rojas Ortiz
+  description: Ensure rpcbind services are not in use to reduce attack surface (Wazuh ID 35572)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - rpcbind
+    - nfs
+    - hardening
+
+dependencies: []

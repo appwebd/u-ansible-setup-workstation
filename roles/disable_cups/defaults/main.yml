@@ -1,0 +1,5 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_cups role
+cups_service_name: "cups.service"
+cups_package_name: "cups"

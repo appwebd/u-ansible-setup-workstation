@@ -1,0 +1,86 @@
+---
+# Role        : disable_cups
+# Description : Ensure print server services are not in use (Wazuh ID 35571)
+# Wazuh ID    : 35571
+
+- name: "Gather installed packages"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if cups is installed"
+  ansible.builtin.set_fact:
+    cups_installed: "{{ cups_package_name in ansible_facts.packages }}"
+
+- name: "Stop and mask cups services (if installed)"
+  when: cups_installed | bool
+  block:
+    - name: "Stop cups.socket and cups.service"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: stopped
+        masked: true
+      loop: "{{ cups_services }}"
+      register: systemd_result
+      failed_when: false
+
+    - name: "Purge cups package (if not required as dependency)"
+      ansible.builtin.apt:
+        name: "{{ cups_package_name }}"
+        state: absent
+        purge: true
+        autoremove: true
+      when: cups_dpkg_check.rc == 0 and not cups_dependency_required
+
+    - name: "Check for dependent packages that require cups"
+      ansible.builtin.shell: |
+        set -o pipefail
+        apt-cache rdepends --installed {{ cups_package_name }} | grep -v '^{{ cups_package_name }}$' || true
+      register: cups_dependents
+      changed_when: false
+      failed_when: false
+      when: cups_dpkg_check.rc == 0 and not cups_dependency_required
+
+    - name: "Warn if dependent packages exist (cups required as dependency)"
+      ansible.builtin.debug:
+        msg: "Package '{{ cups_package_name }}' has dependent packages. Only stopping/masking services."
+      when:
+        - cups_dpkg_check.rc == 0
+        - not cups_dependency_required
+        - cups_dependents.stdout | length > 0
+
+    - name: "Ensure cups services remain masked (idempotent)"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: true
+      loop: "{{ cups_services }}"
+      register: mask_result
+      failed_when: false
+
+- name: "Verify compliance: cups package not installed"
+  ansible.builtin.assert:
+    that:
+      - "cups_package_name not in ansible_facts.packages.keys()"
+    fail_msg: "Package '{{ cups_package_name }}' is still installed."
+    success_msg: "Package '{{ cups_package_name }}' has been removed."
+  when: cups_dependency_required | default(false) | bool
+
+- name: "Verify compliance: services not active"
+  ansible.builtin.shell: |
+    set -o pipefail
+    systemctl show {{ item }} --property=LoadState,ActiveState 2>/dev/null || true
+  args:
+    executable: /bin/bash
+  loop: "{{ cups_services }}"
+  register: service_status_check
+  changed_when: false
+  failed_when: false
+
+- name: "Ensure no cups services are active"
+  ansible.builtin.assert:
+    that:
+      - "'LoadState=loaded' not in item.stdout"
+      - "'ActiveState=active' not in item.stdout"
+    fail_msg: "Service {{ item.item }} is still loaded/active."
+    success_msg: "Service {{ item.item }} is properly masked/stopped."
+  loop: "{{ service_status_check.results }}"
+  when: service_status_check.results | length > 0

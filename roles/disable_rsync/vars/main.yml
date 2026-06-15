@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Internal constants for the disable_rsync role
+
+rsync_service:
+  - "{{ rsync_service_name }}.service"

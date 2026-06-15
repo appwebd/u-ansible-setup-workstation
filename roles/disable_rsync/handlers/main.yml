@@ -1,0 +1,9 @@
+---
+# Role        : disable_rsync
+# Description : Handlers for the disable_rsync role
+
+- name: "Purge unused dependencies"
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
