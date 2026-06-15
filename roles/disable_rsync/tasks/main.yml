@@ -1,0 +1,52 @@
+---
+# Role        : disable_rsync
+# Description : Ensure rsync services are not in use.
+# Wazuh ID    : 35573
+
+- name: "Gather package facts to check rsync installation status"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Stop and mask rsync.service if running (preferred remediation path)"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+  loop: "{{ rsync_service }}"
+  when:
+    - rsync_package_name in ansible_facts.packages
+    - rsync_required_as_dependency | bool
+
+- name: "Purge rsync package if not required as dependency"
+  ansible.builtin.apt:
+    name: "{{ rsync_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when:
+    - rsync_package_name in ansible_facts.packages
+    - not rsync_required_as_dependency | bool
+
+- name: "Verify rsync.service status"
+  ansible.builtin.systemd:
+    name: "{{ rsync_package_name }}"
+  register: service_check
+  changed_when: false | bool
+  failed_when: false
+  check_mode: false
+
+- name: "Show rsync.service compliance status"
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        rsync_service_name ~ ' is compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+        if
+          (service_check.status.LoadState | default('not-found')) != 'loaded' and
+          (service_check.status.ActiveState | default('inactive')) != 'active'
+        else
+        rsync_service_name ~ ' is not compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+      }}
