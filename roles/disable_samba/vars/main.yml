@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for the disable_samba role
+samba_services:
+  - "{{ samba_service_name }}"
+  - nmbd
+  - winbind
