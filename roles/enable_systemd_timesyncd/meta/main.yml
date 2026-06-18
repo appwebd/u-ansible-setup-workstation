@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: enable_sustemd_timesync
   author: Patricio Rojas Ortiz
-  description: Ensure systemd-timesyncd is enabled and running.
+  description: Ensure systemd-timesyncd is enabled and running (Wazuh ID 35589)
   license: Apache 2.0
   namespace: security
   min_ansible_version: "2.16"
