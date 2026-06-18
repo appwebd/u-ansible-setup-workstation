@@ -6,8 +6,8 @@
     Enforce or set AppArmor profiles to complain mode.
 
 #### Description:
-    This Ansible role enforces AppArmor security profiles system-wide or switches them to complain mode. It supports both
-    Debian/Ubuntu and RHEL-based systems, ensuring compliance with Wazuh rule **35760**.
+    This Ansible role enforces AppArmor security profiles system-wide or switches them to complain mode. It supports 
+    Debian/Ubuntu, ensuring compliance with Wazuh rule **35760**.
 
 #### Rationale:
     AppArmor provides mandatory access control (MAC) to limit the capabilities of programs. Enforcing profiles reduces the
