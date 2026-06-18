@@ -1,6 +1,6 @@
 ---
 # Role        : disable_unsafe_filesystem_modules
-# Description : Disable unsafe filesystem kernel modules (CVE-motivated) by preventing loading and unloading active instances.
+# Description : Ensure unused filesystems kernel modules are not available.
 # Wazuh ID    : 35724
 
 - name: "Skip if feature is disabled"
