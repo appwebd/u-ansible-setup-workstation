@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: disable_unsafe_filesystem_modules
   author: Patricio Rojas Ortiz
-  description: Disable unsafe filesystem kernel modules (CVE-motivated) by unloading and preventing future loading via modprobe configuration.
+  description: Ensure unused filesystems kernel modules are not available (Wazuh ID 35724)
   license: Apache 2.0
   namespace: security
   min_ansible_version: "2.16"
