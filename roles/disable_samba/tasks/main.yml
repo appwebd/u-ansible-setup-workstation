@@ -1,0 +1,54 @@
+---
+# Role        : disable_samba
+# Description : Ensure Samba file server services are not in use.
+# Wazuh ID    : 35574
+
+- name: "Gather package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Stop and mask smbd.service if running or enabled"
+  ansible.builtin.systemd:
+    name: "{{ nis_service_name }}"
+    state: stopped
+    masked: true
+  register: systemd_result
+  changed_when: systemd_result.changed
+  failed_when: false
+  when: >
+    (ansible_facts.packages.get(samba_package_name, []) | length > 0) or
+    (samba_stop_and_mask_only | bool)
+
+- name: "Purge samba package if not required as dependency"
+  ansible.builtin.apt:
+    name: "{{ samba_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when: >
+    (samba_package_name in ansible_facts.packages) and
+    (not samba_stop_and_mask_only)
+
+- name: "Verify smbd.service status"
+  ansible.builtin.systemd:
+    name: "{{ samba_package_name }}"
+  register: service_check
+  changed_when: false | bool
+  failed_when: false
+  check_mode: false
+
+- name: "Show smbd.service compliance status"
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        samba_service_name ~ ' is compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+        if
+          (service_check.status.LoadState | default('not-found')) != 'loaded' and
+          (service_check.status.ActiveState | default('inactive')) != 'active'
+        else
+        samba_service_name ~ ' is not compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+      }}

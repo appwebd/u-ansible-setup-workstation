@@ -1,0 +1,5 @@
+---
+# Role        : disable_snmp
+# Description : Handlers for the disable_snmp role
+
+# No handlers needed — autoremove is handled inline via apt module.

@@ -1,0 +1,45 @@
+# Role        : disable_snmp
+# Description : Ensure SNMP services are not in use.
+# Wazuh ID    : 35575
+
+- name: "Gather package facts to detect snmpd"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Stop and disable SNMP service if active"
+  ansible.builtin.systemd:
+    name: "{{ snmp_systemd_service }}"
+    state: stopped
+    enabled: false
+    masked: false
+  ignore_errors: true
+  register: stop_snmp_result
+  when: "'snmpd' in ansible_facts.packages"
+
+- name: "Mask SNMP service to prevent future activation"
+  ansible.builtin.systemd:
+    name: "{{ snmp_systemd_service }}"
+    masked: true
+  register: mask_snmp_result
+  when: "'snmpd' in ansible_facts.packages"
+
+- name: "Remove SNMP packages (strategy: remove)"
+  ansible.builtin.apt:
+    name: "{{ snmp_packages }}"
+    state: absent
+    purge: true
+    autoremove: true
+  register: remove_snmp_result
+  when:
+    - "'snmpd' in ansible_facts.packages"
+    - snmp_strategy == "remove"
+
+- name: "Ensure no SNMP packages remain installed (fallback)"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: absent
+    purge: true
+  loop: "{{ snmp_packages }}"
+  when:
+    - "'snmpd' in ansible_facts.packages"
+    - snmp_strategy != "remove"

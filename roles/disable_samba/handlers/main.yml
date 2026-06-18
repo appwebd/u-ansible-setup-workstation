@@ -1,0 +1,3 @@
+---
+# Role        : disable_samba
+# Description : Handlers for the disable_samba role (empty – no handlers required)

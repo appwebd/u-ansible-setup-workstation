@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_snmp role
+snmp_service_name: "snmpd"
+snmp_package_name: "snmpd"
+
+# Strategy to apply when SNMP is detected:
+# - 'remove': attempt to purge the package (default)
+# - 'mask': stop and mask the service, leave package installed
+snmp_strategy: "remove"

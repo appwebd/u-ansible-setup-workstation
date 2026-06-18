@@ -1,0 +1,9 @@
+---
+# vars/main.yml
+# Internal constants for the disable_snmp role
+
+snmp_systemd_service: "{{ snmp_service_name }}.service"
+snmp_packages:
+  - "{{ snmp_package_name }}"
+  - "snmp"
+  - "snmp-mibs-downloader"

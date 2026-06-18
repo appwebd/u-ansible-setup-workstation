@@ -110,7 +110,7 @@
     - disable_cups                              # 35571 Ensure print server services are not in use.
     - disable_rpcbind                           # 35572 Ensure rpcbind services are not in use.
     - disable_rsync                             # 35573 Ensure rsync services are not in use.
-#    - disable_samba                             # 35574 Ensure samba file server services are not in use.
+    - disable_samba                             # 35574 Ensure samba file server services are not in use.
 #    - disable_snmp                              # 35575 Ensure snmp services are not in use.
 #    - disable_tftp                              # 35576 Ensure tftp server services are not in use.
 #    - disable_squid                             # 35577 Ensure web proxy server services are not in use.

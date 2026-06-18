@@ -1,0 +1,6 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_samba role
+samba_service_name: smbd
+samba_package_name: samba
+samba_stop_and_mask_only: false  # If true, only stop and mask service; do not purge package
