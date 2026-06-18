@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: uninstall_prelink
   author: Patricio Rojas Ortiz
-  description: Ensures the prelink package is removed to prevent interference with AIDE and reduce security risks
+  description: Ensures the prelink package is removed to prevent interference with AIDE and reduce security risks (Wazuh ID 35544)
   license: Apache 2.0
   namespace: ubuntu-server
   min_ansible_version: "2.16"
