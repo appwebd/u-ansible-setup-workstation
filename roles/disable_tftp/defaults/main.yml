@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_tftp role
+
+tftp_service_name: "tftpd-hpa"
+tftp_package_name: "tftpd-hpa"
+
+# Whether to mask service even if package must remain (e.g., due to dependencies)
+mask_service_if_dependency_required: true

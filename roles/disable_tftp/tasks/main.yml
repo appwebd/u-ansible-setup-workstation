@@ -1,0 +1,60 @@
+---
+# Role        : disable_tftp
+# Description : Ensure tftp server services are not in use.
+# Wazuh ID    : 35576
+
+- name: "Check if tftpd-hpa package is installed"
+  ansible.builtin.shell:
+      set -o pipefail
+      dpkg-query -s {{ tftp_package_name }} 2>/dev/null | grep -q "^Status.*install ok installed" && echo "installed" || echo "not_installed"
+  register: tftp_package_status
+  changed_when: false
+  failed_when: false
+
+- name: "Stop and disable tftpd-hpa service (if installed)"
+  ansible.builtin.systemd:
+      name: "{{ item }}"
+      state: stopped
+      masked: false
+  loop: "{{ tftp_services }}"
+  when:
+      - tftp_package_status.stdout == "installed"
+      - not mask_service_if_dependency_required | bool
+
+- name: "Mask tftpd-hpa service (if package required as dependency)"
+  ansible.builtin.systemd:
+      name: "{{ item }}"
+      masked: true
+      state: stopped
+  loop: "{{ tftp_services }}"
+  when:
+      - tftp_package_status.stdout == "installed"
+      - mask_service_if_dependency_required | bool
+
+- name: "Purge tftpd-hpa package (if not required as dependency)"
+  ansible.builtin.apt:
+      name: "{{ tftp_package_name }}"
+      state: absent
+      purge: true
+      autoremove: true
+  when:
+      - tftp_package_status.stdout == "installed"
+      - not mask_service_if_dependency_required | bool
+
+- name: "Verify tftpd-hpa package is not installed (compliance check)"
+  ansible.builtin.shell: |
+      set -o pipefail
+      dpkg-query -s {{ tftp_package_name }} 2>/dev/null | grep "^Package:" && exit 1 || exit 0
+  register: verify_package_removed
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+
+- name: "Verify tftpd-hpa service is not active (compliance check)"
+  ansible.builtin.shell: |
+      set -o pipefail
+      systemctl show {{ tftp_service_name }}.service | grep -E "^LoadState=loaded|^ActiveState=active" && exit 1 || exit 0
+  register: verify_service_inactive
+  changed_when: false
+  failed_when: false
+  ignore_errors: true

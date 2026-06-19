@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Internal constants for the disable_tftp role
+
+tftp_services:
+  - "{{ tftp_service_name }}.service"
+  - "{{ tftp_service_name }}.socket"
