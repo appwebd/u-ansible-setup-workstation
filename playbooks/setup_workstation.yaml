@@ -114,7 +114,7 @@
     - disable_snmp                              # 35575 Ensure snmp services are not in use.
     - disable_tftp                              # 35576 Ensure tftp server services are not in use.
     - disable_squid                             # 35577 Ensure web proxy server services are not in use.
-#    - disable_web_server_services               # 35578 Ensure web server services are not in use.
+    - disable_web_server_services               # 35578 Ensure web server services are not in use.
 #    - disable_xinetd                            # 35579 Ensure xinetd services are not in use.
 #    - disable_x_window_server                   # 35580 Ensure X window server services are not in use.
 
