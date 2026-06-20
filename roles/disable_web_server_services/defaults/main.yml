@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_web_server_services role
+# These are not intended to be overridden by users unless explicitly required
+
+web_service_packages:
+  - apache2
+  - nginx
+  - lighttpd

@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: disable_web_server_services
+  author: Patricio Rojas Ortiz
+  description: Disable and remove common web server packages (apache2, nginx, lighttpd) to reduce attack surface. (Wazuh ID 35578)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - webserver
+    - hardening
+
+dependencies: []

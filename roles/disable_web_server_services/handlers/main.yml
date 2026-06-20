@@ -1,0 +1,9 @@
+---
+# Role        : disable_web_server_services
+# Description : Handlers for the disable_web_server_services role
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
