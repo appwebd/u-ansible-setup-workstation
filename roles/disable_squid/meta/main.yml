@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: disable_squid
+  author: Patricio Rojas Ortiz
+  description: Ensure Squid proxy is properly configured and running, or removed if not needed. (Wazuh ID 35724)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - proxy
+    - squid
+    - compliance
+    - sysadmin
+
+dependencies: []

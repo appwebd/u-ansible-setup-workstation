@@ -1,0 +1,4 @@
+---
+# vars/main.yml
+# Internal constants for the disable_squid role
+# These are not intended to be overridden by users
