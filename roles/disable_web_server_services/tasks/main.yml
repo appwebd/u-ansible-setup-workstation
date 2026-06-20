@@ -1,0 +1,64 @@
+---
+# Role        : disable_web_server_services
+# Description : Disable and remove common web server packages (apache2, nginx, lighttpd) to reduce attack surface.
+# Wazuh ID    : 35578
+
+- name: "Gather package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Check if web service package is installed
+  ansible.builtin.set_fact:
+    web_server_package_installed: >-
+      {{
+        (web_service_packages | map('lower') | list) | intersect(
+          ansible_facts.packages.keys() | map('lower') | list
+        ) | length > 0
+      }}
+
+- name: "Stop and mask web services if installed or enabled"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+  loop: "{{ web_service_packages }}" # Web services = web service packages
+  when:
+    - ansible_facts.packages is defined
+    - ( web_service_packages | map('lower') | list) | intersect(ansible_facts.packages.keys() | map('lower') | list) | length > 0
+
+
+- name: "Remove rpcbind package if not required"
+  ansible.builtin.apt:
+    name: "{{ web_service_packages }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when:
+    - ansible_facts.packages is defined
+    - (web_service_packages | map('lower') | list) | intersect(ansible_facts.packages.keys() | map('lower') | list) | length > 0
+
+
+- name: "Verify web service status"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+  register: service_check
+  changed_when: false | bool
+  failed_when: false
+  check_mode: false
+  loop: "{{ web_service_packages }}"
+
+- name: "Show web service compliance status"
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        web_service_packages ~ ' is compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+        if
+          (service_check.status.LoadState | default('not-found')) != 'loaded' and
+          (service_check.status.ActiveState | default('inactive')) != 'active'
+        else
+        web_service_packages ~ ' is not compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+      }}

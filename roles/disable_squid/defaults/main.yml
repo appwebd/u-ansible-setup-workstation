@@ -1,0 +1,10 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_squid role
+# This role ensures Squid proxy is properly configured and running,
+# or removed if not needed, based on compliance requirements.
+
+squid_service_name: squid
+squid_package_name: squid
+squid_config_dir: /etc/squid
+squid_enabled: false

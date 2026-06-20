@@ -1,0 +1,101 @@
+---
+# Role        : disable_squid
+# Description : Ensure Squid proxy is properly configured and running, or removed if not needed.
+# Wazuh ID    : 35724
+
+- name: "Gather package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if Squid service is active"
+  ansible.builtin.systemd:
+    name: "{{ squid_service_name }}"
+  register: squid_service_status
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Ensure Squid is installed and enabled (when required)"
+  when:
+    - squid_enabled | bool
+  block:
+    - name: "Install Squid package"
+      ansible.builtin.apt:
+        name: "{{ squid_package_name }}"
+        state: present
+        update_cache: true
+        cache_valid_time: 86400
+
+    - name: "Ensure Squid configuration directory exists"
+      ansible.builtin.file:
+        path: "{{ squid_config_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: "Ensure Squid service is enabled and started"
+      ansible.builtin.systemd:
+        name: "{{ squid_service_name }}"
+        enabled: true
+        state: started
+        daemon_reload: true
+
+
+- name: "Remove Squid if not required (compliance enforcement)"
+  when:
+    - not squid_enabled | bool
+  block:
+    - name: "Stop and disable Squid service"
+      ansible.builtin.systemd:
+        name: "{{ squid_service_name }}"
+        state: stopped
+        enabled: false
+        daemon_reload: true
+      failed_when: false
+
+    - name: "Purge Squid package"
+      ansible.builtin.apt:
+        name: "{{ squid_package_name }}"
+        state: absent
+        purge: true
+
+    - name: "Remove Squid configuration directory"
+      ansible.builtin.file:
+        path: "{{ squid_config_dir }}"
+        state: absent
+
+- name: "Verify Squid service compliance status"
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        'Squid is compliant: '
+        ~ (squid_service_status.status.LoadState | default('not-found'))
+        ~ ', '
+        ~ (squid_service_status.status.ActiveState | default('inactive'))
+        if
+          squid_enabled | bool and
+          (squid_service_status.status.LoadState | default('')) == 'loaded'
+          and (squid_service_status.status.ActiveState | default('')) == 'active'
+        else
+        'Squid is not compliant: '
+        ~ (squid_service_status.status.LoadState | default('not-found'))
+        ~ ', '
+        ~ (squid_service_status.status.ActiveState | default('inactive'))
+      }}
+  when:
+    - squid_enabled | bool
+
+- name: "Verify Squid removal compliance status"
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        'Squid is compliant: service not found and package absent'
+        if
+          (squid_service_status.status.LoadState | default('')) == 'not-found'
+          or squid_package_name not in ansible_facts.packages
+        else
+        'Squid is not compliant: service still present or package installed'
+      }}
+  when:
+    - not squid_enabled | bool
