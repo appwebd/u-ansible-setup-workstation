@@ -1,0 +1,9 @@
+---
+# Role        : disable_xinetd
+# Description : Handlers for the disable_xinetd role
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result

@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Safe defaults for the disable_xinetd role
+# This role ensures xinetd service is disabled and removed
+
+xinetd_service_name: xinetd
+xinetd_package_name: xinetd
+xinetd_enabled: true
+xinetd_remove_packages: false
