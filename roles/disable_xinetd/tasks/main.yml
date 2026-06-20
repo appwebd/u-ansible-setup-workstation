@@ -1,0 +1,81 @@
+---
+# Role        : disable_xinetd
+# Description : Disable and remove the xinetd super-server to reduce attack surface.
+# Wazuh ID    : 35579
+
+- name: "Gather package facts for xinetd"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Verify xinetd service status"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+  register: xinetd_service_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  loop: "{{ xinetd_unit_names }}"
+
+- name: "Stop and disable xinetd services if active"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+  loop: "{{ xinetd_unit_names }}"
+  when:
+    - xinetd_enabled | bool
+    - >-
+      (
+        xinetd_service_check.results | default([]) | map(attribute='status') | map(attribute='ActiveState') | list
+        | select('match', '^(active|activating|deactivating)$')
+      ) | length > 0
+
+  notify: Purge unused dependencies
+
+- name: "Remove xinetd package if configured"
+  ansible.builtin.apt:
+    name: "{{ xinetd_package_name }}"
+    state: absent
+    autoremove: true
+    purge: true
+  when:
+    - xinetd_enabled | bool
+    - xinetd_remove_packages | bool
+    - "'xinetd' in ansible_facts.packages"
+  notify: Purge unused dependencies
+
+- name: "Ensure xinetd is not enabled at boot (Debian/Ubuntu)"
+  ansible.builtin.apt:
+    name: "{{ xinetd_package_name }}"
+    state: absent
+  when:
+    - xinetd_enabled | bool
+    - not xinetd_remove_packages | bool
+    - "'xinetd' in ansible_facts.packages"
+  notify: Purge unused dependencies
+
+
+- name: "Verify xinet service status"
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+  register: service_check
+  changed_when: false | bool
+  failed_when: false
+  check_mode: false
+  loop: "{{ xinetd_unit_names }}"
+
+- name: "Show xinet service compliance status"
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        xinetd_unit_names ~ ' is compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+        if
+          (service_check.status.LoadState | default('not-found')) != 'loaded' and
+          (service_check.status.ActiveState | default('inactive')) != 'active'
+        else
+        xinetd_unit_names ~ ' is not compliant: '
+        ~ 'LoadState=' ~ (service_check.status.LoadState | default('unknown'))
+        ~ ', ActiveState=' ~ (service_check.status.ActiveState | default('unknown'))
+      }}
