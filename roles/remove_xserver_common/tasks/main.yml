@@ -1,0 +1,33 @@
+---
+# Role        : remove_xserver_common
+# Description : Ensure X window server services are not in use.
+# Wazuh ID    : 35580
+# Scope       : Debian/Ubuntu family | X server common package removal
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Gather installed packages facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if xserver-common is installed"
+  ansible.builtin.set_fact:
+    xserver_common_installed: "{{ 'xserver-common' in ansible_facts.packages }}"
+  when: ansible_facts.os_family == "Debian"
+
+- name: "Remove X Window Server package (xserver-common)"
+  ansible.builtin.apt:
+    name: "{{ xserver_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when:
+    - xserver_common_installed | default(false)
+    - ansible_facts.os_family == "Debian"
+  register: remove_result
+  notify: "Purge unused dependencies"

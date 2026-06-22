@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Role         : remove_xserver_common
+# Description  : Ensure X window server services are not in use.
+#
+# Internal variables — not meant for override

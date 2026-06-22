@@ -1,0 +1,9 @@
+---
+# Role name   : remove_xserver_common
+# Description : Handlers for the remove_xserver_common role
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
