@@ -118,9 +118,8 @@
     - disable_xinetd                            # 35579 Ensure xinetd services are not in use.
     - remove_xserver_common                     # 35580 Ensure X window server services are not in use.
 
-
 # Unneeded client packages
-                                               # 35581 Ensure mail transfer agent is configured for local-only mode.
+    - configure_postfix_loopback_only          # 35581 Ensure mail transfer agent is configured for local-only mode.
                                                # 35582 Ensure NIS Client is not installed.
                                                # 35583 Ensure rsh client is not installed.
                                                # 35584 Ensure talk client is not installed.
