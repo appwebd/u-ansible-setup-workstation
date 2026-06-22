@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Role         : configure_postfix_loopback_only
+# Description  : Configure Postfix mail transfer agent to listen only on loopback interface (local-only mode)
+#
+# Default configuration for the postfix loopback-only role
+
+postfix_main_cf_path: /etc/postfix/main.cf
+postfix_inet_interfaces_value: loopback-only

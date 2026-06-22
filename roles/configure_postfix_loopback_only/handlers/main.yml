@@ -1,0 +1,9 @@
+---
+# Role name   : configure_postfix_loopback_only
+# Description : Handlers for the configure_postfix_loopback_only role
+
+- name: Restart Postfix
+  ansible.builtin.systemd:
+    name: "{{ postfix_restart_service_name }}"
+    state: restarted
+    daemon_reload: true
