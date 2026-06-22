@@ -5,6 +5,9 @@
 # Path to modprobe configuration file for cramfs
 cramfs_modprobe_conf_file: /etc/modprobe.d/cramfs.conf
 
+# Modprobe configuration directory (moved from vars/main.yml)
+modprobe_conf_dir: /etc/modprobe.d
+
 # Content to blacklist cramfs module
 modprobe_blacklist_content: |
   install cramfs /bin/false
