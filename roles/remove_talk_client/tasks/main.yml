@@ -1,0 +1,49 @@
+---
+# Role        : remove_talk_client
+# Description : Ensure talk client is not installed.
+# Wazuh ID    : 35584
+# Scope       : Debian/Ubuntu family | Talk client removal
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Gather installed packages information"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if talk package is installed"
+  ansible.builtin.set_fact:
+    talk_is_installed: "{{ '{{ talk_package_name }}' in ansible_facts.packages }}"
+
+- name: "Remove talk client package (Debian/Ubuntu)"
+  become: true
+  when: talk_is_installed | bool
+  block:
+    - name: "Purge talk package from system"
+      ansible.builtin.apt:
+        name: "{{ talk_package_name }}"
+        state: absent
+        purge: true
+        autoremove: true
+      register: talk_removal_result
+
+    - name: "Re-gather installed packages to confirm removal"
+      ansible.builtin.package_facts:
+        manager: auto
+
+  rescue:
+    - name: "FAIL: Unable to remove talk package"
+      ansible.builtin.debug:
+        msg: "FAIL: Failed to remove talk package. Ensure the package is installed and system has proper permissions."
+
+- name: "Verify talk client is not installed (final enforcement)"
+  become: true
+  ansible.builtin.assert:
+    that:
+      - "'{{ talk_package_name }}' not in ansible_facts.packages"
+    fail_msg: "FAIL: Talk package '{{ talk_package_name }}' is still installed after removal attempt."
+    success_msg: "Talk package successfully removed and verified absent."

@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: remove_talk_client
+  author: Patricio Rojas Ortiz
+  description: Ensure talk client is not installed. (Wazuh ID 35584)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - sysadmin
+    - removal
+
+dependencies: []
