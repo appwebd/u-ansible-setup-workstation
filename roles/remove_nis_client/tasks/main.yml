@@ -69,8 +69,8 @@
       ansible.builtin.debug:
         msg: >-
           NIS package '{{ nis_package_name }}' status:
-          {% if '{{nis_package_name}}' in ansible_facts.packages %}
-            installed (version {{ ansible_facts.packages['{{nis_package_name}}'][0].version }})
+          {% if '{{ nis_package_name }}' in ansible_facts.packages %}
+            installed (version {{ ansible_facts.packages['{{ nis_package_name }}'][0].version }})
           {% else %}
             not installed
           {% endif %}
