@@ -1,0 +1,14 @@
+---
+# defaults/main.yml
+# Role         : remove_rsh_client
+# Description  : Remove rsh-client package to comply with security benchmarks (Wazuh ID 35583)
+#
+# Default configuration for the remove_rsh_client role
+
+# Package name to remove (rsh client)
+rsh_package_name: rsh-client
+rsh_service_list:
+  - rsh.socket
+  - rlogin.socket
+  - rshd.service
+  - rlogind.service

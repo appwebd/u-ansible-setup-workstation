@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Role         : remove_xserver_common
+# Description  : Ensure X window server services are not in use.
+#
+# Default configuration for the remove_xserver_common role
+
+# Package name to remove (X server common)
+xserver_package_name: xserver-common

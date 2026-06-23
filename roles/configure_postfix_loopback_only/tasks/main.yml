@@ -1,0 +1,78 @@
+---
+# Role        : configure_postfix_loopback_only
+# Description : Configure Postfix mail transfer agent to listen only on loopback interface (local-only mode)
+# Wazuh ID    : 35581
+# Scope       : Debian/Ubuntu family | Postfix configuration for local-only mode
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Ensure /etc/postfix directory exists"
+  ansible.builtin.file:
+    path: /etc/postfix
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: "Check if postfix package is installed"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Fail if postfix is not installed"
+  ansible.builtin.fail:
+    msg: "Postfix mail transfer agent is not installed. This role requires the 'postfix' package."
+  when: "'postfix' not in ansible_facts.packages"
+
+- name: "Backup existing main.cf if it exists"
+  ansible.builtin.copy:
+    src: "{{ postfix_main_cf_path }}"
+    dest: "{{ postfix_main_cf_path }}.backup.{{ ansible_date_time.iso8601 | regex_replace('T', '_') | regex_replace(':', '-') }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0644"
+  when:
+    - postfix_main_cf_path is file
+  register: postfix_backup_result
+  changed_when: false
+
+- name: "Ensure inet_interfaces = loopback-only exists in /etc/postfix/main.cf"
+  ansible.builtin.lineinfile:
+    path: "{{ postfix_main_cf_path }}"
+    regexp: '^inet_interfaces\s*='
+    line: "inet_interfaces = {{ postfix_inet_interfaces_value }}"
+    create: true
+    owner: root
+    group: root
+    mode: "0644"
+    backup: false
+  register: inet_interfaces_result
+
+- name: "Restart Postfix service to apply changes"
+  ansible.builtin.systemd:
+    name: "{{ postfix_restart_service_name }}"
+    state: restarted
+    daemon_reload: true
+  notify: "Restart Postfix"
+
+- name: "Verify Postfix is listening only on loopback interface"
+  ansible.builtin.shell: |
+    set -o pipefail
+    ss -lntu | grep -E ':25\s|:465\s|:587\s' || echo "No external ports detected"
+  register: port_check_result
+  changed_when: false
+  failed_when: false
+
+- name: "Report if Postfix is listening on external interfaces"
+  ansible.builtin.debug:
+    msg: >-
+      "\u001b[31mWARNING: Postfix may be listening on external ports. Check output:\n{{ port_check_result.stdout }}\u001b[0m"
+  when:
+    - port_check_result.rc == 0
+    - port_check_result.stdout | length > 0
+    - not (port_check_result.stdout | regex_search('127\\.\\d+\\.\\d+\\.\\d+|::1'))

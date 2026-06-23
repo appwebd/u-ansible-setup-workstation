@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Role         : remove_nis_client
+# Description  : Remove NIS client package to comply with security benchmarks (Wazuh ID 35582)
+#
+# Internal variables — not meant for override

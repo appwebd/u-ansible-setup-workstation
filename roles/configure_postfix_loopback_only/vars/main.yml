@@ -1,0 +1,8 @@
+---
+# vars/main.yml
+# Role         : configure_postfix_loopback_only
+# Description  : Configure Postfix mail transfer agent to listen only on loopback interface (local-only mode)
+#
+# Internal variables — not meant for override
+
+postfix_restart_service_name: postfix
