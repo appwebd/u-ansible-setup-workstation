@@ -1,0 +1,6 @@
+---
+# Role name   : remove_nis_client
+# Description : Handlers for the remove_nis_client role (Wazuh ID 35582)
+#
+# No handlers required — no tasks use notify:
+#

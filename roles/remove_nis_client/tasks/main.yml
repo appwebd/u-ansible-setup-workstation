@@ -1,0 +1,76 @@
+---
+# Role        : remove_nis_client
+# Description : Ensure NIS Client is not installed.
+# Wazuh ID    : 35582
+# Scope       : Debian/Ubuntu family | Remove NIS client package
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Gather installed packages facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if NIS package is installed"
+  ansible.builtin.set_fact:
+    nis_package_installed: "{{ 'nis' in ansible_facts.packages }}"
+
+- name: "Remove NIS client package"
+  block:
+
+    - name: "Stop and mask NIS-related services before removal"
+      when: nis_package_installed | bool
+      block:
+        - name: "Ensure NIS service is stopped and masked"
+          ansible.builtin.systemd:
+            name: "{{ item }}"
+            state: stopped
+            masked: true
+          loop:
+            - nis.service
+            - ypbind.service
+          register: systemd_result
+          failed_when: false
+          become: true
+
+      rescue:
+        - name: "Warn that NIS service management failed but proceeding with package removal"
+          ansible.builtin.debug:
+            msg: "Failed to stop or mask NIS services. Proceeding with package removal."
+            verbosity: 1
+
+    - name: "Remove NIS client package (Debian/Ubuntu)"
+      ansible.builtin.apt:
+        name: "{{ nis_package_name }}"
+        state: absent
+        purge: true
+        autoremove: true
+      register: apt_result
+      when: nis_package_installed | bool
+      become: true
+
+    - name: "Verify NIS package removal"
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: "Confirm NIS package is not installed"
+      ansible.builtin.assert:
+        that:
+          - "'nis' not in ansible_facts.packages"
+        fail_msg: "NIS package 'nis' is still present after removal attempt."
+        success_msg: "NIS package successfully removed."
+
+  always:
+    - name: "Report NIS package status"
+      ansible.builtin.debug:
+        msg: >-
+          NIS package '{{ nis_package_name }}' status:
+          {% if 'nis' in ansible_facts.packages %}
+            installed (version {{ ansible_facts.packages['nis'][0].version }})
+          {% else %}
+            not installed
+          {% endif %}

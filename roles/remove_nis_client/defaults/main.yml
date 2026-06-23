@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Role         : remove_nis_client
+# Description  : Remove NIS client package to comply with security benchmarks (Wazuh ID 35582)
+#
+# Default configuration for the remove_nis_client role
+
+# Package name to remove (NIS client)
+nis_package_name: nis
