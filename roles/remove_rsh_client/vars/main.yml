@@ -1,0 +1,10 @@
+---
+# vars/main.yml
+# Role         : remove_rsh_client
+# Description  : Remove rsh-client package to comply with security benchmarks (Wazuh ID 35583)
+#
+# Internal variables — not meant for override
+
+rsh_packages_state: absent
+rsh_services_state: stopped
+rsh_services_masked: true

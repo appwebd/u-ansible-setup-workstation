@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: remove_rsh_client
+  author: Patricio Rojas Ortiz
+  description: Remove rsh-client package to comply with security benchmarks (Wazuh ID 35583)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - sysadmin
+
+dependencies: []

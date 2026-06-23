@@ -1,0 +1,94 @@
+---
+# Role        : remove_rsh_client
+# Description : Ensure rsh client is not installed.
+# Wazuh ID    : 35583
+# Scope       : Debian/Ubuntu family | rsh-client package removal
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Gather installed packages facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if rsh-client package is installed"
+  ansible.builtin.set_fact:
+    rsh_client_installed: "{{ 'rsh-client' in ansible_facts.packages }}"
+
+- name: "Remove rsh-client package (Debian/Ubuntu)"
+  block:
+
+    - name: "Ensure rsh-client package is removed"
+      ansible.builtin.apt:
+        name: "{{ rsh_package_name }}"
+        state: absent
+        purge: true
+        autoremove: true
+      register: rsh_removal_result
+      when: rsh_client_installed | bool
+
+  rescue:
+
+    - name: "Fail if rsh-client removal failed"
+      ansible.builtin.debug:
+        msg: "FAIL: Failed to remove rsh-client package. Ensure the system has internet access and package lists are up-to-date."
+      changed_when: false
+      failed_when: true
+
+- name: "Verify rsh-client package removal"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Confirm rsh-client is not installed"
+  ansible.builtin.assert:
+    that:
+      - "'rsh-client' not in ansible_facts.packages"
+    fail_msg: "Failed to remove rsh-client package. Package still present."
+    success_msg: "rsh-client package successfully removed."
+  when: rsh_client_installed | bool
+
+- name: "Stop and mask rsh-related services if they exist"
+  block:
+
+    - name: "Stop any running rsh-related services"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: stopped
+        masked: true
+      loop:
+        "{{ rsh_service_list }}"
+
+      failed_when: false
+      changed_when: false
+
+    - name: "Verify rsh-related services are stopped and masked"
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+      loop:
+        "{{ rsh_service_list }}"
+      register: service_status
+      failed_when: false
+      changed_when: false
+
+  rescue:
+
+    - name: "Fail if service management tasks failed"
+      ansible.builtin.debug:
+        msg: "FAIL: Failed to manage rsh-related services. Ensure systemd is available."
+      changed_when: false
+      failed_when: true
+
+  always:
+    - name: "Report RSH package status"
+      ansible.builtin.debug:
+        msg: >-
+          RSH package '{{ rsh_package_name }}' status:
+          {% if '{{ rsh_package_name }}' in ansible_facts.packages %}
+            installed (version {{ ansible_facts.packages['{{ rsh_package_name }}'][0].version }})
+          {% else %}
+            not installed
+          {% endif %}

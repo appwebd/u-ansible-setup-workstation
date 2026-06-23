@@ -1,0 +1,6 @@
+---
+# Role name   : remove_rsh_client
+# Description : Handlers for the remove_rsh_client role
+
+# No handlers needed — all tasks are idempotent and do not require restarts or notifications.
+#
