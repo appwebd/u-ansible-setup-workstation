@@ -120,7 +120,7 @@
 
 # Unneeded client packages
     - configure_postfix_loopback_only          # 35581 Ensure mail transfer agent is configured for local-only mode.
-                                               # 35582 Ensure NIS Client is not installed.
+    - remove_nis_client                        # 35582 Ensure NIS Client is not installed.
                                                # 35583 Ensure rsh client is not installed.
                                                # 35584 Ensure talk client is not installed.
                                                # 35585 Ensure telnet client is not installed.
