@@ -61,7 +61,7 @@
       ansible.builtin.assert:
         that:
           - "'nis' not in ansible_facts.packages"
-        fail_msg: "NIS package 'nis' is still present after removal attempt."
+        fail_msg: "NIS package '{{ nis_package_name }}' is still present after removal attempt."
         success_msg: "NIS package successfully removed."
 
   always:
@@ -69,8 +69,8 @@
       ansible.builtin.debug:
         msg: >-
           NIS package '{{ nis_package_name }}' status:
-          {% if 'nis' in ansible_facts.packages %}
-            installed (version {{ ansible_facts.packages['nis'][0].version }})
+          {% if '{{nis_package_name}}' in ansible_facts.packages %}
+            installed (version {{ ansible_facts.packages['{{nis_package_name}}'][0].version }})
           {% else %}
             not installed
           {% endif %}
