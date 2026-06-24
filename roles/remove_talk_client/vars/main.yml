@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Role         : remove_talk_client
+# Description  : Remove talk client package to comply with security benchmarks
+#
+# Internal variables — not meant for override

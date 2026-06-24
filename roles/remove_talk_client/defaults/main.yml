@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Role         : remove_talk_client
+# Description  : Ensure talk client is not installed.
+#
+# Default configuration for the remove_talk_client role
+
+# Package name to remove (talk client)
+talk_package_name: talk

@@ -1,0 +1,72 @@
+---
+# Role        : remove_telnet_client
+# Description : Remove telnet and inetutils-telnet packages to prevent insecure remote access.
+# Wazuh ID    : 35585
+# Scope       : Debian/Ubuntu family | Telnet client removal
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Gather installed packages facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if telnet or inetutils-telnet is installed"
+  ansible.builtin.set_fact:
+    telnet_package_present: >-
+      {{ 'telnet' in ansible_facts.packages
+        or 'inetutils-telnet' in ansible_facts.packages }}
+
+- name: "Remove telnet and inetutils-telnet packages"
+  when: telnet_package_present | bool
+  block:
+
+    - name: "Purge telnet package if present"
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: absent
+        purge: true
+        autoremove: true
+      loop: "{{ telnet_package_names }}"
+      when:
+        - telnet_package_present | bool
+        - item in ansible_facts.packages
+      register: apt_purge_result
+
+    - name: "Verify packages have been removed"
+      ansible.builtin.shell: |
+        set -o pipefail
+        dpkg-query -s telnet inetutils-telnet 2>/dev/null | grep "^Status:" | grep "install ok installed" || true
+      register: package_check_result
+      changed_when: false
+      failed_when: false
+
+    - name: "Verify packages are no longer installed"
+      ansible.builtin.assert:
+        that:
+          - package_check_result.stdout | length == 0
+        fail_msg: "One or more telnet client packages remain installed."
+        success_msg: "All telnet client packages successfully removed."
+
+  always:
+
+    - name: "Report telnet-client package status"
+      ansible.builtin.debug:
+        msg: |
+          {% for pkg in telnet_package_names %}
+            Paquete '{{ pkg }}':
+            {% if pkg in ansible_facts.packages %}
+              installed (versión {{ ansible_facts.packages[pkg][0].version }})
+            {% else %}
+              not installed
+            {% endif %}
+          {% endfor %}
+
+- name: "Clean apt cache"
+  ansible.builtin.apt:
+    clean: true
+  when: telnet_package_present | bool

@@ -1,0 +1,5 @@
+---
+# Role name   : remove_talk_client
+# Description : Handlers for the remove_talk_client role
+
+# No handlers needed as this role only removes a package and does not manage services

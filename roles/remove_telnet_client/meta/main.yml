@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: remove_telnet_client
+  author: Patricio Rojas Ortiz
+  description: Ensure telnet client is not installed to prevent insecure remote access (Wazuh ID 35585)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - telnet
+    - removal
+
+dependencies: []

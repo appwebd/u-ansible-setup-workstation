@@ -1,0 +1,9 @@
+---
+# Role name   : remove_telnet_client
+# Description : Handlers for the remove_telnet_client role
+
+- name: Purge unused dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  register: cleanup_result
