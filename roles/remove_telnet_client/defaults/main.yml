@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+# Role         : remove_telnet_client
+# Description  : Ensure telnet client is not installed. (Wazuh ID 35585)
+#
+# Default configuration for the remove_telnet_client role
+
+# Package names to remove (telnet clients)
+telnet_package_names:
+  - telnet
+  - inetutils-telnet

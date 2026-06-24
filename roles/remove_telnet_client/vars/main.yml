@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Role         : remove_telnet_client
+# Description  : Ensure telnet client is not installed to prevent insecure remote access (Wazuh ID 35585)
+#
+# Internal variables — not meant for override
