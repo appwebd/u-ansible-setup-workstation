@@ -123,7 +123,7 @@
     - remove_nis_client                        # 35582 Ensure NIS Client is not installed.
     - remove_rsh_client                        # 35583 Ensure rsh client is not installed.
     - remove_talk_client                       # 35584 Ensure talk client is not installed.
-                                               # 35585 Ensure telnet client is not installed.
+    - remove_telnet_client                     # 35585 Ensure telnet client is not installed.
                                                # 35586 Ensure ldap client is not installed.
                                                # 35587 Ensure ftp client is not installed.
 
