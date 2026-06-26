@@ -1,0 +1,5 @@
+---
+# Role name   : remove_ldap_client
+# Description : Handlers for the remove_ldap_client role
+
+# No handlers required for this role

@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Role         : remove_ldap_client
+# Description  : Ensure LDAP Client is not installed.
+#
+# Internal variables — not meant for override
