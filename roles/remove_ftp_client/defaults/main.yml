@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+# Role         : remove_ftp_client
+# Description  : Ensure ftp client is not installed.
+#
+# Default configuration for the remove_ftp_client role
+
+# Package names to remove (FTP clients)
+ftp_packages:
+  - ftp
+  - tnftp

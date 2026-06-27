@@ -1,0 +1,79 @@
+#### Role name:
+    remove_ftp_client
+
+#### Wazuh ID:
+    35587
+
+#### Title:
+    Ensure ftp client is not installed.
+
+#### Description:
+    tnftp an enhanced FTP client, is the user interface to the Internet standard File Transfer Protocol. The program allows a user to transfer files to and from a remote network site.
+
+#### Rationale:
+    Unless there is a need to run the system using Internet standard File Transfer Protocol (for example, to allow anonymous downloads), it is recommended that the package be removed to reduce the potential attack surface.
+
+#### Remediation:
+    Run the following commands to uninstall tnftp & ftp: # apt purge ftp # apt purge tnftp.
+
+#### Requirements
+    - Ansible 2.16 or higher
+    - `become: yes` required (to modify system packages, services, or configuration files)
+    - OS: inferred from `tasks/main.yml` (e.g., Debian/Ubuntu)
+    - Required Ansible collections/modules: e.g., `ansible.builtin.file`, `ansible.builtin.service`, `ansible.builtin.lineinfile`, `ansible.builtin.command`, etc., used explicitly in tasks
+    
+#### Variables
+
+### defaults/main.yml
+
+| Variable       | Default          | Description                           |
+|----------------|------------------|---------------------------------------|
+| ftp_packages   | ['ftp', 'tnftp'] | Package names to remove (FTP clients) |
+
+### vars/main.yml
+| Variable                | Default | Description |
+|-------------------------|---------|-------------|
+| No variables defined.   |         |             |
+
+#### Dependencies
+    Handlers: `handlers/main.yml` *(if exists)*
+    Dependencies on other roles: *none / list*
+
+#### Compliance mapping
+    cmmc: ['CM.L2-3.4.7', 'CM.L2-3.4.8', 'SC.L2-3.13.6']
+    fedramp: ['CM-2', 'CM-3', 'CM-6', 'CM-7']
+    gdpr: ['32']
+    hipaa: ['164.308(a)(1)']
+    iso_27001: ['A.12.1.1', 'A.12.1.2', 'A.14.2.1']
+    nis2: ['21.2.e', '21.2.a']
+    nist_800_171: ['3.4.7', '3.4.8', '3.13.6']
+    nist_800_53: ['CM-2', 'CM-3', 'CM-6', 'CM-7']
+    pci_dss: ['1.1', '1.2', '2.2', '6.4']
+    tsc: ['CC6.3', 'CC6.6', 'CC8.1', 'CC5.1', 'CC5.2', 'CC5.3']
+
+#### Mitre
+    tactic: ['TA0005']
+    technique: ['T1036', 'T1564']
+
+#### Conditions
+    all
+
+#### Rules
+    not c:dpkg-query -s ftp tnftp -> r:^Status: install ok installed
+
+#### Usage
+
+```code
+- hosts: servers
+  become: yes
+  roles:
+    - remove_ftp_client
+```
+#### License
+    Apache 2.0
+
+#### Author
+    Patricio Rojas Ortiz
+
+### Date
+    2026-06-27_16:03:31

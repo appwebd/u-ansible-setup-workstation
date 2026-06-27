@@ -1,0 +1,11 @@
+---
+# vars/main.yml
+# Role         : remove_ftp_client
+# Description  : Ensure ftp client is not installed.
+#
+# Internal variables — not meant for override
+
+ftp_packages_state: absent
+
+backup_suffix: >-
+  {{ ansible_date_time.iso8601 | regex_replace('T', '_') | regex_replace(':', '-') }}
