@@ -1,0 +1,11 @@
+---
+# vars/main.yml
+# Role         : disable_ip_forwarding
+# Description  : Ensure ip forwarding is disabled.
+#
+# Internal variables — not meant for override
+
+sysctl_ipv4_forward_setting: net.ipv4.ip_forward
+sysctl_ipv6_forward_setting: net.ipv6.conf.all.forwarding
+sysctl_flush_ipv4_route_cmd: sysctl -w net.ipv4.route.flush=1
+sysctl_flush_ipv6_route_cmd: sysctl -w net.ipv6.route.flush=1

@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: disable_ip_forwarding
+  author: Patricio Rojas Ortiz
+  description: Ensure ip forwarding is disabled. (Wazuh ID 35608)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - network
+    - sysctl
+    - ipforward
+
+dependencies: []
