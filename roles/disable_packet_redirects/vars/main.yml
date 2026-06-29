@@ -1,0 +1,12 @@
+---
+# vars/main.yml
+# Role         : disable_packet_redirects
+# Description  : Ensure packet redirect sending is disabled.
+#
+# Internal variables — not meant for override
+
+sysctl_file_owner: root
+sysctl_file_group: root
+sysctl_file_mode: '0644'
+sysctl_dir: /etc/sysctl.d
+sysctl_dir_mode: '0755'

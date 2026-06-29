@@ -1,0 +1,10 @@
+---
+# Role name   : disable_packet_redirects
+# Description : Handlers for the disable_packet_redirects role
+
+- name: Reload sysctl configuration
+  ansible.builtin.command:
+    cmd: sysctl --system
+  become: true
+  changed_when: true
+  listen: reload_sysctl
