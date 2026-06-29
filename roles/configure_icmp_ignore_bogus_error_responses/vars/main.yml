@@ -1,0 +1,8 @@
+---
+# vars/main.yml
+# Role         : configure_icmp_ignore_bogus_error_responses
+# Description  : Ensure bogus icmp responses are ignored.
+#
+# Internal variables — not meant for override
+
+sysctl_config_file_dir: "{{ sysctl_config_file | dirname }}"
