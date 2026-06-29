@@ -1,0 +1,55 @@
+---
+# Role        : remove_ldap_client
+# Description : Ensure LDAP Client is not installed.
+# Wazuh ID    : 35586
+# Scope       : Debian/Ubuntu family | Remove LDAP client package
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Gather installed packages facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if LDAP package is installed"
+  ansible.builtin.set_fact:
+    ldap_package_installed: "{{ '{{ldap_package_name}}' in ansible_facts.packages }}"
+
+- name: "Remove LDAP client package"
+  block:
+
+    - name: "Remove LDAP client package (Debian/Ubuntu)"
+      ansible.builtin.apt:
+        name: "{{ ldap_package_name }}"
+        state: absent
+        purge: true
+        autoremove: true
+      register: apt_result
+      when: ldap_package_installed | bool
+      become: true
+
+    - name: "Verify LDAP package removal"
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: "Confirm LDAP package is not installed"
+      ansible.builtin.assert:
+        that:
+          - "'{{ ldap_package_name }}' not in ansible_facts.packages"
+        fail_msg: "LDAP package '{{ ldap_package_name }}' is still present after removal attempt."
+        success_msg: "LDAP package successfully removed."
+
+  always:
+    - name: "Report LDAP package status"
+      ansible.builtin.debug:
+        msg: >-
+          LDAP package '{{ ldap_package_name }}' status:
+          {% if '{{ ldap_package_name }}' in ansible_facts.packages %}
+            installed (version {{ ansible_facts.packages['{{ ldap_package_name }}'][0].version }})
+          {% else %}
+            not installed
+          {% endif %}

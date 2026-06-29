@@ -1,0 +1,47 @@
+---
+# Role        : configure_icmp_ignore_bogus_error_responses
+# Description : Ensure bogus icmp responses are ignored.
+# Wazuh ID    : 35610
+# Scope       : Debian/Ubuntu family | Configure ICMP bogus error responses ignore
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian or Ubuntu."
+
+- name: "Configure bogus ICMP responses to be ignored in sysctl file"
+  ansible.builtin.lineinfile:
+    path: "{{ sysctl_config_file }}"
+    line: "{{ icmp_ignore_bogus_error_responses_sysctl }} = {{ icmp_ignore_bogus_error_responses_value }}"
+    create: true
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  become: true
+
+- name: "Set kernel parameter for ICMP ignore bogus responses"
+  ansible.posix.sysctl:
+    name: "{{ icmp_ignore_bogus_error_responses_sysctl }}"
+    value: "{{ icmp_ignore_bogus_error_responses_value }}"
+    state: present
+    reload: true                  # reload new values
+  register: sysctl_set_result
+  changed_when: sysctl_set_result.changed
+  become: true
+
+- name: "Verify the kernel parameter is set correctly"
+  ansible.builtin.command: "sysctl -n {{ icmp_ignore_bogus_error_responses_sysctl }}"
+  register: current_value
+  changed_when: false
+
+- name: "Assert that the kernel parameter matches expected value"
+  ansible.builtin.assert:
+    that:
+      - current_value.stdout | trim == icmp_ignore_bogus_error_responses_value | string
+    fail_msg: >
+      Kernel parameter {{ icmp_ignore_bogus_error_responses_sysctl }} is '{{ current_value.stdout | trim }}',
+      but should be '{{ icmp_ignore_bogus_error_responses_value }}'.
+    success_msg: "Kernel parameter {{ icmp_ignore_bogus_error_responses_sysctl }} is correctly set to {{ icmp_ignore_bogus_error_responses_value }}"

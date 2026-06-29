@@ -1,0 +1,65 @@
+---
+# Role        : disable_packet_redirects
+# Description : Ensure packet redirect sending is disabled.
+# Wazuh ID    : 35609
+# Scope       : Debian/Ubuntu family | Disable ICMP redirects
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Ensure sysctl directory exists"
+  ansible.builtin.file:
+    path: sysctl_dir
+    state: directory
+    owner: "{{ sysctl_file_owner }}"
+    group: "{{ sysctl_file_group }}"
+    mode: "{{ sysctl_dir_mode }}"
+  become: true
+
+- name: "Create or update sysctl configuration file to disable packet redirects"
+  ansible.builtin.lineinfile:
+    path: "{{ sysctl_file_path }}"
+    line: "{{ item.name }} = {{ item.value }}"
+    create: true
+    owner: "{{ sysctl_file_owner }}"
+    group: "{{ sysctl_file_group }}"
+    mode: "{{ sysctl_file_mode }}"
+    backup: true
+  loop: "{{ sysctl_parameters }}"
+  notify: reload_sysctl
+  become: true
+
+- name: "Apply sysctl settings immediately"
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_file: "{{ sysctl_file_path }}"
+  loop: "{{ sysctl_parameters }}"
+  register: apply_sysctl_result
+  changed_when: true
+  become: true
+
+- name: "Check sysctl parameter value via command"
+  ansible.builtin.command:
+    cmd: "sysctl -n {{ item.name }}"
+  loop: "{{ sysctl_parameters }}"
+  register: verify_sysctl_result
+  changed_when: false
+
+- name: "Assert that packet redirect sending is disabled (with custom message)"
+  ansible.builtin.assert:
+    that:
+      - item.stdout | trim == item.item.value
+    fail_msg: >
+      Packet redirect sending for '{{ item.item.name }}' is not set to '{{ item.item.value }}'
+      (found: '{{ item.stdout | trim }}').
+    success_msg: >
+      Packet redirect sending correctly disabled for '{{ item.item.name }}'.
+  loop: "{{ verify_sysctl_result.results }}"
+  loop_control:
+    label: "{{ item.item.name }}"

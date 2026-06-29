@@ -1,0 +1,9 @@
+---
+# Role name   : disable_ip_forwarding
+# Description : Handlers for the disable_ip_forwarding role
+
+- name: Reload sysctl configuration
+  ansible.builtin.command:
+    cmd: sysctl --system
+  become: true
+  changed_when: true

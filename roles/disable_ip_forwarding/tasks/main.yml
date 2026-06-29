@@ -1,0 +1,108 @@
+---
+# Role        : disable_ip_forwarding
+# Description : Ensure ip forwarding is disabled.
+# Wazuh ID    : 35608
+# Scope       : Debian/Ubuntu family | Disable IP forwarding
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Ensure sysctl directories exist"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - /etc/sysctl.d
+  become: true
+
+- name: "Disable IPv4 IP forwarding in sysctl configuration"
+  ansible.builtin.blockinfile:
+    path: "{{ sysctl_ipv4_forward_file }}"
+    content: "{{ sysctl_ipv4_forward_content }}"
+    owner: root
+    group: root
+    mode: '0644'
+    create: true
+  notify: Reload sysctl configuration
+
+- name: "Disable IPv6 IP forwarding in sysctl configuration"
+  ansible.builtin.blockinfile:
+    path: "{{ sysctl_ipv6_forward_file }}"
+    content: "{{ sysctl_ipv6_forward_content }}"
+    owner: root
+    group: root
+    mode: '0644'
+    create: true
+  notify: Reload sysctl configuration
+
+- name: "Set active kernel parameters for IPv4 forwarding"
+  ansible.builtin.shell: |
+    set -o pipefail
+    sysctl -w {{ sysctl_ipv4_forward_setting }}=0
+    {{ sysctl_flush_ipv4_route_cmd }}
+  args:
+    executable: /bin/bash
+  become: true
+  changed_when: true
+
+- name: "Set IPv6 forwarding off (and optionally flush route cache)"
+  block:
+    - name: Disable IPv6 forwarding
+      ansible.posix.sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: "0"
+        sysctl_file: /etc/sysctl.d/99-ipv6-forwarding.conf
+        reload: true
+
+    - name: Flush IPv6 route cache (if supported)
+      ansible.builtin.shell: |
+        set -o pipefail
+        if [ -f /proc/sys/net/ipv6/route/flush ]; then
+          echo "1" > /proc/sys/net/ipv6/route/flush || {{ sysctl_flush_ipv6_route_cmd }}
+        fi
+      args:
+        executable: /bin/bash
+      become: true
+      changed_when: false
+
+  rescue:
+    - name: "Fallback if route flush fails"
+      ansible.builtin.debug:
+        msg: "IPv6 route flush skipped (not supported on this system)"
+
+- name: "Verify IPv4 forwarding is disabled"
+  ansible.builtin.command:
+    cmd: sysctl {{ sysctl_ipv4_forward_setting }}
+  register: ipv4_forward_result
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Assert IPv4 forwarding is 0"
+  ansible.builtin.assert:
+    that:
+      - ipv4_forward_result.stdout.split('=')[-1].strip() == '0'
+    fail_msg: "IPv4 forwarding setting not correctly applied."
+    success_msg: "IPv4 forwarding successfully disabled."
+
+- name: "Verify IPv6 forwarding is disabled"
+  ansible.builtin.command:
+    cmd: sysctl {{ sysctl_ipv6_forward_setting }}
+  register: ipv6_forward_result
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Assert that IPv6 forwarding is set to 0"
+  ansible.builtin.assert:
+    that:
+      - ipv6_forward_result.stdout.split('=')[-1].strip() == '0'
+    fail_msg: "IPv6 forwarding setting not correctly applied."
+    success_msg: "IPv6 forwarding successfully disabled."

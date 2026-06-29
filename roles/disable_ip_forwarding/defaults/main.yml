@@ -1,0 +1,20 @@
+---
+# defaults/main.yml
+# Role         : disable_ip_forwarding
+# Description  : Ensure ip forwarding is disabled.
+#
+# Default configuration for the disable_ip_forwarding role
+
+# Sysctl file path for IPv4 forwarding setting
+sysctl_ipv4_forward_file: /etc/sysctl.d/60-netipv4_sysctl.conf
+
+# Sysctl file path for IPv6 forwarding setting
+sysctl_ipv6_forward_file: /etc/sysctl.d/60-netipv6_sysctl.conf
+
+# Content to disable IPv4 forwarding
+sysctl_ipv4_forward_content: |
+  net.ipv4.ip_forward = 0
+
+# Content to disable IPv6 forwarding
+sysctl_ipv6_forward_content: |
+  net.ipv6.conf.all.forwarding = 0

@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: disable_packet_redirects
+  author: Patricio Rojas Ortiz
+  description: Ensure packet redirect sending is disabled. (Wazuh ID 35609)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - network
+    - compliance
+    - sysctl
+    - redirect
+
+dependencies: []

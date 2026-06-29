@@ -1,0 +1,61 @@
+---
+# Role        : remove_ftp_client
+# Description : Ensure ftp client is not installed.
+# Wazuh ID    : 35587
+# Scope       : Debian/Ubuntu family | Remove FTP client packages
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Gather installed packages facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Check if FTP packages are installed"
+  ansible.builtin.set_fact:
+    ftp_packages_installed: >-
+      {{
+        ftp_packages
+        | select('in', ansible_facts.packages)
+        | list
+      }}
+
+- name: "Remove FTP client packages"
+  ansible.builtin.apt:
+    name: "{{ ftp_packages }}"
+    state: absent
+    purge: true
+    autoremove: true
+  register: apt_result
+  when: ftp_packages_installed | length > 0
+  become: true
+
+- name: "Verify FTP packages removal"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Confirm FTP packages are not installed"
+  ansible.builtin.assert:
+    that:
+      - "'{{ item }}' not in ansible_facts.packages"
+    fail_msg: "FTP package '{{ item }}' is still present after removal attempt."
+    success_msg: "FTP package '{{ item }}' successfully removed."
+  loop: "{{ ftp_packages_installed }}"
+
+- name: "Report FTP packages status"
+  ansible.builtin.debug:
+    msg: >-
+      FTP packages status:
+      {% for pkg in ftp_packages %}
+        {{ pkg }}:
+        {% if pkg in ansible_facts.packages %}
+          installed (version {{ ansible_facts.packages[pkg][0].version }})
+        {% else %}
+          not installed
+        {% endif %}
+        {% if not loop.last %}; {% endif %}
+      {% endfor %}

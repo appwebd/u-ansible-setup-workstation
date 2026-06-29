@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  role_name: remove_ldap_client
+  author: Patricio Rojas Ortiz
+  description: Remove the LDAP client package (ldap-utils) to reduce attack surface. (Wazuh ID 35586)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - compliance
+    - ldap
+    - authentication
+    - nis
+    - audit
+
+dependencies: []

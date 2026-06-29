@@ -1,0 +1,9 @@
+---
+# defaults/main.yml
+# Role         : remove_ldap_client
+# Description  : Ensure LDAP Client is not installed.
+#
+# Default configuration for the remove_ldap_client role
+
+# Package name to remove (LDAP client)
+ldap_package_name: ldap-utils

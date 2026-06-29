@@ -1,0 +1,13 @@
+---
+# defaults/main.yml
+# Role         : configure_icmp_ignore_bogus_error_responses
+# Description  : Ensure bogus icmp responses are ignored.
+#
+# Default configuration for the configure_icmp_ignore_bogus_error_responses role
+
+# Sysctl parameter to configure
+icmp_ignore_bogus_error_responses_sysctl: net.ipv4.icmp_ignore_bogus_error_responses
+icmp_ignore_bogus_error_responses_value: 1
+
+# Configuration file path
+sysctl_config_file: /etc/sysctl.d/60-netipv4_sysctl.conf
