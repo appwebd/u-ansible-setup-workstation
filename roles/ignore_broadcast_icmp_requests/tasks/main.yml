@@ -1,0 +1,49 @@
+---
+# Role        : ignore_broadcast_icmp_requests
+# Description : Ensure broadcast ICMP requests are ignored.
+# Wazuh ID    : 35611
+# Scope       : Debian/Ubuntu family | Set net.ipv4.icmp_echo_ignore_broadcasts to 1
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    success_msg: "OS family verified as Debian."
+
+- name: "Ensure sysctl.d directory exists"
+  ansible.builtin.file:
+    path: "{{ sysctl_d_confir_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+
+- name: "Set ICMP broadcast echo ignore parameter in sysctl configuration file"
+  ansible.builtin.blockinfile:
+    dest: "{{ sysctl_config_file }}"
+    create: true
+    owner: root
+    group: root
+    mode: '0644'
+    content: "{{ sysctl_config_content }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    backup: false
+  become: true
+  notify: Reload sysctl configuration
+
+- name: "Verify ICMP broadcast echo ignore setting is active"
+  ansible.builtin.command:
+    cmd: sysctl {{ icmp_echo_ignore_broadcasts_sysctl }}
+  register: icmp_verify_result
+  changed_when: false
+  failed_when: false
+  become: true
+
+- name: "Report compliance status for ICMP broadcast ignore setting"
+  ansible.builtin.assert:
+    that:
+      - icmp_verify_result.stdout.split('=')[-1].strip() == '1'
+    fail_msg: "ICMP broadcast echo is Non-compliant: verification failed."
+    success_msg: "ICMP broadcast echo ignore setting is compliant."

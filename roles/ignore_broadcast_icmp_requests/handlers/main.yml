@@ -1,0 +1,11 @@
+---
+# Role name   : ignore_broadcast_icmp_requests
+# Description : Handlers for the ignore_broadcast_icmp_requests role
+
+- name: Reload sysctl configuration
+  ansible.posix.sysctl:
+    name: "{{ icmp_echo_ignore_broadcasts_sysctl }}"
+    value: "{{ icmp_echo_ignore_broadcasts_value }}"
+    state: present
+    reload: true
+  become: true
