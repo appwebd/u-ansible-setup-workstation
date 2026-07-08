@@ -3,43 +3,53 @@
 # Description : Ensure tftp server services are not in use.
 # Wazuh ID    : 35576
 
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
 - name: "Check if tftpd-hpa package is installed"
   ansible.builtin.shell:
-      set -o pipefail
-      dpkg-query -s {{ tftp_package_name }} 2>/dev/null | grep -q "^Status.*install ok installed" && echo "installed" || echo "not_installed"
+    set -o pipefail
+    dpkg-query -s {{ tftp_package_name }} 2>/dev/null | grep -q "^Status.*install ok installed" && echo "installed" || echo "not_installed"
   register: tftp_package_status
   changed_when: false
   failed_when: false
 
 - name: "Stop and disable tftpd-hpa service (if installed)"
   ansible.builtin.systemd:
-      name: "{{ item }}"
-      state: stopped
-      masked: false
+    name: "{{ item }}"
+    state: stopped
+    masked: false
   loop: "{{ tftp_services }}"
   when:
-      - tftp_package_status.stdout == "installed"
-      - not mask_service_if_dependency_required | bool
+    - tftp_package_status.stdout == "installed"
+    - not mask_service_if_dependency_required | bool
 
 - name: "Mask tftpd-hpa service (if package required as dependency)"
   ansible.builtin.systemd:
-      name: "{{ item }}"
-      masked: true
-      state: stopped
+    name: "{{ item }}"
+    masked: true
+    state: stopped
   loop: "{{ tftp_services }}"
   when:
-      - tftp_package_status.stdout == "installed"
-      - mask_service_if_dependency_required | bool
+    - tftp_package_status.stdout == "installed"
+    - mask_service_if_dependency_required | bool
 
 - name: "Purge tftpd-hpa package (if not required as dependency)"
   ansible.builtin.apt:
-      name: "{{ tftp_package_name }}"
-      state: absent
-      purge: true
-      autoremove: true
+    name: "{{ tftp_package_name }}"
+    state: absent
+    purge: true
+    autoremove: true
   when:
-      - tftp_package_status.stdout == "installed"
-      - not mask_service_if_dependency_required | bool
+    - tftp_package_status.stdout == "installed"
+    - not mask_service_if_dependency_required | bool
 
 - name: "Verify tftpd-hpa package is not installed (compliance check)"
   ansible.builtin.shell: |
