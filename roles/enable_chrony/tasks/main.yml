@@ -3,6 +3,16 @@
 # Description : Ensure chrony is enabled and running.
 # Wazuh ID    : 35592
 
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
 - name: "Check if systemd-timesyncd is active"
   ansible.builtin.shell: |
     set -euo pipefail
