@@ -18,6 +18,16 @@
 # 35606 - Ensure rds kernel module is not available.
 # 35607 - Ensure sctp kernel module is not available.
 
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
 - name: "Filter kernel modules excluding exceptions"
   ansible.builtin.set_fact:
     filtered_filesystem_modules: "{{ disable_kernel_modules_list | difference(filesystem_module_exceptions) }}"
