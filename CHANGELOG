@@ -1,3 +1,148 @@
+c6f036a Sat Jul 4 14:56:33 2026 -0400 feat(roles/ignore_broadcast_icmp_requests): add sysctl configuration to ignore broadcast ICMP requests
+7691a18 Mon Jun 29 18:49:21 2026 -0400 feat(roles/configure_icmp_ignore_bogus_error_responses): add support for ignoring bogus ICMP responses
+2d32327 Mon Jun 29 18:33:03 2026 -0400 feat(roles): add disable_packet_redirects role with sysctl configuration to prevent packet redirects
+1b59b65 Mon Jun 29 16:53:21 2026 -0400 feat(roles/disable_ip_forwarding): add new role to ensure ip forwarding is disabled
+a9f6975 Sat Jun 27 18:19:56 2026 -0400 fix(security): remove unnecessary ldap and ftp clients
+22e4e17 Sat Jun 27 18:19:44 2026 -0400 feat(roles/remove_ftp_client): add support for removing FTP clients on Debian systems
+8b15a71 Fri Jun 26 15:49:05 2026 -0400 feat(roles/remove_ldap_client): add new role to ensure ldap client is not installed
+46b2721 Wed Jun 24 19:24:30 2026 -0400 fix(security): remove unnecessary comments and update telnet client removal
+abdf2f4 Wed Jun 24 19:23:18 2026 -0400 feat(roles/remove_telnet_client): add new role to ensure telnet client is not installed
+9087315 Tue Jun 23 19:16:05 2026 -0400 fix(talk): report package status and improve error message
+bc4cca8 Tue Jun 23 19:04:50 2026 -0400 fix(client): remove unnecessary rsh and talk clients
+68c26e1 Tue Jun 23 19:04:15 2026 -0400 fix(rsh_client): correct version check logic in uninstall task
+55bb88a Tue Jun 23 19:03:50 2026 -0400 feat(roles/remove_talk_client): add and configure role to ensure talk client is not installed
+78f42f4 Tue Jun 23 18:53:01 2026 -0400 feat(roles/remove_rsh_client): add package and service management for rsh-client removal
+6050377 Tue Jun 23 18:49:11 2026 -0400 fix(nis): fix package status check message formatting
+4945439 Tue Jun 23 18:48:44 2026 -0400 feat(roles/remove_nis_client): update failure message and package check to use variable
+cb04edb Tue Jun 23 18:27:01 2026 -0400 fix(playbooks): remove unneeded NIS client software
+f63de91 Tue Jun 23 18:26:30 2026 -0400 feat(roles/remove_nis_client): add license and author information
+88fda42 Mon Jun 22 18:57:36 2026 -0400 fix(system_configuration): configure postfix to loopback only and remove unneeded clients
+6cad738 Mon Jun 22 18:57:14 2026 -0400 feat(postfix): add configuration for local-only Postfix mode and update documentation
+cd45c14 Mon Jun 22 18:30:25 2026 -0400 fix(ci): disable X window server services and update cramfs module configuration directory path
+edc8c2e Mon Jun 22 18:30:06 2026 -0400 feat(roles/remove_xserver_common): add license and author information
+b2079d2 Sat Jun 20 18:59:07 2026 -0400 fix(security): ensure proper service disabling configuration
+893e96c Sat Jun 20 18:58:47 2026 -0400 feat(roles/disable_xinetd): add and configure role to disable and remove xinetd
+1bf982a Sat Jun 20 18:40:13 2026 -0400 fix(playbooks): ensure web server services are disabled in setup script
+ae64ba7 Sat Jun 20 18:39:31 2026 -0400 feat(roles/disable_web_server_services): add and configure web server disabling capabilities
+2f42c4b Sat Jun 20 17:07:05 2026 -0400 fix(system): ensure web proxy server services are disabled correctly
+c498297 Sat Jun 20 17:06:11 2026 -0400 feat(roles/disable_squid): Add Ensure web proxy server services are not in use. Wazuh ID 35577
+5f10045 Fri Jun 19 17:10:01 2026 -0400 feat(playbooks): enable snmp and tftp service disablement
+396ec7f Fri Jun 19 17:09:34 2026 -0400 feat(roles): add disable_tftp role for tftp service management
+357fad2 Thu Jun 18 16:42:06 2026 -0400 fix(enforce_apparmor): remove RHEL support from README description
+dfa1c16 Thu Jun 18 16:41:47 2026 -0400 docs(role): update apparmor role description Wazuh ID 35760
+535a817 Thu Jun 18 16:33:53 2026 -0400 docs(role): update description for disable_unsafe_filesystem_modules Wazuh ID 35724
+eb58c97 Thu Jun 18 16:27:22 2026 -0400 docs(role): update description for disable_unsafe_filesystem_modules Wazuh ID 35724
+3df784e Thu Jun 18 16:25:03 2026 -0400 docs(roles): update systemd-timesyncd role description with Wazuh ID 35589
+fa09267 Thu Jun 18 15:24:25 2026 -0400 docs: Update description is now 'Ensures the prelink package is removed to prevent interference with AIDE and reduce security risks (Wazuh ID 35544)'
+8c730b8 Thu Jun 18 15:23:46 2026 -0400 docs: Updated galaxy info for consistency with upstream role. Refs
+00d4849 Wed Jun 17 20:29:22 2026 -0400 Add `disable_snmp` role: ensure SNMP services are disabled, refine README, and set namespace to `security`.
+3cf5fb1 Wed Jun 17 20:20:52 2026 -0400 Update LICENSE URL to use HTTPS in `configure_group_minus_permissions` role.
+82921a8 Wed Jun 17 20:20:37 2026 -0400 Add LICENSE file for `enable_chrony` role.
+6f59487 Tue Jun 16 15:18:27 2026 -0400 Enable `disable_samba` role in `setup_workstation.yaml`.
+6a714d7 Tue Jun 16 15:18:14 2026 -0400 Add `disable_samba` role: ensure Samba services are disabled, refine README, and set namespace to `security`.
+dc80c3c Mon Jun 15 18:04:02 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#43) from Create-ansible-roles-and-verify-functionality into main
+631ec4c Mon Jun 15 18:03:22 2026 -0400 Enable `disable_rsync` role in `setup_workstation.yaml`.
+af4e46b Mon Jun 15 18:03:12 2026 -0400 Add `disable_rsync` role: ensure rsync services are disabled, refine README, and set namespace to `security`.
+1115f0f Mon Jun 15 17:01:03 2026 -0400 Enable `disable_rpcbind` role in `setup_workstation.yaml`.
+8e1bf68 Mon Jun 15 17:00:51 2026 -0400 Add `disable_rpcbind` role: ensure RPCBind services are disabled, refine README, and set namespace to `security`.
+5424998 Mon Jun 15 15:53:33 2026 -0400 Enable `disable_cups` role in `setup_workstation.yaml`.
+45a0f78 Mon Jun 15 15:53:24 2026 -0400 Add `disable_cups` role: ensure CUPS services are disabled, refine README, and set namespace to `security`.
+8cbcc56 Mon Jun 15 14:55:06 2026 -0400 Enable `disable_nis_server` role in `setup_workstation.yaml`.
+c94ead3 Mon Jun 15 14:54:53 2026 -0400 Add `disable_nis_server` role: ensure NIS services are disabled, refine README, and set namespace to `security`.
+a33f131 Sat Jun 13 19:49:02 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#42) from Create-ansible-roles-and-verify-functionality into main
+e7c0ac5 Sat Jun 13 19:48:32 2026 -0400 Enable `disable_nfs` role in `setup_workstation.yaml`.
+2d610dd Sat Jun 13 19:48:23 2026 -0400 Add `disable_nfs` role: ensure NFS services are disabled, refine README, and set namespace to `security`.
+1b64750 Sat Jun 13 19:47:12 2026 -0400 Update `configure_chrony_user` role: add `restrict_timesyncd` variable, refine README, and enhance user configuration options.
+39db11c Sat Jun 13 19:31:48 2026 -0400 Refactor `configure_chrony_user` role: update handlers, streamline tasks, and enhance configuration for `chronyd`.
+16302bf Sat Jun 13 19:18:23 2026 -0400 Add notification handler to `disable_dovecot` for purging unused dependencies.
+18d479d Sat Jun 13 18:55:27 2026 -0400 Enable `disable_dovecot` role in `setup_workstation.yaml`.
+00a29bf Sat Jun 13 18:55:17 2026 -0400 Add `disable_dovecot` role: ensure Dovecot services are disabled, refine README, and set namespace to `security`.
+781a36b Fri Jun 12 18:48:38 2026 -0400 Enable `disable_ldap_server` role in `setup_workstation.yaml`.
+4883434 Fri Jun 12 18:48:26 2026 -0400 Add `disable_ldap_server` role: ensure LDAP server services are disabled, refine README, and set namespace to `security`.
+9d2787f Thu Jun 11 18:44:47 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#41) from Create-ansible-roles-and-verify-functionality into main
+a556a51 Thu Jun 11 18:25:26 2026 -0400 Enable `disable_sctp` role in `setup_workstation.yaml`.
+b40b7b2 Thu Jun 11 18:25:17 2026 -0400 Enable `disable_rds` role in `setup_workstation.yaml`.
+b1fe405 Thu Jun 11 18:21:41 2026 -0400 Enable `disable_rds` role in `setup_workstation.yaml`.
+33c7255 Thu Jun 11 18:21:30 2026 -0400 Add `disable_rds` role: ensure RDS kernel module is disabled, refine README, and set namespace to `security`.
+5b16cd1 Thu Jun 11 16:49:14 2026 -0400 Enable `disable_tipc` role in `setup_workstation.yaml`.
+2ed3603 Thu Jun 11 16:49:02 2026 -0400 Add `disable_tipc` role: ensure TIPC kernel module is disabled, refine README, and set namespace to `security`.
+fc09bc2 Thu Jun 11 16:30:04 2026 -0400 Enable `disable_dccp` role in `setup_workstation.yaml`.
+657df64 Thu Jun 11 16:29:54 2026 -0400 Add `disable_dccp` role: ensure DCCP kernel module is disabled, refine README, and set namespace to `security`.
+5c01814 Thu Jun 11 14:42:30 2026 -0400 Enable `disable_unsafe_filesystem_modules` role in `setup_workstation.yaml`.
+9a8157a Thu Jun 11 14:42:17 2026 -0400 Add `disable_unsafe_filesystem_modules` role: disable CVE-affected filesystem modules, refine README, and set namespace to `security`.
+e595913 Thu Jun 11 14:00:22 2026 -0400 Enable `disable_usb_storage` role in `setup_workstation.yaml`.
+3868899 Thu Jun 11 14:00:14 2026 -0400 Add `disable_usb_storage` role: ensure usb-storage kernel module is disabled, refine README, and set namespace to `security`.
+799c1e6 Thu Jun 11 13:45:25 2026 -0400 Enable `disable_udf` role in `setup_workstation.yaml`.
+2f303d4 Thu Jun 11 13:45:14 2026 -0400 Add `disable_udf` role: ensure udf kernel module is disabled, refine README, and set namespace to `security`.
+ce5c8e6 Thu Jun 11 13:44:46 2026 -0400 Parameterize `squashfs` module name in `disable_squashfs` role to enhance flexibility.
+d27c847 Thu Jun 11 11:51:45 2026 -0400 Enable `disable_squashfs` role in `setup_workstation.yaml`.
+e5d1ddf Thu Jun 11 11:51:24 2026 -0400 Add `disable_squashfs` role: ensure squashfs kernel module is disabled, refine README, and set namespace to `security`.
+b261957 Wed Jun 10 18:42:28 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#40) from Create-ansible-roles-and-verify-functionality into main
+c5b51a1 Wed Jun 10 18:41:28 2026 -0400 Enable `disable_overlayfs` role in `setup_workstation.yaml`.
+245a72d Wed Jun 10 18:41:19 2026 -0400 Add `disable_overlayfs` role: ensure overlay and overlayfs kernel modules are disabled, refine README, and set namespace to `security`.
+10495b6 Wed Jun 10 18:24:10 2026 -0400 Enable `disable_jffs2` role in `setup_workstation.yaml`.
+3ba4a81 Wed Jun 10 18:24:01 2026 -0400 Update `disable_hfsplus` role: remove unnecessary modprobe.d directory creation task
+ab56ad2 Wed Jun 10 18:23:43 2026 -0400 Add `disable_jffs2` role: ensure jffs2 kernel module is disabled, refine README, and set namespace to `security`.
+242b063 Wed Jun 10 17:40:03 2026 -0400 Enable `disable_hfsplus` role: ensure hfsplus kernel module is disabled.
+830af56 Wed Jun 10 17:39:55 2026 -0400 Add `disable_hfsplus` role: ensure hfsplus kernel module is disabled, refine README, and set namespace to `security`.
+e558342 Mon Jun 8 17:50:27 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#39) from Create-ansible-roles-and-verify-functionality into main
+b3e2145 Mon Jun 8 17:10:20 2026 -0400 Update `ensure_shadowed_passwords` role: refine description formatting, remove unused variables, update min Ansible version, and fix table formatting in README.
+5931522 Mon Jun 8 17:00:19 2026 -0400 Update `ensure_reauth_privilege` role: change namespace to `security`, remove unused variables, and refine README table formatting.
+8b4ebb1 Mon Jun 8 16:30:43 2026 -0400 Update `enforce_apparmor_profiles` role: remove unused variable, refine README table formatting, and correct defaults filename typo.
+c48a61e Mon Jun 8 16:27:01 2026 -0400 Update `enforce_apparmor` role: change namespace to `security` and remove unused `apparmor_ignore_profiles` variable.
+988834e Mon Jun 8 16:25:07 2026 -0400 Update `enable_systemd_timesyncd` role: change namespace to `security`, remove unused variables, and fix table formatting in README.
+f4e80be Mon Jun 8 16:16:12 2026 -0400 Update `enable_chrony` role: change namespace to `security`, remove unused `systemd_timesyncd_service` variable, and fix table formatting in README
+dfe7997 Mon Jun 8 15:32:33 2026 -0400 Update `disable_xdmcp` role: change namespace to `security` and remove unused `xdmcp_gdm3_schemas_path` variable, fix table formatting in README
+54cb96c Mon Jun 8 15:21:37 2026 -0400 Refine description formatting in `disable_freevxfs_kernel_module` role.
+7f01400 Mon Jun 8 15:13:15 2026 -0400 Update `disable_dns_server` role: change namespace to `security`, remove unused `dns_server_service` variable, and fix table formatting in README.
+8568ae2 Mon Jun 8 15:08:10 2026 -0400 Update `disable_avahi` role: change namespace to `security`, adjust task to debug active services, and fix table formatting in README.
+f7e437e Sun Jun 7 19:26:38 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#38) from Create-ansible-roles-and-verify-functionality into main
+0e50b4a Sun Jun 7 19:25:49 2026 -0400 Remove unused `autofs_service_name` variable and fix table formatting in `disable_autofs` README.
+3ee26ca Sun Jun 7 19:23:49 2026 -0400 Rename `timesyncd_configuration` role to `configure_timesyncd_authorized_servers` and update related metadata, variables, and documentation.
+9909c01 Sun Jun 7 19:17:54 2026 -0400 Remove unused `motd_file_stat_pattern` variable and fix table formatting in `configure_motd_access` README.
+c3b154f Sun Jun 7 19:12:43 2026 -0400 Templatize `motd.j2` content with `motd_content_default` variable and fix minor formatting issues in README.
+6bf5e7c Sun Jun 7 18:57:28 2026 -0400 Rename `ensure_issue_net_permissions` role to `configure_etc_issue_net_access` and update related metadata, variables, and documentation.
+4e45b59 Sun Jun 7 18:56:32 2026 -0400 Update `configure_cron_weekly_permissions` role: refine description formatting
+e248a43 Sun Jun 7 18:27:02 2026 -0400 Update `configure_chrony` role: change namespace to `security` and remove unused `chrony_conf_file` variable
+af4dc0f Sun Jun 7 18:24:00 2026 -0400 Add `community.general.modprobe` usage note to `disable_freevxfs_kernel_module` and `disable_hfs_kernel_module` roles
+e4ade83 Sun Jun 7 18:23:39 2026 -0400 Update `disable_cramfs` README: remove RHEL-family OS support from requirements
+60224aa Sun Jun 7 18:23:25 2026 -0400 Update `configure_bootloader_access` role: refine GRUB handler, update license/meta, adjust variables, and fix formatting in README.
+619c41f Sun Jun 7 18:22:43 2026 -0400 Add Ansible Galaxy collections `ansible.posix` and `community.general` to `install-ansible.sh`
+fd5905b Fri Jun 5 19:31:33 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#37) from Create-ansible-roles-and-verify-functionality into main
+715aab9 Fri Jun 5 17:04:16 2026 -0400 Uncomment `disable_hfs_kernel_module` role in `setup_workstation.yaml` to enable hfs filesystem restrictions.
+495575a Fri Jun 5 17:04:04 2026 -0400 Add `disable_hfs_kernel_module` role to prevent usage of hfs filesystem modules
+281e956 Fri Jun 5 16:48:28 2026 -0400 Uncomment `disable_cramfs` and `disable_freevxfs_kernel_module` roles in `setup_workstation.yaml` to enable filesystem restrictions.
+c5d0c65 Fri Jun 5 16:48:09 2026 -0400 Add `disable_freevxfs_kernel_module` role to prevent usage of freevxfs filesystem modules
+a1cacfd Fri Jun 5 10:20:23 2026 -0400 Add `disable_cramfs` role to prevent usage of cramfs filesystem modules
+d4d02f3 Fri Jun 5 09:49:52 2026 -0400 Merge pull request 'Fix spacing issue in `setup_workstation.yaml` for `sshd_access_control` rule description' (#36) from Create-ansible-roles-and-verify-functionality into main
+bcd467f Fri Jun 5 09:49:17 2026 -0400 Fix spacing issue in `setup_workstation.yaml` for `sshd_access_control` rule description
+f069535 Thu Jun 4 20:34:02 2026 -0400 Uncomment `restrict_su_access` role to enforce access restrictions for the `su` command
+7e5d45f Thu Jun 4 20:32:52 2026 -0400 Add `restrict_su_access` role to enforce `su` access restrictions using PAM configuration
+e3ebf88 Thu Jun 4 20:26:02 2026 -0400 Uncomment `sudo_timestamp_timeout` role to enforce secure sudo authentication timeout configuration
+d7340ce Thu Jun 4 20:25:39 2026 -0400 Add `sudo_timestamp_timeout` role to enforce secure sudo authentication timeout configuration
+5cf9016 Thu Jun 4 20:13:59 2026 -0400 Refactor filesystem module disabling for clarity and consistency; rename `sudo_reauth` role for better descriptiveness.
+a238d33 Thu Jun 4 20:13:44 2026 -0400 Add more unused accounts to removal list (`cups-pk-helper`, `cups-browsed`, `hplip`)
+0d709a0 Thu Jun 4 20:13:31 2026 -0400 Refactor `ensure_reauth_privilege` role to use fully qualified module names for better clarity
+a0e3b49 Thu Jun 4 20:09:11 2026 -0400 Add `ensure_reauth_privilege` role to enforce re-authentication for privilege escalation
+a6b2b3e Mon Jun 1 18:35:40 2026 -0400 Uncomment `enforce_sudo_password` role to require password for privilege escalation
+4f90b10 Mon Jun 1 18:35:05 2026 -0400 Add `enforce_sudo_password` role to ensure password is required for privilege escalation
+56cdd04 Fri May 29 19:07:34 2026 -0400 Merge pull request 'create-privilege-escalation-and-sudo-roles-#31' (#34) from create-privilege-escalation-and-sudo-roles-#31 into main
+09df786 Fri May 29 19:07:02 2026 -0400 Merge branch 'main' into create-privilege-escalation-and-sudo-roles-#31
+4be88cc Fri May 29 19:05:14 2026 -0400 Remove unused `vars/main.yml` and update README table in `sshd_permitrootlogin_disabled` role
+b2b023a Fri May 29 18:45:20 2026 -0400 Uncomment `sudo_log_file` role to enable sudo command logging
+5d0e116 Fri May 29 18:45:08 2026 -0400 Add `sudo_log_file` role to enforce sudo command logging
+0228b3b Fri May 29 16:58:11 2026 -0400 Enhance `sudo_pty` role by adding metadata comments in the sudoers file for better traceability
+03e4500 Fri May 29 09:58:53 2026 -0400 Add additional bloatware packages to removal list (`gamemode`, `pptp-linux`)
+0ec1f6f Thu May 28 21:08:17 2026 -0400 Merge pull request 'create-privilege-escalation-and-sudo-roles-#31' (#33) from create-privilege-escalation-and-sudo-roles-#31 into main
+6329ad2 Thu May 28 21:07:44 2026 -0400 Uncomment `sudo_pty` role to enforce pseudo-terminal usage for sudo commands
+15003f4 Thu May 28 21:07:37 2026 -0400 Add `sudo_pty` role to enforce pseudo-terminal usage for sudo commands
+9b48645 Thu May 28 20:56:31 2026 -0400 Refactor privilege escalation tasks by renaming and uncommenting relevant sudo-related actions
+3ffc000 Thu May 28 20:55:29 2026 -0400 Add `install_sudo` role to ensure `sudo` package installation on Debian-family systems
+49ec3a2 Thu May 28 20:09:07 2026 -0400 Merge pull request 'Review-disabled-kernel-modules' (#32) from Review-disabled-kernel-modules into main
+a32f6b1 Thu May 28 20:08:16 2026 -0400 Add depmod cache rebuild and debug task to kernel module disable role
+be68217 Thu May 28 20:07:57 2026 -0400 Set explicit bash executable for kernel module unload tasks
+a85ca0a Thu May 28 19:53:56 2026 -0400 Uncomment `fat` module in kernel module disable list
+e862a03 Thu May 28 19:53:42 2026 -0400 Add recent commit logs to CHANGELOG file
 890f1a7 Thu May 28 19:53:21 2026 -0400 Switch ASLR configuration task to use Jinja2 template with backup support
 cb47f05 Tue May 26 16:26:40 2026 -0400 Merge branch 'Create-Ansible-roles-and-verify-functionality-#1'
 3f548d5 Tue May 26 16:25:22 2026 -0400 Merge branch 'main' into Create-Ansible-roles-and-verify-functionality-#1
