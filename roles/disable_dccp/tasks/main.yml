@@ -3,6 +3,16 @@
 # Description : Ensure the DCCP kernel module is not available (Wazuh ID 35604)
 # Wazuh ID    : 35604
 
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
 - name: "Check if dccp kernel module is currently loaded"
   ansible.builtin.shell: |
     set -o pipefail
