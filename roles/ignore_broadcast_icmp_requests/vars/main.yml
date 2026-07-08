@@ -1,0 +1,8 @@
+---
+# vars/main.yml
+# Role         : ignore_broadcast_icmp_requests
+# Description  : Ensure broadcast ICMP requests are ignored.
+#
+# Internal variables — not meant for override
+
+sysctl_config_content: "{{ icmp_echo_ignore_broadcasts_sysctl }} = {{ icmp_echo_ignore_broadcasts_value }}"

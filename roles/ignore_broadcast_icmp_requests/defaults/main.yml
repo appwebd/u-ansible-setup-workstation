@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+# Role         : ignore_broadcast_icmp_requests
+# Description  : Ensure broadcast ICMP requests are ignored.
+#
+# Default configuration for the ignore_broadcast_icmp_requests role
+
+icmp_echo_ignore_broadcasts_sysctl: net.ipv4.icmp_echo_ignore_broadcasts
+icmp_echo_ignore_broadcasts_value: "1"
+sysctl_config_file: /etc/sysctl.d/60-netipv4_sysctl.conf
+sysctl_d_confir_dir: /etc/sysctl.d

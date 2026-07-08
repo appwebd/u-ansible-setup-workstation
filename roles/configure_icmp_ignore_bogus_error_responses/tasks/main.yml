@@ -8,7 +8,10 @@
   ansible.builtin.assert:
     that:
       - ansible_os_family in ['Debian', 'Ubuntu']
-    fail_msg: "This role only supports Debian/Ubuntu-based systems."
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
     success_msg: "OS family verified as Debian or Ubuntu."
 
 - name: "Configure bogus ICMP responses to be ignored in sysctl file"

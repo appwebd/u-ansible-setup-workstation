@@ -1,0 +1,17 @@
+---
+# Role name   : disable_icmp_redirects
+# Description : Handlers for the disable_icmp_redirects role
+
+- name: Reload sysctl settings
+  ansible.posix.sysctl:
+    name: "{{ item }}"
+    value: "0"
+    state: present
+    reload: true
+  loop:
+    - net.ipv4.conf.all.accept_redirects
+    - net.ipv4.conf.default.accept_redirects
+    - net.ipv6.conf.all.accept_redirects
+    - net.ipv6.conf.default.accept_redirects
+  when: check_ipv6_enabled | bool or not ipv6_enabled | default(false)
+  become: true

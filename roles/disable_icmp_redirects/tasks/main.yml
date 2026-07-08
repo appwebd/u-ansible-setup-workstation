@@ -1,0 +1,179 @@
+---
+# Role        : disable_icmp_redirects
+# Description : Ensure ICMP redirects are not accepted.
+# Wazuh ID    : 35612
+# Scope       : Debian/Ubuntu family | Disable IPv4 and IPv6 ICMP redirect acceptance
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
+- name: "Ensure /etc/sysctl.d directory exists"
+  ansible.builtin.file:
+    path: "{{ sysctl_confir_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+# ----------------------------------------------------------------------------------------------------------------------
+# IPv4 settings
+- name: "Set net.ipv4.conf.all.accept_redirects to 0"
+  ansible.posix.sysctl:
+    name: "{{ ipv4_all_sysctl_param }}"
+    value: "{{ ipv4_accept_redirects_value }}"
+    state: present
+    reload: true
+  become: true
+
+- name: "Set net.ipv4.conf.default.accept_redirects to 0"
+  ansible.posix.sysctl:
+    name: "{{ ipv4_default_sysctl_param }}"
+    value: "{{ ipv4_accept_redirects_value }}"
+    state: present
+    reload: true
+  become: true
+
+- name: "Create sysctl.d file for net.ipv4.conf.all.accept_redirects"
+  ansible.builtin.copy:
+    content: "{{ ipv4_all_sysctl_param }} = {{ ipv4_accept_redirects_value }}\n"
+    dest: "{{ ipv4_all_conf_file_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  become: true
+
+- name: "Create sysctl.d file for net.ipv4.conf.default.accept_redirects"
+  ansible.builtin.copy:
+    content: "{{ ipv4_default_sysctl_param }} = {{ ipv4_accept_redirects_value }}\n"
+    dest: "{{ ipv4_default_conf_file_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  become: true
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+- name: Check if IPv6 is available on system (try to read one param)
+  ansible.builtin.command: "sysctl -n {{ ipv6_all_sysctl_param }}"
+  register: result_ipv6_check_availability
+  changed_when: false
+  failed_when: false
+  ignore_errors: true
+
+- name: Debug Check if IPv6 is available on system
+  ansible.builtin.debug:
+    msg: >-
+      Value of variable : ipv6_supported ?: "{{ result_ipv6_check_availability.rc == 0 }}"
+
+- name: Skip IPv6 verification if not supported (no kernel support or disabled)
+  ansible.builtin.set_fact:
+    ipv6_supported: "{{ result_ipv6_check_availability.rc == 0 }}"
+
+# IPv6 settings (only if IPv6 is enabled)
+- name: "Set net.ipv6.conf.all.accept_redirects to 0 when IPv6 is enabled"
+  ansible.posix.sysctl:
+    name: "{{ ipv6_all_sysctl_param }}"
+    value: "{{ ipv6_accept_redirects_value }}"
+    state: present
+    reload: true
+  become: true
+  when: check_ipv6_enabled | bool and ipv6_supported | default(false)
+
+- name: "Set net.ipv6.conf.default.accept_redirects to 0 when IPv6 is enabled"
+  ansible.posix.sysctl:
+    name: "{{ ipv6_default_sysctl_param }}"
+    value: "{{ ipv6_accept_redirects_value }}"
+    state: present
+    reload: true
+  become: true
+  when: check_ipv6_enabled | bool and ipv6_supported | default(false)
+
+
+- name: "Create sysctl.d file for net.ipv6.conf.all.accept_redirects when IPv6 is enabled"
+  ansible.builtin.copy:
+    content: "{{ ipv6_all_sysctl_param }} = {{ ipv6_accept_redirects_value }}\n"
+    dest: "{{ ipv6_all_conf_file_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  become: true
+  when: check_ipv6_enabled | bool and ipv6_supported | default(false)
+
+- name: "Create sysctl.d file for net.ipv6.conf.default.accept_redirects when IPv6 is enabled"
+  ansible.builtin.copy:
+    content: "{{ ipv6_default_sysctl_param }} = {{ ipv6_accept_redirects_value }}\n"
+    dest: "{{ ipv6_default_conf_file_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  become: true
+  when: check_ipv6_enabled | bool and ipv6_supported | default(false)
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Verification tasks
+- name: "Verify IPv4 ICMP redirect all settings are applied"
+  ansible.builtin.command: "sysctl {{ ipv4_all_sysctl_param }}"
+  register: ipv4_verify_all_result
+  changed_when: false
+  failed_when: false
+
+- name: "Verify IPv4 ICMP redirect default settings are applied"
+  ansible.builtin.command: "sysctl {{ ipv4_default_sysctl_param }}"
+  register: ipv4_verify_default_result
+  changed_when: false
+  failed_when: false
+
+- name: "Verify IPv6 ICMP redirect all settings are applied when IPv6 is enabled"
+  ansible.builtin.command: "sysctl {{ ipv6_all_sysctl_param }}"
+  register: ipv6_verify_all_result
+  changed_when: false
+  failed_when: false
+  when: check_ipv6_enabled | bool and ipv6_supported | default(false)
+
+- name: "Verify IPv6 ICMP redirect default settings are applied when IPv6 is enabled"
+  ansible.builtin.command: "sysctl {{ ipv6_default_sysctl_param }}"
+  register: ipv6_verify_default_result
+  changed_when: false
+  failed_when: false
+  when: check_ipv6_enabled | bool and ipv6_supported | default(false)
+
+
+- name: "Report of IPv4 net.ipv4.conf.all.accept_redirects is  0"
+  ansible.builtin.assert:
+    that:
+      - ipv4_verify_all_result.stdout.split('=')[-1].strip() == '0'
+    fail_msg: "IPv4 redirect all setting not correctly applied."
+    success_msg: "IPv4 redirect all setting is successfully disabled."
+
+- name: "Report of IPv4 net.ipv4.conf.default.accept_redirects is  0"
+  ansible.builtin.assert:
+    that:
+      - ipv4_verify_default_result.stdout.split('=')[-1].strip() == '0'
+    fail_msg: "IPv4 redirect setting not correctly applied."
+    success_msg: "IPv4 redirect default setting is successfully disabled."
+
+
+- name: "Report of IPv6 net.ipv6.conf.all.accept_redirects is is 0"
+  ansible.builtin.assert:
+    that:
+      - ipv6_verify_all_result.stdout.split('=')[-1].strip() == '0'
+    fail_msg: "IPv6 redirect setting not correctly applied."
+    success_msg: "IPv6 redirect successfully disabled."
+
+- name: "Report of IPv6 net.ipv6.conf.default.accept_redirects is is 0"
+  ansible.builtin.assert:
+    that:
+      - ipv6_verify_default_result.stdout.split('=')[-1].strip() == '0'
+    fail_msg: "IPv6 redirect default setting not correctly applied."
+    success_msg: "IPv6 redirect default is successfully disabled."

@@ -1,0 +1,21 @@
+---
+# defaults/main.yml
+# Role         : disable_icmp_redirects
+# Description  : Ensure ICMP redirects are not accepted.
+#
+# Default configuration for the disable_icmp_redirects role
+
+sysctl_confir_dir: /etc/sysctl.d
+
+# IPv4 settings
+ipv4_accept_redirects_value: "0"
+ipv4_all_conf_file_path: /etc/sysctl.d/60-ipv4-accept-redirects.conf
+ipv4_default_conf_file_path: /etc/sysctl.d/61-ipv4-default-accept-redirects.conf
+
+# IPv6 settings (only applied if IPv6 is enabled)
+ipv6_accept_redirects_value: "0"
+ipv6_all_conf_file_path: /etc/sysctl.d/62-ipv6-accept-redirects.conf
+ipv6_default_conf_file_path: /etc/sysctl.d/63-ipv6-default-accept-redirects.conf
+
+# Enable IPv6 check (default true)
+check_ipv6_enabled: true

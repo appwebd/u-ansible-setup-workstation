@@ -1,0 +1,11 @@
+---
+# vars/main.yml
+# Role         : disable_icmp_redirects
+# Description  : Ensure ICMP redirects are not accepted.
+#
+# Internal variables — not meant for override
+
+ipv4_all_sysctl_param: net.ipv4.conf.all.accept_redirects
+ipv4_default_sysctl_param: net.ipv4.conf.default.accept_redirects
+ipv6_all_sysctl_param: net.ipv6.conf.all.accept_redirects
+ipv6_default_sysctl_param: net.ipv6.conf.default.accept_redirects
