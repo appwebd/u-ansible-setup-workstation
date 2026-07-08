@@ -3,6 +3,16 @@
 # Description : Ensure sudo log file exists and is configured.
 # Wazuh ID    : 35664
 
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
 - name: Ensure sudo logfile directive exists in /etc/sudoers
   ansible.builtin.lineinfile:
     path: /etc/sudoers
