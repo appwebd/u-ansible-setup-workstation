@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  role_name: disable_icmp_redirects
+  author: Patricio Rojas Ortiz
+  description: Ensure ICMP redirects are not accepted. (Wazuh ID 35612)
+  license: Apache 2.0
+  namespace: security
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - audit
+    - compliance
+    - sysadmin
+
+dependencies: []
