@@ -7,12 +7,12 @@
 - name: "Verify operating system is Debian/Ubuntu (apt-based)"
   ansible.builtin.assert:
     that:
-      - ansible_os_family == "Debian"
+      - ansible_os_family in ['Debian', 'Ubuntu']
     fail_msg: >
       CRITICAL: This role only supports Debian/Ubuntu-based systems.
       Execution will STOP on this host because the OS family is not 'Debian'.
       Current value: {{ ansible_os_family | default('UNKNOWN') }}
-    success_msg: "OS family verified as Debian."
+    success_msg: "OS family verified as Debian or Ubuntu."
 
 - name: "Ensure /etc/sysctl.d directory exists"
   ansible.builtin.file:
@@ -71,7 +71,7 @@
 
 - name: Debug Check if IPv6 is available on system
   ansible.builtin.debug:
-    msg: >- 
+    msg: >-
       Value of variable : ipv6_supported ?: "{{ result_ipv6_check_availability.rc == 0 }}"
 
 - name: Skip IPv6 verification if not supported (no kernel support or disabled)
