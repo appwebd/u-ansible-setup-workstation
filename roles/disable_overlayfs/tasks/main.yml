@@ -3,6 +3,16 @@
 # Description : Disable overlay and overlayfs kernel modules to enhance security posture.
 # Wazuh ID    : 35723
 
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
 - name: "Check if overlay module is currently loaded"
   ansible.builtin.shell: |
     set -euo pipefail
