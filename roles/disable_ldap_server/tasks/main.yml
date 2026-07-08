@@ -3,10 +3,19 @@
 # Description : Ensure LDAP server services are not in use.
 # Wazuh ID    : 35567
 
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
 - name: "Gather the package facts"
   ansible.builtin.package_facts:
     manager: auto
-
 
 - name: "Check if ldap-server package is installed"
   ansible.builtin.set_fact:

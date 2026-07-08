@@ -3,6 +3,16 @@
 # Description : Disable core dumps to prevent sensitive memory information leakage
 # Wazuh ID    : 35543
 
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
 - name: "Set ulimit for core dumps (soft/hard)"
   ansible.builtin.lineinfile:
     path: "{{ restrict_core_dumps_limits_file }}"
