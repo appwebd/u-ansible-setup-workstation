@@ -119,7 +119,7 @@
     - remove_xserver_common                     # 35580 Ensure X window server services are not in use.
 
 # Unneeded client packages
-    - configure_postfix_loopback_only          # 35581 Ensure mail transfer agent is configured for local-only mode.
+    - configure_mail_agent_local_only          # 35581 Ensure mail transfer agent is configured for local-only mode.
     - remove_nis_client                        # 35582 Ensure NIS Client is not installed.
     - remove_rsh_client                        # 35583 Ensure rsh client is not installed.
     - remove_talk_client                       # 35584 Ensure talk client is not installed.
@@ -150,17 +150,17 @@
                                                 # 35603 Ensure bluetooth services are not in use.
 
 # 10. Network Stack Hardening (Kernel Networking)
-                                                # 35608 Ensure ip forwarding is disabled.
-                                                # 35609 Ensure packet redirect sending is disabled.
-                                                # 35610 Ensure bogus icmp responses are ignored.
-                                                # 35611 Ensure broadcast icmp requests are ignored.
-                                                # 35612 Ensure icmp redirects are not accepted.
-                                                # 35613 Ensure secure icmp redirects are not accepted.
-                                                # 35614 Ensure reverse path filtering is enabled.
-                                                # 35615 Ensure source routed packets are not accepted.
-                                                # 35616 Ensure suspicious packets are logged.
-                                                # 35617 Ensure tcp syn cookies is enabled.
-                                                # 35618 Ensure ipv6 router advertisements are not accepted.
+    - disable_ip_forwarding                       # 35608 Ensure ip forwarding is disabled.
+    - disable_packet_redirects                    # 35609 Ensure packet redirect sending is disabled.
+    - configure_icmp_ignore_bogus_error_responses # 35610 Ensure bogus icmp responses are ignored.
+    - ignore_broadcast_icmp_requests              # 35611 Ensure broadcast icmp requests are ignored.
+    - disable_icmp_redirects                      # 35612 Ensure icmp redirects are not accepted.
+    - configure_secure_icmp_redirects             # 35613 Ensure secure icmp redirects are not accepted.
+#    - configure_rp_filter                         # 35614 Ensure reverse path filtering is enabled.
+#    - configure_source_route                      # 35615 Ensure source routed packets are not accepted.
+#    - configure_log_martians                      # 35616 Ensure suspicious packets are logged.
+#    - ensure_tcp_syn_cookies                      # 35617 Ensure tcp syn cookies is enabled.
+#    - configure_ipv6_router_advertisements        # 35618 Ensure ipv6 router advertisements are not accepted.
 
 # 11. Firewall Configuration (UFW, nftables, iptables)
                                                 # 35619 Ensure a single firewall configuration utility is in use.
