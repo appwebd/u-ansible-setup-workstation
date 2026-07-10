@@ -1,0 +1,11 @@
+---
+# defaults/main.yml
+# Role         : configure_mail_agent_local_only
+# Description  : Ensure mail agent listens only on loopback interface.
+#
+# Default configuration for the role
+
+mail_agent_service_name: postfix
+mail_agent_config_file: /etc/postfix/main.cf
+mail_agent_inet_interfaces_line: "inet_interfaces = loopback-only"
+mail_agent_config_section: "RECEIVING MAIL"

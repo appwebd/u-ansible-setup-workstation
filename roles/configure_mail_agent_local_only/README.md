@@ -1,0 +1,83 @@
+#### Role name:
+    configure_mail_agent_local_only
+
+#### Wazuh ID:
+    35581
+
+#### Title:
+    Ensure mail transfer agent is configured for local-only mode.
+
+#### Description:
+    Mail Transfer Agents (MTA), such as sendmail and Postfix, are used to listen for incoming mail and transfer the messages to the appropriate user or mail server. If the system is not intended to be a mail server, it is recommended that the MTA be configured to only process local mail.
+
+#### Rationale:
+    The software for all Mail Transfer Agents is complex and most have a long history of security issues. While it is important to ensure that the system can process local mail messages, it is not necessary to have the MTA's daemon listening on a port unless the server is intended to be a mail server that receives and processes mail from other systems.
+
+#### Remediation:
+    Only if you have the Mail Transfers Agent software installed, perform the following action: Edit /etc/postfix/main.cf and add the following line to the RECEIVING MAIL section. If the line already exists, change it to look like the line below: inet_interfaces = loopback-only Run the following command to restart postfix: # systemctl restart postfix Note: - This recommendation is designed around the postfix mail server. - Depending on your environment you may have an alternative MTA installed such as exim4. If this is the case consult the documentation for your installed MTA to configure the recommended state.
+
+#### Requirements
+    - Ansible 2.16 or higher
+    - `become: yes` required (to modify system packages, services, or configuration files)
+    - OS: inferred from `tasks/main.yml` (e.g., Debian/Ubuntu)
+    - Required Ansible collections/modules: ansible.builtin.command, ansible.builtin.lineinfile, ansible.builtin.set_fact, ansible.builtin.shell, ansible.builtin.systemd, ansible.builtin.assert, ansible.builtin.debug, ansible.builtin.meta
+
+#### Variables
+
+### defaults/main.yml
+
+| Variable                           | Default                    | Description |
+|------------------------------------|----------------------------|-------------|
+| mail_agent_service_name            | postfix                    | Name of the mail agent service to manage (e.g., postfix) |
+| mail_agent_config_file             | /etc/postfix/main.cf       | Path to the main configuration file for the mail agent |
+| mail_agent_inet_interfaces_line    | inet_interfaces = loopback-only | Line to set in the config file to enforce local-only mode |
+| mail_agent_config_section          | RECEIVING MAIL             | Section header name used in the configuration file |
+
+### vars/main.yml
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| No variables defined. |  | All paths and service names are hardcoded to match standard Postfix deployment. |
+
+#### Dependencies
+    Handlers: `handlers/main.yml`
+    Dependencies on other roles: none
+
+#### Compliance mapping
+    cmmc: ['CM.L2-3.4.7', 'CM.L2-3.4.8', 'SC.L2-3.13.6']
+    fedramp: ['CM-2', 'CM-3', 'CM-6', 'CM-7']
+    gdpr: ['32']
+    hipaa: ['164.308(a)(1)']
+    iso_27001: ['A.12.1.1', 'A.12.1.2', 'A.14.2.1']
+    nis2: ['21.2.e', '21.2.a']
+    nist_800_171: ['3.4.7', '3.4.8', '3.13.6']
+    nist_800_53: ['CM-2', 'CM-3', 'CM-6', 'CM-7']
+    pci_dss: ['1.1', '1.2', '2.2', '6.4']
+    tsc: ['CC6.3', 'CC6.6', 'CC8.1', 'CC5.1', 'CC5.2', 'CC5.3']
+
+#### Mitre
+    tactic: ['TA0005']
+    technique: ['T1036', 'T1564']
+
+#### Conditions
+    all
+
+#### Rules
+    not c:ss -lntu -> r::25\s|:465\s|:587\s && r:\s+127\.0\.0\.\d+:|\s+\[::1\]:
+
+#### Usage
+
+```code
+- hosts: servers
+  become: yes
+  roles:
+    - configure_mail_agent_local_only
+```
+#### License
+    Apache 2.0
+
+#### Author
+    Patricio Rojas Ortiz
+
+### Date
+    2026-07-10_14:37:18
