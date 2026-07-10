@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: configure_postfix_loopback_only
+  role_name: configure_mail_agent_local_only
   author: Patricio Rojas Ortiz
-  description: Configure Postfix mail transfer agent to listen only on loopback interface (local-only mode). (Wazuh ID 35581)
+  description: Ensure mail transfer agent is configured for local-only mode. (Wazuh ID 35581)
   license: Apache 2.0
   namespace: security
   min_ansible_version: "2.16"
@@ -10,11 +10,15 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - all
+    - name: Debian
+      versions:
+        - all
   galaxy_tags:
     - security
+    - audit
     - compliance
-    - mail
+    - sysadmin
     - postfix
-    - network
+    - mail
 
 dependencies: []

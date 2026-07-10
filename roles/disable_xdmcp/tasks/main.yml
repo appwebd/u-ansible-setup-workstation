@@ -13,57 +13,46 @@
       Current value: {{ ansible_os_family | default('UNKNOWN') }}
     success_msg: "OS family verified as Debian or Ubuntu."
 
-- name: "Ensure XDMCP is not enabled in GDM3"
-  when: ansible_facts.os_family == "Debian"
+- name: "Ensure default GDM3 paths"
+  set_fact:
+    xdmcp_gdm3_config_dir: "{{ xdmcp_gdm3_config_dir | default('/etc/gdm3') }}"
+    xdmcp_gdm3_custom_conf: "{{ xdmcp_gdm3_custom_conf | default('/etc/gdm3/custom.conf') }}"
+
+- name: "Pre-check: Verify GDM3 configuration directory exists"
+  ansible.builtin.stat:
+    path: /etc/gdm3
+  register: gdm3_dir_check
+  changed_when: false
+
+# Only run if GDM3 directory exists AND OS is Debian-family
+- name: "Ensure XDMCP is disabled in GDM3 (only if GDM3 is installed)"
+  when:
+    - ansible_facts.os_family == 'Debian'
+    - gdm3_dir_check.stat.exists
   block:
-    - name: "Check if GDM3 configuration directory exists"
-      ansible.builtin.stat:
-        path: "{{ xdmcp_gdm3_config_dir }}"
-      register: gdm3_config_dir_stat
-
-    - name: "Fail if GDM3 configuration directory does not exist"
-      ansible.builtin.fail:
-        msg: "GDM3 configuration directory {{ xdmcp_gdm3_config_dir }} does not exist. XDMCP cannot be configured."
-      when: not gdm3_config_dir_stat.stat.exists
-
-    - name: "Ensure custom.conf file exists (create if missing)"
+    - name: "Create or update /etc/gdm3/custom.conf to disable XDMCP"
       ansible.builtin.copy:
-        dest: "{{ xdmcp_gdm3_custom_conf }}"
+        dest: /etc/gdm3/custom.conf
         content: |
           # GDM configuration storage
           # Managed by Ansible (Wazuh ID 35560)
           # Generated: {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
-          # See /usr/share/gdm/gdm.schemas for a list of available options.
           [daemon]
-          # Uncomment the line below to force the login screen to use Xorg
           #WaylandEnable=false
-          # Enabling automatic login
-          # AutomaticLoginEnable = true
-          # AutomaticLogin = user1
-          # Enabling timed login
-          # TimedLoginEnable = true
-          # TimedLogin = user1
-          # TimedLoginDelay = 10
           [security]
-          # Ensure XDMCP is NOT enabled in GDM3 Wazuh ID : 35560
           [xdmcp]
-          # Enable=false  # <-- This line should be removed or commented out
+          # Enable=false is NOT set — XDMCP remains disabled by default (Wazuh 35560)
           [chooser]
           [debug]
-          # Uncomment the line below to turn on debugging
-          # More verbose logs
-          # Additionally lets the X server dump core if it crashes
-          #Enable=true
         owner: root
         group: root
         mode: '0644'
         backup: true
-        force: true
       register: custom_conf_result
 
     - name: "Ensure [xdmcp] section exists in custom.conf"
       ansible.builtin.lineinfile:
-        path: "{{ xdmcp_gdm3_custom_conf }}"
+        path: /etc/gdm3/custom.conf
         regexp: '^\[xdmcp\]$'
         line: '[xdmcp]'
         insertafter: 'EOF'
@@ -71,11 +60,10 @@
         owner: root
         group: root
         mode: '0644'
-      register: xdmcp_section_result
 
     - name: "Ensure Enable=true is commented out or removed in [xdmcp] section"
       ansible.builtin.lineinfile:
-        path: "{{ xdmcp_gdm3_custom_conf }}"
+        path: /etc/gdm3/custom.conf
         regexp: '^\s*Enable\s*=\s*true\s*$'
         line: '# Enable=true'
         state: present
@@ -83,11 +71,16 @@
         group: root
         mode: '0644'
         backrefs: true
-      register: enable_line_result
 
-    - name: "Verify XDMCP is disabled"
+    - name: "Verify XDMCP is disabled (no active Enable=true)"
       ansible.builtin.shell: |
-        grep -E '^\s*Enable\s*=\s*true\s*$' "{{ xdmcp_gdm3_custom_conf }}" || true
+        grep -E '^\s*Enable\s*=\s*true\s*$' /etc/gdm3/custom.conf || true
       register: xdmcp_enabled_check
       changed_when: false
       failed_when: xdmcp_enabled_check.stdout | length > 0
+
+# Optional: Notify user if GDM3 is not installed (non-fatal)
+- name: "Notify that XDMCP was skipped due to missing GDM3"
+  ansible.builtin.debug:
+    msg: "Skipped XDMCP configuration: /etc/gdm3 directory does not exist."
+  when: not gdm3_dir_check.stat.exists and ansible_facts.os_family == 'Debian'

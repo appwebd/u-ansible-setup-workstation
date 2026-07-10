@@ -1,0 +1,10 @@
+---
+# Role name   : configure_mail_agent_local_only
+# Description : Handlers for the configure_mail_agent_local_only role
+
+- name: Restart mail agent service
+  ansible.builtin.systemd:
+    name: "{{ mail_agent_service_name }}"
+    state: restarted
+    daemon_reload: true
+  become: true

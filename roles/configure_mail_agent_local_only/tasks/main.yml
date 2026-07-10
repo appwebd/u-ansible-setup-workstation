@@ -1,0 +1,97 @@
+---
+# Role        : configure_mail_agent_local_only
+# Description : Ensure mail agent is configured to listen only on loopback interface.
+# Wazuh ID    : 35581
+# Scope       : Postfix (Debian/Ubuntu/CentOS/RHEL) — local-only mode
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian."
+
+- name: "Check if Postfix is installed"
+  ansible.builtin.command: which postconf
+  register: postfix_bin_check
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Set fact for Postfix installation status"
+  ansible.builtin.set_fact:
+    postfix_installed: "{{ postfix_bin_check.rc == 0 }}"
+
+- name: "Skip configuration if Postfix is not installed"
+  ansible.builtin.meta: end_host
+  when: not postfix_installed | bool
+
+- name: "Check current inet_interfaces setting"
+  ansible.builtin.command: postconf inet_interfaces
+  register: current_inet_interfaces
+  changed_when: false
+
+- name: "Check if inet_interface_line already exists in config file"
+  ansible.builtin.shell: |
+    grep -E '^\s*inet_interfaces\s*=' "{{ mail_agent_config_file }}" || true
+  register: inet_interface_line_check
+  changed_when: false
+  check_mode: false
+
+- name: "Configure mail agent to listen only on loopback interface"
+  block:
+
+    - name: "Ensure RECEIVING MAIL section header exists (if missing)"
+      ansible.builtin.lineinfile:
+        path: "{{ mail_agent_config_file }}"
+        insertafter: '^\s*#?\s*(smtpd|receive)\s+.*'
+        line: "# {{ mail_agent_config_section }}"
+        create: true
+        mode: '0644'
+        become: true
+      when: inet_interface_line_check.stdout | length == 0
+
+    - name: "Add or update inet_interfaces = loopback-only"
+      ansible.builtin.lineinfile:
+        path: "{{ mail_agent_config_file }}"
+        regexp: '^inet_interfaces\s*='
+        line: "{{ mail_agent_inet_interfaces_line }}"
+        insertafter: '^\s*#?\s*(smtpd|receive)\s+.*'
+        create: true
+        mode: '0644'
+      become: true
+      notify: Restart mail agent service
+
+  rescue:
+    - name: "Fail if configuration update failed"
+      ansible.builtin.fail:
+        msg: "Failed to configure inet_interfaces for local-only mode."
+
+- name: "Verify configuration was applied correctly"
+  block:
+
+    - name: "Read current inet_interfaces setting"
+      ansible.builtin.command: postconf inet_interfaces
+      register: current_inet_interfaces
+      changed_when: false
+
+    - name: "Assert that inet_interfaces is set to loopback-only"
+      ansible.builtin.assert:
+        that:
+          - "'loopback-only' in current_inet_interfaces.stdout"
+        fail_msg: "inet_interfaces is not configured as 'loopback-only'. Current value: {{ current_inet_interfaces.stdout }}"
+        success_msg: "inet_interfaces correctly set to loopback-only."
+
+  always:
+    - name: "Report final status of mail agent configuration"
+      ansible.builtin.debug:
+        msg: >-
+          Mail agent ({{ mail_agent_service_name }}) local-only mode status:
+          {% if postfix_installed | bool %}
+            installed, configured
+          {% else %}
+            not installed — no action taken
+          {% endif %}

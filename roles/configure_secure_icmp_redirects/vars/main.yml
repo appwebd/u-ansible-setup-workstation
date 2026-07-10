@@ -1,0 +1,6 @@
+---
+# vars/main.yml
+# Role         : configure_secure_icmp_redirects
+# Description  : Ensure secure ICMP redirects are disabled.
+#
+# Internal variables — not meant for override

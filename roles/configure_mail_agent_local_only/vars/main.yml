@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+# Role         : configure_mail_agent_local_only
+# Description  : Internal variables for the role.
+
+# No user-overridable variables beyond defaults/main.yml.
+# All paths and service names are hardcoded to match standard Postfix deployment.
