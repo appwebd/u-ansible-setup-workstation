@@ -1,0 +1,9 @@
+---
+# Role name   : configure_secure_icmp_redirects
+# Description : Handlers for the configure_secure_icmp_redirects role
+
+- name: Reload sysctl settings
+  ansible.builtin.command: sysctl -p {{ sysctl_config_file }}
+  changed_when: false
+  failed_when: false
+  when: sysctl_config_file is defined and sysctl_config_file | length > 0

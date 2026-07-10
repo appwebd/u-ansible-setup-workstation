@@ -1,0 +1,61 @@
+---
+# Role        : configure_secure_icmp_redirects
+# Description : Ensure secure ICMP redirects are disabled.
+# Wazuh ID    : 35613
+# Scope       : Debian/Ubuntu family | Disable secure ICMP redirect acceptance
+
+- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'Ubuntu']
+    fail_msg: >
+      CRITICAL: This role only supports Debian/Ubuntu-based systems.
+      Execution will STOP on this host because the OS family is not 'Debian'.
+      Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian or Ubuntu."
+
+- name: "Ensure sysctl.d directory exists"
+  ansible.builtin.file:
+    path: /etc/sysctl.d
+    state: directory
+    mode: '0755'
+
+- name: "Write sysctl configuration file for secure ICMP redirects"
+  ansible.builtin.lineinfile:
+    path: "{{ sysctl_config_file }}"
+    create: true
+    mode: '0644'
+    regexp: '^{{ item.name }}\s*='
+    line: '{{ item.name }} = {{ item.value }}'
+    backrefs: true
+  loop: "{{ required_params }}"
+  notify: Reload sysctl settings
+
+- name: "Apply sysctl parameters immediately"
+  ansible.builtin.command: >
+    sh -c 'sysctl -w net.ipv4.conf.all.secure_redirects=0 &&
+           sysctl -w net.ipv4.conf.default.secure_redirects=0 &&
+           sysctl -w net.ipv4.route.flush=1'
+  changed_when: true
+  failed_when: false
+
+- name: "Verify secure ICMP redirect settings are applied"
+  ansible.builtin.command: sysctl net.ipv4.conf.all.secure_redirects net.ipv4.conf.default.secure_redirects
+  register: sysctl_output
+  changed_when: false
+  check_mode: true
+
+- name: "Report current sysctl values for secure redirects"
+  ansible.builtin.debug:
+    msg: >-
+      Current sysctl settings:
+        net.ipv4.conf.all.secure_redirects = {{
+          (sysctl_output.stdout_lines
+           | select('match', 'net.ipv4.conf.all.secure_redirects')
+           | first).split('=')[1] | trim
+        }}
+        net.ipv4.conf.default.secure_redirects = {{
+          (sysctl_output.stdout_lines
+           | select('match', 'net.ipv4.conf.default.secure_redirects')
+           | first).split('=')[1] | trim
+        }}

@@ -1,0 +1,14 @@
+---
+# defaults/main.yml
+# Role         : configure_secure_icmp_redirects
+# Description  : Ensure secure ICMP redirects are disabled.
+#
+# Default configuration for the secure_icmp_redirects role
+
+sysctl_config_file: /etc/sysctl.d/60-secure-icmp-redirects.conf
+
+required_params:
+  - name: net.ipv4.conf.all.secure_redirects
+    value: "0"
+  - name: net.ipv4.conf.default.secure_redirects
+    value: "0"
