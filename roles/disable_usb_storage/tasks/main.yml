@@ -34,7 +34,7 @@
     cmd: rmmod {{ usb_storage_module_name }}
   when:
     - modprobe_check.rc == 0
-    - modprobe_check.stdout | search(usb_storage_module_name)
+    - modprobe_check.stdout | regex_search(usb_storage_module_name)
   failed_when: false
   changed_when: true
 
