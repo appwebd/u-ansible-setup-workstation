@@ -1,5 +1,7 @@
----
-# Blacklist overlay and overlayfs modules to prevent loading
+# Description : Disable overlay and overlayfs kernel modules to enhance security posture.
+# Wazuh ID    : 35723
+# Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+
 {% for module in disable_overlayfs_modules %}
 blacklist {{ module }}
 {% endfor %}
