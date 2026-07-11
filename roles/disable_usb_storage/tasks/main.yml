@@ -29,6 +29,10 @@
   failed_when: false
   check_mode: false
 
+- name: "Check variable modprobe_check"
+  ansible.builtin.debug:
+    msg: "variable modprobe_check : {{ modprobe_check }}"
+
 - name: "Ensure usb-storage module is not loaded"
   ansible.builtin.command:
     cmd: rmmod {{ usb_storage_module_name }}
