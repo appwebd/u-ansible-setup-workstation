@@ -1,5 +1,5 @@
 #### Role name:
-    configure_secure_icmp_redirects
+    ensure_secure_icmp_redirects_not_accepted
 
 #### Wazuh ID:
     35613
@@ -20,22 +20,22 @@
     - Ansible 2.16 or higher
     - `become: yes` required (to modify system packages, services, or configuration files)
     - OS: inferred from `tasks/main.yml` (e.g., Debian/Ubuntu)
-    - Required Ansible collections/modules: ansible.builtin.assert, ansible.builtin.file, ansible.builtin.lineinfile, ansible.builtin.command, ansible.builtin.debug
+    - Required Ansible collections/modules: ansible.builtin.assert, ansible.builtin.file, ansible.builtin.template, ansible.builtin.command, ansible.builtin.shell, ansible.builtin.debug
 
 #### Variables
 
 ### defaults/main.yml
 
-| Variable           | Default                                                                                                                    | Description                                                                                     |
-|--------------------|----------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
-| sysctl_config_file | /etc/sysctl.d/60-secure-icmp-redirects.conf                                                                                | Path to the sysctl configuration file used to store secure ICMP redirect settings               |
-| required_params    | [ { name: net.ipv4.conf.all.secure_redirects, value: "0" }, { name: net.ipv4.conf.default.secure_redirects, value: "0" } ] | List of sysctl parameters and their values to be configured for disabling secure ICMP redirects |
+| Variable                         | Default                                | Description                                                                          |
+|----------------------------------|----------------------------------------|--------------------------------------------------------------------------------------|
+| sysctl_config_file               | /etc/sysctl.d/60-netipv4_sysctl.conf   | Path to the sysctl configuration file where secure redirect settings will be written |
+| sysctl_params                    | list of dicts with name and value keys | List of sysctl parameters to be configured                                           |
 
 ### vars/main.yml
 
-| Variable                        | Default | Description |
-|---------------------------------|---------|-------------|
-| (No variables defined.)         |         |             |
+| Variable               | Default | Description |
+|------------------------|---------|-------------|
+| No variables defined.  |         |             |
 
 #### Dependencies
     Handlers: `handlers/main.yml`
@@ -70,7 +70,7 @@
 - hosts: servers
   become: yes
   roles:
-    - configure_secure_icmp_redirects
+    - ensure_secure_icmp_redirects_not_accepted
 ```
 #### License
     Apache 2.0
@@ -79,4 +79,4 @@
     Patricio Rojas Ortiz
 
 ### Date
-    2026-07-08_17:57:51
+    2026-07-21_15:54:37
