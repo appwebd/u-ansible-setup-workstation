@@ -7,3 +7,4 @@
   when:
     - grub_binary_path is defined
     - effective_grub_cfg_path is defined or boot_grub_cfg_path is defined
+  become: true
