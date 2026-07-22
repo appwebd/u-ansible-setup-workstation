@@ -1,0 +1,8 @@
+# Role        : configure_secure_icmp_redirects
+# Description : Ensure secure ICMP redirects are disabled.
+# Wazuh ID    : 35613
+# Scope       : Debian/Ubuntu family | Disable secure ICMP redirect acceptance
+# Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+
+net.ipv4.conf.all.secure_redirects = 0
+net.ipv4.conf.default.secure_redirects = 0

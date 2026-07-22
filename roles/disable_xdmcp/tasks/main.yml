@@ -14,7 +14,7 @@
     success_msg: "OS family verified as Debian or Ubuntu."
 
 - name: "Ensure default GDM3 paths"
-  set_fact:
+  ansible.builtin.set_fact:
     xdmcp_gdm3_config_dir: "{{ xdmcp_gdm3_config_dir | default('/etc/gdm3') }}"
     xdmcp_gdm3_custom_conf: "{{ xdmcp_gdm3_custom_conf | default('/etc/gdm3/custom.conf') }}"
 

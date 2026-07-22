@@ -24,12 +24,12 @@
 
 #### Variables
 
-| Variable                   | Default                      | Description                                      |
-|----------------------------|------------------------------|--------------------------------------------------|
-| `grub_binary_path`         | `/usr/sbin/grub-mkconfig`    | Path to the GRUB configuration binary            |
-| `boot_grub_cfg_path`       | `/boot/grub/grub.cfg`        | Path to the GRUB config file (BIOS systems)      |
-| `boot_grub_efi_cfg_path`   | `/boot/efi/grub.cfg`         | Path to the GRUB config file (UEFI systems)      |
-| `boot_grub_dir_path`       | `/boot/grub`                 | Path to the /boot/grub directory                 |
+| Variable                  | Default                    | Description                                  |
+|---------------------------|----------------------------|----------------------------------------------|
+| `grub_binary_path`        | `/usr/sbin/grub-mkconfig`  | Path to the GRUB configuration binary        |
+| `boot_grub_cfg_path`      | `/boot/grub/grub.cfg`      | Path to the GRUB config file (BIOS systems)  |
+| `boot_grub_efi_cfg_path`  | `/boot/efi/grub.cfg`       | Path to the GRUB config file (UEFI systems)  |
+| `boot_grub_dir_path`      | `/boot/grub`               | Path to the /boot/grub directory             |
 
 #### Dependencies
     No dependencies
