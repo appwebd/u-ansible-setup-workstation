@@ -30,6 +30,7 @@
 | `disable_overlayfs_enabled`        | `true`                                 | Controls whether the role enforces module blacklisting. Set to `false` to skip execution. |
 | `disable_overlayfs_modules`        | `['overlay', 'overlayfs']`             | List of kernel modules to blacklist.                                                      |
 | `disable_overlayfs_blacklist_file` | `/etc/modprobe.d/disable-overlay.conf` | Path to the modprobe configuration file where blacklists will be written.                 |
+| `overlay_unload_if_loaded: true`   | true                                   | Remove overlay module if currently loaded                                                 |
 
 ### vars/main.yml
 | Variable               | Default  | Description                |
