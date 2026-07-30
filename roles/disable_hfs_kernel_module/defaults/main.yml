@@ -11,6 +11,11 @@ hfs_modprobe_conf_file: "{{ hfs_modprobe_conf_dir }}/hfs.conf"
 
 # Content to disable hfs module
 hfs_modprobe_content: |
+  #
+  # Description : Ensure hfs kernel module is not available.
+  # Wazuh ID    : 35502
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
   install hfs /bin/false
   blacklist hfs
 
