@@ -56,8 +56,7 @@ remove_bloatware_packages_:
   - talk
   - telnet*
   - tftp-hpa
-  - tftpd-hpa
-  - tnftp
+  - tftpd-hpa  
   - tnftp                    # This removes ubuntu-standard (ubuntu-standard is a metapackage)
   - tracker                  # Dependency with GNOME Files (default file manager)
   - vim
