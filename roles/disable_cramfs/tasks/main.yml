@@ -41,6 +41,7 @@
     backup: true
   register: modprobe_conf_result
   when: disable_cramfs_enabled | bool
+  become: true
 
 - name: "Remove cramfs module if currently loaded"
   community.general.modprobe:
