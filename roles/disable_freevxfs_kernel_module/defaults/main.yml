@@ -7,6 +7,11 @@ freevxfs_modprobe_conf_file: /etc/modprobe.d/freevxfs.conf
 
 # Content to disable the freevxfs kernel module
 freevxfs_modprobe_content: |
+  #
+  # Description : Ensure freevxfs kernel module is not available.
+  # Wazuh ID    : 35501
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #    
   install freevxfs /bin/false
   blacklist freevxfs
 
