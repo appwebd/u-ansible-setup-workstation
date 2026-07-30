@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: enable_apparmor
   author: Patricio Rojas Ortiz
-  description: Ensure AppArmor is enabled via kernel boot parameters
+  description: Ensure AppArmor is enabled via kernel boot parameters (Wazuh ID 35537)
   license: Apache 2.0
   namespace: ubuntu-server
   min_ansible_version: "2.16"
