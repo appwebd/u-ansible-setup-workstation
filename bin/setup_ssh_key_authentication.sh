@@ -6,5 +6,5 @@ set -euo pipefail          # Terminate on error, avoid using uninitialized varia
 set +o history
 
 # Copy your ssh key to the workstation
-ssh-copy-id -i ~/.ssh/id_rsa.pub pro@192.168.1.89
+ssh-copy-id -o "KexAlgorithms=+sntrup761x25519-sha512@openssh.com" -i ~/.ssh/id_rsa.pub pro@192.168.1.89
 
