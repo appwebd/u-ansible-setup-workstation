@@ -51,7 +51,7 @@
         line: "# {{ mail_agent_config_section }}"
         create: true
         mode: '0644'
-        become: true
+      become: true
       when: inet_interface_line_check.stdout | length == 0
 
     - name: "Add or update inet_interfaces = loopback-only"
