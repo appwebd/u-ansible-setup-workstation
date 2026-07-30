@@ -1,3 +1,16 @@
 ---
-# Internal variables - do not override
-# no internal variables
+# vars/main.yml
+# Role         : grub_access_hardening
+# Description  : Internal variables for bootloader access hardening
+
+grub_dir_owner: "root"
+grub_dir_group: "root"
+grub_dir_mode: "0700"
+
+grub_cfg_owner: "root"
+grub_cfg_group: "root"
+grub_cfg_mode: "0600"
+
+# GRUB config file path fallbacks (common across distros)
+boot_grub_cfg_path: /boot/grub/grub.cfg
+efi_grub_cfg_path: /boot/efi/EFI/{{ ansible_distribution | lower }}/grub.cfg
