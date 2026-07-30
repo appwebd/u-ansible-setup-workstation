@@ -1,6 +1,6 @@
 ---
 # Role: configure_bootloader_access
-# Description: Ensure access to bootloader config is configured
+# Description  : Ensure bootloader access is restricted to root user only
 # Wazuh ID: 35541
 # CIS: 1.4.2
 #
@@ -78,11 +78,15 @@
 - name: "Set secure permissions on GRUB config file (0600)"
   ansible.builtin.file:
     path: "{{ effective_grub_cfg_path }}"
-    mode: "0600"
+    owner: "{{ grub_cfg_owner }}"
+    group: "{{ grub_cfg_group }}"
+    mode: "{{ grub_cfg_mode }}"
     state: file
   when:
     - grub_cfg_stat.stat.exists | default(false)
     - (grub_cfg_current_perms.stat.mode | default('0644')) != '0600'
+    - (grub_cfg_stat.stat.pw_name | default('nobody')) != 'root'
+      or (grub_cfg_stat.stat.gr_name | default('nogroup')) != 'root'
   notify: "Regenerate GRUB configuration"
 
 # --------------------------------------------------
@@ -98,9 +102,9 @@
 - name: "Set secure permissions on GRUB directory (0700)"
   ansible.builtin.file:
     path: "{{ boot_grub_dir_path }}"
-    mode: "0700"
-    owner: root
-    group: root
+    owner: "{{ grub_dir_owner }}"
+    group: "{{ grub_dir_group }}"
+    mode: "{{ grub_dir_mode }}"
     state: directory
   when:
     - grub_dir_stat.stat.exists | default(false)
@@ -140,9 +144,9 @@
 - name: "Set secure ownership on GRUB directory (root:root)"
   ansible.builtin.file:
     path: "{{ boot_grub_dir_path }}"
-    owner: root
-    group: root
-    mode: "0700"
+    owner: "{{ grub_dir_owner }}"
+    group: "{{ grub_dir_group }}"
+    mode: "{{ grub_dir_mode }}"
     state: directory
   when:
     - grub_dir_stat.stat.exists | default(false)
