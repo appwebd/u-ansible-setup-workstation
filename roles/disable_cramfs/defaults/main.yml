@@ -10,6 +10,11 @@ modprobe_conf_dir: /etc/modprobe.d
 
 # Content to blacklist cramfs module
 modprobe_blacklist_content: |
+  #
+  # Description : Disable the cramfs kernel module to prevent mounting of cramfs filesystems
+  # Wazuh ID    : 35500
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
   install cramfs /bin/false
   blacklist cramfs
 
