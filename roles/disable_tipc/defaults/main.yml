@@ -1,12 +1,9 @@
 ---
 # defaults/main.yml
-# Default variables for disable_tipc role
-tipc_modprobe_conf_file: /etc/modprobe.d/tipc.conf
-tipc_blacklist_content: |
-  #
-  # Description : Ensure tipc kernel module is not available.
-  # Wazuh ID    : 35505
-  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
-  #
-  install tipc /bin/false
-  blacklist tipc
+# Role         : disable_tipc
+# Description  : Ensure TIPC kernel module is disabled (Wazuh ID 35605)
+#
+# Default configuration for the `disable_tipc` role
+
+tipc_modprobe_conf_path: /etc/modprobe.d/tipc.conf
+tipc_install_line: "install tipc /bin/false"

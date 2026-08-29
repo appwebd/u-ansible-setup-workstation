@@ -1,4 +1,6 @@
 ---
 # vars/main.yml
-# Internal constants for the disable_tipc role
-tipc_module_name: tipc
+# Role         : disable_tipc_module
+# Description  : Ensure TIPC kernel module is disabled (Wazuh ID 35605)
+#
+# No additional variables needed — all logic derived from defaults and runtime checks
