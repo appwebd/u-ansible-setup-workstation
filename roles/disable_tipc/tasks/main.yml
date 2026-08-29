@@ -20,29 +20,29 @@
     mode: '0755'
   become: true
 
-- name: "Create modprobe configuration to disable TIPC module"
-  ansible.builtin.template:
-    src: tipc.conf.j2
+- name: "Ensure TIPC is blacklisted in modprobe.d"
+  ansible.builtin.copy:
     dest: "{{ tipc_modprobe_conf_path }}"
+    content: "{{ modprobe_blacklist_content }}"
     owner: root
     group: root
-    mode: '0644'
-    backup: yes
+    mode: "0644"
+    backup: true
+  register: modprobe_conf_result
+  when: disable_tipc_enabled | bool
   become: true
 
 - name: "Check if TIPC is currently loaded"
-  ansible.builtin.shell: lsmod | grep -q tipc && echo "loaded" || true
+  ansible.builtin.shell: |
+      set -o pipefail
+      lsmod | grep -q tipc && echo "loaded" || true
   register: tipc_is_loaded
   changed_when: false
 
-- name: "Unload TIPC if still loaded"
-  ansible.builtin.command: rmmod tipc
-  when: tipc_is_loaded.stdout | length > 0
-  ignore_errors: true
-  become: true
-  
 - name: "Verify TIPC module is not loaded (runtime check)"
-  ansible.builtin.shell: lsmod | grep -q '^tipc' && exit 1 || exit 0
+  ansible.builtin.shell: |
+      set -o pipefail
+      lsmod | grep -q '^tipc' && exit 1 || exit 0
   register: tipc_lsmod_check
   changed_when: false
   failed_when: false
@@ -69,13 +69,16 @@
     success_msg: "TIPC module is properly disabled per Wazuh requirement."
 
 - name: "Check if TIPC module is loaded"
-  ansible.builtin.shell: lsmod | grep -q tipc || true
+  ansible.builtin.shell: |
+      set -o pipefail
+      lsmod | grep -q tipc || true
   register: tipc_loaded_check
   changed_when: false
 
 - name: "Report current status of TIPC module"
   ansible.builtin.debug:
     msg: >-
+      set -o pipefail
       TIPC module status:
       {% if tipc_loaded_check.rc == 0 %}
         LOADED (runtime)
@@ -84,4 +87,3 @@
       {% endif %},
       modprobe config: {{ tipc_modprobe_conf_path | default('N/A') }},
       modprobe output: {{ modprobe_output.stdout | default('N/A') }}
-
