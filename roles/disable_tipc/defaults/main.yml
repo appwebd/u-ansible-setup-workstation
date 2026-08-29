@@ -6,4 +6,15 @@
 # Default configuration for the `disable_tipc` role
 
 tipc_modprobe_conf_path: /etc/modprobe.d/tipc.conf
-tipc_install_line: "install tipc /bin/false"
+modprobe_blacklist_content: |
+  #
+  # Description : Disable the tipc kernel module to prevent mounting of tipc filesystems
+  # Wazuh ID    : 35605
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
+  install tipc /bin/false
+  blacklist tipc
+
+
+  # Enable/disable the role (can be overridden via group_vars or host_vars)
+disable_tipc_enabled: true
