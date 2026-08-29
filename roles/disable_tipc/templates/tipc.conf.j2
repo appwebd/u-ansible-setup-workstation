@@ -1,8 +1,0 @@
-# Role         : disable_tipc
-# Description  : Ensure TIPC kernel module is disabled (Wazuh ID 35605)
-# Platform     : Debian/Ubuntu
-# Scope        : Debian/Ubuntu | Disable TIPC kernel module via modprobe configuration
-# Generated    : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
-
-{{ tipc_install_line | default("install tipc /bin/false") }}
-blacklist tipc
