@@ -1,70 +1,89 @@
 ---
 # Role        : disable_tipc
-# Description : Ensure tipc kernel module is not available.
-# Wazuh ID    : 35605
+# Description : Ensure TIPC kernel module is disabled (Wazuh ID 35605)
+# Scope       : Debian/Ubuntu | Disable TIPC via modprobe and verify not loaded
 
-- name: "Verify operating system is Debian/Ubuntu (apt-based)"
+- name: "Verify operating system family supports TIPC disabling"
   ansible.builtin.assert:
     that:
-      - ansible_os_family in ['Debian', 'Ubuntu']
+      - ansible_os_family == "Debian"
     fail_msg: >
-      CRITICAL: This role only supports Debian/Ubuntu-based systems.
-      Execution will STOP on this host because the OS family is not 'Debian'.
-      Current value: {{ ansible_os_family | default('UNKNOWN') }}
-    success_msg: "OS family verified as Debian or Ubuntu."
+         CRITICAL: This role only supports Debian/Ubuntu systems.
+         Execution will STOP on this host because the OS family is not supported.
+         Current value: {{ ansible_os_family | default('UNKNOWN') }}
+    success_msg: "OS family verified as Debian."
 
-- name: "Ensure /etc/modprobe.d directory exists"
+- name: "Ensure modprobe configuration directory exists"
   ansible.builtin.file:
-    path: /etc/modprobe.d
+    path: "{{ tipc_modprobe_conf_path | dirname }}"
     state: directory
-    owner: root
-    group: root
-    mode: "0755"
+    mode: '0755'
+  become: true
 
-- name: "Check if tipc module is currently loaded"
-  ansible.builtin.shell: |
-    set -o pipefail
-    lsmod | grep -q '^{{ tipc_module_name }}' || true
-  register: tipc_loaded_check
-  changed_when: false
-  failed_when: false
-  check_mode: false
-
-- name: "Check if tipc module is available in modprobe"
-  ansible.builtin.shell: |
-    set -o pipefail
-    modprobe -n -v {{ tipc_module_name }} 2>/dev/null || true
-  register: tipc_modprobe_check
-  changed_when: false
-  failed_when: false
-  check_mode: false
-
-- name: "Create modprobe configuration to disable tipc module"
+- name: "Ensure TIPC is blacklisted in modprobe.d"
   ansible.builtin.copy:
-    content: "{{ tipc_blacklist_content }}"
-    dest: "{{ tipc_modprobe_conf_file }}"
+    dest: "{{ tipc_modprobe_conf_path }}"
+    content: "{{ modprobe_blacklist_content }}"
     owner: root
     group: root
     mode: "0644"
-    force: true
+    backup: true
+  register: modprobe_conf_result
+  when: disable_tipc_enabled | bool
+  become: true
 
-- name: "Unload tipc module if currently loaded"
+- name: "Check if TIPC is currently loaded"
   ansible.builtin.shell: |
-    set -o pipefail
-    modprobe -r {{ tipc_module_name }} 2>/dev/null || true; rmmod {{ tipc_module_name }} 2>/dev/null || true
-  register: tipc_unload_result
+      set -o pipefail
+      lsmod | grep -q tipc && echo "loaded" || true
+  register: tipc_is_loaded
+  changed_when: false
+
+- name: "Verify TIPC module is not loaded (runtime check)"
+  ansible.builtin.shell: |
+      set -o pipefail
+      lsmod | grep -q '^tipc' && exit 1 || exit 0
+  register: tipc_lsmod_check
   changed_when: false
   failed_when: false
-  when:
-    - tipc_modprobe_check.rc == 0 or tipc_loaded_check.rc == 0
-    - tipc_loaded_check.stdout | length > 0
+  become: true
 
-- name: "Verify tipc module is not loaded after remediation"
-  ansible.builtin.shell: |
-    set -o pipefail
-    lsmod | grep -q '^tipc' && exit 1 || exit 0
-  register: tipc_verify
+- name: "Verify modprobe configuration for TIPC"
+  ansible.builtin.command: modprobe -n -v tipc
+  register: modprobe_output
   changed_when: false
-  failed_when: true
-  when:
-    - tipc_modprobe_check.rc == 0 or tipc_loaded_check.rc == 0
+  become: true
+
+- name: "Check compliance with Wazuh requirement condition and rules"
+  ansible.builtin.assert:
+    that:
+      # Rule 1: `modprobe -n -v tipc` must return line starting with "install /bin/false"
+      - modprobe_output.stdout | regex_search('^install /bin/false', multiline=True) is defined
+      # Rule 2: TIPC module must not be loaded (lsmod should NOT match 'tipc')
+      - tipc_lsmod_check.rc == 0
+    fail_msg: >
+         COMPLIANCE FAILURE:
+         - modprobe check failed or rule violated.
+           Expected: `install /bin/false`, got: {{ modprobe_output.stdout | default('empty') }}
+         - lsmod check failed. TIPC module may still be loaded.
+    success_msg: "TIPC module is properly disabled per Wazuh requirement."
+
+- name: "Check if TIPC module is loaded"
+  ansible.builtin.shell: |
+      set -o pipefail
+      lsmod | grep -q tipc || true
+  register: tipc_loaded_check
+  changed_when: false
+
+- name: "Report current status of TIPC module"
+  ansible.builtin.debug:
+    msg: >-
+      set -o pipefail
+      TIPC module status:
+      {% if tipc_loaded_check.rc == 0 %}
+        LOADED (runtime)
+      {% else %}
+        not loaded
+      {% endif %},
+      modprobe config: {{ tipc_modprobe_conf_path | default('N/A') }},
+      modprobe output: {{ modprobe_output.stdout | default('N/A') }}

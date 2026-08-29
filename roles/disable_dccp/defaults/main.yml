@@ -7,6 +7,6 @@ dccp_modprobe_blacklist_content: |
   # Description : Ensure the DCCP kernel module is not available
   # Wazuh ID    : 35604
   # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
-  #    
+  #
   install dccp /bin/false
   blacklist dccp

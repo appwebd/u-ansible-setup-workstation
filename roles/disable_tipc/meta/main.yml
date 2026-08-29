@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: disable_tipc
   author: Patricio Rojas Ortiz
-  description: Ensure tipc kernel module is not available (Wazuh ID 35605)
+  description: Ensure tipc kernel module is not available. (Wazuh ID 35605)
   license: Apache 2.0
   namespace: security
   min_ansible_version: "2.16"
@@ -12,8 +12,9 @@ galaxy_info:
         - all
   galaxy_tags:
     - security
-    - compliance
     - kernel
-    - modules
+    - compliance
+    - audit
+    - sysadmin
 
 dependencies: []

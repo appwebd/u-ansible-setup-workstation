@@ -53,7 +53,7 @@
 
 - name: "Ensure cramfs is blacklisted in initramfs (Debian/Ubuntu)"
   ansible.builtin.lineinfile:
-    path: /etc/initramfs-tools/conf.d/cramfs
+    path: "{{ cramfs_modprobe_conf_file }}"
     line: "blacklist cramfs"
     create: true
     owner: root

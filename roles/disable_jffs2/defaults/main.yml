@@ -11,6 +11,11 @@ jffs2_modprobe_conf_file: "{{ jffs2_modprobe_conf_dir }}/jffs2.conf"
 
 # Content to disable jffs2 module
 jffs2_modprobe_content: |
+  #
+  # Description : Ensure jffs2 kernel module is not available.
+  # Wazuh ID    : 35504
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
   install jffs2 /bin/false
   blacklist jffs2
 

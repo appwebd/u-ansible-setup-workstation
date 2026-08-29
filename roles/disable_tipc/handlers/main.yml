@@ -1,3 +1,5 @@
 ---
-# Role        : disable_tipc
-# Description : Handlers for the disable_tipc role
+# Role name   : disable_tipc
+# Description : Ensure TIPC kernel module is disabled (Wazuh ID 35605)
+# No module handlers
+#

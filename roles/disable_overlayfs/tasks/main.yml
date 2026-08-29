@@ -1,7 +1,8 @@
 ---
 # Role        : disable_overlayfs
-# Description : Disable overlay and overlayfs kernel modules to enhance security posture.
-# Wazuh ID    : 35723
+# Description : Ensure overlay filesystem is disabled.
+# Wazuh ID    : 35505
+# Scope       : Debian/Ubuntu family | Disable overlay module at boot and unload if loaded
 
 - name: "Verify operating system is Debian/Ubuntu (apt-based)"
   ansible.builtin.assert:
@@ -39,16 +40,15 @@
     state: absent
   when:
     - overlay_unload_if_loaded | bool
-    - overlay_loaded_check.stdout == "loaded"
+    - overlay_loaded_check.rc == 0
 
-- name: "Ensure overlay modules are not loaded on next boot"
+- name: "Ensure overlay modules are not loaded on next boot (remove from /etc/modules)"
   ansible.builtin.lineinfile:
     path: /etc/modules-load.d/disable-overlay.conf
     line: "{{ item }}"
     state: absent
     backup: true
-  loop:
-    - disable_overlayfs_modules
+  loop: "{{ disable_overlayfs_modules }}"
   when: disable_overlayfs_enabled | bool
 
 - name: "Ensure overlay modules are blacklisted in modprobe configuration (idempotent)"
@@ -61,3 +61,63 @@
   loop: "{{ disable_overlayfs_modules }}"
   when: disable_overlayfs_enabled | bool
   notify: Update initramfs
+
+
+- name: Verify overlayfs is disabled (blacklisted and not loaded)
+  when: disable_overlayfs_enabled | default(false) | bool
+  block:
+
+    # Step 1: Check if the overlay is blacklisted
+    - name: "Verify overlay modules are blacklisted"
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep -E '^\s*blacklist\s+(overlay|overlayfs)\s*$' {{ disable_overlayfs_blacklist_file }}
+      register: blacklist_verify_result
+      changed_when: false
+      failed_when: false
+
+
+    # Step 2: Check that it's not currently loaded into memory
+    - name: "Check if overlay module is currently loaded"
+      ansible.builtin.shell: |
+        set -euo pipefail
+        lsmod | grep -q "^overlay" || lsmod | grep -q "^overlayfs"
+      register: overlay_mod_loaded
+      changed_when: false
+      failed_when: false
+      check_mode: false
+
+    # (Optional) You can also use lsmod to check status in runtime:
+    - name: Check overlay module is not loaded via lsmod
+      ansible.builtin.command: lsmod | grep -q '^overlay'
+      register: overlay_lsmod
+      changed_when: false
+      failed_when: false
+
+    - name: Report compliance status for overlay filesystem
+      ansible.builtin.debug:
+        msg: >-
+          {% if not disable_overlayfs_enabled | bool %}
+            Overlay filesystem is compliant (disabled via config)
+          {% elif blacklist_check.results | map(attribute='matched') | sum == 0 %}
+            Non-compliant: no blacklist entry found for 'overlay'
+          {% elif overlay_lsmod.rc == 0 or overlay_mod_loaded.rc == 0 %}
+            Non-compliant: overlay module loaded despite blacklisting
+          {% else %}
+            Compliant: overlay is blacklisted and not loaded.
+          {% endif %}
+
+    # (Optional) Force failure if not compliant
+    - name: Fail if non-compliant
+      ansible.builtin.fail:
+        msg: "Overlay filesystem must be disabled for security compliance"
+      when:
+        disable_overlayfs_enabled | bool or
+        blacklist_check.results | map(attribute='matched') | sum == 0 or
+        overlay_lsmod.rc == 0 or
+        overlay_mod_loaded.rc == 0
+
+  rescue:
+    - name: Handle failures gracefully
+      ansible.builtin.debug:
+        msg: "Compliance check for overlay filesystem failed"

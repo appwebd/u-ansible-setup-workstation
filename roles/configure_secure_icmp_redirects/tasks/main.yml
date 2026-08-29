@@ -18,17 +18,19 @@
   ansible.builtin.file:
     path: /etc/sysctl.d
     state: directory
+    owner: root
+    group: root
     mode: '0755'
-
 - name: "Write sysctl configuration file for secure ICMP redirects"
-  ansible.builtin.lineinfile:
-    path: "{{ sysctl_config_file }}"
-    create: true
-    mode: '0644'
-    regexp: '^{{ item.name }}\s*='
-    line: '{{ item.name }} = {{ item.value }}'
-    backrefs: true
-  loop: "{{ required_params }}"
+  become: true
+  ansible.builtin.template:
+    src: 60-secure-icmp-redirects.conf.j2
+    dest: "{{ sysctl_config_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+    backup: true
   notify: Reload sysctl settings
 
 - name: "Apply sysctl parameters immediately"
@@ -40,22 +42,21 @@
   failed_when: false
 
 - name: "Verify secure ICMP redirect settings are applied"
-  ansible.builtin.command: sysctl net.ipv4.conf.all.secure_redirects net.ipv4.conf.default.secure_redirects
-  register: sysctl_output
+  ansible.builtin.command:
+    cmd: sysctl -n net.ipv4.conf.all.secure_redirects net.ipv4.conf.default.secure_redirects
+  register: sysctl_output_raw
   changed_when: false
-  check_mode: true
+  check_mode: false
 
 - name: "Report current sysctl values for secure redirects"
   ansible.builtin.debug:
-    msg: >-
+    msg: |
       Current sysctl settings:
-        net.ipv4.conf.all.secure_redirects = {{
-          (sysctl_output.stdout_lines
-           | select('match', 'net.ipv4.conf.all.secure_redirects')
-           | first).split('=')[1] | trim
-        }}
-        net.ipv4.conf.default.secure_redirects = {{
-          (sysctl_output.stdout_lines
-           | select('match', 'net.ipv4.conf.default.secure_redirects')
-           | first).split('=')[1] | trim
-        }}
+      {% if sysctl_output_raw.stdout | length > 0 %}
+        net.ipv4.conf.all.secure_redirects = {{ (sysctl_output_raw.stdout_lines[0] | default('N/A')).strip() }}
+        net.ipv4.conf.default.secure_redirects = {{ (sysctl_output_raw.stdout_lines[1] | default('N/A')).strip() }}
+      {% else %}
+        [INFO] Sysctl parameters not found. This may occur if:
+              - Kernel doesn't support these options
+              - Parameters are not exposed via sysfs in this environment (e.g., containers)
+      {% endif %}
