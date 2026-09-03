@@ -41,6 +41,7 @@ remove_bloatware_packages_:
   - ldap-utils
   - libvirt-daemon*
   - nfs-kernel-server
+  - network-manager-config-connectivity-ubuntu  
   - nginx
   - nis
   - open-iscsi
@@ -51,7 +52,7 @@ remove_bloatware_packages_:
   - rsh-server
   - samba
   - slapd
-  - snmpd
+  - snmpd  
   - systemd-resolved
   - talk
   - telnet*
