@@ -5,17 +5,35 @@
       - ansible_os_family in ['Debian', 'Ubuntu']
     fail_msg: >
       CRITICAL: This role only supports Debian/Ubuntu-based systems.
-      Execution will STOP on this host because the OS family is not 'Debian'.
       Current value: {{ ansible_os_family | default('UNKNOWN') }}
     success_msg: "OS family verified as Debian or Ubuntu."
 
-- name: Remove useless packages from the cache /var/cache/apt/archives
+- name: "Gather package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Identify which bloatware packages are actually installed"
+  ansible.builtin.set_fact:
+    packages_to_be_removed: "{{ remove_bloatware_packages_ | intersect(ansible_facts.packages.keys() | map('string') | list) }}"
+
+- name: "Remove useless packages from the cache /var/cache/apt/archives"
   ansible.builtin.apt:
     autoclean: true
     autoremove: true
 
-- name: Remove packages
+- name: "Remove identified bloatware packages"
   ansible.builtin.apt:
-    name: "{{ remove_bloatware_packages_ }}"
+    name: "{{ packages_to_be_removed }}"
     state: absent
     update_cache: true
+  when: packages_to_be_removed | length > 0
+
+- name: "Final Report: Software Removal Summary"
+  ansible.builtin.debug:
+    msg: >
+      {% if packages_to_be_removed | length > 0 %}
+      SUCCESS: The following packages have been removed: {{ packages_to_be_removed | join(', ') }}.
+      {% else %}
+      INFO: No bloatware packages were found to be removed. System is already clean.
+      {% endif %}
+

@@ -19,6 +19,7 @@ remove_bloatware_packages_:
   - cups-filters-core-drivers
   - cups-pk-helper
   - cups-ppdc
+  - curl
   - deja-dup
   - dovecot-imapd
   - dovecot-pop3d
@@ -26,6 +27,7 @@ remove_bloatware_packages_:
   - evolution
   - evolution-data-server
   - ftp
+  - tnftp 
   - gamemode
   - gamemode-daemon
   - gnome-bluetooth-sendto
@@ -46,8 +48,13 @@ remove_bloatware_packages_:
   - nis
   - open-iscsi
   - openvpn
+  - prelink 
   - pptp-linux
   - remmina
+  - rsh.socket
+  - rlogin.socket
+  - rshd.service
+  - rlogind.service 
   - rsh-client
   - rsh-server
   - samba
@@ -62,6 +69,7 @@ remove_bloatware_packages_:
   - tracker                  # Dependency with GNOME Files (default file manager)
   - vim
   - vim-common
+  - vim-tiny
   - vsftpd
   - xinetd
 #  - yelp                    # Dependencias with gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp
