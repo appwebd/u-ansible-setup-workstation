@@ -9,3 +9,17 @@ disable_overlayfs_blacklist_file: /etc/modprobe.d/disable-overlay.conf
 disable_overlayfs_modules:
   - overlay
   - overlayfs
+
+modprobe_blacklist_content: |
+  #  
+  # Role        : disable_overlaysfs
+  # Description : Ensure overlay filesystem is disabled
+  # Wazuh ID    : 35505
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
+
+  {% for module in disable_overlayfs_modules %}
+  install {{ module }} /bin/false
+  blacklist {{ module }}
+
+  {% endfor %}
