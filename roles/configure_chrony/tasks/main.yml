@@ -2,6 +2,7 @@
 # Role        : configure_chrony
 # Description : Ensure chrony is configured with authorized timeserver.
 # Wazuh ID    : 35590
+  
 
 - name: "Verify operating system is Debian/Ubuntu (apt-based)"
   ansible.builtin.assert:
@@ -37,8 +38,10 @@
     content: |
       #
       # Chrony drop-in configuration for Wazuh compliance
-      # Author: Security team
-      # Wazuh ID: 35590
+      # Author   : Security team
+      # Role     : configure_chrony
+      # Wazuh ID : 35590
+      # Generated: {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
       #
       {% for server in chrony_pool_directives %}
       {{ server }}
@@ -54,8 +57,10 @@
     content: |
       #
       # Chrony drop-in configuration for Wazuh compliance
-      # Author: Security team
-      # Wazuh ID: 35590
+      # Author   : Security team
+      # Role     : configure_chrony
+      # Wazuh ID : 35590
+      # Generated: {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
       #
       {% for server in chrony_server_directives %}
       {{ server }}
