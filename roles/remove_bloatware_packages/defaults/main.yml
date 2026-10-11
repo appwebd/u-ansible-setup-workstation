@@ -27,7 +27,7 @@ remove_bloatware_packages_:
   - evolution
   - evolution-data-server
   - ftp
-  - tnftp 
+  - tnftp
   - gamemode
   - gamemode-daemon
   - gnome-bluetooth-sendto
@@ -40,26 +40,27 @@ remove_bloatware_packages_:
   - inetutils-telnetd
   - iptables-persistent
   - isc-dhcp-server
+  - kdump-tools
   - ldap-utils
   - libvirt-daemon*
   - nfs-kernel-server
-  - network-manager-config-connectivity-ubuntu  
+  - network-manager-config-connectivity-ubuntu
   - nginx
   - nis
   - open-iscsi
   - openvpn
-  - prelink 
+  - prelink
   - pptp-linux
   - remmina
   - rsh.socket
   - rlogin.socket
   - rshd.service
-  - rlogind.service 
+  - rlogind.service
   - rsh-client
   - rsh-server
   - samba
   - slapd
-  - snmpd  
+  - snmpd
   - systemd-resolved
   - talk
   - telnet*
