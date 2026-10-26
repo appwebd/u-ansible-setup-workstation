@@ -50,4 +50,3 @@
     mode: "0644"
     backup: true
   register: modprobe_conf_result
-  notify: Restart System
