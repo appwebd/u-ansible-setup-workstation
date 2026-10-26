@@ -45,6 +45,7 @@ remove_bloatware_packages_:
   - inetutils-telnetd
   - iptables-persistent
   - isc-dhcp-server
+  - kdump-tools
   - ldap-utils
   - libvirt-daemon*
   - nfs-kernel-server
