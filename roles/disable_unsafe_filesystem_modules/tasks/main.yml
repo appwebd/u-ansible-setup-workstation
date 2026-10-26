@@ -52,6 +52,12 @@
 - name: "Create modprobe config file for module (denylist/blacklist rule)"
   ansible.builtin.copy:
     content: |
+      #
+      # Role        : disable_unsafe_filesystem_modules
+      # Description : Ensure unused filesystems kernel modules are not available.
+      # Wazuh ID    : 35509
+      # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+      #
       install {{ item }} /bin/false
       blacklist {{ item }}
     dest: "{{ modprobe_conf_dir }}/{{ item }}.conf"
