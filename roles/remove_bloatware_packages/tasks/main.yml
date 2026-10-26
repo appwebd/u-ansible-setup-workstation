@@ -26,6 +26,8 @@
     name: "{{ packages_to_be_removed }}"
     state: absent
     update_cache: true
+    allow_change_held_packages: true
+  become: true
   when: packages_to_be_removed | length > 0
 
 - name: "Final Report: Software Removal Summary"
@@ -36,4 +38,3 @@
       {% else %}
       INFO: No bloatware packages were found to be removed. System is already clean.
       {% endif %}
-
