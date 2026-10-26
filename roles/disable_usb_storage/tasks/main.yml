@@ -36,8 +36,9 @@
 - name: "Attempt to unload usb-storage module if loaded"
   ansible.builtin.command:
     cmd: modprobe -r {{ usb_storage_module_name }}
-  ignore_errors: true   # "Avoid errors if it is not loaded or does not exist."
   register: modprobe_rm_result
+  changed_when: false
+  failed_when: false
 
 - name: "Create modprobe configuration to disable usb-storage"
   ansible.builtin.copy:
