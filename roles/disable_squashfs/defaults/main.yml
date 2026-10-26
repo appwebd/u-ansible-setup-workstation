@@ -3,5 +3,11 @@
 # Default variables for disable_squashfs role
 squashfs_modprobe_conf_file: /etc/modprobe.d/squashfs.conf
 squashfs_blacklist_content: |
+  #
+  # Role        : disable_squashfs
+  # Description : Ensure squashfs kernel module is not available.
+  # Wazuh ID    : 35506
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
   install squashfs /bin/false
   blacklist squashfs
