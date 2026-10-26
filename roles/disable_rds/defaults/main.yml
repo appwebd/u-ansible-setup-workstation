@@ -3,5 +3,11 @@
 # Default variables for disable_rds role
 rds_modprobe_conf_file: /etc/modprobe.d/rds.conf
 rds_blacklist_content: |
+  #
+  # Role        : disable_rds
+  # Description : Ensure rds kernel module is not available.
+  # Wazuh ID    : 35606
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
   install rds /bin/false
   blacklist rds
