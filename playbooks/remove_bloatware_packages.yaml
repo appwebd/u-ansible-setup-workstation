@@ -1,6 +1,12 @@
 ---
 - name: Remove bloatware and no recommended packages
-  hosts: dev.local
+  hosts: localhost
+  connection: local
   become: true
+  gather_facts: true
+  gather_subset:
+    - '!all'                  # start from the minimal set
+    - '!min'                  # then drop the “minimal” subset as well
+    - 'network'               # only network-related facts (IP, MAC)
   roles:
     - remove_bloatware_packages
