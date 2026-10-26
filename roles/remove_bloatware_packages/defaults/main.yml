@@ -4,6 +4,10 @@ remove_bloatware_packages_:
   #  - nftables              # docker.io : Dependency with : containerd (>= 1.2.6-0ubuntu1~)
   - apache2-bin
   - avahi-daemon
+  - avahi-daemon:i386
+  - avahi-daemon
+  - libavahi-core7
+  - libdaemon0
   - avahi-utils
   - bind9
   - bluetooth
@@ -27,9 +31,10 @@ remove_bloatware_packages_:
   - evolution
   - evolution-data-server
   - ftp
-  - tnftp 
+  - tnftp
   - gamemode
-  - gamemode-daemon
+  - gamemode-daemon:*
+  - libgamemode0
   - gnome-bluetooth-sendto
   - gnome-characters
   - gnome-maps
@@ -43,23 +48,24 @@ remove_bloatware_packages_:
   - ldap-utils
   - libvirt-daemon*
   - nfs-kernel-server
-  - network-manager-config-connectivity-ubuntu  
+  - network-manager-config-connectivity-ubuntu
   - nginx
   - nis
+  - orca
   - open-iscsi
   - openvpn
-  - prelink 
+  - prelink
   - pptp-linux
   - remmina
   - rsh.socket
   - rlogin.socket
   - rshd.service
-  - rlogind.service 
+  - rlogind.service
   - rsh-client
   - rsh-server
   - samba
   - slapd
-  - snmpd  
+  - snmpd
   - systemd-resolved
   - talk
   - telnet*
@@ -71,5 +77,7 @@ remove_bloatware_packages_:
   - vim-common
   - vim-tiny
   - vsftpd
+  - whoopsie
+#  - libwhoopsie-preferences* # Dependencies with apport-gtk  gdm3  gnome-control-center  gnome-shell  gnome-shell-ubuntu-extensions  libwhoopsie-preferences0  libwhoopsie0  ubuntu-desktop  ubuntu-desktop-minimal  ubuntu-session  whoopsie-preferences
   - xinetd
-#  - yelp                    # Dependencias with gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp
+#  - yelp                     # Dependencias with gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp
