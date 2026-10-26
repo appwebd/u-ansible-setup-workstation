@@ -3,5 +3,11 @@
 # Default variables for the disable_sctp role
 sctp_modprobe_conf_file: /etc/modprobe.d/sctp.conf
 sctp_blacklist_content: |
+  #
+  # Role        : disable_sctp
+  # Description : Ensure sctp kernel module is not available.
+  # Wazuh ID    : 35607
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
   install sctp /bin/false
   blacklist sctp

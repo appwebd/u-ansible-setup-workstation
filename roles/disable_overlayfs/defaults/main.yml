@@ -11,7 +11,7 @@ disable_overlayfs_modules:
   - overlayfs
 
 modprobe_blacklist_content: |
-  #  
+  #
   # Role        : disable_overlaysfs
   # Description : Ensure overlay filesystem is disabled
   # Wazuh ID    : 35505

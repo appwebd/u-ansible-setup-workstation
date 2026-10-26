@@ -4,5 +4,11 @@
 usb_storage_modprobe_conf_dir: /etc/modprobe.d
 usb_storage_modprobe_conf_file: /etc/modprobe.d/usb-storage.conf
 usb_storage_blacklist_content: |
+  #
+  # Role        : disable_usb_storage
+  # Description : Ensure usb-storage kernel module is not available.
+  # Wazuh ID    : 35508
+  # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
+  #
   install usb-storage /bin/false
   blacklist usb-storage

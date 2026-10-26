@@ -8,6 +8,7 @@
 tipc_modprobe_conf_path: /etc/modprobe.d/tipc.conf
 modprobe_blacklist_content: |
   #
+  # Role        : disable_tipc
   # Description : Disable the tipc kernel module to prevent mounting of tipc filesystems
   # Wazuh ID    : 35605
   # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}

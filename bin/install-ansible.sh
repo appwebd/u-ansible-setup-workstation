@@ -4,7 +4,7 @@
 
 set -euo pipefail          # Terminate on error, avoid using uninitialized variables, and capture pipeline errors.
 
-PYTHON_VERSION="3.12"
+PYTHON_VERSION="3.14"
 echo "installing ansible  ... "
 sudo apt install ansible python3 python3-pip sshpass libssl-dev git
 

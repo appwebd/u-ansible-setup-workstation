@@ -5,6 +5,7 @@ hfsplus_modprobe_conf_dir: /etc/modprobe.d
 hfsplus_modprobe_conf_file: /etc/modprobe.d/hfsplus.conf
 hfsplus_modprobe_content: |
   #
+  # Role        : disable_hfsplus
   # Description : Ensure hfsplus kernel module is not available.
   # Wazuh ID    : 35503
   # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}

@@ -4,6 +4,10 @@ remove_bloatware_packages_:
   #  - nftables              # docker.io : Dependency with : containerd (>= 1.2.6-0ubuntu1~)
   - apache2-bin
   - avahi-daemon
+  - avahi-daemon:i386
+  - avahi-daemon
+  - libavahi-core7
+  - libdaemon0
   - avahi-utils
   - bind9
   - bluetooth
@@ -29,7 +33,8 @@ remove_bloatware_packages_:
   - ftp
   - tnftp
   - gamemode
-  - gamemode-daemon
+  - gamemode-daemon:*
+  - libgamemode0
   - gnome-bluetooth-sendto
   - gnome-characters
   - gnome-maps
@@ -47,6 +52,7 @@ remove_bloatware_packages_:
   - network-manager-config-connectivity-ubuntu
   - nginx
   - nis
+  - orca
   - open-iscsi
   - openvpn
   - prelink
@@ -72,5 +78,7 @@ remove_bloatware_packages_:
   - vim-common
   - vim-tiny
   - vsftpd
+  - whoopsie
+#  - libwhoopsie-preferences* # Dependencies with apport-gtk  gdm3  gnome-control-center  gnome-shell  gnome-shell-ubuntu-extensions  libwhoopsie-preferences0  libwhoopsie0  ubuntu-desktop  ubuntu-desktop-minimal  ubuntu-session  whoopsie-preferences
   - xinetd
-#  - yelp                    # Dependencias with gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp
+#  - yelp                     # Dependencias with gnome-user-docs ubuntu-desktop ubuntu-desktop-minimal ubuntu-docs yelp

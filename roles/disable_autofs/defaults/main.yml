@@ -7,6 +7,7 @@ autofs_package_name: autofs
 autofs_modprobe_conf_file: /etc/modprobe.d/autofs.conf
 modprobe_blacklist_content: |
   #
+  # Role        : disable_autofs
   # Description : Ensure autofs services are not in use.
   # Wazuh ID    : 35561
   # Generated   : {{ lookup('pipe', 'date "+%Y-%m-%d_%H:%M:%S"') }}
