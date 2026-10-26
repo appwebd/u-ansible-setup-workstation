@@ -1,12 +1,225 @@
+fbd4210 Mon Oct 26 11:04:45 2026 -0300 fix(bloatware): allow removal of held packages
+1fc90d8 Mon Oct 26 11:04:35 2026 -0300 refactor(defaults): update bloatware package lists
+6bc6570 Mon Oct 26 11:04:26 2026 -0300 fix(disable-usb) Prevent errors during module unloading attempt
+af54c39 Mon Oct 26 11:04:19 2026 -0300 docs(disable_usb_storage): add module description to blacklist content
+62d40d6 Mon Oct 26 11:04:14 2026 -0300 refactor(filesystem): add module configuration comments
+7986ff4 Mon Oct 26 11:04:08 2026 -0300 chore(disable-udf): add role metadata to default config
+672081f Mon Oct 26 11:04:03 2026 -0300 docs(disable_tipc): add role header to main.yml
+26f1672 Mon Oct 26 11:03:57 2026 -0300 docs(roles): add role metadata to main.yml
+5ad2eac Mon Oct 26 11:03:48 2026 -0300 chore(disable_sctp): add role metadata to defaults file
+0d38a7c Mon Oct 26 11:03:42 2026 -0300 docs(disable_rds): add role description and metadata
+6b569b4 Mon Oct 26 11:03:34 2026 -0300 chore(disable_overlayfs): clean up comments in defaults
+0aa4d89 Mon Oct 26 11:03:19 2026 -0300 chore(disable_jffs2): add role header comments
+ba60ee7 Mon Oct 26 11:02:49 2026 -0300 docs(disable_hfsplus): add role description to defaults file
+4d0620c Mon Oct 26 11:02:43 2026 -0300 chore(defaults): add role documentation to hfs configuration
+21983ae Mon Oct 26 11:02:37 2026 -0300 chore(role): add role metadata to defaults file
+14034b0 Mon Oct 26 11:02:21 2026 -0300 chore(disable_dccp): add role metadata comments
+2787adf Mon Oct 26 11:02:11 2026 -0300 docs(disable_cramfs): add role metadata to defaults file
+ca28821 Mon Oct 26 11:02:02 2026 -0300 chore(defaults): add role header to main.yml
+60a9d1a Mon Oct 26 11:01:29 2026 -0300 chore(playbooks): add bloatware removal playbook copy
+87a64a7 Mon Oct 26 11:01:02 2026 -0300 chore(deps): update lockfile and package definitions
+d231729 Mon Oct 26 11:00:34 2026 -0300 chore(deps): add uv workspace configuration
+ec002f0 Mon Oct 26 10:59:58 2026 -0300 refactor(playbooks): adjust bloatware removal playbook configuration
+ed85cd7 Mon Oct 26 10:59:45 2026 -0300 chore(install): update python version for ansible installation
+56f0edd Mon Oct 26 10:59:31 2026 -0300 chore(config): update ansible configuration defaults
+3a3f9f9 Wed Sep 16 19:27:23 2026 -0300 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#58) from Create-ansible-roles-and-verify-functionality into main
+3238cc1 Thu Sep 10 15:43:35 2026 -0300 refactor(disable_overlayfs): simplify module blacklisting logic
+4d19f4a Thu Sep 10 15:41:58 2026 -0300 feat(defaults): add modprobe_blacklist_content template
+6d74bc7 Thu Sep 10 15:41:37 2026 -0300 chore(deps): update ansible and core dependencies
+a721d2f Thu Sep 10 15:40:50 2026 -0300 refactor(remove_bloatware_packages): optimize package removal logic
+b8328ca Fri Sep 4 14:37:22 2026 -0400 chore(disable_overlayfs): remove template file for enhanced security
+8e8b546 Thu Sep 3 17:51:39 2026 -0400 feat(remove_bloatware_packages): add network-manager-config-connectivity-ubuntu to default package list
+daeb22a Sat Aug 29 19:39:27 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#57) from Create-ansible-roles-and-verify-functionality into main
+5ff40c8 Sat Aug 29 19:39:13 2026 -0400  chore(remove_bloatware_packages): Ansible-lint: Remove unnecessary  spaces in line ending
+05569a0 Sat Aug 29 19:37:26 2026 -0400 fix(roles/disable_tipc): Remove TIPC configuration template
+feb2723 Sat Aug 29 19:37:09 2026 -0400 fix(disable_tipc): Ensure TIPC is properly disabled and blacklisted in /etc/modprobe.d/
+f6a5337 Sat Aug 29 19:36:43 2026 -0400 feat(roles/disable_tipc): add configuration to disable TIPC module and enable/disable feature
+c3212e6 Sat Aug 29 19:36:07 2026 -0400 feat(roles/disable_cramfs): update cramfs blacklist file path in Debian/Ubuntu
+21727a7 Sat Aug 29 19:22:41 2026 -0400 feat(deps): update requires-python and remove resolution markers
+b599915 Sat Aug 29 19:16:57 2026 -0400 fix(disable_tipc): Correct tipc module disabling script for Debian systems
+59c7611 Mon Aug 3 19:04:16 2026 -0400  feat(sysctl): Add configuration for secure ICMP redirects and improve  verification
+923f2cc Mon Aug 3 19:02:50 2026 -0400 fix(disable_overlayfs): Ensure overlay modules are not loaded on next boot (remove from /etc/modules)
+32d5c26 Mon Aug 3 19:02:14 2026 -0400  feat(disable_freevxfs_kernel_module): update default content to disable  freevxfs kernel module
+a3d3786 Mon Aug 3 19:01:44 2026 -0400 fix(disable_dccp): Correct typo in main.yml file
+27559e2 Mon Aug 3 19:01:20 2026 -0400 chore(hfsplus): Add comments and metadata to disable hfsplus module
+fb85bf0 Mon Aug 3 19:01:07 2026 -0400 feat(jffs2_modprobe): Add comments to disable jffs2 module
+637048c Mon Aug 3 19:00:50 2026 -0400 feat(disable_overlayfs): update Wazuh ID in disable-overlay.conf template
+c1cc770 Mon Aug 3 19:00:03 2026 -0400 feat(roles): update handlers and defaults for disable_overlayfs
+8ef21c3 Thu Jul 30 19:30:15 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#56) from Create-ansible-roles-and-verify-functionality into main
+96a6759 Thu Jul 30 19:30:07 2026 -0400 Merge branch 'main' into Create-ansible-roles-and-verify-functionality
+2adfc3a Thu Jul 30 19:29:05 2026 -0400 feat(disable_overlayfs): add role description and update default variables
+c64ec1f Thu Jul 30 19:28:47 2026 -0400 feat(disable_overlayfs): add option to remove overlay module if currently loaded
+94866e9 Thu Jul 30 19:28:06 2026 -0400 feat(configure_bootloader_access): add internal variables for bootloader access hardening
+52d60ca Thu Jul 30 19:27:48 2026 -0400 fix(configure_bootloader_access): Restrict bootloader access to root user only on Linux systems
+ce89c28 Thu Jul 30 19:25:47 2026 -0400 feat(configure_mail_agent_local_only): Add missing space before `become` in YAML configuration
+20887d9 Thu Jul 30 19:25:15 2026 -0400 feat(roles/disable_hfs_kernel_module): add comments to disable hfs module
+2dd85e7 Thu Jul 30 19:24:55 2026 -0400 feat(roles/disable_freevxfs_kernel_module): Update the content to disable the freevxfs kernel module
+f990fbf Thu Jul 30 19:18:28 2026 -0400 feat(roles/disable_freevxfs_kernel_module): add comments and date to disable the freevxfs kernel module
+7fc5da4 Thu Jul 30 19:14:00 2026 -0400 feat(roles/disable_autofs): add comments to ensure autofs services are not in use
+4f88ba9 Thu Jul 30 19:13:40 2026 -0400 feat(disable_dccp): add comments and metadata to DCCP module blacklist configuration
+840a448 Thu Jul 30 19:06:32 2026 -0400 feat(remove_bloatware_packages): remove unnecessary packages tnftp and vim from default removals
+73afccf Thu Jul 30 19:02:31 2026 -0400 feat(ansible.cfg): add python interpreter and disable callbacks
+48d16bb Thu Jul 30 19:02:11 2026 -0400 feat(.python-version): Update Python version to 3.14
+06c9ed0 Thu Jul 30 19:01:58 2026 -0400 feat(ssh): update KexAlgorithms for ssh-copy-id
+4585593 Thu Jul 30 19:00:51 2026 -0400 feat(roles/disable_cramfs): Add comments and metadata to disable the cramfs module
+c85015c Thu Jul 30 19:00:16 2026 -0400 feat(disable_cramfs): add `become` to tasks in main.yml
+8cdaa98 Thu Jul 30 18:59:18 2026 -0400 feat(roles/enable_apparmor): ensure AppArmor is enabled via kernel boot parameters (Wazuh ID 35537)
+1c53515 Wed Jul 22 19:03:48 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#55) from Create-ansible-roles-and-verify-functionality into main
+bf68d4f Wed Jul 22 19:02:52 2026 -0400 feat(roles/disable_xdmcp): update set_fact syntax to ansible.builtin.set_fact
+3ff75c3 Wed Jul 22 19:02:15 2026 -0400 feat(configure_secure_icmp_redirects): Disable secure ICMP redirects on all interfaces
+f912757 Wed Jul 22 19:01:58 2026 -0400 feat(roles/disable_overlayfs): add role description and module name clarification
+134608d Wed Jul 22 19:01:10 2026 -0400 feat(roles): update role name and dependencies to ensure secure ICMP redirects are not accepted
+5b5ba48 Wed Jul 22 19:00:54 2026 -0400 feat(configure_secure_icmp_redirects): Disable secure ICMP redirects by default
+5e3124b Wed Jul 22 19:00:10 2026 -0400 feat(configure_bootloader_access): add `become` to handler conditions
+7157b25 Wed Jul 22 18:59:34 2026 -0400 feat(roles/configure_bootloader_access): simplify README.md variable table formatting
+5c47974 Wed Jul 22 18:58:48 2026 -0400 feat(roles/disable_usb_storage): Attempt to unload usb-storage module if loaded
+3426434 Sat Jul 11 15:11:03 2026 -0400  feat(roles/disable_usb_storage): Add debug msg for modprobe_check and ensure usb-storage module is not loaded
+3cfe76c Sat Jul 11 15:05:45 2026 -0400 feat(roles/disable_overlayfs): Add description and metadata to disable-overlay.conf (Wazuh ID 35723)
+4da035c Fri Jul 10 17:21:56 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#54) from Create-ansible-roles-and-verify-functionality into main
+3fc22e2 Fri Jul 10 17:21:12 2026 -0400 feat(roles/configure_secure_icmp_redirects): add functionality to disable secure ICMP redirects and update documentation (Wazuh ID 35613)
+0e562b0 Fri Jul 10 17:17:18 2026 -0400 feat(playbooks): rename configure_postfix_loopback_only to configure_mail_agent_local_only and refactor network stack hardening settings
+c9b6a97 Fri Jul 10 17:15:38 2026 -0400 fea(roles/configure_postfix_loopback_only): configure Postfix mail transfer agent to listen only on loopback interface (local-only mode)
+5d27740 Fri Jul 10 11:54:22 2026 -0400 fix(roles/disable_xdmcp): Ensure XDMCP is disabled only if  GDM3 path exists (in Debian/Ubuntu)
+ce2deca Fri Jul 10 11:52:07 2026 -0400 fix(roles/disable_usb_storage): Changing search deprecated Jinja2
+a1e9d3e Wed Jul 8 19:20:36 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#53) from Create-ansible-roles-and-verify-functionality into main
+c0d125c Wed Jul 8 19:20:12 2026 -0400 feat(sshd_permituserenvironment): Add assertion for Debian/Ubuntu support
+367027c Wed Jul 8 19:20:03 2026 -0400 feat(sshd_permitrootlogin_disabled): add check for supported operating system and improve messaging on unsupported systems
+0fee420 Wed Jul 8 19:19:53 2026 -0400 feat(sshd_permitemptypasswords_disabled): add assertion for correct OS family
+ff0fbc2 Wed Jul 8 19:19:44 2026 -0400 feat(sshd_maxstartups): add check for operating system being Debian/Ubuntu before proceeding
+dadc077 Wed Jul 8 19:19:31 2026 -0400 feat(sshd_maxsessions): add assertion for OS family check in Debian/Ubuntu
+3480f8b Wed Jul 8 19:19:21 2026 -0400 feat(sshd_maxauthtries): Add assertion to verify operating system is Debian/Ubuntu
+f9cbee2 Wed Jul 8 19:19:12 2026 -0400 feat(sshd_macs): Add assertion to check for Debian/Ubuntu systems
+58891f2 Wed Jul 8 19:18:59 2026 -0400 feat(sshd_loglevel): Add assertion for Debian/Ubuntu systems
+37e3a71 Wed Jul 8 19:18:47 2026 -0400 feat(sshd_logingracetime): add check for OS family and fail if not Debian/Ubuntu
+13d4b9c Wed Jul 8 19:18:34 2026 -0400 feat(sshd_kexalgorithms): Add assertion to check for Debian/Ubuntu systems
+f02393a Wed Jul 8 19:18:26 2026 -0400 feat(sshd_ignore_rhosts): add assertion to check for Debian/Ubuntu systems
+dc0c712 Wed Jul 8 19:18:18 2026 -0400 feat(sshd_hostbasedauthentication_disabled): add assertion for correct OS family on apt-based systems
+1ac1d78 Wed Jul 8 19:18:09 2026 -0400 feat(sshd_gssapi_authentication): add assertion to check for Debian/Ubuntu systems
+f90d241 Wed Jul 8 19:18:01 2026 -0400 feat(sshd_disable_forwarding): Add assertion for correct OS family support
+74510c0 Wed Jul 8 19:17:47 2026 -0400 feat(sshd_config_permissions): Add assertion to verify OS is Debian/Ubuntu
+9cf9536 Wed Jul 8 19:17:37 2026 -0400 feat(sshd_client_alive): Add assertion for Debian/Ubuntu systems OS.
+2d04e83 Wed Jul 8 19:17:19 2026 -0400 feat(sshd_ciphers): Add assertion for Debian/Ubuntu system verification
+2c143a5 Wed Jul 8 19:17:11 2026 -0400 feat(sshd_banner): Add assertion for Debian/Ubuntu system check
+dc0f2df Wed Jul 8 19:16:59 2026 -0400 feat(sshd_access_control): add assertion for Debian/Ubuntu system check
+c84b558 Wed Jul 8 19:16:45 2026 -0400 feat(ssh_host_keys_permissions): Add assertion to verify operating system is Debian/Ubuntu
+0bec54f Wed Jul 8 19:16:26 2026 -0400 feat(roles/shadow_password_fields): add assertion to verify OS is Debian/Ubuntu
+b93ec17 Wed Jul 8 19:16:17 2026 -0400 feat(set_passwd_permissions): Add assertion to verify OS is Debian/Ubuntu
+f823dc3 Wed Jul 8 19:16:08 2026 -0400 feat(set_grub_password): Add assertion to check for Debian/Ubuntu systems
+d469797 Wed Jul 8 19:16:00 2026 -0400 feat(secure_opasswd_permissions): add assertion to check for Debian/Ubuntu systems
+b440464 Wed Jul 8 19:15:51 2026 -0400 feat(restrict_su_access): add assertion to verify operating system is Debian/Ubuntu
+da22b7d Wed Jul 8 19:15:43 2026 -0400 feat(restrict_crontab): Add assertion to verify OS is Debian/Ubuntu
+2c149cc Wed Jul 8 19:15:35 2026 -0400 feat(restrict_core_dumps): add assertion to check Debian/Ubuntu compatibility
+d99ef7f Wed Jul 8 19:15:25 2026 -0400 feat(restrict_at_access): add assertion to check for Debian/Ubuntu systems
+714963a Wed Jul 8 19:15:17 2026 -0400 feat(roles/remove_xserver_common): add assertion to verify OS family for Debian/Ubuntu systems
+190419f Wed Jul 8 19:15:02 2026 -0400 feat(roles/remove_unused_accounts_groups): Add assertion to verify OS is Debian/Ubuntu
+3701d3b Wed Jul 8 19:14:52 2026 -0400 fix(roles/remove_telnet_client): Update assertion message for better clarity and precision
+233f85b Wed Jul 8 19:14:40 2026 -0400 fix(remove_talk_client): Improve OS verification message for clarity and specificity
+47c21cd Wed Jul 8 19:14:26 2026 -0400 fix(remove_rsh_client): Update assertion message for better clarity and specificity
+e81683f Wed Jul 8 19:14:14 2026 -0400 feat(roles/remove_prelink): add assertion to check operating system is Debian/Ubuntu
+607c01e Wed Jul 8 19:14:05 2026 -0400 feat(remove_nis_client): Update OS verification to support both Debian and Ubuntu
+baf9ca0 Wed Jul 8 19:13:53 2026 -0400 feat(sshd_usepam): Add check for supported operating system in main.yml
+7ad3b2e Wed Jul 8 19:13:42 2026 -0400 feat(sudo_log_file): add assertion to check for Debian/Ubuntu systems
+45bcd3d Wed Jul 8 19:13:29 2026 -0400 feat(sudo_pty): add assertion to verify OS is Debian/Ubuntu
+1158036 Wed Jul 8 19:13:19 2026 -0400 feat(remove_ldap_client): Update assertion message to specify support for both Debian and Ubuntu
+91af6fb Wed Jul 8 19:13:03 2026 -0400 feat(roles/remove_gdm): Add assertion to verify OS family is Debian/Ubuntu
+8dffd1e Wed Jul 8 19:12:54 2026 -0400 feat(remove_ftp_client): Update OS check to support both Debian and Ubuntu
+0059a79 Wed Jul 8 19:12:37 2026 -0400 feat(remove_bloatware_packages): Add assertion to check operating system is Debian/Ubuntu
+8f4e39b Wed Jul 8 19:12:29 2026 -0400 feat(install_sudo): add assertion for OS family verification
+38a0251 Wed Jul 8 19:12:19 2026 -0400 feat(install_apparmor): Add assertion to verify OS is Debian/Ubuntu
+68e3d60 Wed Jul 8 19:12:12 2026 -0400 feat(roles/ignore_broadcast_icmp_requests): Add assertion to verify Debian/Ubuntu systems
+6f6a093 Wed Jul 8 19:12:01 2026 -0400 feat(roles): Add assertion to check for Debian/Ubuntu systems
+0adf001 Wed Jul 8 19:11:48 2026 -0400 feat(ensure_reauth_privilege): Add assertion to verify Debian/Ubuntu system
+804b2bc Wed Jul 8 19:11:36 2026 -0400 feat(roles/ensure_libpam_modules_installed): Add assertion to verify Debian/Ubuntu OS family
+3651562 Wed Jul 8 19:11:24 2026 -0400 feat(enforce_sudo_password): add assertion to verify OS is Debian/Ubuntu
+6e48f67 Wed Jul 8 19:11:14 2026 -0400 feat(enforce_apparmor_profiles): add assertion to check OS family before proceeding
+9ee2a3f Wed Jul 8 19:11:06 2026 -0400 feat(enforce_apparmor): Add assertion to verify OS family is Debian/Ubuntu
+7b151e9 Wed Jul 8 19:10:57 2026 -0400 feat(enable_systemd_timesync): Add assertion to check OS family for Debian/Ubuntu
+d2a7b15 Wed Jul 8 19:10:48 2026 -0400 feat(roles/enable_cron): add assertion to verify OS is Debian/Ubuntu
+8b28177 Wed Jul 8 19:10:36 2026 -0400 feat(enable_chrony): Add assertion to verify operating system is Debian/Ubuntu
+473ac3d Wed Jul 8 19:10:26 2026 -0400 feat(enable_aslr): add assertion to check OS family is Debian/Ubuntu
+b0c06ea Wed Jul 8 19:10:16 2026 -0400 feat(enable_apparmor): Add check for Debian/Ubuntu OS in main.yml
+31f10cf Wed Jul 8 19:10:07 2026 -0400 feat(roles/disable_xinetd): Add assertion to check OS family is Debian/Ubuntu
+6c5491e Wed Jul 8 19:09:55 2026 -0400 fix(disable_xdmcp): Add assertion to check for Debian/Ubuntu systems
+42a55fb Wed Jul 8 19:09:43 2026 -0400 feat(disable_web_server_services): Add assertion to verify OS is Debian/Ubuntu
+415a1ab Wed Jul 8 19:09:31 2026 -0400 feat(disable_vsftpd): add assertion to verify OS family is Debian/Ubuntu
+15bde7d Wed Jul 8 19:09:20 2026 -0400 feat(disable_usb_storage): Add assertion to verify Debian/Ubuntu OS
+3cdbc7d Wed Jul 8 19:09:08 2026 -0400 feat(disable_unsafe_filesystem_modules): Add assertion to check for Debian/Ubuntu OS
+1f453cd Wed Jul 8 19:08:54 2026 -0400 feat(disable_udf): Add OS family verification for Debian/Ubuntu
+111934d Wed Jul 8 19:08:44 2026 -0400 feat(disable_tipc): add assertion to check OS family for Debian/Ubuntu compatibility
+a58459c Wed Jul 8 19:08:35 2026 -0400 feat(disable_tftp): add assertion to verify OS family and handle Debian/Ubuntu only
+e289830 Wed Jul 8 19:08:17 2026 -0400 feat(disable_squid): add assertion to verify Debian/Ubuntu system
+d06eb56 Wed Jul 8 19:08:08 2026 -0400 feat(disable_squashfs): Add check for Debian/Ubuntu and error message if not supported
+340ca68 Wed Jul 8 19:07:58 2026 -0400  feat(disable_snmp): Add assertion for Debian/Ubuntu systems
+2218981 Wed Jul 8 19:07:44 2026 -0400 feat(disable_sctp): add assertion to verify Debian/Ubuntu system
+e2077bd Wed Jul 8 19:07:31 2026 -0400 feat(disable_samba): add assertion to check for Debian/Ubuntu systems
+4a4fdfd Wed Jul 8 19:07:19 2026 -0400 feat(roles/disable_rsync): Add assertion for checking OS family
+015e92e Wed Jul 8 19:07:08 2026 -0400 feat(disable_rpcbind): add assertion for correct OS family on Debian/Ubuntu systems
+887d039 Wed Jul 8 19:06:59 2026 -0400 feat(disable_rds): add assertion for OS family to ensure only Debian/Ubuntu systems are supported
+0d0faf3 Wed Jul 8 19:06:48 2026 -0400 feat(roles/disable_packet_redirects): Add assertion to verify Debian/Ubuntu OS for apt-based systems
+3292a4c Wed Jul 8 19:06:37 2026 -0400 feat(disable_overlayfs): add assertion to check OS family for Debian/Ubuntu
+6bda9e9 Wed Jul 8 19:06:20 2026 -0400 feat(disable_nis_server): Add assertion to check for Debian/Ubuntu OS
+ce40d63 Wed Jul 8 19:06:02 2026 -0400 feat(disable_nfs): Add OS family verification for Debian/Ubuntu systems
+4a7bf5e Wed Jul 8 19:05:17 2026 -0400 feat(disable_ldap_server): Add assertion to verify Debian/Ubuntu OS
+b20d93e Wed Jul 8 19:04:58 2026 -0400 feat(sudo_timestamp_timeout): Add assertion to verify Debian/Ubuntu system
+946223e Wed Jul 8 19:04:44 2026 -0400 feat(update_pam): add assertion to check for Debian/Ubuntu systems
+50a9a0f Wed Jul 8 19:04:14 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#52) from Create-ansible-roles-and-verify-functionality into main
+c6f39ac Wed Jul 8 19:03:23 2026 -0400 feat(disable_kernel_modules): Add assertion to verify Debian/Ubuntu OS before proceeding
+f1ec159 Wed Jul 8 19:03:00 2026 -0400 feat(disable_jffs2): Add assertion to verify OS family is Debian/Ubuntu
+46c7edf Wed Jul 8 19:02:44 2026 -0400 feat(disable_ip_forwarding): Add assertion to check for Debian/Ubuntu systems
+8b8c371 Wed Jul 8 19:02:29 2026 -0400 fix(disable_icmp_redirects): Expand OS family check to include Ubuntu
+ef5f411 Wed Jul 8 19:02:16 2026 -0400 feat(disable_hfsplus): add assertion to check for Debian/Ubuntu systems
+e05dec9 Wed Jul 8 19:02:05 2026 -0400 feat(disable_hfs_kernel_module): Add assertion to check for Debian/Ubuntu systems
+2952d03 Wed Jul 8 19:01:51 2026 -0400 feat(disable_freevxfs_kernel_module): Add assertion to check for Debian/Ubuntu OS
+a9ef186 Wed Jul 8 19:01:38 2026 -0400 feat(disable_dovecot): Add assertion to verify OS is Debian/Ubuntu
+c0127c4 Wed Jul 8 19:01:17 2026 -0400 feat(disable_dnsmasq): add assertion to check for Debian/Ubuntu systems
+4919087 Wed Jul 8 19:00:57 2026 -0400 feat(disable_dns_server): add assertion for OS family on Debian/Ubuntu
+9c54a3f Wed Jul 8 19:00:42 2026 -0400 feat(disable_dhcp_server): Add assertion for operating system being Debian/Ubuntu
+2a4ae16 Wed Jul 8 19:00:28 2026 -0400 feat(roles/disable_dccp): Add assertion to check OS family for DCCP disabling
+b4b5470 Wed Jul 8 19:00:17 2026 -0400 feat(roles/disable_cups): Add assertion to check for Debian/Ubuntu systems
+b52ebd9 Wed Jul 8 19:00:02 2026 -0400 feat(disable_cramfs): add assertion to verify Debian/Ubuntu OS for cramfs role
+c92606a Wed Jul 8 18:59:51 2026 -0400 feat(disable_avahi): add assertion to verify Debian/Ubuntu OS and provide critical message on unsupported systems
+6cebdb2 Wed Jul 8 18:59:39 2026 -0400 feat(roles/disable_autofs): Add assertion to check Debian/Ubuntu OS family
+055d0f3 Wed Jul 8 18:59:29 2026 -0400 feat(disable_apport): Add assertion to verify OS family on Debian/Ubuntu systems
+89adcd2 Wed Jul 8 18:59:13 2026 -0400 feat(configure_timesyncd_authorized_servers): Add assertion to verify operating system is Debian/Ubuntu
+f8565f5 Wed Jul 8 18:58:55 2026 -0400 feat(roles/configure_shadow_permissions): Ensure correct OS family is verified in tasks
+e24da5d Wed Jul 8 18:58:34 2026 -0400 feat(configure_shadow_minus_permissions): Add assertion to verify OS is Debian/Ubuntu
+0811915 Wed Jul 8 18:58:22 2026 -0400 feat(configure_remote_login_banner): Add assertion to check for Debian/Ubuntu systems
+85ef58b Wed Jul 8 18:58:09 2026 -0400 feat(configure_postfix_loopback_only): Update assertion to support both Debian and Ubuntu
+aa084ee Wed Jul 8 18:57:43 2026 -0400 feat(roles/configure_passwd_permissions): Add assertion to verify Debian/Ubuntu OS
+5182c49 Wed Jul 8 18:57:31 2026 -0400 feat(configure_motd_access): Add assertion to verify OS family is Debian/Ubuntu
+96d2bf6 Wed Jul 8 18:57:18 2026 -0400 feat(configure_motd): Add assertion to verify operating system is Debian/Ubuntu
+be99e4a Wed Jul 8 18:57:07 2026 -0400 feat(roles/configure_local_login_banner): Add assertion to check for Debian/Ubuntu systems
+cf1a3bc Wed Jul 8 18:56:54 2026 -0400 perf(configure_icmp_ignore_bogus_error_responses): Improve error message for unsupported OS families
+6f78676 Wed Jul 8 18:47:48 2026 -0400 feat(configure_gshadow_permissions): Add assertion to check for Debian/Ubuntu systems
+c4272fb Wed Jul 8 18:47:37 2026 -0400 feat(configure_gshadow_minus_permissions): Add assertion to check for Debian/Ubuntu systems
+f75918d Wed Jul 8 18:46:48 2026 -0400 feat(roles/configure_group_permissions): Add assertion to verify OS is Debian/Ubuntu
+5dd23c2 Wed Jul 8 18:46:37 2026 -0400 feat(roles/configure_group_minus_permissions): Add assertion to verify OS family is Debian or Ubuntu
+d41b129 Wed Jul 8 18:46:20 2026 -0400 feat(configure_etc_shells_permissions): Add assertion to verify OS is Debian/Ubuntu
+8595b5a Wed Jul 8 18:46:07 2026 -0400 feat(configure_etc_issue_net_access): Add check for operating system to be Debian or Ubuntu
+2ac3aa3 Wed Jul 8 18:45:54 2026 -0400 feat(configure_etc_issue_access): Add assertion to verify operating system is Debian/Ubuntu
+374c0b7 Wed Jul 8 18:45:39 2026 -0400 feat(configure_crontab_permissions): Add assertion to verify OS is Debian/Ubuntu
+d463f55 Wed Jul 8 18:45:25 2026 -0400 feat(configure_cron_weekly_permissions): Add assertion to verify OS family is Debian/Ubuntu
+8490b2e Wed Jul 8 18:45:11 2026 -0400 feat(configure_cron_monthly_permissions): Add assertion to check for Debian/Ubuntu OS
+4326141 Wed Jul 8 18:44:54 2026 -0400  feat(configure_cron_hourly_permissions): Add assertion to verify OS  family is Debian or Ubuntu
+2fe4493 Wed Jul 8 18:44:47 2026 -0400  feat(configure_cron_daily_permissions): Add assertion for Debian/Ubuntu  system verification
+6d86a0b Wed Jul 8 18:44:38 2026 -0400 feat(configure_cron_d_permissions): Add assertion to verify OS family is Debian or Ubuntu
+b1f6e50 Wed Jul 8 18:44:25 2026 -0400 feat(configure_chrony_user): Add assertion to verify OS is Debian/Ubuntu
+d1df445 Wed Jul 8 18:44:12 2026 -0400  feat(configure_chrony): Add assertion to verify operating system is  Debian/Ubuntu
+1f44e3f Wed Jul 8 18:44:00 2026 -0400 feat(configure_bootloader_access): Add assertion to verify OS is Debian/Ubuntu
+9c9d0cd Wed Jul 8 16:53:32 2026 -0400  docs(CHANGELOG): update changelog file
+4da6968 Wed Jul 8 16:48:24 2026 -0400 feat(roles/disable_icmp_redirects): Add role to ensure ICMP redirects are not accepted
 c6f036a Sat Jul 4 14:56:33 2026 -0400 feat(roles/ignore_broadcast_icmp_requests): add sysctl configuration to ignore broadcast ICMP requests
+96bbad8 Mon Jun 29 18:52:54 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#51) from Create-ansible-roles-and-verify-functionality into main
 7691a18 Mon Jun 29 18:49:21 2026 -0400 feat(roles/configure_icmp_ignore_bogus_error_responses): add support for ignoring bogus ICMP responses
 2d32327 Mon Jun 29 18:33:03 2026 -0400 feat(roles): add disable_packet_redirects role with sysctl configuration to prevent packet redirects
 1b59b65 Mon Jun 29 16:53:21 2026 -0400 feat(roles/disable_ip_forwarding): add new role to ensure ip forwarding is disabled
 a9f6975 Sat Jun 27 18:19:56 2026 -0400 fix(security): remove unnecessary ldap and ftp clients
 22e4e17 Sat Jun 27 18:19:44 2026 -0400 feat(roles/remove_ftp_client): add support for removing FTP clients on Debian systems
 8b15a71 Fri Jun 26 15:49:05 2026 -0400 feat(roles/remove_ldap_client): add new role to ensure ldap client is not installed
+1c360c9 Wed Jun 24 19:35:07 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#50) from Create-ansible-roles-and-verify-functionality into main
 46b2721 Wed Jun 24 19:24:30 2026 -0400 fix(security): remove unnecessary comments and update telnet client removal
 abdf2f4 Wed Jun 24 19:23:18 2026 -0400 feat(roles/remove_telnet_client): add new role to ensure telnet client is not installed
+5777920 Tue Jun 23 19:16:40 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#49) from Create-ansible-roles-and-verify-functionality into main
 9087315 Tue Jun 23 19:16:05 2026 -0400 fix(talk): report package status and improve error message
 bc4cca8 Tue Jun 23 19:04:50 2026 -0400 fix(client): remove unnecessary rsh and talk clients
 68c26e1 Tue Jun 23 19:04:15 2026 -0400 fix(rsh_client): correct version check logic in uninstall task
@@ -20,14 +233,18 @@ f63de91 Tue Jun 23 18:26:30 2026 -0400 feat(roles/remove_nis_client): add licens
 6cad738 Mon Jun 22 18:57:14 2026 -0400 feat(postfix): add configuration for local-only Postfix mode and update documentation
 cd45c14 Mon Jun 22 18:30:25 2026 -0400 fix(ci): disable X window server services and update cramfs module configuration directory path
 edc8c2e Mon Jun 22 18:30:06 2026 -0400 feat(roles/remove_xserver_common): add license and author information
+fdffc87 Sat Jun 20 19:01:52 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#48) from Create-ansible-roles-and-verify-functionality into main
 b2079d2 Sat Jun 20 18:59:07 2026 -0400 fix(security): ensure proper service disabling configuration
 893e96c Sat Jun 20 18:58:47 2026 -0400 feat(roles/disable_xinetd): add and configure role to disable and remove xinetd
+c6d48a4 Sat Jun 20 18:50:33 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#47) from Create-ansible-roles-and-verify-functionality into main
 1bf982a Sat Jun 20 18:40:13 2026 -0400 fix(playbooks): ensure web server services are disabled in setup script
 ae64ba7 Sat Jun 20 18:39:31 2026 -0400 feat(roles/disable_web_server_services): add and configure web server disabling capabilities
 2f42c4b Sat Jun 20 17:07:05 2026 -0400 fix(system): ensure web proxy server services are disabled correctly
 c498297 Sat Jun 20 17:06:11 2026 -0400 feat(roles/disable_squid): Add Ensure web proxy server services are not in use. Wazuh ID 35577
+c497694 Fri Jun 19 18:21:32 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#46) from Create-ansible-roles-and-verify-functionality into main
 5f10045 Fri Jun 19 17:10:01 2026 -0400 feat(playbooks): enable snmp and tftp service disablement
 396ec7f Fri Jun 19 17:09:34 2026 -0400 feat(roles): add disable_tftp role for tftp service management
+9193db8 Thu Jun 18 19:36:42 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#45) from Create-ansible-roles-and-verify-functionality into main
 357fad2 Thu Jun 18 16:42:06 2026 -0400 fix(enforce_apparmor): remove RHEL support from README description
 dfa1c16 Thu Jun 18 16:41:47 2026 -0400 docs(role): update apparmor role description Wazuh ID 35760
 535a817 Thu Jun 18 16:33:53 2026 -0400 docs(role): update description for disable_unsafe_filesystem_modules Wazuh ID 35724
@@ -35,6 +252,7 @@ eb58c97 Thu Jun 18 16:27:22 2026 -0400 docs(role): update description for disabl
 3df784e Thu Jun 18 16:25:03 2026 -0400 docs(roles): update systemd-timesyncd role description with Wazuh ID 35589
 fa09267 Thu Jun 18 15:24:25 2026 -0400 docs: Update description is now 'Ensures the prelink package is removed to prevent interference with AIDE and reduce security risks (Wazuh ID 35544)'
 8c730b8 Thu Jun 18 15:23:46 2026 -0400 docs: Updated galaxy info for consistency with upstream role. Refs
+0afcae7 Wed Jun 17 20:31:09 2026 -0400 Merge pull request 'Create-ansible-roles-and-verify-functionality' (#44) from Create-ansible-roles-and-verify-functionality into main
 00d4849 Wed Jun 17 20:29:22 2026 -0400 Add `disable_snmp` role: ensure SNMP services are disabled, refine README, and set namespace to `security`.
 3cf5fb1 Wed Jun 17 20:20:52 2026 -0400 Update LICENSE URL to use HTTPS in `configure_group_minus_permissions` role.
 82921a8 Wed Jun 17 20:20:37 2026 -0400 Add LICENSE file for `enable_chrony` role.
