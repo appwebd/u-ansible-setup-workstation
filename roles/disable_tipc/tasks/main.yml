@@ -36,6 +36,8 @@
   ansible.builtin.shell: |
       set -o pipefail
       lsmod | grep -q tipc && echo "loaded" || true
+  args:
+    executable: /bin/bash
   register: tipc_is_loaded
   changed_when: false
 
@@ -43,6 +45,8 @@
   ansible.builtin.shell: |
       set -o pipefail
       lsmod | grep -q '^tipc' && exit 1 || exit 0
+  args:
+    executable: /bin/bash      
   register: tipc_lsmod_check
   changed_when: false
   failed_when: false
@@ -72,6 +76,8 @@
   ansible.builtin.shell: |
       set -o pipefail
       lsmod | grep -q tipc || true
+  args:
+    executable: /bin/bash      
   register: tipc_loaded_check
   changed_when: false
 
